@@ -6,12 +6,9 @@ import axios from "axios";
 const baseURL = "http://localhost:5000";
 
 export default createStore({
-  state: { testVar: 3, products: [] },
+  state: { products: [] },
   getters: {},
   mutations: {
-    INCREMENT_COUNT(state, payload) {
-      state.testVar += payload;
-    },
     SET_PRODUCTS(state, payload) {
       state.products = payload;
     },

@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, request, Response
 from .models import Product
 from .helpers import getProductsList
 from . import db
-
+import os
 api = Blueprint('api', __name__)
 
 @api.route('/api/products', methods=["POST"])
@@ -23,3 +23,8 @@ def getProducts():
     response = jsonify(getProductsList(products))
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
+
+@api.route('/', methods=["GET"])
+def test():
+
+    return os.getcwd() + '\\website\\'

@@ -1,12 +1,10 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from os import path
+import os
 
 db = SQLAlchemy()
-DB_NAME = "blog.sqlite3"
-
-
+DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     CORS(app)
@@ -25,5 +23,5 @@ def create_app():
 
 
 def create_database(app):
-    if not path.exists('website/' + DB_NAME):
+    if not os.path.exists('website/' + DB_NAME):
         db.create_all(app=app)

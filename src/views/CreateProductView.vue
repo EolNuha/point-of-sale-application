@@ -114,7 +114,6 @@ export default {
   },
   methods: {
     isRequired(value) {
-      console.log(value);
       return value ? true : "This field is required";
     },
     createProduct() {

@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="bg-white border-gray-200 px-2 sm:px-4 py-1 rounded dark:bg-gray-900 fixed top-0 left-0 right-0"
+    class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-1 sticky top-0 left-0 right-0"
   >
     <div class="container flex flex-wrap justify-between items-center mx-auto">
       <a href="https://eolnuha.com/" class="flex items-center">
@@ -73,12 +73,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 nav {
+  z-index: 9999;
   a {
     font-weight: bold;
     color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: rgb(26 86 219 / var(--tw-text-opacity));
+    &.router-link-active {
+      @apply text-blue-600 #{!important};
     }
   }
 }

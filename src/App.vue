@@ -71,6 +71,12 @@ export default {
   margin-left: 16rem;
 }
 .min-h-screen {
-  min-height: calc(100vh - 60px) !important;
+  min-height: calc(100vh - 65.6px) !important;
+}
+.min-h-50 {
+  min-height: 50vh !important;
+}
+.min-h-75 {
+  min-height: 75vh !important;
 }
 </style>

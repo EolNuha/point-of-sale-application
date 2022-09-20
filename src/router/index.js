@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   createRouter,
   createWebHistory,
@@ -5,6 +6,8 @@ import {
 } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import CreateProductView from "../views/CreateProductView.vue";
+import ProductDetailsView from "../views/ProductDetailsView.vue";
+import ProductsView from "../views/ProductsView.vue";
 
 const routes = [
   {
@@ -24,12 +27,58 @@ const routes = [
     component: () => import("@/views/AboutView.vue"),
   },
   {
+    path: "/products",
+    name: "products",
+    component: ProductsView,
+    meta: {
+      title: "Products",
+      breadcrumb: [
+        {
+          text: (route) => "Products",
+          to: "products",
+        },
+      ],
+    },
+  },
+  {
     path: "/products/create",
     name: "products-create",
+    component: CreateProductView,
     meta: {
       title: "Create Product",
+      breadcrumb: [
+        {
+          text: (route) => "Products",
+          to: "products",
+          active: false,
+        },
+        {
+          text: (route) => "Create Product",
+          to: "products-create",
+          active: true,
+        },
+      ],
     },
-    component: CreateProductView,
+  },
+  {
+    path: "/products/:productId",
+    name: "product-view",
+    component: ProductDetailsView,
+    meta: {
+      title: "Product Details",
+      breadcrumb: [
+        {
+          text: (route) => "Products",
+          to: "products",
+          active: false,
+        },
+        {
+          text: (route) => `${route.meta.title}`,
+          to: "product-view",
+          active: true,
+        },
+      ],
+    },
   },
 ];
 

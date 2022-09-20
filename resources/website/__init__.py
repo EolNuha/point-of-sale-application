@@ -15,7 +15,7 @@ def create_app():
 
     from .api import api
 
-    app.register_blueprint(api, url_prefix='/')
+    app.register_blueprint(api, url_prefix='/api/')
 
     create_database(app)
 

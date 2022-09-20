@@ -6,6 +6,11 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "./index.css";
 import "flowbite";
+import Icon from "@/components/IconsComponent.vue";
+import Overlay from "@/components/OverlayComponent.vue";
+
+const app = createApp(App);
+
 const options = {
   position: "top-right",
   timeout: 5000,
@@ -20,4 +25,5 @@ const options = {
   icon: true,
   rtl: false,
 };
-createApp(App).use(store).use(router).use(Toast, options).mount("#app");
+app.component("IconC", Icon).component("OverlayC", Overlay);
+app.use(store).use(router).use(Toast, options).mount("#app");

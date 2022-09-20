@@ -2,8 +2,8 @@
   <nav
     class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-1 sticky top-0 left-0 right-0"
   >
-    <div class="container flex flex-wrap justify-between items-center mx-auto">
-      <a href="https://eolnuha.com/" class="flex items-center">
+    <div class="container flex flex-wrap items-center mx-auto">
+      <a href="https://eolnuha.com/" class="flex items-center w-64">
         <img
           src="https://flowbite.com/docs/images/logo.svg"
           class="mr-3 h-6 sm:h-9"
@@ -14,6 +14,31 @@
           >Flowbite</span
         >
       </a>
+      <ol class="inline-flex mr-auto space-x-1 md:space-x-3">
+        <li class="inline-flex items-center">
+          <router-link
+            :to="{ name: 'home' }"
+            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          >
+            <IconC iconName="Home" iconClass="w-4 h-4 mr-2" />
+            Dashboard
+          </router-link>
+        </li>
+        <li v-for="item in $route.meta.breadcrumb" :key="item">
+          <div class="flex items-center">
+            <IconC
+              iconName="AngleRight"
+              iconClass="w-6 h-6 text-gray-400"
+              v-show="!item.active"
+            />
+            <router-link
+              :to="{ name: item.to }"
+              class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+              >{{ item.text($route) }}</router-link
+            >
+          </div>
+        </li>
+      </ol>
       <button
         data-collapse-toggle="navbar-default"
         type="button"
@@ -22,19 +47,7 @@
         aria-expanded="false"
       >
         <span class="sr-only">Open main menu</span>
-        <svg
-          class="w-6 h-6"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
+        <IconC iconName="Bars" iconClass="w-6 h-6" />
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
@@ -149,134 +162,8 @@
                     </div>
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                  >
-                    <div class="inline-flex items-center">
-                      <svg
-                        class="h-3.5 w-3.5 rounded-full mr-2"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        id="flag-icon-css-de"
-                        viewBox="0 0 512 512"
-                      >
-                        <path fill="#ffce00" d="M0 341.3h512V512H0z" />
-                        <path d="M0 0h512v170.7H0z" />
-                        <path fill="#d00" d="M0 170.7h512v170.6H0z" />
-                      </svg>
-                      Deutsch
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                  >
-                    <div class="inline-flex items-center">
-                      <svg
-                        class="h-3.5 w-3.5 rounded-full mr-2"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        id="flag-icon-css-it"
-                        viewBox="0 0 512 512"
-                      >
-                        <g fill-rule="evenodd" stroke-width="1pt">
-                          <path fill="#fff" d="M0 0h512v512H0z" />
-                          <path fill="#009246" d="M0 0h170.7v512H0z" />
-                          <path fill="#ce2b37" d="M341.3 0H512v512H341.3z" />
-                        </g>
-                      </svg>
-                      Italiano
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                  >
-                    <div class="inline-flex items-center">
-                      <svg
-                        class="h-3.5 w-3.5 rounded-full mr-2"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        id="flag-icon-css-cn"
-                        viewBox="0 0 512 512"
-                      >
-                        <defs>
-                          <path
-                            id="a"
-                            fill="#ffde00"
-                            d="M1-.3L-.7.8 0-1 .6.8-1-.3z"
-                          />
-                        </defs>
-                        <path fill="#de2910" d="M0 0h512v512H0z" />
-                        <use
-                          width="30"
-                          height="20"
-                          transform="matrix(76.8 0 0 76.8 128 128)"
-                          xlink:href="#a"
-                        />
-                        <use
-                          width="30"
-                          height="20"
-                          transform="rotate(-121 142.6 -47) scale(25.5827)"
-                          xlink:href="#a"
-                        />
-                        <use
-                          width="30"
-                          height="20"
-                          transform="rotate(-98.1 198 -82) scale(25.6)"
-                          xlink:href="#a"
-                        />
-                        <use
-                          width="30"
-                          height="20"
-                          transform="rotate(-74 272.4 -114) scale(25.6137)"
-                          xlink:href="#a"
-                        />
-                        <use
-                          width="30"
-                          height="20"
-                          transform="matrix(16 -19.968 19.968 16 256 230.4)"
-                          xlink:href="#a"
-                        />
-                      </svg>
-                      中文 (繁體)
-                    </div>
-                  </a>
-                </li>
               </ul>
             </div>
-            <button
-              data-collapse-toggle="mobile-menu-language-select"
-              type="button"
-              class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              aria-controls="mobile-menu-language-select"
-              aria-expanded="false"
-            >
-              <span class="sr-only">Open main menu</span>
-              <svg
-                class="w-6 h-6"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </button>
           </li>
           <li>
             <button
@@ -285,32 +172,8 @@
               type="button"
               class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm"
             >
-              <svg
-                id="theme-toggle-dark-icon"
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                v-show="!isDarkMode"
-              >
-                <path
-                  d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-                ></path>
-              </svg>
-              <svg
-                id="theme-toggle-light-icon"
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                v-show="isDarkMode"
-              >
-                <path
-                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
+              <IconC iconName="Moon" iconClass="w-5 h-5" v-if="!isDarkMode" />
+              <IconC iconName="Sun" iconClass="w-5 h-5" v-if="isDarkMode" />
             </button>
           </li>
         </ul>
@@ -322,9 +185,6 @@
 <script>
 export default {
   name: "NavBar",
-  props: {
-    msg: String,
-  },
   data() {
     return {
       isDarkMode:

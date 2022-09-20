@@ -123,12 +123,12 @@ export default {
   },
   computed: {
     product() {
-      return this.$store.state.product;
+      return this.$store.state.productModule.product;
     },
   },
   async mounted() {
     await this.$store
-      .dispatch("getProductDetails", this.$route.params.productId)
+      .dispatch("productModule/getProductDetails", this.$route.params.productId)
       .then(async (response) => {
         this.$route.meta.title = response.data.name;
       });
@@ -146,7 +146,7 @@ export default {
         price: this.product.price,
       };
       this.$store
-        .dispatch("updateProduct", data)
+        .dispatch("productModule/updateProduct", data)
         .then((response) => {
           this.isLoading = false;
           console.log(response.data);

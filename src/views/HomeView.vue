@@ -46,7 +46,7 @@
         <tbody>
           <tr
             class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 cursor-pointer hover:opacity-75"
-            v-for="product in $store.state.products"
+            v-for="product in $store.state.productModule.products"
             :key="product.id"
             @click="
               $router.push({
@@ -83,7 +83,7 @@ export default {
   },
   created() {
     this.isLoading = true;
-    this.$store.dispatch("getProducts").then(() => {
+    this.$store.dispatch("productModule/getProducts").then(() => {
       this.isLoading = false;
     });
   },

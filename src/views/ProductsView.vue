@@ -55,7 +55,7 @@
         <tbody>
           <tr
             class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:opacity-75"
-            v-for="product in $store.state.products"
+            v-for="product in products"
             :key="product.id"
           >
             <th
@@ -112,22 +112,22 @@ export default {
   },
   computed: {
     products() {
-      return this.$store.state.products;
+      return this.$store.state.productModule.products;
     },
   },
   created() {
     this.isLoading = true;
-    this.$store.dispatch("getProducts").then(() => {
+    this.$store.dispatch("productModule/getProducts").then(() => {
       this.isLoading = false;
     });
   },
   methods: {
     deleteProduct(productId) {
       this.$store
-        .dispatch("deleteProduct", productId)
+        .dispatch("productModule/deleteProduct", productId)
         .then(() => {
           this.$toast.success("Product deleted successfully!");
-          this.$store.dispatch("getProducts");
+          this.$store.dispatch("productModule/getProducts");
         })
         .catch((error) => {
           console.log(error);

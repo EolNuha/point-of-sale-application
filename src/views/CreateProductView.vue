@@ -105,7 +105,7 @@ export default {
     createProduct() {
       this.isLoading = true;
       this.$store
-        .dispatch("createProduct", this.product)
+        .dispatch("productModule/createProduct", this.product)
         .then((response) => {
           this.isLoading = false;
           this.$router.push({

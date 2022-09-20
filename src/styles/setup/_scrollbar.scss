@@ -1,0 +1,11 @@
+.scrollbar-style::-webkit-scrollbar {
+  height: 3.5px;
+}
+.scrollbar-style::-webkit-scrollbar-track {
+  @apply bg-gray-400;
+  @apply dark:bg-gray-400;
+}
+.scrollbar-style::-webkit-scrollbar-thumb {
+  @apply bg-blue-700;
+  border-radius: 20px;
+}

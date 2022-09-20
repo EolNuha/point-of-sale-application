@@ -9,7 +9,7 @@
         "
         class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        <IconC iconName="Plus" iconClass="w-6 h-6 mr-2" /> Create Product
+        <IconC iconName="Plus" iconClass="w-5 h-5 mr-2" /> Create Product
       </button>
       <div class="flex items-center w-64">
         <label for="simple-search" class="sr-only">Search</label>
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto relative sm:rounded-lg my-5">
+    <div class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style">
       <table
         v-if="products.length"
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -65,8 +65,10 @@
               {{ product.id }}
             </th>
             <td class="py-4 px-6">{{ product.name }}</td>
-            <td class="py-4 px-6">{{ product.description }}</td>
-            <td class="py-4 px-6">{{ product.price }}</td>
+            <td class="py-4 px-6 max-w-xs break-words">
+              {{ product.description }}
+            </td>
+            <td class="py-4 px-6">{{ product.price }} $</td>
             <td
               class="py-4 px-6"
               @click="
@@ -78,13 +80,13 @@
             >
               <IconC
                 iconName="Pencil"
-                iconClass="w-6 h-6 text-blue-700 cursor-pointer hover:text-blue-500 rounded-full"
+                iconClass="w-5 h-5 text-blue-700 cursor-pointer hover:text-blue-500 rounded-full"
               />
             </td>
             <td class="py-4 px-6" @click="deleteProduct(product.id)">
               <IconC
                 iconName="Trash"
-                iconClass="w-6 h-6 text-red-700 cursor-pointer hover:text-red-500"
+                iconClass="w-5 h-5 text-red-700 cursor-pointer hover:text-red-500"
               />
             </td>
           </tr>

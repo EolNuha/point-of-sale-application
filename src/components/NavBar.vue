@@ -185,17 +185,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-nav {
-  z-index: 9999;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-active {
-      @apply text-blue-600 #{!important};
-    }
-  }
-}
+@import "/src/styles/components/_navbar.scss";
 </style>

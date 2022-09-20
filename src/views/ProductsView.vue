@@ -124,12 +124,12 @@ export default {
       this.$store
         .dispatch("deleteProduct", productId)
         .then(() => {
-          this.toast.success("Product deleted successfully!");
+          this.$toast.success("Product deleted successfully!");
           this.$store.dispatch("getProducts");
         })
         .catch((error) => {
           console.log(error);
-          this.toast.error(
+          this.$toast.error(
             error.data || "Something went wrong, please try again later!"
           );
         });

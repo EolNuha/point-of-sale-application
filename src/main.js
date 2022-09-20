@@ -8,9 +8,10 @@ import "./index.css";
 import "flowbite";
 import Icon from "@/components/IconsComponent.vue";
 import Overlay from "@/components/OverlayComponent.vue";
+import { useToast } from "vue-toastification";
 
 const app = createApp(App);
-
+app.config.globalProperties.$toast = useToast();
 const options = {
   position: "top-right",
   timeout: 5000,

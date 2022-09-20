@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <SideBar />
-  <router-view class="router-view" />
+  <router-view class="router-view" :toast="toast" />
 </template>
 
 <script>
@@ -62,21 +62,5 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.router-view {
-  margin-left: 16rem;
-}
-.min-h-screen {
-  min-height: calc(100vh - 65.6px) !important;
-}
-.min-h-50 {
-  min-height: 50vh !important;
-}
-.min-h-75 {
-  min-height: 75vh !important;
-}
+@import "/src/styles/index.scss";
 </style>

@@ -108,7 +108,6 @@
 </template>
 
 <script>
-import { useToast } from "vue-toastification";
 import { Field, Form } from "vee-validate";
 
 export default {
@@ -116,10 +115,6 @@ export default {
   components: {
     Field,
     Form,
-  },
-  setup() {
-    const toast = useToast();
-    return { toast };
   },
   data() {
     return {
@@ -155,11 +150,11 @@ export default {
         .then((response) => {
           this.isLoading = false;
           console.log(response.data);
-          this.toast.success("Product updated successfully!");
+          this.$toast.success("Product updated successfully!");
         })
         .catch(() => {
           this.isLoading = false;
-          this.toast.error("Something went wrong!");
+          this.$toast.error("Something went wrong!");
         });
     },
   },

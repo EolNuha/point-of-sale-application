@@ -85,10 +85,7 @@ export default {
     Form,
   },
   setup() {
-    // Get toast interface
     const toast = useToast();
-
-    // Make it available inside methods
     return { toast };
   },
   data() {
@@ -115,11 +112,11 @@ export default {
             name: "product-view",
             params: { productId: response.data.productId },
           });
-          this.toast.success("Product created successfully!");
+          this.$toast.success("Product created successfully!");
         })
         .catch(() => {
           this.isLoading = false;
-          this.toast.error("Something went wrong!");
+          this.$toast.error("Something went wrong!");
         });
     },
   },

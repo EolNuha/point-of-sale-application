@@ -57,14 +57,5 @@ export default {
 </script>
 
 <style lang="scss">
-.sidebar {
-  position: fixed;
-  height: 100vh;
-  overflow-y: auto;
-  z-index: 3205;
-}
-.sidebar .router-link-active {
-  @apply bg-gray-200;
-  @apply dark:bg-gray-700;
-}
+@import "/src/styles/components/_sidebar.scss";
 </style>

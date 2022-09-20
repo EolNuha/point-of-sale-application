@@ -54,27 +54,5 @@ export default {
 };
 </script>
 <style lang="scss">
-.loader {
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-  // @apply border-t-blue-700 #{!important};
-}
-
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+@import "/src/styles/components/_overlay.scss";
 </style>

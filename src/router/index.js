@@ -19,14 +19,6 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/about",
-    name: "about",
-    meta: {
-      title: "About Page",
-    },
-    component: () => import("@/views/AboutView.vue"),
-  },
-  {
     path: "/products",
     name: "products",
     component: ProductsView,

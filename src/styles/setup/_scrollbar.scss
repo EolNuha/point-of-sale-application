@@ -1,5 +1,6 @@
 .scrollbar-style::-webkit-scrollbar {
-  height: 3.5px;
+  height: 4px;
+  width: 4px;
 }
 .scrollbar-style::-webkit-scrollbar-track {
   @apply bg-gray-400;

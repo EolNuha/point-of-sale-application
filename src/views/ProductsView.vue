@@ -1,3 +1,4 @@
+<!-- eslint-disable no-undef -->
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between">
@@ -34,7 +35,9 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style">
+    <div
+      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-25"
+    >
       <table
         v-if="products.length"
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -44,6 +47,7 @@
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
+            <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6">ID</th>
             <th scope="col" class="py-3 px-6">Product name</th>
             <th scope="col" class="py-3 px-6">Description</th>
@@ -53,56 +57,93 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:opacity-75"
-            v-for="product in products"
-            :key="product.id"
-          >
-            <th
-              scope="row"
-              class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {{ product.id }}
-            </th>
-            <td class="py-4 px-6">{{ product.name }}</td>
-            <td class="py-4 px-6 max-w-xs break-words">
-              {{ product.description }}
-            </td>
-            <td class="py-4 px-6">{{ product.price }} $</td>
-            <td
-              class="py-4 px-6"
-              @click="
-                $router.push({
-                  name: 'product-view',
-                  params: { productId: product.id },
-                })
+          <template v-for="product in products" :key="product.id">
+            <tr
+              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              :class="
+                selectedProduct === product
+                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
+                  : ''
               "
             >
-              <IconC
-                iconName="Pencil"
-                iconClass="w-5 h-5 text-blue-700 cursor-pointer hover:text-blue-500 rounded-full"
-              />
-            </td>
-            <td class="py-4 px-6" @click="deleteProduct(product.id)">
-              <IconC
-                iconName="Trash"
-                iconClass="w-5 h-5 text-red-700 cursor-pointer hover:text-red-500"
-              />
-            </td>
-          </tr>
+              <td class="py-2 px-6" @click="updateSelectedProduct(product)">
+                <IconC
+                  iconName="CheckCircle"
+                  :iconClass="
+                    selectedProduct === product
+                      ? 'h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700'
+                      : 'h-6 w-6 text-gray-900 dark:text-gray-300'
+                  "
+                />
+              </td>
+              <th
+                scope="row"
+                class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ product.id }}
+              </th>
+              <td class="py-2 px-6">{{ product.name }}</td>
+              <td class="py-2 px-6 max-w-xs break-words">
+                {{ product.description }}
+              </td>
+              <td class="py-2 px-6">{{ product.price }} $</td>
+              <td
+                class="py-2 px-6"
+                @click="
+                  $router.push({
+                    name: 'product-view',
+                    params: { productId: product.id },
+                  })
+                "
+              >
+                <button
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                >
+                  <IconC
+                    iconName="Pencil"
+                    iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                  />
+                </button>
+              </td>
+              <td class="py-2 px-6">
+                <button
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  @click="openModal(product)"
+                >
+                  <IconC
+                    iconName="Trash"
+                    iconClass="w-5 h-5 text-red-700 cursor-pointer"
+                  />
+                </button>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
+    <delete-modal
+      :productId="selectedProductToDelete.id"
+      deleteAction="productModule/deleteProduct"
+      getAction="productModule/getProducts"
+      title="Product"
+      deleteRef="delete-modal"
+    >
+    </delete-modal>
   </div>
 </template>
 
 <script>
 import { useToast } from "vue-toastification";
-
+import DeleteModal from "@/components/modals/DeleteModal.vue";
 export default {
+  components: {
+    DeleteModal,
+  },
   data() {
     return {
       isLoading: false,
+      selectedProduct: {},
+      selectedProductToDelete: {},
       search: "",
     };
   },
@@ -116,25 +157,33 @@ export default {
     },
   },
   created() {
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "Delete") {
+        const isEmpty = Object.keys(this.selectedProduct).length === 0;
+        if (!isEmpty) {
+          this.openModal(this.selectedProduct);
+        }
+      }
+    });
     this.isLoading = true;
     this.$store.dispatch("productModule/getProducts").then(() => {
       this.isLoading = false;
     });
   },
   methods: {
-    deleteProduct(productId) {
-      this.$store
-        .dispatch("productModule/deleteProduct", productId)
-        .then(() => {
-          this.$toast.success("Product deleted successfully!");
-          this.$store.dispatch("productModule/getProducts");
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$toast.error(
-            error.data || "Something went wrong, please try again later!"
-          );
-        });
+    updateSelectedProduct(product) {
+      if (this.selectedProduct.id === product.id) {
+        this.selectedProduct = {};
+      } else {
+        this.selectedProduct = product;
+      }
+    },
+    openModal(product) {
+      this.selectedProductToDelete = product;
+      const el = document.getElementById("delete-modal");
+      // eslint-disable-next-line no-undef
+      const mod = new Modal(el);
+      mod.show();
     },
   },
 };

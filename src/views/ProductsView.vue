@@ -182,6 +182,7 @@
       getAction="productModule/getProducts"
       title="Product"
       deleteRef="delete-modal"
+      @reload="reload"
     >
     </delete-modal>
   </div>
@@ -242,19 +243,22 @@ export default {
         }
       }
     });
-    this.isTableLoading = true;
-    this.$store
-      .dispatch("productModule/getProducts", {
-        page: this.currentPage,
-      })
-      .then(() => {
-        this.isTableLoading = false;
-      })
-      .catch(() => {
-        this.$toast.error("Something went wrong, please try again later!");
-      });
+    this.reload();
   },
   methods: {
+    reload() {
+      this.isTableLoading = true;
+      this.$store
+        .dispatch("productModule/getProducts", {
+          page: this.currentPage,
+        })
+        .then(() => {
+          this.isTableLoading = false;
+        })
+        .catch(() => {
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
     updateSelectedProduct(product) {
       if (this.selectedProduct.id === product.id) {
         this.selectedProduct = {};

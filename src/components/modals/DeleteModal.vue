@@ -96,7 +96,7 @@ export default {
         .dispatch(this.deleteAction, this.productId)
         .then(() => {
           this.$toast.success(`${this.title} deleted successfully!`);
-          this.$store.dispatch(this.getAction);
+          this.$emit("reload");
           this.hideModal();
           this.isLoading = false;
         })

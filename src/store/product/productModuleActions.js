@@ -5,10 +5,10 @@ import axios from "axios";
 const baseURL = "http://localhost:5000";
 
 export default {
-  getProducts({ commit }) {
+  getProducts({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/products`)
+        .get(`${baseURL}/api/products`, { params: data })
         .then(async (response) => {
           commit("SET_PRODUCTS", response.data);
           resolve(response);

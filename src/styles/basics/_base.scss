@@ -4,6 +4,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  @apply bg-gray-200;
+  @apply dark:bg-gray-800;
+}
+
 div[modal-backdrop] {
 	z-index: 9998;
 }

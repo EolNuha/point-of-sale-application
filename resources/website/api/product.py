@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify, request, Response
 from website.models import Product
-from website.helpers import getProductsList
+from website.helpers import getProductsList, getPaginatedDict
 from datetime import datetime
 from website import db
+from sqlalchemy import or_
 
 product = Blueprint('product', __name__)
 
@@ -23,10 +24,29 @@ def createProduct():
 
 @product.route('/products', methods=["GET"])
 def getProducts():
-    products = Product.query.all()
-    response = jsonify(getProductsList(products))
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    search = request.args.get('search')
+
+    if search:
+        search = search.strip().replace('+', ' ')\
+            .replace('%20', ' ')
+    else: 
+        search = "*"
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = Product.query.filter(or_(
+        Product.name.ilike(looking_for),
+        ))\
+        .order_by(Product.id.desc()).paginate(page=page, per_page=per_page)
+
+    return jsonify(getPaginatedDict(getProductsList(paginated_items.items), paginated_items))
 
 @product.route('/products/<int:productId>', methods=["GET"])
 def getProductDetails(productId):

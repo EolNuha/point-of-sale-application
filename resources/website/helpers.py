@@ -17,3 +17,21 @@ def getProductsList(products):
         }
         products_list.append(product_dict)
     return products_list
+
+def getPaginatedDict(data, paginated_items):
+    return {
+        "data": data,
+        "pagination": {
+            "has_next": paginated_items.has_next,
+            "has_prev": paginated_items.has_prev,
+            "page": paginated_items.page,
+            "per_page": paginated_items.per_page,
+            "pages": paginated_items.pages,
+            "next_num": paginated_items.next_num,
+            "prev_num": paginated_items.prev_num,
+            "items": len(paginated_items.items),
+            "total": paginated_items.total,
+            "page_range": get_page_range(paginated_items.page, paginated_items.pages, 5)
+        },
+        
+    }

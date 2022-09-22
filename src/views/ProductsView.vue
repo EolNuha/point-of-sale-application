@@ -24,25 +24,22 @@
             />
           </div>
           <input
-            v-model="search"
+            v-model="searchQuery"
             type="text"
-            id="simple-search"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search"
-            required
           />
         </div>
       </div>
     </div>
 
     <div
-      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-25"
+      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-65"
     >
       <table
-        v-if="products.length"
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
       >
-        <OverlayC v-if="isLoading" />
+        <OverlayC v-if="isTableLoading" />
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
@@ -121,6 +118,64 @@
         </tbody>
       </table>
     </div>
+    <div class="flex justify-between items-center">
+      <div class="text-gray-700 dark:text-gray-400">
+        Viewing page
+        <span
+          class="bg-white dark:bg-gray-700 rounded-lg font-semibold text-gray-900 dark:text-white p-2.5"
+          >{{ currentPage }}</span
+        >
+        with {{ pagination.items }} items of total {{ pagination.total }}
+      </div>
+      <div aria-label="Page navigation" v-if="!(pagination.pages === 1)">
+        <ul class="inline-flex items-center -space-x-px">
+          <li
+            @click="getProducts(pagination.prev_num)"
+            v-if="pagination.has_prev"
+          >
+            <a
+              href="#"
+              onclick="return false;"
+              disabled
+              class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <span class="sr-only">Previous</span>
+              <IconC iconName="AngleLeft" iconClass="w-5 h-5" />
+            </a>
+          </li>
+          <li
+            v-for="page in pagination.page_range"
+            :key="page"
+            @click="getProducts(page)"
+          >
+            <a
+              href="#"
+              onclick="return false;"
+              aria-current="page"
+              :class="
+                page === currentPage
+                  ? 'py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                  : 'py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+              "
+              >{{ page }}</a
+            >
+          </li>
+          <li
+            @click="getProducts(pagination.next_num)"
+            v-if="pagination.has_next"
+          >
+            <a
+              href="#"
+              onclick="return false;"
+              class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <span class="sr-only">Next</span>
+              <IconC iconName="AngleRight" iconClass="w-5 h-5" />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
     <delete-modal
       :productId="selectedProductToDelete.id"
       deleteAction="productModule/deleteProduct"
@@ -141,34 +196,63 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isTableLoading: false,
       selectedProduct: {},
       selectedProductToDelete: {},
-      search: "",
+      currentPage: 1,
+      searchQuery: "",
     };
   },
   setup() {
     const toast = useToast();
     return { toast };
   },
+  watch: {
+    searchQuery: {
+      async handler(value) {
+        this.tableLoading = true;
+        try {
+          await this.$store.dispatch("productModule/getProducts", {
+            page: this.currentPage,
+            search: value,
+          });
+          this.isTableLoading = false;
+          this.isError = false;
+        } catch {
+          this.isTableLoading = false;
+          this.isError = true;
+        }
+      },
+    },
+  },
   computed: {
     products() {
-      return this.$store.state.productModule.products;
+      return this.$store.getters["productModule/getProductsList"];
+    },
+    pagination() {
+      return this.$store.getters["productModule/getProductsPagination"];
     },
   },
   created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct).length === 0;
+        const isEmpty = Object.keys(this.selectedProduct) === 0;
         if (!isEmpty) {
           this.openModal(this.selectedProduct);
         }
       }
     });
-    this.isLoading = true;
-    this.$store.dispatch("productModule/getProducts").then(() => {
-      this.isLoading = false;
-    });
+    this.isTableLoading = true;
+    this.$store
+      .dispatch("productModule/getProducts", {
+        page: this.currentPage,
+      })
+      .then(() => {
+        this.isTableLoading = false;
+      })
+      .catch(() => {
+        this.$toast.error("Something went wrong, please try again later!");
+      });
   },
   methods: {
     updateSelectedProduct(product) {
@@ -184,6 +268,19 @@ export default {
       // eslint-disable-next-line no-undef
       const mod = new Modal(el);
       mod.show();
+    },
+    getProducts(page) {
+      this.isTableLoading = true;
+      this.$store
+        .dispatch("productModule/getProducts", { page: page })
+        .then(() => {
+          this.isTableLoading = false;
+          this.currentPage = page;
+        })
+        .catch(() => {
+          this.isTableLoading = false;
+          this.$toast.error("Something went wrong, please try again later!");
+        });
     },
   },
 };

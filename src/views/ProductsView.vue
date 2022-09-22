@@ -189,7 +189,6 @@
 </template>
 
 <script>
-import { useToast } from "vue-toastification";
 import DeleteModal from "@/components/modals/DeleteModal.vue";
 export default {
   components: {
@@ -204,24 +203,18 @@ export default {
       searchQuery: "",
     };
   },
-  setup() {
-    const toast = useToast();
-    return { toast };
-  },
   watch: {
     searchQuery: {
       async handler(value) {
-        this.tableLoading = true;
+        this.isTableLoading = true;
         try {
           await this.$store.dispatch("productModule/getProducts", {
             page: this.currentPage,
             search: value,
           });
           this.isTableLoading = false;
-          this.isError = false;
         } catch {
           this.isTableLoading = false;
-          this.isError = true;
         }
       },
     },

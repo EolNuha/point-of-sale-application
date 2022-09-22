@@ -106,11 +106,10 @@ export default {
       this.isLoading = true;
       this.$store
         .dispatch("productModule/createProduct", this.product)
-        .then((response) => {
+        .then(() => {
           this.isLoading = false;
           this.$router.push({
-            name: "product-view",
-            params: { productId: response.data.productId },
+            name: "products",
           });
           this.$toast.success("Product created successfully!");
         })

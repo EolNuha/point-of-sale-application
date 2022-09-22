@@ -13,9 +13,9 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
-    from .api import api
+    from website.api.product import product
 
-    app.register_blueprint(api, url_prefix='/api/')
+    app.register_blueprint(product, url_prefix='/api/')
 
     create_database(app)
 

@@ -6,7 +6,7 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "./index.css";
 import "flowbite";
-import Icon from "@/components/IconsComponent.vue";
+import Icon from "@/components/icons/IconComponent.vue";
 import Overlay from "@/components/OverlayComponent.vue";
 import { useToast } from "vue-toastification";
 

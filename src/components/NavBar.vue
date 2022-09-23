@@ -20,16 +20,17 @@
             :to="{ name: 'home' }"
             class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
-            <IconC iconName="Home" iconClass="w-4 h-4 mr-2" />
+            <IconC iconName="HomeIcon" iconClass="w-4 h-4 mr-2" />
             Dashboard
           </router-link>
         </li>
         <li v-for="item in $route.meta.breadcrumb" :key="item">
           <div class="flex items-center">
             <IconC
-              iconName="AngleRight"
+              iconSize="20"
+              iconType="solid"
+              iconName="ChevronRightIcon"
               iconClass="w-6 h-6 text-gray-400"
-              v-show="!item.active"
             />
             <router-link
               :to="{ name: item.to }"
@@ -47,7 +48,7 @@
         aria-expanded="false"
       >
         <span class="sr-only">Open main menu</span>
-        <IconC iconName="Bars" iconClass="w-6 h-6" />
+        <IconC iconName="ChevronRightIcon" iconClass="w-6 h-6" />
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
@@ -157,8 +158,12 @@
               type="button"
               class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm"
             >
-              <IconC iconName="Moon" iconClass="w-5 h-5" v-if="!isDarkMode" />
-              <IconC iconName="Sun" iconClass="w-5 h-5" v-if="isDarkMode" />
+              <IconC
+                iconName="MoonIcon"
+                iconClass="w-5 h-5"
+                v-if="!isDarkMode"
+              />
+              <IconC iconName="SunIcon" iconClass="w-5 h-5" v-if="isDarkMode" />
             </button>
           </li>
         </ul>

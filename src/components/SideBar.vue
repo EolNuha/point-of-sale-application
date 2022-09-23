@@ -11,7 +11,8 @@
             class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
           >
             <IconC
-              iconName="Dashboard"
+              iconType="outline"
+              iconName="ChartPieIcon"
               iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
             />
             <span class="ml-3">Dashboard</span>
@@ -25,7 +26,8 @@
             data-collapse-toggle="dropdown-example"
           >
             <IconC
-              iconName="Product"
+              iconType="outline"
+              iconName="ShoppingCartIcon"
               iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
             />
             <span
@@ -33,7 +35,7 @@
               sidebar-toggle-item=""
               >Management</span
             >
-            <IconC iconName="AngleDown" iconClass="w-6 h-6" />
+            <IconC iconName="ChevronRightIcon" iconClass="w-6 h-6" />
           </button>
           <ul id="dropdown-example" class="hidden py-2 space-y-2">
             <li>

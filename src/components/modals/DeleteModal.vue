@@ -17,12 +17,12 @@
             @click="hideModal"
             :disabled="isLoading"
           >
-            <IconC iconName="Close" iconClass="w-5 h-5" />
+            <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
             <span class="sr-only">Close modal</span>
           </button>
         </div>
         <div class="p-6 text-center">
-          <IconC iconName="ExlamationCircle" :iconClass="icon.class" />
+          <IconC iconName="ExclamationCircleIcon" :iconClass="icon.class" />
           <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
             Are you sure you want to delete this?
           </h3>

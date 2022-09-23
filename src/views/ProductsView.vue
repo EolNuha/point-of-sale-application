@@ -10,7 +10,8 @@
         "
         class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        <IconC iconName="Plus" iconClass="w-5 h-5 mr-2" /> Create Product
+        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+        Create Product
       </button>
       <div class="flex items-center w-64">
         <label for="simple-search" class="sr-only">Search</label>
@@ -19,7 +20,8 @@
             class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
           >
             <IconC
-              iconName="Search"
+              iconType="solid"
+              iconName="MagnifyingGlassIcon"
               iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
             />
           </div>
@@ -69,12 +71,14 @@
             >
               <td class="py-2 px-6" @click="updateSelectedProduct(product)">
                 <IconC
-                  iconName="CheckCircle"
-                  :iconClass="
-                    selectedProduct === product
-                      ? 'h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700'
-                      : 'h-6 w-6 text-gray-900 dark:text-gray-300'
-                  "
+                  v-if="selectedProduct === product"
+                  iconName="CheckCircleIcon"
+                  iconClass="h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                />
+                <IconC
+                  v-else
+                  iconName="MinusCircleIcon"
+                  iconClass="h-6 w-6 text-gray-900 dark:text-gray-300"
                 />
               </td>
               <th
@@ -101,7 +105,8 @@
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
                 >
                   <IconC
-                    iconName="Pencil"
+                    iconType="solid"
+                    iconName="PencilIcon"
                     iconClass="w-5 h-5 text-blue-700 cursor-pointer"
                   />
                 </button>
@@ -112,7 +117,7 @@
                   @click="openModal(product)"
                 >
                   <IconC
-                    iconName="Trash"
+                    iconName="TrashIcon"
                     iconClass="w-5 h-5 text-red-700 cursor-pointer"
                   />
                 </button>

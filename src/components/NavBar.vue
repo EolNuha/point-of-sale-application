@@ -48,7 +48,7 @@
         aria-expanded="false"
       >
         <span class="sr-only">Open main menu</span>
-        <IconC iconName="ChevronRightIcon" iconClass="w-6 h-6" />
+        <IconC iconName="Bars3Icon" iconClass="w-6 h-6" />
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul

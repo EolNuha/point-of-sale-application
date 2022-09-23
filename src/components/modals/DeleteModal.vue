@@ -22,7 +22,7 @@
           </button>
         </div>
         <div class="p-6 text-center">
-          <IconC iconName="ExclamationCircleIcon" :iconClass="icon.class" />
+          <IconC :iconName="icon.name" :iconClass="icon.class" />
           <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
             Are you sure you want to delete this?
           </h3>
@@ -41,8 +41,9 @@
           >
             <IconC
               v-if="isLoading"
-              iconName="Spinner"
-              iconClass="w-4 h-4 text-gray-200 animate-spin fill-gray-700"
+              iconType="custom"
+              iconName="SpinnerIcon"
+              iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-blue-600"
             />
             <span v-else>Delete</span>
           </button>
@@ -72,7 +73,7 @@ export default {
       type: Object,
       required: false,
       default: () => ({
-        name: "ExlamationCircle",
+        name: "ExclamationCircleIcon",
         class: "mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200",
       }),
     },

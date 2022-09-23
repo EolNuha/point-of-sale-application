@@ -63,7 +63,8 @@
       >
         <div role="status" v-if="isLoading">
           <IconC
-            iconName="Spinner"
+            iconType="custom"
+            iconName="SpinnerIcon"
             iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-blue-600"
           />
           <span class="sr-only">Loading...</span>

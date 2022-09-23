@@ -8,18 +8,23 @@
   <template v-if="iconType === 'solid' && iconSize === '20'">
     <solid-hero-icons-20 :iconName="iconName" :iconClass="iconClass" />
   </template>
+  <template v-if="iconType === 'custom'">
+    <custom-icons :iconName="iconName" :iconClass="iconClass" />
+  </template>
 </template>
 
 <script>
 import OutlineHeroIcons from "./OutlineIcon24.vue";
 import SolidHeroIcons from "./SolidIcon24.vue";
 import SolidHeroIcons20 from "./SolidIcon20.vue";
+import CustomIcons from "./CustomIcons.vue";
 
 export default {
   components: {
     OutlineHeroIcons,
     SolidHeroIcons,
     SolidHeroIcons20,
+    CustomIcons,
   },
   props: {
     iconType: { type: String, required: false, default: "outline" },

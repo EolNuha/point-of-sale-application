@@ -66,14 +66,18 @@ def getProductDetails(productId):
 @product.route('/products/<int:productId>', methods=["POST"])
 def updateProductDetails(productId):
     name = request.json["name"]
-    description = request.json["description"]
-    price = request.json["price"]
+    barcode = request.json["barcode"]
+    stock = request.json["stock"]
+    purchased_price = request.json["purchasedPrice"]
+    selling_price = request.json["sellingPrice"]
     
     product = Product.query.filter_by(id=productId).first_or_404()
 
     product.name = name
-    product.description = description
-    product.price = price
+    product.barcode = barcode
+    product.stock = stock
+    product.purchased_price = purchased_price
+    product.selling_price = selling_price
     product.modified = datetime.now()
 
     db.session.commit()

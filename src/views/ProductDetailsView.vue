@@ -14,47 +14,86 @@
           type="text"
           id="product_name"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Enter product eol"
+          placeholder="Enter product name"
           required
         />
         <span class="text-red-700">{{ errors.product_name }}</span>
       </div>
       <div class="mb-6">
         <label
-          for="product_description"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
-          >Product Description</label
+          for="product_barcode"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >Product barcode</label
         >
         <Field
-          as="textarea"
-          name="product_description"
-          v-model="product.description"
-          id="product_description"
-          rows="4"
-          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Product description..."
+          name="product_barcode"
+          :rules="isRequired"
+          v-model="product.barcode"
+          type="number"
+          id="product_barcode"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Enter product barcode"
           required
         />
-        <span class="text-red-700">{{ errors.product_description }}</span>
+        <span class="text-red-700">{{ errors.product_barcode }}</span>
       </div>
       <div class="mb-6">
         <label
-          for="product_price"
+          for="product_stock"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Product Price</label
+          >Product stock</label
         >
         <Field
-          name="product_price"
+          name="product_stock"
           :rules="isRequired"
-          v-model="product.price"
+          v-model="product.stock"
           type="number"
-          step="any"
-          id="product_price"
+          id="product_stock"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Enter product price"
+          placeholder="Enter product stock"
           required
         />
-        <span class="text-red-700">{{ errors.product_price }}</span>
+        <span class="text-red-700">{{ errors.product_stock }}</span>
+      </div>
+      <div class="mb-6 flex gap-4">
+        <div class="basis-1/2">
+          <label
+            for="product_purchasedprice"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Product purchased price</label
+          >
+          <Field
+            name="product_purchasedprice"
+            :rules="isRequired"
+            v-model="product.purchasedPrice"
+            type="number"
+            step="0.01"
+            id="product_purchasedprice"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter product price"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_purchasedprice }}</span>
+        </div>
+        <div class="basis-1/2">
+          <label
+            for="product_sellingprice"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Product selling price</label
+          >
+          <Field
+            name="product_sellingprice"
+            :rules="isRequired"
+            v-model="product.sellingPrice"
+            type="number"
+            step="0.01"
+            id="product_sellingprice"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter product price"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_sellingprice }}</span>
+        </div>
       </div>
       <div class="mb-6">
         <label
@@ -140,17 +179,10 @@ export default {
     },
     updateProduct() {
       this.isLoading = true;
-      const data = {
-        id: this.product.id,
-        name: this.product.name,
-        description: this.product.description,
-        price: this.product.price,
-      };
       this.$store
-        .dispatch("productModule/updateProduct", data)
-        .then((response) => {
+        .dispatch("productModule/updateProduct", this.product)
+        .then(() => {
           this.isLoading = false;
-          console.log(response.data);
           this.$toast.success("Product updated successfully!");
         })
         .catch(() => {

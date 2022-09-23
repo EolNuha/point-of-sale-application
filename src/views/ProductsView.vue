@@ -56,6 +56,7 @@
             <th scope="col" class="py-3 px-6">Barcode</th>
             <th scope="col" class="py-3 px-6">Purchased Price</th>
             <th scope="col" class="py-3 px-6">Selling Price</th>
+            <th scope="col" class="py-3 px-6">Stock</th>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
@@ -95,6 +96,14 @@
               </td>
               <td class="py-2 px-6 max-w-xs break-words">
                 {{ product.sellingPrice }} €
+              </td>
+              <td class="py-2 px-6">
+                <div
+                  class="flex items-center"
+                  :class="stockStatus(product.stock).color"
+                >
+                  &#9679; {{ stockStatus(product.stock).text }}
+                </div>
               </td>
               <td
                 class="py-2 px-6"
@@ -316,6 +325,22 @@ export default {
           this.isTableLoading = false;
           this.$toast.error("Something went wrong, please try again later!");
         });
+    },
+    stockStatus(v) {
+      console.log(v);
+      let color;
+      let text;
+      if (v >= 50) {
+        color = "text-green-500";
+        text = "In stock";
+      } else if (v < 50 && v > 0) {
+        color = "text-yellow-400";
+        text = "Low stock";
+      } else if (v <= 0) {
+        color = "text-red-700";
+        text = "Out of stock";
+      }
+      return { color, text };
     },
   },
 };

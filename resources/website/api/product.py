@@ -51,6 +51,8 @@ def getProducts():
         
     paginated_items = Product.query.filter(or_(
         Product.name.ilike(looking_for),
+        Product.id.ilike(looking_for),
+        Product.barcode.ilike(looking_for),
         ))\
         .order_by(Product.id.desc()).paginate(page=page, per_page=per_page)
 

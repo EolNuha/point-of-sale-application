@@ -53,8 +53,9 @@
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6">ID</th>
             <th scope="col" class="py-3 px-6">Product name</th>
-            <th scope="col" class="py-3 px-6">Description</th>
-            <th scope="col" class="py-3 px-6">Price</th>
+            <th scope="col" class="py-3 px-6">Barcode</th>
+            <th scope="col" class="py-3 px-6">Purchased Price</th>
+            <th scope="col" class="py-3 px-6">Selling Price</th>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
@@ -88,10 +89,13 @@
                 {{ product.id }}
               </th>
               <td class="py-2 px-6">{{ product.name }}</td>
+              <td class="py-2 px-6">{{ product.barcode }}</td>
               <td class="py-2 px-6 max-w-xs break-words">
-                {{ product.description }}
+                {{ product.purchasedPrice }} €
               </td>
-              <td class="py-2 px-6">{{ product.price }} $</td>
+              <td class="py-2 px-6 max-w-xs break-words">
+                {{ product.sellingPrice }} €
+              </td>
               <td
                 class="py-2 px-6"
                 @click="
@@ -264,7 +268,7 @@ export default {
   created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct) === 0;
+        const isEmpty = Object.keys(this.selectedProduct).length === 0;
         if (!isEmpty) {
           this.openModal(this.selectedProduct);
         }

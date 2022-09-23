@@ -64,7 +64,7 @@
         >
         <input
           name="product_price"
-          v-model="product.date"
+          v-model="product.dateCreated"
           type="any"
           step="any"
           id="product_price"
@@ -81,7 +81,7 @@
         >
         <input
           name="product_price"
-          v-model="product.modified"
+          v-model="product.dateModified"
           type="any"
           step="any"
           id="product_price"

@@ -10,10 +10,12 @@ def getProductsList(products):
         product_dict = {
             "id": i.id,
             "name": i.name,
-            "description": i.description,
-            "price": i.price,
-            "date": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
-            "modified": i.modified.strftime('%d-%m-%Y, %H:%M:%S'),
+            "barcode": i.barcode,
+            "stock": i.stock,
+            "purchasedPrice": i.purchased_price,
+            "sellingPrice": i.selling_price,
+            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
         }
         products_list.append(product_dict)
     return products_list

@@ -10,10 +10,18 @@ product = Blueprint('product', __name__)
 @product.route('/products', methods=["POST"])
 def createProduct():
     name = request.json["name"]
-    description = request.json["description"]
-    price = request.json["price"]
+    barcode = request.json["barcode"]
+    stock = request.json["stock"]
+    purchased_price = request.json["purchasedPrice"]
+    selling_price = request.json["sellingPrice"]
 
-    product = Product(name=name, description=description, price=price)
+    product = Product(
+        name=name, 
+        barcode=barcode, 
+        stock=stock, 
+        purchased_price=purchased_price, 
+        selling_price=selling_price
+        )
 
     db.session.add(product)
     db.session.commit()

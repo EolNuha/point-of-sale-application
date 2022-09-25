@@ -82,7 +82,7 @@
                   : ''
               "
             >
-              <td class="py-2 px-6">
+              <td class="py-2 px-6" @click="updateSelectedProduct(product)">
                 <IconC
                   v-if="selectedProduct === product"
                   iconName="CheckCircleIcon"
@@ -126,7 +126,7 @@
       </table>
     </div>
     <div
-      class="fixed bottom-0 left-0 flex items-center h-32 bg-gray-100 dark:bg-gray-700 w-full px-3"
+      class="fixed bottom-0 left-[16rem] right-0 flex items-center h-32 bg-gray-100 dark:bg-gray-700 px-2"
     >
       <div
         class="ml-auto flex flex-row items-center text-7xl text-gray-700 dark:text-gray-300"
@@ -198,7 +198,7 @@ export default {
               this.searchedProducts = res.data.data;
             });
         } catch {
-          console.log(value);
+          console.log();
         }
       },
     },
@@ -247,6 +247,13 @@ export default {
       }, 0);
       return sum.toFixed(2);
     },
+    updateSelectedProduct(product) {
+      if (this.selectedProduct.id === product.id) {
+        this.selectedProduct = {};
+      } else {
+        this.selectedProduct = product;
+      }
+    },
     openModal(product) {
       this.selectedProductToRemove = product;
       const el = document.getElementById("remove-modal");
@@ -267,6 +274,7 @@ export default {
       );
       this.products.splice(objectIdx, 1);
       this.total = this.getProductsTotal();
+      this.selectedProduct = {};
       this.hideModal();
     },
   },

@@ -288,6 +288,7 @@ export default {
   methods: {
     reload() {
       this.isTableLoading = true;
+      this.selectedProduct = {};
       this.$store
         .dispatch("productModule/getProducts", {
           page: this.currentPage,
@@ -327,7 +328,6 @@ export default {
         });
     },
     stockStatus(v) {
-      console.log(v);
       let color;
       let text;
       if (v >= 50) {

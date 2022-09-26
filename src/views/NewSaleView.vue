@@ -22,15 +22,16 @@
       </div>
       <div class="search-results" v-if="searchQuery">
         <table
-          class="w-full text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
+          class="w-full bg-white dark:bg-gray-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
         >
           <tbody>
             <template v-for="product in searchedProducts" :key="product.id">
               <tr
-                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-700"
+                @click="onSearchedProductClick(product)"
+                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-100/75 hover:dark:bg-gray-800/50"
                 :class="
                   searchedProducts[searchedProductsIndex] === product
-                    ? 'bg-blue-100 dark:bg-blue-900'
+                    ? 'bg-blue-100 dark:bg-blue-900 hover:bg-blue-200/75 hover:dark:bg-blue-800/50'
                     : ''
                 "
               >
@@ -99,6 +100,7 @@
                   v-model="product.quantity"
                   class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   @change="() => (total = getProductsTotal())"
+                  @focus="$event.target.select()"
                 />
               </td>
               <td class="py-2 px-6 max-w-xs break-words">
@@ -121,7 +123,7 @@
       </table>
     </div>
     <div
-      class="fixed bottom-0 left-[16rem] right-0 flex items-center justify-between h-32 bg-gray-100 dark:bg-gray-700 px-2"
+      class="fixed bottom-0 left-[16rem] right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-gray-700 px-2"
     >
       <button
         :disabled="products.length === 0"
@@ -142,7 +144,7 @@
       >
         Total:
         <div
-          class="min-w-64 max-w-md h-28 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg"
+          class="min-w-64 max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg"
         >
           <span id="total">{{ total }}</span
           >€
@@ -236,19 +238,22 @@ export default {
       }
       if (e.key === "Enter" && this.searchQuery) {
         const selectedPr = this.searchedProducts[this.searchedProductsIndex];
-        selectedPr.quantity = 1;
-        const objectIdx = this.products.findIndex(
-          (item) => item.id === selectedPr.id
-        );
-        if (objectIdx != -1) {
-          this.products[objectIdx].quantity++;
-        } else {
-          this.products.unshift(selectedPr);
-        }
-        this.total = this.getProductsTotal();
-        this.searchQuery = "";
-        this.searchedProductsIndex = 0;
+        this.onSearchedProductClick(selectedPr);
       }
+    },
+    onSearchedProductClick(product) {
+      product.quantity = 1;
+      const objectIdx = this.products.findIndex(
+        (item) => item.id === product.id
+      );
+      if (objectIdx != -1) {
+        this.products[objectIdx].quantity++;
+      } else {
+        this.products.unshift(product);
+      }
+      this.total = this.getProductsTotal();
+      this.searchQuery = "";
+      this.searchedProductsIndex = 0;
     },
     getProductsTotal() {
       const products = this.products;

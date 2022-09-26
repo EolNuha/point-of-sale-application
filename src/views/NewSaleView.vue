@@ -14,11 +14,6 @@
         </div>
         <input
           @keydown="keyEvent"
-          @input="
-            debounce(() => {
-              searchQuery = $event.target.value;
-            })
-          "
           v-model="searchQuery"
           type="text"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -112,7 +107,7 @@
               <td class="py-2 px-6">
                 <button
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                  @click="openModal(product)"
+                  @click="openRemoveModal(product)"
                 >
                   <IconC
                     iconName="TrashIcon"
@@ -126,10 +121,24 @@
       </table>
     </div>
     <div
-      class="fixed bottom-0 left-[16rem] right-0 flex items-center h-32 bg-gray-100 dark:bg-gray-700 px-2"
+      class="fixed bottom-0 left-[16rem] right-0 flex items-center justify-between h-32 bg-gray-100 dark:bg-gray-700 px-2"
     >
+      <button
+        :disabled="products.length === 0"
+        @click="openModal(finishOrderModalRef)"
+        type="button"
+        class="flex justify-center items-center flex-col text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+      >
+        <IconC
+          iconType="solid"
+          iconSize="20"
+          iconName="CheckIcon"
+          iconClass="w-6 h-6"
+        />
+        Finish (F8)
+      </button>
       <div
-        class="ml-auto flex flex-row items-center text-7xl text-gray-700 dark:text-gray-300"
+        class="flex flex-row items-center text-7xl text-gray-700 dark:text-gray-300"
       >
         Total:
         <div
@@ -143,22 +152,32 @@
     <remove-modal
       :productId="selectedProductToRemove.id"
       title="Product"
-      removeRef="remove-modal"
+      :removeRef="removeModalRef"
       @remove="removeProduct"
+    />
+    <finish-order-modal
+      :isLoading="isFinishOrderLoading"
+      :modalRef="finishOrderModalRef"
+      :total="total"
+      @submit="finishOrder"
     />
   </div>
 </template>
 
 <script>
 import RemoveModal from "@/components/modals/RemoveModal.vue";
+import FinishOrderModal from "@/components/modals/FinishOrderModal.vue";
 export default {
   components: {
     RemoveModal,
+    FinishOrderModal,
   },
   name: "NewSaleView",
   data() {
     return {
-      isLoading: false,
+      isFinishOrderLoading: false,
+      removeModalRef: "remove-modal",
+      finishOrderModalRef: "finish-order-modal",
       selectedProduct: {},
       searchQuery: "",
       searchedProducts: [],
@@ -166,21 +185,6 @@ export default {
       selectedProductToRemove: {},
       products: [],
       total: "0.00",
-    };
-  },
-  setup() {
-    function createDebounce() {
-      let timeout = null;
-      return function (func, delayMs) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          func();
-        }, delayMs || 500);
-      };
-    }
-
-    return {
-      debounce: createDebounce(),
     };
   },
   watch: {
@@ -209,6 +213,12 @@ export default {
         const isEmpty = Object.keys(this.selectedProduct).length === 0;
         if (!isEmpty) {
           this.openModal(this.selectedProduct);
+        }
+      }
+      if (e.key == "F8") {
+        const isProductsEmpty = this.products.length === 0;
+        if (!isProductsEmpty) {
+          this.openModal(this.finishOrderModalRef);
         }
       }
     });
@@ -254,15 +264,18 @@ export default {
         this.selectedProduct = product;
       }
     },
-    openModal(product) {
+    openRemoveModal(product) {
       this.selectedProductToRemove = product;
-      const el = document.getElementById("remove-modal");
+      this.openModal(this.removeModalRef);
+    },
+    openModal(modalRef) {
+      const el = document.getElementById(modalRef);
       // eslint-disable-next-line no-undef
       const mod = new Modal(el);
       mod.show();
     },
-    hideModal() {
-      const el = document.getElementById("remove-modal");
+    hideModal(modalRef) {
+      const el = document.getElementById(modalRef);
       // eslint-disable-next-line no-undef
       const mod = new Modal(el);
       mod.hide();
@@ -275,7 +288,25 @@ export default {
       this.products.splice(objectIdx, 1);
       this.total = this.getProductsTotal();
       this.selectedProduct = {};
-      this.hideModal();
+      this.hideModal(this.removeModalRef);
+    },
+    finishOrder(e) {
+      this.isFinishOrderLoading = true;
+      const data = {
+        products: this.products,
+        totalAmount: this.total,
+        customerAmount: parseInt(e).toFixed(2),
+      };
+      this.$store
+        .dispatch("orderModule/createOrder", data)
+        .then(() => {
+          this.isFinishOrderLoading = false;
+          this.$toast.success("Order was successful!");
+        })
+        .catch(() => {
+          this.isFinishOrderLoading = false;
+          this.$toast.error("Something went wrong, please try again later!");
+        });
     },
   },
 };

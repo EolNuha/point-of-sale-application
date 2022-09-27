@@ -2,8 +2,7 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between">
-      <div></div>
-      <div class="flex items-center w-64">
+      <div class="flex items-center w-1/2">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
           <div
@@ -50,6 +49,12 @@
         <tbody>
           <template v-for="order in orders" :key="order.id">
             <tr
+              @click="
+                $router.push({
+                  name: 'order-view',
+                  params: { orderId: order.id },
+                })
+              "
               class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
               :class="
                 selectedProduct === order

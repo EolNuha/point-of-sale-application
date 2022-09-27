@@ -1,1 +1,1 @@
-export default { orders: [] };
+export default { orders: [], order: {} };

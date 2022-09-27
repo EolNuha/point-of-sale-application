@@ -5,11 +5,12 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import CreateProductView from "../views/CreateProductView.vue";
-import ProductDetailsView from "../views/ProductDetailsView.vue";
-import ProductsView from "../views/ProductsView.vue";
-import OrdersView from "../views/OrdersView.vue";
-import NewOrderView from "../views/NewOrderView.vue";
+import CreateProductView from "../views/products/CreateProductView.vue";
+import ProductDetailsView from "../views/products/ProductDetailsView.vue";
+import ProductsView from "../views/products/ProductsView.vue";
+import OrdersView from "../views/orders/OrdersView.vue";
+import NewOrderView from "../views/orders/NewOrderView.vue";
+import OrderDetailsView from "../views/orders/OrderDetailsView.vue";
 
 const routes = [
   {
@@ -104,6 +105,26 @@ const routes = [
         {
           text: (route) => "New Order",
           to: "new-order",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/orders/:orderId",
+    name: "order-view",
+    component: OrderDetailsView,
+    meta: {
+      title: "Order Details",
+      breadcrumb: [
+        {
+          text: (route) => "Orders",
+          to: "orders",
+          active: false,
+        },
+        {
+          text: (route) => `${route.meta.title}`,
+          to: "order-view",
           active: true,
         },
       ],

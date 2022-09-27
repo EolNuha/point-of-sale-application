@@ -20,14 +20,38 @@ def getProductsList(products):
         products_list.append(product_dict)
     return products_list
 
+def getOrderItemsList(items):
+    orders_list = []
+    for i in items:
+        order_dict = {
+            "id": i.id,
+            "product": {
+                "id": i.product.id,
+                "name": i.product.name,
+                "barcode": i.product.barcode,
+                "stock": i.product.stock,
+                "purchasedPrice": i.product.purchased_price,
+                "sellingPrice": i.product.selling_price,
+                "dateCreated": i.product.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
+                "dateModified": i.product.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+            },
+            "quantity": i.quantity,
+            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+        }
+        orders_list.append(order_dict)
+    return orders_list
+
 def getOrdersList(orders):
     orders_list = []
     for i in orders:
+        print(i.order_items)
         order_dict = {
             "id": i.id,
             "totalAmount": i.total_amount,
             "customerAmount": i.customer_amount,
             "changeAmount": i.change_amount,
+            "orderItems": getOrderItemsList(i.order_items),
             "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
         }

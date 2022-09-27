@@ -297,6 +297,7 @@ export default {
     },
     finishOrder(e) {
       this.isFinishOrderLoading = true;
+      console.log(this.total);
       const data = {
         products: this.products,
         totalAmount: this.total,

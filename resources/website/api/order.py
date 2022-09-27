@@ -1,9 +1,9 @@
-from flask import Blueprint, request, jsonify, request, Response
+from flask import Blueprint, request, jsonify, request
 from website.models import Order, OrderItem, Product
-from website.helpers import getProductsList, getPaginatedDict, getOrdersList
-from datetime import datetime
+from website.helpers import getPaginatedDict, getOrdersList
 from website import db
 from sqlalchemy import or_
+from decimal import *
 
 order = Blueprint('order', __name__)
 
@@ -28,10 +28,10 @@ def createOrder():
         order_item = OrderItem(
             order=order,
             product=product_query,
-            quantity=product["quantity"],
+            quantity=Decimal(product["quantity"]),
         )
 
-        product_query.stock -= int(product["quantity"])
+        product_query.stock -= Decimal(product["quantity"])
         
         db.session.add(order_item)
 
@@ -67,3 +67,8 @@ def getOrders():
         .order_by(Order.id.desc()).paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getOrdersList(paginated_items.items), paginated_items))
+
+@order.route('/orders/<int:orderId>', methods=["GET"])
+def getOrderDetails(orderId):
+    orders = Order.query.filter_by(id=orderId).all()
+    return jsonify(getOrdersList(orders)[0])

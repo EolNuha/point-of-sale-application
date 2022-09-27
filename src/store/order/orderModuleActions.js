@@ -34,4 +34,17 @@ export default {
         });
     });
   },
+  getOrderDetails({ commit }, orderId) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseURL}/api/orders/${orderId}`)
+        .then(async (response) => {
+          commit("SET_ORDER", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

@@ -2,18 +2,7 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between">
-      <button
-        @click="
-          $router.push({
-            name: 'products-create',
-          })
-        "
-        class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-        Create Product
-      </button>
-      <div class="flex items-center w-64">
+      <div class="flex items-center w-1/2">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
           <div
@@ -37,6 +26,17 @@
           />
         </div>
       </div>
+      <button
+        @click="
+          $router.push({
+            name: 'products-create',
+          })
+        "
+        class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+        Create Product
+      </button>
     </div>
 
     <div

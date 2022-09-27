@@ -30,6 +30,8 @@ def createOrder():
             product=product_query,
             quantity=product["quantity"],
         )
+
+        product_query.stock -= int(product["quantity"])
         
         db.session.add(order_item)
 

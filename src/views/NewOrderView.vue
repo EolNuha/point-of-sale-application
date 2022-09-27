@@ -174,7 +174,7 @@ export default {
     RemoveModal,
     FinishOrderModal,
   },
-  name: "NewSaleView",
+  name: "NewOrderView",
   data() {
     return {
       isFinishOrderLoading: false,
@@ -300,13 +300,16 @@ export default {
       const data = {
         products: this.products,
         totalAmount: this.total,
-        customerAmount: parseInt(e).toFixed(2),
-        changeAmount: (parseInt(e) - this.total).toFixed(2),
+        customerAmount: parseFloat(e).toFixed(2),
+        changeAmount: (parseFloat(e) - this.total).toFixed(2),
       };
       this.$store
         .dispatch("orderModule/createOrder", data)
         .then(() => {
           this.isFinishOrderLoading = false;
+          this.products = [];
+          this.selectedProduct = {};
+          this.total = (0).toFixed(2);
           this.hideModal(this.finishOrderModalRef);
           this.$toast.success("Order was successful!");
         })

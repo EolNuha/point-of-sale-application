@@ -9,7 +9,7 @@ import CreateProductView from "../views/CreateProductView.vue";
 import ProductDetailsView from "../views/ProductDetailsView.vue";
 import ProductsView from "../views/ProductsView.vue";
 import OrdersView from "../views/OrdersView.vue";
-import NewSaleView from "../views/NewSaleView.vue";
+import NewOrderView from "../views/NewOrderView.vue";
 
 const routes = [
   {
@@ -90,11 +90,11 @@ const routes = [
     },
   },
   {
-    path: "/sales/new-sale",
-    name: "new-sale",
-    component: NewSaleView,
+    path: "/orders/new-order",
+    name: "new-order",
+    component: NewOrderView,
     meta: {
-      title: "New Sale",
+      title: "New Order",
       breadcrumb: [
         {
           text: (route) => "Orders",
@@ -102,8 +102,8 @@ const routes = [
           active: false,
         },
         {
-          text: (route) => "New Sale",
-          to: "new-sale",
+          text: (route) => "New Order",
+          to: "new-order",
           active: true,
         },
       ],

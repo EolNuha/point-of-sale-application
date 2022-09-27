@@ -20,6 +20,20 @@ def getProductsList(products):
         products_list.append(product_dict)
     return products_list
 
+def getOrdersList(orders):
+    orders_list = []
+    for i in orders:
+        order_dict = {
+            "id": i.id,
+            "totalAmount": i.total_amount,
+            "customerAmount": i.customer_amount,
+            "changeAmount": i.change_amount,
+            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+        }
+        orders_list.append(order_dict)
+    return orders_list
+
 def getPaginatedDict(data, paginated_items):
     return {
         "data": data,

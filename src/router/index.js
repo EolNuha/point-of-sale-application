@@ -8,6 +8,7 @@ import HomeView from "../views/HomeView.vue";
 import CreateProductView from "../views/CreateProductView.vue";
 import ProductDetailsView from "../views/ProductDetailsView.vue";
 import ProductsView from "../views/ProductsView.vue";
+import OrdersView from "../views/OrdersView.vue";
 import NewSaleView from "../views/NewSaleView.vue";
 
 const routes = [
@@ -74,15 +75,15 @@ const routes = [
     },
   },
   {
-    path: "/sales",
-    name: "sales",
-    component: NewSaleView,
+    path: "/orders",
+    name: "orders",
+    component: OrdersView,
     meta: {
-      title: "Sales",
+      title: "Orders",
       breadcrumb: [
         {
-          text: (route) => "Sales",
-          to: "sales",
+          text: (route) => "Orders",
+          to: "orders",
           active: true,
         },
       ],
@@ -96,8 +97,8 @@ const routes = [
       title: "New Sale",
       breadcrumb: [
         {
-          text: (route) => "Sales",
-          to: "sales",
+          text: (route) => "Orders",
+          to: "orders",
           active: false,
         },
         {

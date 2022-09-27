@@ -14,8 +14,10 @@ def create_app():
     db.init_app(app)
 
     from website.api.product import product
+    from website.api.order import order
 
     app.register_blueprint(product, url_prefix='/api/')
+    app.register_blueprint(order, url_prefix='/api/')
 
     create_database(app)
 

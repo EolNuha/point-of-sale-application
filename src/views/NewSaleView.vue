@@ -301,11 +301,13 @@ export default {
         products: this.products,
         totalAmount: this.total,
         customerAmount: parseInt(e).toFixed(2),
+        changeAmount: (parseInt(e) - this.total).toFixed(2),
       };
       this.$store
         .dispatch("orderModule/createOrder", data)
         .then(() => {
           this.isFinishOrderLoading = false;
+          this.hideModal(this.finishOrderModalRef);
           this.$toast.success("Order was successful!");
         })
         .catch(() => {

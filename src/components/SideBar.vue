@@ -69,6 +69,13 @@
           <ul id="sales-dropdown" class="hidden py-2 space-y-2">
             <li>
               <router-link
+                :to="{ name: 'orders' }"
+                class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                >Orders</router-link
+              >
+            </li>
+            <li>
+              <router-link
                 :to="{ name: 'new-sale' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
                 >New sale</router-link

@@ -1,0 +1,264 @@
+<!-- eslint-disable no-undef -->
+<template>
+  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+    <div class="flex items-center justify-between">
+      <div></div>
+      <div class="flex items-center w-64">
+        <label for="simple-search" class="sr-only">Search</label>
+        <div class="relative w-full">
+          <div
+            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+          >
+            <IconC
+              iconType="solid"
+              iconName="MagnifyingGlassIcon"
+              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+            />
+          </div>
+          <input
+            @input="
+              debounce(() => {
+                searchQuery = $event.target.value;
+              })
+            "
+            type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-65"
+    >
+      <table
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
+      >
+        <OverlayC v-if="isTableLoading" />
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="py-3 px-6"></th>
+            <th scope="col" class="py-3 px-6">ID</th>
+            <th scope="col" class="py-3 px-6">Total Amount</th>
+            <th scope="col" class="py-3 px-6">Customer Amount</th>
+            <th scope="col" class="py-3 px-6">Change Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="order in orders" :key="order.id">
+            <tr
+              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              :class="
+                selectedProduct === order
+                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
+                  : ''
+              "
+            >
+              <td class="py-2 px-6" @click="updateSelectedProduct(order)">
+                <IconC
+                  v-if="selectedProduct === order"
+                  iconName="CheckCircleIcon"
+                  iconClass="h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                />
+                <IconC
+                  v-else
+                  iconName="MinusCircleIcon"
+                  iconClass="h-6 w-6 text-gray-900 dark:text-gray-300"
+                />
+              </td>
+              <th
+                scope="row"
+                class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ order.id }}
+              </th>
+              <td class="py-2 px-6">{{ order.totalAmount }} €</td>
+              <td class="py-2 px-6">{{ order.customerAmount }} €</td>
+              <td class="py-2 px-6 max-w-xs break-words">
+                {{ order.changeAmount }} €
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-between items-center">
+      <div class="text-gray-700 dark:text-gray-400">
+        Viewing page
+        <span
+          class="bg-white dark:bg-gray-700 rounded-lg font-semibold text-gray-900 dark:text-white p-2.5"
+          >{{ currentPage }}</span
+        >
+        with {{ pagination.items }} items of total {{ pagination.total }}
+      </div>
+      <div aria-label="Page navigation" v-if="!(pagination.pages === 1)">
+        <ul class="inline-flex items-center -space-x-px">
+          <li
+            @click="getOrders(pagination.prev_num)"
+            v-if="pagination.has_prev"
+          >
+            <a
+              href="#"
+              onclick="return false;"
+              disabled
+              class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <span class="sr-only">Previous</span>
+              <IconC
+                iconType="solid"
+                icontType="20"
+                iconName="ChevronLeftIcon"
+                iconClass="w-5 h-5"
+              />
+            </a>
+          </li>
+          <li
+            v-for="page in pagination.page_range"
+            :key="page"
+            @click="getOrders(page)"
+          >
+            <a
+              href="#"
+              onclick="return false;"
+              aria-current="page"
+              :class="
+                page === currentPage
+                  ? 'py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                  : 'py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+              "
+              >{{ page }}</a
+            >
+          </li>
+          <li
+            @click="getOrders(pagination.next_num)"
+            v-if="pagination.has_next"
+          >
+            <a
+              href="#"
+              onclick="return false;"
+              class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <span class="sr-only">Next</span>
+              <IconC
+                iconType="solid"
+                icontType="20"
+                iconName="ChevronRightIcon"
+                iconClass="w-5 h-5"
+              />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isTableLoading: false,
+      selectedProduct: {},
+      selectedProductToDelete: {},
+      currentPage: 1,
+      searchQuery: "",
+    };
+  },
+  setup() {
+    function createDebounce() {
+      let timeout = null;
+      return function (func, delayMs) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          func();
+        }, delayMs || 500);
+      };
+    }
+
+    return {
+      debounce: createDebounce(),
+    };
+  },
+  watch: {
+    searchQuery: {
+      async handler(value) {
+        this.isTableLoading = true;
+        try {
+          await this.$store.dispatch("orderModule/getOrders", {
+            page: this.currentPage,
+            search: value,
+          });
+          this.isTableLoading = false;
+        } catch {
+          this.isTableLoading = false;
+        }
+      },
+    },
+  },
+  computed: {
+    orders() {
+      return this.$store.getters["orderModule/getOrdersList"];
+    },
+    pagination() {
+      return this.$store.getters["orderModule/getOrdersPagination"];
+    },
+  },
+  created() {
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "Delete") {
+        const isEmpty = Object.keys(this.selectedProduct).length === 0;
+        if (!isEmpty) {
+          this.openModal(this.selectedProduct);
+        }
+      }
+    });
+    this.reload();
+  },
+  methods: {
+    reload() {
+      this.isTableLoading = true;
+      this.selectedProduct = {};
+      this.$store
+        .dispatch("orderModule/getOrders", {
+          page: this.currentPage,
+        })
+        .then(() => {
+          this.isTableLoading = false;
+        })
+        .catch(() => {
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
+    updateSelectedProduct(product) {
+      if (this.selectedProduct.id === product.id) {
+        this.selectedProduct = {};
+      } else {
+        this.selectedProduct = product;
+      }
+    },
+    openModal(product) {
+      this.selectedProductToDelete = product;
+      const el = document.getElementById("delete-modal");
+      // eslint-disable-next-line no-undef
+      const mod = new Modal(el);
+      mod.show();
+    },
+    getOrders(page) {
+      this.isTableLoading = true;
+      this.$store
+        .dispatch("orderModule/getOrders", { page: page })
+        .then(() => {
+          this.isTableLoading = false;
+          this.currentPage = page;
+        })
+        .catch(() => {
+          this.isTableLoading = false;
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
+  },
+};
+</script>

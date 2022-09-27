@@ -35,7 +35,7 @@
               sidebar-toggle-item=""
               >Management</span
             >
-            <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4" />
+            <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
           <ul id="dropdown-example" class="hidden py-2 space-y-2">
             <li>
@@ -64,7 +64,7 @@
               sidebar-toggle-item=""
               >Orders</span
             >
-            <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4" />
+            <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
           <ul id="orders-dropdown" class="hidden py-2 space-y-2">
             <li>

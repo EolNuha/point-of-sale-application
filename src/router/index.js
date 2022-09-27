@@ -31,6 +31,7 @@ const routes = [
         {
           text: (route) => "Products",
           to: "products",
+          active: true,
         },
       ],
     },

@@ -14,10 +14,12 @@
           >
             <tr>
               <th scope="col" class="py-3 px-6">ID</th>
-              <th scope="col" class="py-3 px-6">Product name</th>
+              <th scope="col" class="py-3 px-6">Name</th>
               <th scope="col" class="py-3 px-6">Barcode</th>
               <th scope="col" class="py-3 px-6">Quantity</th>
               <th scope="col" class="py-3 px-6">Price</th>
+              <th scope="col" class="py-3 px-6">Price w/o Tax</th>
+              <th scope="col" class="py-3 px-6">Tax</th>
               <th scope="col" class="py-3 px-6">Total</th>
             </tr>
           </thead>
@@ -42,6 +44,12 @@
                   {{ item.product.sellingPrice }} €
                 </td>
                 <td class="py-3 px-6 max-w-xs break-words">
+                  {{ item.priceWithoutTax }} €
+                </td>
+                <td class="py-3 px-6 max-w-xs break-words">
+                  {{ item.taxAmount }} € ({{ item.product.tax }}%)
+                </td>
+                <td class="py-3 px-6 max-w-xs break-words">
                   {{ (item.product.sellingPrice * item.quantity).toFixed(2) }} €
                 </td>
               </tr>
@@ -56,11 +64,15 @@
             <tbody>
               <tr>
                 <td class="py-2">SUBTOTAL</td>
-                <td class="text-right py-2">400 €</td>
+                <td class="text-right py-2">{{ order.subTotalAmount }} €</td>
               </tr>
-              <tr>
-                <td class="py-2">TAX RATE</td>
-                <td class="text-right py-2">8%</td>
+              <tr v-if="order.eightTaxAmount > 0">
+                <td class="py-2">TAX RATE (8%)</td>
+                <td class="text-right py-2">{{ order.eightTaxAmount }} €</td>
+              </tr>
+              <tr v-if="order.eighteenTaxAmount > 0">
+                <td class="py-2">TAX RATE (18%)</td>
+                <td class="text-right py-2">{{ order.eighteenTaxAmount }} €</td>
               </tr>
               <tr class="font-bold text-xl">
                 <td class="py-2">TOTAL</td>

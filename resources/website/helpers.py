@@ -12,6 +12,7 @@ def getProductsList(products):
             "name": i.name,
             "barcode": i.barcode,
             "stock": i.stock,
+            "tax": i.tax,
             "purchasedPrice": i.purchased_price,
             "sellingPrice": i.selling_price,
             "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
@@ -30,12 +31,15 @@ def getOrderItemsList(items):
                 "name": i.product.name,
                 "barcode": i.product.barcode,
                 "stock": i.product.stock,
+                "tax": i.product.tax,
                 "purchasedPrice": i.product.purchased_price,
                 "sellingPrice": i.product.selling_price,
                 "dateCreated": i.product.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
                 "dateModified": i.product.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
             },
             "quantity": i.quantity,
+            "priceWithoutTax": i.price_without_tax,
+            "taxAmount": i.tax_amount,
             "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
         }
@@ -45,10 +49,12 @@ def getOrderItemsList(items):
 def getOrdersList(orders):
     orders_list = []
     for i in orders:
-        print(i.order_items)
         order_dict = {
             "id": i.id,
             "totalAmount": i.total_amount,
+            "subTotalAmount": i.subtotal_amount,
+            "eightTaxAmount": i.eight_tax_amount,
+            "eighteenTaxAmount": i.eighteen_tax_amount,
             "customerAmount": i.customer_amount,
             "changeAmount": i.change_amount,
             "orderItems": getOrderItemsList(i.order_items),

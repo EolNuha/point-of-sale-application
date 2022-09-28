@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, request
 from website.models import Order, OrderItem, Product
-from website.helpers import getPaginatedDict, getOrdersList
+from website.helpers import getPaginatedDict, getOrdersList, getOrderItemsList
 from website import db
 from sqlalchemy import or_
 from decimal import *
@@ -24,17 +24,37 @@ def createOrder():
     
 
     for product in products:
+        decimal_price = Decimal(product["sellingPrice"])
+        decimal_tax = Decimal(product["tax"])
+        price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
+        tax_amount = (decimal_tax / 100) * decimal_price
+
         product_query = Product.query.filter_by(id=product["id"]).one()
         order_item = OrderItem(
             order=order,
             product=product_query,
             quantity=Decimal(product["quantity"]),
+            price_without_tax=price_without_tax,
+            tax_amount=tax_amount
         )
 
         product_query.stock -= Decimal(product["quantity"])
         
         db.session.add(order_item)
 
+    subtotal, eight, eighteen = [], [], []
+
+    for item in getOrderItemsList(order.order_items):
+        subtotal.append(item['priceWithoutTax'] * Decimal(item['quantity']))
+        if item['product']['tax'] == 8:
+            eight.append(item['taxAmount'] * Decimal(item['quantity']))
+        if item['product']['tax'] == 18:
+            eighteen.append(item['taxAmount'] * Decimal(item['quantity']))
+    
+    order.subtotal_amount = sum(subtotal)
+    order.eight_tax_amount = sum(eight)
+    order.eighteen_tax_amount = sum(eighteen)
+    
     db.session.commit()
     data = {
         "orderId": order.id
@@ -46,13 +66,7 @@ def createOrder():
 def getOrders():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
-    search = request.args.get('search')
-
-    if search:
-        search = search.strip().replace('+', ' ')\
-            .replace('%20', ' ')
-    else: 
-        search = "*"
+    search = request.args.get('search', '*', type=str)
 
     if '*' in search or '_' in search: 
         looking_for = search.replace('_', '__')\

@@ -12,6 +12,7 @@ def createProduct():
     name = request.json["name"]
     barcode = request.json["barcode"]
     stock = request.json["stock"]
+    tax = request.json["tax"]
     purchased_price = request.json["purchasedPrice"]
     selling_price = request.json["sellingPrice"]
 
@@ -19,6 +20,7 @@ def createProduct():
         name=name, 
         barcode=barcode, 
         stock=stock, 
+        tax=tax, 
         purchased_price=purchased_price, 
         selling_price=selling_price
         )
@@ -34,13 +36,7 @@ def createProduct():
 def getProducts():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
-    search = request.args.get('search')
-
-    if search:
-        search = search.strip().replace('+', ' ')\
-            .replace('%20', ' ')
-    else: 
-        search = "*"
+    search = request.args.get('search', '*', type=str)
 
     if '*' in search or '_' in search: 
         looking_for = search.replace('_', '__')\
@@ -68,6 +64,7 @@ def updateProductDetails(productId):
     name = request.json["name"]
     barcode = request.json["barcode"]
     stock = request.json["stock"]
+    tax = request.json["tax"]
     purchased_price = request.json["purchasedPrice"]
     selling_price = request.json["sellingPrice"]
     
@@ -76,6 +73,7 @@ def updateProductDetails(productId):
     product.name = name
     product.barcode = barcode
     product.stock = stock
+    product.tax = tax
     product.purchased_price = purchased_price
     product.selling_price = selling_price
     product.modified = datetime.now()
@@ -85,6 +83,6 @@ def updateProductDetails(productId):
 
 @product.route('/products/<int:productId>', methods=["DELETE"])
 def deleteProductDetails(productId):
-    product = Product.query.filter_by(id=productId).delete()
+    Product.query.filter_by(id=productId).delete()
     db.session.commit()
     return "Success", 200

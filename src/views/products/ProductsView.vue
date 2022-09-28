@@ -57,6 +57,7 @@
             <th scope="col" class="py-3 px-6">Purchased Price</th>
             <th scope="col" class="py-3 px-6">Selling Price</th>
             <th scope="col" class="py-3 px-6">Stock</th>
+            <th scope="col" class="py-3 px-6">Tax</th>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
@@ -105,6 +106,7 @@
                   &#9679; {{ stockStatus(product.stock).text }}
                 </div>
               </td>
+              <td class="py-2 px-6 max-w-xs break-words">{{ product.tax }}%</td>
               <td
                 class="py-2 px-6"
                 @click="

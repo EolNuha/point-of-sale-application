@@ -9,10 +9,18 @@
           class="mr-3 h-6 sm:h-9"
           alt="Flowbite Logo"
         />
-        <span
-          class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
-          >Flowbite</span
-        >
+        <div>
+          <span
+            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+          >
+            Egzoni
+          </span>
+          <span
+            class="text-sm font-semibold whitespace-nowrap dark:text-gray-300"
+          >
+            Market
+          </span>
+        </div>
       </a>
       <ol class="inline-flex mr-auto space-x-1 md:space-x-3">
         <li class="inline-flex items-center">

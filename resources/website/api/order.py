@@ -32,8 +32,13 @@ def createOrder():
         product_query = Product.query.filter_by(id=product["id"]).one()
         order_item = OrderItem(
             order=order,
-            product=product_query,
-            quantity=Decimal(product["quantity"]),
+            product_id=product_query.id,
+            product_barcode=product_query.barcode,
+            product_name=product_query.name,
+            product_tax=product_query.tax,
+            product_purchased_price=product_query.purchased_price,
+            product_selling_price=product_query.selling_price,
+            product_quantity=Decimal(product["quantity"]),
             price_without_tax=price_without_tax,
             tax_amount=tax_amount
         )

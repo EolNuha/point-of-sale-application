@@ -13,7 +13,6 @@ class Product(db.Model):
     selling_price = db.Column(db.Numeric(precision=10, scale=2), default=0)
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
-    order_items = db.relationship('OrderItem', backref='product', lazy=True)
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,8 +29,13 @@ class Order(db.Model):
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    quantity = db.Column(db.Numeric(precision=10, scale=2))
+    product_id = db.Column(db.Integer)
+    product_barcode = db.Column(db.Integer, unique=True)
+    product_name = db.Column(db.String(200))
+    product_tax=db.Column(db.Integer, default=18)
+    product_purchased_price = db.Column(db.Numeric(precision=10, scale=2), default=0)
+    product_selling_price = db.Column(db.Numeric(precision=10, scale=2), default=0)
+    product_quantity = db.Column(db.Numeric(precision=10, scale=2))
     price_without_tax = db.Column(db.Numeric(precision=10, scale=2))
     tax_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())

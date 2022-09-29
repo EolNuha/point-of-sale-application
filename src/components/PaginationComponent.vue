@@ -1,0 +1,99 @@
+<template>
+  <div class="flex justify-between items-center">
+    <div class="text-gray-700 dark:text-gray-400">
+      Viewing page
+      <span
+        class="rounded-lg font-semibold text-gray-900 dark:text-white p-1"
+        >{{ currentPage }}</span
+      >
+      with
+      <span
+        class="rounded-lg font-semibold text-gray-900 dark:text-gray-300 p-1"
+        >{{ pagination.items }}</span
+      >
+      items of total
+      <span
+        class="rounded-lg font-semibold text-gray-900 dark:text-gray-300 p-1"
+        >{{ pagination.total }}</span
+      >
+    </div>
+    <div aria-label="Page navigation" v-if="!(pagination.pages === 1)">
+      <ul class="inline-flex items-center -space-x-px">
+        <li>
+          <button
+            :disabled="!pagination.has_prev"
+            @click="$emit('pageChange', pagination.prev_num)"
+            class="block py-2 px-3 ml-0 text-gray-500 bg-transparent rounded-lg dark:text-gray-400"
+            :class="
+              pagination.has_prev
+                ? 'hover:text-gray-700 dark:hover:text-white'
+                : ''
+            "
+          >
+            <span class="sr-only">Previous</span>
+            <IconC
+              iconType="solid"
+              icontType="20"
+              iconName="ChevronLeftIcon"
+              iconClass="w-4 h-4"
+            />
+          </button>
+        </li>
+        <li
+          v-for="page in pagination.page_range"
+          :key="page"
+          @click="$emit('pageChange', page)"
+        >
+          <a
+            href="#"
+            onclick="return false;"
+            aria-current="page"
+            :class="
+              page === currentPage
+                ? 'py-2 px-3 rounded-md text-blue-600 bg-transparent border border-blue-500 hover:text-blue-700'
+                : 'py-2 px-3 text-gray-500 bg-transparent border border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-white'
+            "
+            >{{ page }}</a
+          >
+        </li>
+        <li>
+          <button
+            :disabled="!pagination.has_next"
+            @click="$emit('pageChange', pagination.next_num)"
+            class="block py-2 px-3 ml-0 text-gray-500 bg-transparent rounded-lg dark:text-gray-400"
+            :class="
+              pagination.has_next
+                ? 'hover:text-gray-700 dark:hover:text-white'
+                : ''
+            "
+          >
+            <span class="sr-only">Next</span>
+            <IconC
+              iconType="solid"
+              icontType="20"
+              iconName="ChevronRightIcon"
+              iconClass="w-4 h-4"
+            />
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    pagination: {
+      type: null,
+      required: false,
+      default: null,
+    },
+    currentPage: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
+  },
+};
+</script>

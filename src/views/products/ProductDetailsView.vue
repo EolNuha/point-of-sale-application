@@ -1,5 +1,6 @@
 <template>
-  <div class="bg-gray-200 dark:bg-gray-800 min-h-screen">
+  <div class="bg-gray-200 dark:bg-gray-800 min-h-screen relative">
+    <OverlayC v-if="isDataLoading" />
     <Form v-slot="{ errors }" class="p-5" @submit="updateProduct">
       <div class="mb-6">
         <label
@@ -155,7 +156,7 @@
         type="submit"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-32 px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        <div role="status" v-if="isLoading">
+        <div role="status" v-if="isUpdateLoading">
           <IconC
             iconType="custom"
             iconName="SpinnerIcon"
@@ -180,7 +181,8 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isDataLoading: true,
+      isUpdateLoading: false,
     };
   },
   computed: {
@@ -193,6 +195,7 @@ export default {
       .dispatch("productModule/getProductDetails", this.$route.params.productId)
       .then(async (response) => {
         this.$route.meta.title = response.data.name;
+        this.isDataLoading = false;
       });
   },
   methods: {
@@ -200,15 +203,15 @@ export default {
       return value ? true : "This field is required";
     },
     updateProduct() {
-      this.isLoading = true;
+      this.isUpdateLoading = true;
       this.$store
         .dispatch("productModule/updateProduct", this.product)
         .then(() => {
-          this.isLoading = false;
+          this.isUpdateLoading = false;
           this.$toast.success("Product updated successfully!");
         })
         .catch(() => {
-          this.isLoading = false;
+          this.isUpdateLoading = false;
           this.$toast.error("Something went wrong!");
         });
     },

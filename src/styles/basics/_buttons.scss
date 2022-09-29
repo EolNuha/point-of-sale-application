@@ -1,0 +1,61 @@
+.red-gradient-btn {
+	@apply text-white;
+	@apply bg-gradient-to-r #{!important};
+	@apply from-red-500 #{!important};
+	@apply via-red-600 #{!important};
+	@apply to-red-700 #{!important};
+	@apply hover:bg-gradient-to-br #{!important};
+	@apply focus:ring-4;
+	@apply focus:outline-none;
+	@apply focus:ring-red-300;
+	@apply dark:focus:ring-red-800;
+	@apply font-medium;
+	@apply rounded-lg;
+	@apply text-sm;
+	@apply px-5;
+	@apply py-2;
+	@apply text-center;
+}
+
+.blue-gradient-btn {
+	@apply text-white;
+	@apply bg-gradient-to-r #{!important};
+	@apply from-blue-500 #{!important};
+	@apply via-blue-600 #{!important};
+	@apply to-blue-700 #{!important};
+	@apply hover:bg-gradient-to-br #{!important};
+	@apply focus:ring-4;
+	@apply focus:outline-none;
+	@apply focus:ring-blue-300;
+	@apply dark:focus:ring-blue-800;
+	@apply font-medium;
+	@apply rounded-lg;
+	@apply text-sm;
+	@apply px-5;
+	@apply py-2;
+	@apply text-center;
+}
+
+.gray-outline-btn {
+	@apply text-gray-500;
+	@apply bg-white;
+	@apply hover:bg-gray-100;
+	@apply focus:ring-4;
+	@apply focus:outline-none;
+	@apply focus:ring-gray-200;
+	@apply rounded-lg;
+	@apply border;
+	@apply border-gray-500;
+	@apply text-sm;
+	@apply font-medium;
+	@apply px-5;
+	@apply py-2;
+	@apply hover:text-gray-900;
+	@apply dark:border-gray-200;
+	@apply dark:bg-gray-700;
+	@apply dark:text-gray-300;
+	@apply dark:border-gray-500;
+	@apply dark:hover:text-white;
+	@apply dark:hover:bg-gray-600;
+	@apply dark:focus:ring-gray-600;
+}

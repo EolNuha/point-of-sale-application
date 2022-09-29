@@ -1,0 +1,14 @@
+.search-results {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  top: 35px;
+}
+.min-w-64 {
+  min-width: 16rem;
+}
+#total {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

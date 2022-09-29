@@ -8,6 +8,7 @@ import "./index.css";
 import "flowbite";
 import Icon from "@/components/icons/IconComponent.vue";
 import Overlay from "@/components/OverlayComponent.vue";
+import Pagination from "@/components/PaginationComponent.vue";
 import { useToast } from "vue-toastification";
 import openModalPlugin from "./plugins/modals";
 import focusPlugin from "./plugins/focus";
@@ -30,7 +31,10 @@ const options = {
   icon: true,
   rtl: false,
 };
-app.component("IconC", Icon).component("OverlayC", Overlay);
+app
+  .component("IconC", Icon)
+  .component("OverlayC", Overlay)
+  .component("PaginationC", Pagination);
 app
   .use(store)
   .use(router)

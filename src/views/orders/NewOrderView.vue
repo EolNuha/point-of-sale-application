@@ -233,18 +233,21 @@ export default {
       await this.$swal({
         html: "<p class='text-gray-500 dark:text-gray-300'>The order is not finished, are you sure you want to continue?</p>",
         icon: "info",
+        iconColor: "#1c64f2",
         confirmButtonText: "Confirm",
         showCancelButton: true,
         showCloseButton: true,
         focusConfirm: true,
+        reverseButtons: true,
         customClass: {
-          popup: "bg-gray-300 dark:bg-gray-800",
-          header: "bg-gray-300 dark:bg-gray-800",
-          confirmButton:
-            "text-white !bg-blue-600 h-10 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 text-sm font-medium rounded-lg inline-flex items-center justify-center px-5 py-2.5",
-          cancelButton:
-            "text-gray-500 bg-white h-10 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border !border-gray-200 text-sm font-medium px-5 py-2.5 !hover:text-gray-900 inline-flex items-center justify-center !dark:bg-gray-700 !dark:text-gray-300 !dark:border-gray-500 !dark:hover:text-white !dark:hover:bg-gray-600 !dark:focus:ring-gray-600 mr-2",
+          popup: "bg-gray-300 dark:bg-gray-700",
+          header: "bg-gray-300 dark:bg-gray-700",
+          confirmButton: "blue-gradient-btn",
+          cancelButton: "gray-outline-btn mr-2",
+          closeButton:
+            "text-gray-400 bg-transparent hover:text-gray-900 text-sm dark:hover:text-white",
         },
+        buttonsStyling: false,
       }).then((result) => {
         if (result.isDenied || result.isDismissed) {
           return;
@@ -352,18 +355,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-results {
-  position: absolute;
-  width: 100%;
-  z-index: 1000;
-  top: 35px;
-}
-.min-w-64 {
-  min-width: 16rem;
-}
-#total {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+@import "/src/styles/views/_neworder.scss";
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white dark:bg-gray-900 w-64 sidebar min-h-screen"
+    class="bg-white dark:bg-gray-900 w-64 sidebar h-screen overflow-y-auto"
     aria-label="Sidebar"
   >
     <div class="overflow-y-auto py-4 px-3">

@@ -21,7 +21,7 @@
               })
             "
             type="text"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search"
           />
         </div>
@@ -32,7 +32,7 @@
             name: 'products-create',
           })
         "
-        class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="blue-gradient-btn flex items-center text-center"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
         Create Product
@@ -142,74 +142,11 @@
         </tbody>
       </table>
     </div>
-    <div class="flex justify-between items-center">
-      <div class="text-gray-700 dark:text-gray-400">
-        Viewing page
-        <span
-          class="bg-white dark:bg-gray-700 rounded-lg font-semibold text-gray-900 dark:text-white p-2.5"
-          >{{ currentPage }}</span
-        >
-        with {{ pagination.items }} items of total {{ pagination.total }}
-      </div>
-      <div aria-label="Page navigation" v-if="!(pagination.pages === 1)">
-        <ul class="inline-flex items-center -space-x-px">
-          <li
-            @click="getProducts(pagination.prev_num)"
-            v-if="pagination.has_prev"
-          >
-            <a
-              href="#"
-              onclick="return false;"
-              disabled
-              class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <span class="sr-only">Previous</span>
-              <IconC
-                iconType="solid"
-                icontType="20"
-                iconName="ChevronLeftIcon"
-                iconClass="w-5 h-5"
-              />
-            </a>
-          </li>
-          <li
-            v-for="page in pagination.page_range"
-            :key="page"
-            @click="getProducts(page)"
-          >
-            <a
-              href="#"
-              onclick="return false;"
-              aria-current="page"
-              :class="
-                page === currentPage
-                  ? 'py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                  : 'py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-              "
-              >{{ page }}</a
-            >
-          </li>
-          <li
-            @click="getProducts(pagination.next_num)"
-            v-if="pagination.has_next"
-          >
-            <a
-              href="#"
-              onclick="return false;"
-              class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <span class="sr-only">Next</span>
-              <IconC
-                iconType="solid"
-                icontType="20"
-                iconName="ChevronRightIcon"
-                iconClass="w-5 h-5"
-              />
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <PaginationC
+      :pagination="pagination"
+      :currentPage="currentPage"
+      @pageChange="getProducts($event)"
+    />
     <delete-modal
       :productId="selectedProductToDelete.id"
       deleteAction="productModule/deleteProduct"

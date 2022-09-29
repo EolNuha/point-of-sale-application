@@ -30,14 +30,14 @@
             @click="$hideModal(deleteRef)"
             :disabled="isLoading"
             type="button"
-            class="text-gray-500 bg-white w-20 h-10 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 inline-flex items-center justify-center dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600 mr-2"
+            class="gray-outline-btn mr-2 h-10 w-20 inline-flex items-center justify-center"
           >
             Cancel
           </button>
           <button
             @click="deleteFunc"
             type="button"
-            class="text-white bg-red-600 w-20 h-10 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 text-sm font-medium rounded-lg inline-flex items-center justify-center px-5 py-2.5"
+            class="red-gradient-btn h-10 w-20 inline-flex justify-center items-center"
           >
             <IconC
               v-if="isLoading"

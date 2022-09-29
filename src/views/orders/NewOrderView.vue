@@ -127,7 +127,7 @@
     >
       <button
         :disabled="products.length === 0"
-        @click="$openModal(finishOrderModalRef)"
+        @click="finishOrderModal()"
         type="button"
         id="finishOrder"
         class="flex justify-center items-center flex-col text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -215,13 +215,13 @@ export default {
       if (e.key == "Delete") {
         const isEmpty = Object.keys(this.selectedProduct).length === 0;
         if (!isEmpty) {
-          this.$openModal(this.selectedProduct);
+          this.openRemoveModal(this.selectedProduct);
         }
       }
       if (e.key == "F8") {
         const isProductsEmpty = this.products.length === 0;
         if (!isProductsEmpty) {
-          this.$openModal(this.finishOrderModalRef);
+          this.finishOrderModal();
         }
       }
     });
@@ -301,6 +301,7 @@ export default {
     openRemoveModal(product) {
       this.selectedProductToRemove = product;
       this.$openModal(this.removeModalRef);
+      this.$putOnFocus("remove-modal-btn");
     },
     removeProduct(productId) {
       const objectIdx = this.products.findIndex(
@@ -310,6 +311,10 @@ export default {
       this.total = this.getProductsTotal();
       this.selectedProduct = {};
       this.$hideModal(this.removeModalRef);
+    },
+    finishOrderModal() {
+      this.$openModal(this.finishOrderModalRef);
+      this.$putOnFocus("finish-order-modal-btn");
     },
     finishOrder(e) {
       this.isFinishOrderLoading = true;

@@ -36,6 +36,7 @@
           </button>
           <button
             @click="$emit('remove', productId)"
+            id="remove-modal-btn"
             type="button"
             class="text-white bg-red-600 w-20 h-10 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 text-sm font-medium rounded-lg inline-flex items-center justify-center px-5 py-2.5"
           >

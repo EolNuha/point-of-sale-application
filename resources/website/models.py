@@ -30,7 +30,7 @@ class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
     product_id = db.Column(db.Integer)
-    product_barcode = db.Column(db.Integer, unique=True)
+    product_barcode = db.Column(db.Integer)
     product_name = db.Column(db.String(200))
     product_tax=db.Column(db.Integer, default=18)
     product_purchased_price = db.Column(db.Numeric(precision=10, scale=2), default=0)

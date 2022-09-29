@@ -129,7 +129,7 @@
               <td class="py-2 px-6">
                 <button
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                  @click="openModal(product)"
+                  @click="deleteProduct(product)"
                 >
                   <IconC
                     iconName="TrashIcon"
@@ -281,7 +281,7 @@ export default {
       if (e.key == "Delete") {
         const isEmpty = Object.keys(this.selectedProduct).length === 0;
         if (!isEmpty) {
-          this.openModal(this.selectedProduct);
+          this.deleteProduct(this.selectedProduct);
         }
       }
     });
@@ -309,12 +309,9 @@ export default {
         this.selectedProduct = product;
       }
     },
-    openModal(product) {
+    deleteProduct(product) {
       this.selectedProductToDelete = product;
-      const el = document.getElementById("delete-modal");
-      // eslint-disable-next-line no-undef
-      const mod = new Modal(el);
-      mod.show();
+      this.$openModal("delete-modal");
     },
     getProducts(page) {
       this.isTableLoading = true;

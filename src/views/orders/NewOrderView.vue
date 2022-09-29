@@ -127,8 +127,9 @@
     >
       <button
         :disabled="products.length === 0"
-        @click="openModal(finishOrderModalRef)"
+        @click="$openModal(finishOrderModalRef)"
         type="button"
+        id="finishOrder"
         class="flex justify-center items-center flex-col text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
       >
         <IconC
@@ -214,16 +215,44 @@ export default {
       if (e.key == "Delete") {
         const isEmpty = Object.keys(this.selectedProduct).length === 0;
         if (!isEmpty) {
-          this.openModal(this.selectedProduct);
+          this.$openModal(this.selectedProduct);
         }
       }
       if (e.key == "F8") {
         const isProductsEmpty = this.products.length === 0;
         if (!isProductsEmpty) {
-          this.openModal(this.finishOrderModalRef);
+          this.$openModal(this.finishOrderModalRef);
         }
       }
     });
+  },
+  async beforeRouteLeave(to, from, next) {
+    if (!(this.products.length === 0)) {
+      await this.$swal({
+        html: "<p class='text-gray-500 dark:text-gray-300'>The order is not finished, are you sure you want to continue?</p>",
+        icon: "info",
+        confirmButtonText: "Confirm",
+        showCancelButton: true,
+        showCloseButton: true,
+        focusConfirm: true,
+        customClass: {
+          popup: "bg-gray-300 dark:bg-gray-800",
+          header: "bg-gray-300 dark:bg-gray-800",
+          confirmButton:
+            "text-white !bg-blue-600 h-10 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 text-sm font-medium rounded-lg inline-flex items-center justify-center px-5 py-2.5",
+          cancelButton:
+            "text-gray-500 bg-white h-10 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border !border-gray-200 text-sm font-medium px-5 py-2.5 !hover:text-gray-900 inline-flex items-center justify-center !dark:bg-gray-700 !dark:text-gray-300 !dark:border-gray-500 !dark:hover:text-white !dark:hover:bg-gray-600 !dark:focus:ring-gray-600 mr-2",
+        },
+      }).then((result) => {
+        if (result.isDenied || result.isDismissed) {
+          return;
+        } else {
+          next();
+        }
+      });
+    } else {
+      next();
+    }
   },
   methods: {
     keyEvent(e) {
@@ -271,20 +300,7 @@ export default {
     },
     openRemoveModal(product) {
       this.selectedProductToRemove = product;
-      this.openModal(this.removeModalRef);
-    },
-    openModal(modalRef) {
-      const el = document.getElementById(modalRef);
-      // eslint-disable-next-line no-undef
-      const mod = new Modal(el);
-      mod.show();
-    },
-    hideModal(modalRef) {
-      const el = document.getElementById(modalRef);
-      // eslint-disable-next-line no-undef
-      const mod = new Modal(el);
-      mod.hide();
-      document.querySelector("[modal-backdrop]").remove();
+      this.$openModal(this.removeModalRef);
     },
     removeProduct(productId) {
       const objectIdx = this.products.findIndex(
@@ -293,11 +309,11 @@ export default {
       this.products.splice(objectIdx, 1);
       this.total = this.getProductsTotal();
       this.selectedProduct = {};
-      this.hideModal(this.removeModalRef);
+      this.$hideModal(this.removeModalRef);
     },
     finishOrder(e) {
       this.isFinishOrderLoading = true;
-      console.log(this.total);
+      document.getElementById("finishOrder").blur();
       const data = {
         products: this.products,
         totalAmount: this.total,
@@ -311,7 +327,7 @@ export default {
           this.products = [];
           this.selectedProduct = {};
           this.total = (0).toFixed(2);
-          this.hideModal(this.finishOrderModalRef);
+          this.$hideModal(this.finishOrderModalRef);
           this.$toast.success("Order was successful!");
         })
         .catch(() => {

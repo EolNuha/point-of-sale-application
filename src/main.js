@@ -9,6 +9,9 @@ import "flowbite";
 import Icon from "@/components/icons/IconComponent.vue";
 import Overlay from "@/components/OverlayComponent.vue";
 import { useToast } from "vue-toastification";
+import openModalPlugin from "./plugins/modals";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 const app = createApp(App);
 app.config.globalProperties.$toast = useToast();
@@ -27,4 +30,10 @@ const options = {
   rtl: false,
 };
 app.component("IconC", Icon).component("OverlayC", Overlay);
-app.use(store).use(router).use(Toast, options).mount("#app");
+app
+  .use(store)
+  .use(router)
+  .use(Toast, options)
+  .use(VueSweetalert2)
+  .use(openModalPlugin)
+  .mount("#app");

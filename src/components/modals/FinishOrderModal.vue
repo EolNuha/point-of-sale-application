@@ -2,8 +2,6 @@
   <div
     :id="modalRef"
     :ref="modalRef"
-    tabindex="-1"
-    aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
   >
     <div class="relative p-4 w-full max-w-md h-full md:h-auto">
@@ -12,7 +10,7 @@
         <button
           type="button"
           class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-          @click="hideModal"
+          @click="$hideModal(modalRef)"
           :disabled="isLoading"
         >
           <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
@@ -62,7 +60,6 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Customer amount"
                 required
-                autofocus
                 :disabled="isLoading"
               />
               <span class="text-red-700">{{ errors.customer_amount }}</span>
@@ -86,6 +83,7 @@
               <span class="text-red-700">{{ errors.change_amount }}</span>
             </div>
             <button
+              id="submit-btn"
               type="submit"
               class="inline-flex items-center justify-center w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
@@ -97,7 +95,7 @@
                 />
                 <span class="sr-only">Loading...</span>
               </div>
-              <div v-else>Finish Order</div>
+              <template v-else>Finish Order</template>
             </button>
           </Form>
         </div>
@@ -124,6 +122,11 @@ export default {
       changeAmount: "0.00",
     };
   },
+  mounted() {
+    setTimeout(function () {
+      console.log(document.getElementById("submit-btn").focus);
+    }, 1000);
+  },
   watch: {
     total: {
       async handler(value) {
@@ -148,13 +151,13 @@ export default {
         return "The change amount can not be less than 0";
       }
     },
-    hideModal() {
-      const el = document.getElementById(this.modalRef);
-      // eslint-disable-next-line no-undef
-      const mod = new Modal(el);
-      mod.hide();
-      document.querySelector("[modal-backdrop]").remove();
-    },
+    // $hideModal() {
+    //   const el = document.getElementById(this.modalRef);
+    //   // eslint-disable-next-line no-undef
+    //   const mod = new Modal(el);
+    //   mod.hide();
+    //   document.querySelector("[modal-backdrop]").remove();
+    // },
   },
 };
 </script>

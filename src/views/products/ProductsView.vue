@@ -101,9 +101,24 @@
               <td class="py-2 px-6">
                 <div
                   class="flex items-center"
+                  :id="`product-${product.id}-tooltip-btn`"
+                  @mouseover="
+                    $showTooltip({
+                      targetEl: `product-${product.id}-tooltip`,
+                      triggerEl: `product-${product.id}-tooltip-btn`,
+                    })
+                  "
                   :class="stockStatus(product.stock).color"
                 >
                   &#9679; {{ stockStatus(product.stock).text }}
+                </div>
+                <div
+                  :id="`product-${product.id}-tooltip`"
+                  role="tooltip"
+                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                >
+                  {{ product.stock }}
+                  <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
               </td>
               <td class="py-2 px-6 max-w-xs break-words">{{ product.tax }}%</td>
@@ -249,6 +264,7 @@ export default {
     deleteProduct(product) {
       this.selectedProductToDelete = product;
       this.$openModal("delete-modal");
+      this.$putOnFocus("delete-product-modal-btn");
     },
     getProducts(page) {
       this.isTableLoading = true;

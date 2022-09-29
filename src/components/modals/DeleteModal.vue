@@ -36,6 +36,7 @@
           </button>
           <button
             @click="deleteFunc"
+            id="delete-product-modal-btn"
             type="button"
             class="red-gradient-btn h-10 w-20 inline-flex justify-center items-center"
           >

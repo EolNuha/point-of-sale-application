@@ -97,6 +97,7 @@
               <td class="py-2 px-6">{{ product.barcode }}</td>
               <td class="py-2 px-6">
                 <input
+                  :id="`product-${product.id}-quantity`"
                   v-model="product.quantity"
                   class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   @change="() => (total = getProductsTotal())"
@@ -186,6 +187,7 @@ export default {
       searchedProducts: [],
       searchedProductsIndex: 0,
       selectedProductToRemove: {},
+      lastSearchedProduct: {},
       products: [],
       total: "0.00",
     };
@@ -265,12 +267,17 @@ export default {
       if (e.key === "ArrowUp" && this.searchedProductsIndex > 0) {
         this.searchedProductsIndex--;
       }
+      if (e.key === "Enter" && !this.searchQuery) {
+        const productId = this.lastSearchedProduct.id;
+        this.$putOnFocus(`product-${productId}-quantity`);
+      }
       if (e.key === "Enter" && this.searchQuery) {
         const selectedPr = this.searchedProducts[this.searchedProductsIndex];
         this.onSearchedProductClick(selectedPr);
       }
     },
     onSearchedProductClick(product) {
+      this.lastSearchedProduct = product;
       product.quantity = 1;
       const objectIdx = this.products.findIndex(
         (item) => item.id === product.id

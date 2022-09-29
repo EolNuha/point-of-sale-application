@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl p-5 relative">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl py-8 relative px-10">
       <OverlayC v-if="isLoading" />
       <p class="text-gray-700 dark:text-gray-300 text-3xl font-bold">
         Order #{{ $route.params.orderId }}

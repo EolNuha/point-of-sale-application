@@ -321,7 +321,7 @@ export default {
     },
     finishOrderModal() {
       this.$openModal(this.finishOrderModalRef);
-      this.$putOnFocus("finish-order-modal-btn");
+      this.$putOnFocus("customer_amount");
     },
     finishOrder(e) {
       this.isFinishOrderLoading = true;

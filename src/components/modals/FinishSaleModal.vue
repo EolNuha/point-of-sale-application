@@ -18,7 +18,7 @@
         </button>
         <div class="py-6 px-6 lg:px-8">
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-            Finish Order
+            Finish Sale
           </h3>
           <Form
             v-slot="{ errors }"
@@ -29,18 +29,18 @@
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Order total</label
+                >Sale total</label
               >
               <input
                 :value="total"
                 type="number"
-                name="order_total"
-                id="order_total"
+                name="sale_total"
+                id="sale_total"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Order total"
+                placeholder="Sale total"
                 disabled
               />
-              <span class="text-red-700">{{ errors.order_total }}</span>
+              <span class="text-red-700">{{ errors.sale_total }}</span>
             </div>
             <div>
               <label
@@ -83,7 +83,7 @@
               <span class="text-red-700">{{ errors.change_amount }}</span>
             </div>
             <button
-              id="finish-order-modal-btn"
+              id="finish-sale-modal-btn"
               type="submit"
               class="inline-flex items-center justify-center w-full blue-gradient-btn"
             >
@@ -95,7 +95,7 @@
                 />
                 <span class="sr-only">Loading...</span>
               </div>
-              <template v-else>Finish Order</template>
+              <template v-else>Finish Sale</template>
             </button>
           </Form>
         </div>
@@ -114,7 +114,7 @@ export default {
   props: {
     total: { type: null, required: true, default: null },
     isLoading: { type: null, required: true, default: false },
-    modalRef: { type: String, required: true, default: "order-modal" },
+    modalRef: { type: String, required: true, default: "sale-modal" },
   },
   data() {
     return {

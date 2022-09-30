@@ -8,9 +8,9 @@ import HomeView from "../views/HomeView.vue";
 import ProductsView from "../views/products/ProductsView.vue";
 import CreateProductView from "../views/products/CreateProductView.vue";
 import ProductDetailsView from "../views/products/ProductDetailsView.vue";
-import OrdersView from "../views/orders/OrdersView.vue";
-import NewOrderView from "../views/orders/NewOrderView.vue";
-import OrderDetailsView from "../views/orders/OrderDetailsView.vue";
+import SalesView from "../views/sales/SalesView.vue";
+import NewSaleView from "../views/sales/NewSaleView.vue";
+import SaleDetailsView from "../views/sales/SaleDetailsView.vue";
 import PurchasesView from "../views/purchases/PurchasesView.vue";
 import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
 
@@ -79,55 +79,55 @@ const routes = [
     },
   },
   {
-    path: "/orders",
-    name: "orders",
-    component: OrdersView,
+    path: "/sales",
+    name: "sales",
+    component: SalesView,
     meta: {
-      title: "Orders",
+      title: "Sales",
       breadcrumb: [
         {
-          text: (route) => "Orders",
-          to: "orders",
+          text: (route) => "Sales",
+          to: "sales",
           active: true,
         },
       ],
     },
   },
   {
-    path: "/orders/new-order",
-    name: "new-order",
-    component: NewOrderView,
+    path: "/sales/new-sale",
+    name: "new-sale",
+    component: NewSaleView,
     meta: {
-      title: "New Order",
+      title: "New Sale",
       breadcrumb: [
         {
-          text: (route) => "Orders",
-          to: "orders",
+          text: (route) => "Sales",
+          to: "sales",
           active: false,
         },
         {
-          text: (route) => "New Order",
-          to: "new-order",
+          text: (route) => "New Sale",
+          to: "new-sale",
           active: true,
         },
       ],
     },
   },
   {
-    path: "/orders/:orderId",
-    name: "order-view",
-    component: OrderDetailsView,
+    path: "/sales/:saleId",
+    name: "sale-view",
+    component: SaleDetailsView,
     meta: {
-      title: "Order Details",
+      title: "Sale Details",
       breadcrumb: [
         {
-          text: (route) => "Orders",
-          to: "orders",
+          text: (route) => "Sales",
+          to: "sales",
           active: false,
         },
         {
           text: (route) => `${route.meta.title}`,
-          to: "order-view",
+          to: "sale-view",
           active: true,
         },
       ],

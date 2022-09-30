@@ -21,10 +21,10 @@ def getProductsList(products):
         products_list.append(product_dict)
     return products_list
 
-def getOrderItemsList(items):
-    orders_list = []
+def getSaleItemsList(items):
+    sales_list = []
     for i in items:
-        order_dict = {
+        sale_dict = {
             "id": i.id,
             "product": {
                 "id": i.product_id,
@@ -40,13 +40,13 @@ def getOrderItemsList(items):
             "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
         }
-        orders_list.append(order_dict)
-    return orders_list
+        sales_list.append(sale_dict)
+    return sales_list
 
-def getOrdersList(orders):
-    orders_list = []
-    for i in orders:
-        order_dict = {
+def getSalesList(sales):
+    sales_list = []
+    for i in sales:
+        sale_dict = {
             "id": i.id,
             "totalAmount": i.total_amount,
             "subTotalAmount": i.subtotal_amount,
@@ -54,12 +54,12 @@ def getOrdersList(orders):
             "eighteenTaxAmount": i.eighteen_tax_amount,
             "customerAmount": i.customer_amount,
             "changeAmount": i.change_amount,
-            "orderItems": getOrderItemsList(i.order_items),
+            "saleItems": getSaleItemsList(i.sale_items),
             "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
         }
-        orders_list.append(order_dict)
-    return orders_list
+        sales_list.append(sale_dict)
+    return sales_list
 
 def getPurchaseItemsList(items):
     purchases_list = []

@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { createStore } from "vuex";
 import productModule from "./product/productModule";
-import orderModule from "./order/orderModule";
+import saleModule from "./sale/saleModule";
 import purchaseModule from "./purchase/purchaseModule";
 
 export default createStore({
@@ -10,5 +10,5 @@ export default createStore({
   getters: {},
   mutations: {},
   actions: {},
-  modules: { productModule, orderModule, purchaseModule },
+  modules: { productModule, saleModule, purchaseModule },
 });

@@ -58,8 +58,8 @@
           <button
             type="button"
             class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-            aria-controls="orders-dropdown"
-            data-collapse-toggle="orders-dropdown"
+            aria-controls="sales-dropdown"
+            data-collapse-toggle="sales-dropdown"
           >
             <IconC
               iconType="outline"
@@ -69,23 +69,23 @@
             <span
               class="flex-1 ml-3 text-left whitespace-nowrap"
               sidebar-toggle-item=""
-              >Orders</span
+              >Sales</span
             >
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
-          <ul id="orders-dropdown" class="hidden py-2 space-y-2">
+          <ul id="sales-dropdown" class="hidden py-2 space-y-2">
             <li>
               <router-link
-                :to="{ name: 'orders' }"
+                :to="{ name: 'new-sale' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Orders</router-link
+                >New Sale</router-link
               >
             </li>
             <li>
               <router-link
-                :to="{ name: 'new-order' }"
+                :to="{ name: 'sales' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >New order</router-link
+                >Sales List</router-link
               >
             </li>
           </ul>

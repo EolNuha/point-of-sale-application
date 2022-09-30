@@ -13,7 +13,7 @@ class Product(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
 
-class Order(db.Model):
+class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     total_amount = db.Column(db.Numeric(precision=10, scale=2))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=2))
@@ -23,11 +23,11 @@ class Order(db.Model):
     change_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
-    order_items = db.relationship('OrderItem', backref='order', lazy=True)
+    sale_items = db.relationship('SaleItem', backref='sale', lazy=True)
 
-class OrderItem(db.Model):
+class SaleItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    sale_id = db.Column(db.Integer, db.ForeignKey('sale.id'), nullable=False)
     product_id = db.Column(db.Integer)
     product_barcode = db.Column(db.Integer)
     product_name = db.Column(db.String(200))

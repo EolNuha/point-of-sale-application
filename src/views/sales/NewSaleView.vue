@@ -128,9 +128,9 @@
     >
       <button
         :disabled="products.length === 0"
-        @click="finishOrderModal()"
+        @click="finishSaleModal()"
         type="button"
-        id="finishOrder"
+        id="finishSale"
         class="flex justify-center items-center flex-col text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
       >
         <IconC
@@ -159,29 +159,29 @@
       :removeRef="removeModalRef"
       @remove="removeProduct"
     />
-    <finish-order-modal
-      :isLoading="isFinishOrderLoading"
-      :modalRef="finishOrderModalRef"
+    <finish-sale-modal
+      :isLoading="isFinishSaleLoading"
+      :modalRef="finishSaleModalRef"
       :total="total"
-      @submit="finishOrder"
+      @submit="finishSale"
     />
   </div>
 </template>
 
 <script>
 import RemoveModal from "@/components/modals/RemoveModal.vue";
-import FinishOrderModal from "@/components/modals/FinishOrderModal.vue";
+import FinishSaleModal from "@/components/modals/FinishSaleModal.vue";
 export default {
   components: {
     RemoveModal,
-    FinishOrderModal,
+    FinishSaleModal,
   },
-  name: "NewOrderView",
+  name: "NewSaleView",
   data() {
     return {
-      isFinishOrderLoading: false,
+      isFinishSaleLoading: false,
       removeModalRef: "remove-modal",
-      finishOrderModalRef: "finish-order-modal",
+      finishSaleModalRef: "finish-sale-modal",
       selectedProduct: {},
       searchQuery: "",
       searchedProducts: [],
@@ -223,7 +223,7 @@ export default {
       if (e.key == "F8") {
         const isProductsEmpty = this.products.length === 0;
         if (!isProductsEmpty) {
-          this.finishOrderModal();
+          this.finishSaleModal();
         }
       }
     });
@@ -231,7 +231,7 @@ export default {
   async beforeRouteLeave(to, from, next) {
     if (!(this.products.length === 0)) {
       await this.$swal({
-        html: "<p class='text-gray-500 dark:text-gray-300'>The order is not finished, are you sure you want to continue?</p>",
+        html: "<p class='text-gray-500 dark:text-gray-300'>The sale is not finished, are you sure you want to continue?</p>",
         icon: "info",
         iconColor: "#1c64f2",
         confirmButtonText: "Confirm",
@@ -322,13 +322,12 @@ export default {
       this.selectedProduct = {};
       this.$hideModal(this.removeModalRef);
     },
-    finishOrderModal() {
-      this.$openModal(this.finishOrderModalRef);
+    finishSaleModal() {
+      this.$openModal(this.finishSaleModalRef);
       this.$putOnFocus("customer_amount");
     },
-    finishOrder(e) {
-      this.isFinishOrderLoading = true;
-      document.getElementById("finishOrder").blur();
+    finishSale(e) {
+      this.isFinishSaleLoading = true;
       const data = {
         products: this.products,
         totalAmount: this.total,
@@ -336,17 +335,17 @@ export default {
         changeAmount: (parseFloat(e) - this.total).toFixed(2),
       };
       this.$store
-        .dispatch("orderModule/createOrder", data)
+        .dispatch("saleModule/createSale", data)
         .then(() => {
-          this.isFinishOrderLoading = false;
+          this.isFinishSaleLoading = false;
           this.products = [];
           this.selectedProduct = {};
           this.total = (0).toFixed(2);
-          this.$hideModal(this.finishOrderModalRef);
-          this.$toast.success("Order was successful!");
+          this.$hideModal(this.finishSaleModalRef);
+          this.$toast.success("Sale was successful!");
         })
         .catch(() => {
-          this.isFinishOrderLoading = false;
+          this.isFinishSaleLoading = false;
           this.$toast.error("Something went wrong, please try again later!");
         });
     },
@@ -355,5 +354,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "/src/styles/views/_neworder.scss";
+@import "/src/styles/views/_newsale.scss";
 </style>

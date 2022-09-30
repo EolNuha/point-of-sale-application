@@ -5,10 +5,10 @@ import axios from "axios";
 const baseURL = "http://localhost:5000";
 
 export default {
-  createOrder({ commit, state }, data) {
+  createSale({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       axios({
-        url: `/api/orders`,
+        url: `/api/sales`,
         baseURL,
         method: "POST",
         data,
@@ -21,12 +21,12 @@ export default {
         });
     });
   },
-  getOrders({ commit }, data) {
+  getSales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/orders`, { params: data })
+        .get(`${baseURL}/api/sales`, { params: data })
         .then(async (response) => {
-          commit("SET_ORDERS", response.data);
+          commit("SET_SALES", response.data);
           resolve(response);
         })
         .catch((error) => {
@@ -34,12 +34,12 @@ export default {
         });
     });
   },
-  getOrderDetails({ commit }, orderId) {
+  getSaleDetails({ commit }, saleId) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/orders/${orderId}`)
+        .get(`${baseURL}/api/sales/${saleId}`)
         .then(async (response) => {
-          commit("SET_ORDER", response.data);
+          commit("SET_SALE", response.data);
           resolve(response);
         })
         .catch((error) => {

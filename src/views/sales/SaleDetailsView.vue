@@ -3,7 +3,7 @@
     <div class="bg-white dark:bg-gray-900 rounded-3xl py-8 relative px-10">
       <OverlayC v-if="isLoading" />
       <p class="text-gray-700 dark:text-gray-300 text-3xl font-bold">
-        Order #{{ $route.params.orderId }}
+        Sale #{{ $route.params.saleId }}
       </p>
       <div class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style">
         <table
@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="item in order.orderItems" :key="item.id">
+            <template v-for="item in sale.saleItems" :key="item.id">
               <tr class="bg-white dark:bg-gray-900">
                 <td class="py-3 px-6">{{ item.product.id }}</td>
                 <td
@@ -64,19 +64,19 @@
             <tbody>
               <tr>
                 <td class="py-2">SUBTOTAL</td>
-                <td class="text-right py-2">{{ order.subTotalAmount }} €</td>
+                <td class="text-right py-2">{{ sale.subTotalAmount }} €</td>
               </tr>
-              <tr v-if="order.eightTaxAmount > 0">
+              <tr v-if="sale.eightTaxAmount > 0">
                 <td class="py-2">TAX RATE (8%)</td>
-                <td class="text-right py-2">{{ order.eightTaxAmount }} €</td>
+                <td class="text-right py-2">{{ sale.eightTaxAmount }} €</td>
               </tr>
-              <tr v-if="order.eighteenTaxAmount > 0">
+              <tr v-if="sale.eighteenTaxAmount > 0">
                 <td class="py-2">TAX RATE (18%)</td>
-                <td class="text-right py-2">{{ order.eighteenTaxAmount }} €</td>
+                <td class="text-right py-2">{{ sale.eighteenTaxAmount }} €</td>
               </tr>
               <tr class="font-bold text-xl">
                 <td class="py-2">TOTAL</td>
-                <td class="text-right py-2">{{ order.totalAmount }} €</td>
+                <td class="text-right py-2">{{ sale.totalAmount }} €</td>
               </tr>
             </tbody>
           </table>
@@ -94,13 +94,13 @@ export default {
     };
   },
   computed: {
-    order() {
-      return this.$store.state.orderModule.order;
+    sale() {
+      return this.$store.state.saleModule.sale;
     },
   },
   async mounted() {
     await this.$store
-      .dispatch("orderModule/getOrderDetails", this.$route.params.orderId)
+      .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)
       .then(() => {
         this.isLoading = false;
       });

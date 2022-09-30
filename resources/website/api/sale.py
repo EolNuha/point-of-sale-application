@@ -1,26 +1,26 @@
 from flask import Blueprint, request, jsonify, request
-from website.models import Order, OrderItem, Product
-from website.helpers import getPaginatedDict, getOrdersList, getOrderItemsList
+from website.models import Sale, SaleItem, Product
+from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList
 from website import db
 from sqlalchemy import or_
 from decimal import *
 
-order = Blueprint('order', __name__)
+sale = Blueprint('sale', __name__)
 
-@order.route('/orders', methods=["POST"])
-def createOrder():
+@sale.route('/sales', methods=["POST"])
+def createSale():
     products = request.json["products"]
     total_amount = request.json["totalAmount"]
     customer_amount = request.json["customerAmount"]
     change_amount = request.json["changeAmount"]
 
-    order = Order(
+    sale = Sale(
         total_amount=total_amount,
         customer_amount=customer_amount,
         change_amount=change_amount,
     )
 
-    db.session.add(order)
+    db.session.add(sale)
     
 
     for product in products:
@@ -30,8 +30,8 @@ def createOrder():
         tax_amount = (decimal_tax / 100) * decimal_price
 
         product_query = Product.query.filter_by(id=product["id"]).one()
-        order_item = OrderItem(
-            order=order,
+        sale_item = SaleItem(
+            sale=sale,
             product_id=product_query.id,
             product_barcode=product_query.barcode,
             product_name=product_query.name,
@@ -45,30 +45,27 @@ def createOrder():
 
         product_query.stock -= Decimal(product["quantity"])
         
-        db.session.add(order_item)
+        db.session.add(sale_item)
 
     subtotal, eight, eighteen = [], [], []
 
-    for item in getOrderItemsList(order.order_items):
+    for item in getSaleItemsList(sale.sale_items):
         subtotal.append(item['priceWithoutTax'] * Decimal(item['quantity']))
         if item['product']['tax'] == 8:
             eight.append(item['taxAmount'] * Decimal(item['quantity']))
         if item['product']['tax'] == 18:
             eighteen.append(item['taxAmount'] * Decimal(item['quantity']))
     
-    order.subtotal_amount = sum(subtotal)
-    order.eight_tax_amount = sum(eight)
-    order.eighteen_tax_amount = sum(eighteen)
+    sale.subtotal_amount = sum(subtotal)
+    sale.eight_tax_amount = sum(eight)
+    sale.eighteen_tax_amount = sum(eighteen)
     
     db.session.commit()
-    data = {
-        "orderId": order.id
-    }
     
-    return jsonify(data), 200
+    return jsonify("success"), 200
 
-@order.route('/orders', methods=["GET"])
-def getOrders():
+@sale.route('/sales', methods=["GET"])
+def getSales():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)
@@ -80,14 +77,14 @@ def getOrders():
     else:
         looking_for = '%{0}%'.format(search)
         
-    paginated_items = Order.query.filter(or_(
-        Order.id.ilike(looking_for),
+    paginated_items = Sale.query.filter(or_(
+        Sale.id.ilike(looking_for),
         ))\
-        .order_by(Order.id.desc()).paginate(page=page, per_page=per_page)
+        .order_by(Sale.id.desc()).paginate(page=page, per_page=per_page)
 
-    return jsonify(getPaginatedDict(getOrdersList(paginated_items.items), paginated_items))
+    return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
 
-@order.route('/orders/<int:orderId>', methods=["GET"])
-def getOrderDetails(orderId):
-    orders = Order.query.filter_by(id=orderId).all()
-    return jsonify(getOrdersList(orders)[0])
+@sale.route('/sales/<int:saleId>', methods=["GET"])
+def getSaleDetails(saleId):
+    sales = Sale.query.filter_by(id=saleId).all()
+    return jsonify(getSalesList(sales)[0])

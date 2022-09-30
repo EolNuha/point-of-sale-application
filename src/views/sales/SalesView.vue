@@ -26,6 +26,17 @@
           />
         </div>
       </div>
+      <button
+        @click="
+          $router.push({
+            name: 'new-sale',
+          })
+        "
+        class="blue-gradient-btn flex items-center text-center"
+      >
+        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+        New Sale
+      </button>
     </div>
 
     <div
@@ -47,7 +58,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="order in orders" :key="order.id">
+          <template v-for="sale in sales" :key="sale.id">
             <tr
               class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
             >
@@ -55,19 +66,19 @@
                 scope="row"
                 class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {{ order.id }}
+                {{ sale.id }}
               </th>
-              <td class="py-2 px-6">{{ order.totalAmount }} €</td>
-              <td class="py-2 px-6">{{ order.customerAmount }} €</td>
+              <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
+              <td class="py-2 px-6">{{ sale.customerAmount }} €</td>
               <td class="py-2 px-6 max-w-xs break-words">
-                {{ order.changeAmount }} €
+                {{ sale.changeAmount }} €
               </td>
               <td class="py-2 px-6">
                 <button
                   @click="
                     $router.push({
-                      name: 'order-view',
-                      params: { orderId: order.id },
+                      name: 'sale-view',
+                      params: { saleId: sale.id },
                     })
                   "
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
@@ -86,7 +97,7 @@
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
-      @pageChange="getOrders($event)"
+      @pageChange="getSales($event)"
     />
   </div>
 </template>
@@ -122,7 +133,7 @@ export default {
       async handler(value) {
         this.isTableLoading = true;
         try {
-          await this.$store.dispatch("orderModule/getOrders", {
+          await this.$store.dispatch("saleModule/getSales", {
             page: this.currentPage,
             search: value,
           });
@@ -134,11 +145,11 @@ export default {
     },
   },
   computed: {
-    orders() {
-      return this.$store.getters["orderModule/getOrdersList"];
+    sales() {
+      return this.$store.getters["saleModule/getSalesList"];
     },
     pagination() {
-      return this.$store.getters["orderModule/getOrdersPagination"];
+      return this.$store.getters["saleModule/getSalesPagination"];
     },
   },
   created() {
@@ -149,7 +160,7 @@ export default {
       this.isTableLoading = true;
       this.selectedProduct = {};
       this.$store
-        .dispatch("orderModule/getOrders", {
+        .dispatch("saleModule/getSales", {
           page: this.currentPage,
         })
         .then(() => {
@@ -159,10 +170,10 @@ export default {
           this.$toast.error("Something went wrong, please try again later!");
         });
     },
-    getOrders(page) {
+    getSales(page) {
       this.isTableLoading = true;
       this.$store
-        .dispatch("orderModule/getOrders", { page: page })
+        .dispatch("saleModule/getSales", { page: page })
         .then(() => {
           this.isTableLoading = false;
           this.currentPage = page;

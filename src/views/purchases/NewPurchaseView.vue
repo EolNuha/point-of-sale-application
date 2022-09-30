@@ -156,6 +156,7 @@
           />
         </div>
         <button
+          v-show="products.length != 1"
           type="button"
           class="p-1.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-900 items-end mt-auto mb-2"
           @click="removeProduct(index)"

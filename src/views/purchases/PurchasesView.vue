@@ -1,0 +1,299 @@
+<!-- eslint-disable no-undef -->
+<template>
+  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center w-1/2">
+        <label for="simple-search" class="sr-only">Search</label>
+        <div class="relative w-full">
+          <div
+            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+          >
+            <IconC
+              iconType="solid"
+              iconName="MagnifyingGlassIcon"
+              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+            />
+          </div>
+          <input
+            @input="
+              debounce(() => {
+                searchQuery = $event.target.value;
+              })
+            "
+            type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+      <button
+        @click="
+          $router.push({
+            name: 'new-purchase',
+          })
+        "
+        class="blue-gradient-btn flex items-center text-center"
+      >
+        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+        New Purchase
+      </button>
+    </div>
+
+    <div
+      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-65"
+    >
+      <table
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
+      >
+        <OverlayC v-if="isTableLoading" />
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="py-3 px-6"></th>
+            <th scope="col" class="py-3 px-6">ID</th>
+            <th scope="col" class="py-3 px-6">Product name</th>
+            <th scope="col" class="py-3 px-6">Barcode</th>
+            <th scope="col" class="py-3 px-6">Purchased Price</th>
+            <th scope="col" class="py-3 px-6">Selling Price</th>
+            <th scope="col" class="py-3 px-6">Stock</th>
+            <th scope="col" class="py-3 px-6">Tax</th>
+            <th scope="col" class="py-3 px-6"></th>
+            <th scope="col" class="py-3 px-6"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="product in products" :key="product.id">
+            <tr
+              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              :class="
+                selectedProduct === product
+                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
+                  : ''
+              "
+            >
+              <td class="py-2 px-6" @click="updateSelectedProduct(product)">
+                <IconC
+                  v-if="selectedProduct === product"
+                  iconName="CheckCircleIcon"
+                  iconClass="h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                />
+                <IconC
+                  v-else
+                  iconName="MinusCircleIcon"
+                  iconClass="h-6 w-6 text-gray-900 dark:text-gray-300"
+                />
+              </td>
+              <th
+                scope="row"
+                class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ product.id }}
+              </th>
+              <td class="py-2 px-6">{{ product.name }}</td>
+              <td class="py-2 px-6">{{ product.barcode }}</td>
+              <td class="py-2 px-6 max-w-xs break-words">
+                {{ product.purchasedPrice }} €
+              </td>
+              <td class="py-2 px-6 max-w-xs break-words">
+                {{ product.sellingPrice }} €
+              </td>
+              <td class="py-2 px-6">
+                <div
+                  class="flex items-center"
+                  :id="`product-${product.id}-tooltip-btn`"
+                  @mouseover="
+                    $showTooltip({
+                      targetEl: `product-${product.id}-tooltip`,
+                      triggerEl: `product-${product.id}-tooltip-btn`,
+                    })
+                  "
+                  :class="stockStatus(product.stock).color"
+                >
+                  &#9679; {{ stockStatus(product.stock).text }}
+                </div>
+                <div
+                  :id="`product-${product.id}-tooltip`"
+                  role="tooltip"
+                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                >
+                  {{ product.stock }}
+                  <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </td>
+              <td class="py-2 px-6 max-w-xs break-words">{{ product.tax }}%</td>
+              <td
+                class="py-2 px-6"
+                @click="
+                  $router.push({
+                    name: 'product-view',
+                    params: { productId: product.id },
+                  })
+                "
+              >
+                <button
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                >
+                  <IconC
+                    iconType="solid"
+                    iconName="PencilIcon"
+                    iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                  />
+                </button>
+              </td>
+              <td class="py-2 px-6">
+                <button
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  @click="deleteProduct(product)"
+                >
+                  <IconC
+                    iconName="TrashIcon"
+                    iconClass="w-5 h-5 text-red-700 cursor-pointer"
+                  />
+                </button>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+    <PaginationC
+      :pagination="pagination"
+      :currentPage="currentPage"
+      @pageChange="getProducts($event)"
+    />
+    <delete-modal
+      :productId="selectedProductToDelete.id"
+      deleteAction="productModule/deleteProduct"
+      getAction="productModule/getProducts"
+      title="Product"
+      deleteRef="delete-modal"
+      @reload="reload"
+    >
+    </delete-modal>
+  </div>
+</template>
+
+<script>
+import DeleteModal from "@/components/modals/DeleteModal.vue";
+export default {
+  components: {
+    DeleteModal,
+  },
+  data() {
+    return {
+      isTableLoading: false,
+      selectedProduct: {},
+      selectedProductToDelete: {},
+      currentPage: 1,
+      searchQuery: "",
+    };
+  },
+  setup() {
+    function createDebounce() {
+      let timeout = null;
+      return function (func, delayMs) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          func();
+        }, delayMs || 500);
+      };
+    }
+
+    return {
+      debounce: createDebounce(),
+    };
+  },
+  watch: {
+    searchQuery: {
+      async handler(value) {
+        this.isTableLoading = true;
+        try {
+          await this.$store.dispatch("productModule/getProducts", {
+            page: this.currentPage,
+            search: value,
+          });
+          this.isTableLoading = false;
+        } catch {
+          this.isTableLoading = false;
+        }
+      },
+    },
+  },
+  computed: {
+    products() {
+      return this.$store.getters["productModule/getProductsList"];
+    },
+    pagination() {
+      return this.$store.getters["productModule/getProductsPagination"];
+    },
+  },
+  created() {
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "Delete") {
+        const isEmpty = Object.keys(this.selectedProduct).length === 0;
+        if (!isEmpty) {
+          this.deleteProduct(this.selectedProduct);
+        }
+      }
+    });
+    this.reload();
+  },
+  methods: {
+    reload() {
+      this.isTableLoading = true;
+      this.selectedProduct = {};
+      this.$store
+        .dispatch("productModule/getProducts", {
+          page: this.currentPage,
+        })
+        .then(() => {
+          this.isTableLoading = false;
+        })
+        .catch(() => {
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
+    updateSelectedProduct(product) {
+      if (this.selectedProduct.id === product.id) {
+        this.selectedProduct = {};
+      } else {
+        this.selectedProduct = product;
+      }
+    },
+    deleteProduct(product) {
+      this.selectedProductToDelete = product;
+      this.$openModal("delete-modal");
+      this.$putOnFocus("delete-product-modal-btn");
+    },
+    getProducts(page) {
+      this.isTableLoading = true;
+      this.$store
+        .dispatch("productModule/getProducts", { page: page })
+        .then(() => {
+          this.isTableLoading = false;
+          this.currentPage = page;
+        })
+        .catch(() => {
+          this.isTableLoading = false;
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
+    stockStatus(v) {
+      let color;
+      let text;
+      if (v >= 50) {
+        color = "text-green-500";
+        text = "In stock";
+      } else if (v < 50 && v > 0) {
+        color = "text-yellow-400";
+        text = "Low stock";
+      } else if (v <= 0) {
+        color = "text-red-700";
+        text = "Out of stock";
+      }
+      return { color, text };
+    },
+  },
+};
+</script>

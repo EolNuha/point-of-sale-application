@@ -137,7 +137,6 @@
 </template>
 
 <script>
-import { useToast } from "vue-toastification";
 import { Field, Form } from "vee-validate";
 
 export default {
@@ -145,10 +144,6 @@ export default {
   components: {
     Field,
     Form,
-  },
-  setup() {
-    const toast = useToast();
-    return { toast };
   },
   data() {
     return {

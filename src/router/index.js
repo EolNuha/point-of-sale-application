@@ -5,12 +5,14 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ProductsView from "../views/products/ProductsView.vue";
 import CreateProductView from "../views/products/CreateProductView.vue";
 import ProductDetailsView from "../views/products/ProductDetailsView.vue";
-import ProductsView from "../views/products/ProductsView.vue";
 import OrdersView from "../views/orders/OrdersView.vue";
 import NewOrderView from "../views/orders/NewOrderView.vue";
 import OrderDetailsView from "../views/orders/OrderDetailsView.vue";
+import PurchasesView from "../views/purchases/PurchasesView.vue";
+import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
 
 const routes = [
   {
@@ -126,6 +128,41 @@ const routes = [
         {
           text: (route) => `${route.meta.title}`,
           to: "order-view",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/purchases",
+    name: "purchases",
+    component: PurchasesView,
+    meta: {
+      title: "Purchases",
+      breadcrumb: [
+        {
+          text: (route) => "Purchases",
+          to: "purchases",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/purchases/new-purchase",
+    name: "new-purchase",
+    component: NewPurchaseView,
+    meta: {
+      title: "New Purchase",
+      breadcrumb: [
+        {
+          text: (route) => "Purchases",
+          to: "purchases",
+          active: false,
+        },
+        {
+          text: (route) => "New Purchase",
+          to: "new-purchase",
           active: true,
         },
       ],

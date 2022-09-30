@@ -50,105 +50,36 @@
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">Product name</th>
-            <th scope="col" class="py-3 px-6">Barcode</th>
-            <th scope="col" class="py-3 px-6">Purchased Price</th>
-            <th scope="col" class="py-3 px-6">Selling Price</th>
-            <th scope="col" class="py-3 px-6">Stock</th>
-            <th scope="col" class="py-3 px-6">Tax</th>
-            <th scope="col" class="py-3 px-6"></th>
+            <th scope="col" class="py-3 px-6">Total Amount</th>
+            <th scope="col" class="py-3 px-6">Seller Name</th>
+            <th scope="col" class="py-3 px-6">Seller Invoice Number</th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>
         <tbody>
-          <template v-for="product in products" :key="product.id">
+          <template v-for="purchase in purchases" :key="purchase.id">
             <tr
               class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
-              :class="
-                selectedProduct === product
-                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
-                  : ''
-              "
             >
-              <td class="py-2 px-6" @click="updateSelectedProduct(product)">
-                <IconC
-                  v-if="selectedProduct === product"
-                  iconName="CheckCircleIcon"
-                  iconClass="h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
-                />
-                <IconC
-                  v-else
-                  iconName="MinusCircleIcon"
-                  iconClass="h-6 w-6 text-gray-900 dark:text-gray-300"
-                />
-              </td>
               <th
                 scope="row"
                 class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {{ product.id }}
+                {{ purchase.id }}
               </th>
-              <td class="py-2 px-6">{{ product.name }}</td>
-              <td class="py-2 px-6">{{ product.barcode }}</td>
+              <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
+              <td class="py-2 px-6">{{ purchase.sellerName }}</td>
               <td class="py-2 px-6 max-w-xs break-words">
-                {{ product.purchasedPrice }} €
-              </td>
-              <td class="py-2 px-6 max-w-xs break-words">
-                {{ product.sellingPrice }} €
-              </td>
-              <td class="py-2 px-6">
-                <div
-                  class="flex items-center"
-                  :id="`product-${product.id}-tooltip-btn`"
-                  @mouseover="
-                    $showTooltip({
-                      targetEl: `product-${product.id}-tooltip`,
-                      triggerEl: `product-${product.id}-tooltip-btn`,
-                    })
-                  "
-                  :class="stockStatus(product.stock).color"
-                >
-                  &#9679; {{ stockStatus(product.stock).text }}
-                </div>
-                <div
-                  :id="`product-${product.id}-tooltip`"
-                  role="tooltip"
-                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-                >
-                  {{ product.stock }}
-                  <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
-              </td>
-              <td class="py-2 px-6 max-w-xs break-words">{{ product.tax }}%</td>
-              <td
-                class="py-2 px-6"
-                @click="
-                  $router.push({
-                    name: 'product-view',
-                    params: { productId: product.id },
-                  })
-                "
-              >
-                <button
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                >
-                  <IconC
-                    iconType="solid"
-                    iconName="PencilIcon"
-                    iconClass="w-5 h-5 text-blue-700 cursor-pointer"
-                  />
-                </button>
+                {{ purchase.sellerInvoiceNumber }}
               </td>
               <td class="py-2 px-6">
                 <button
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                  @click="deleteProduct(product)"
                 >
                   <IconC
-                    iconName="TrashIcon"
-                    iconClass="w-5 h-5 text-red-700 cursor-pointer"
+                    iconName="DocumentMagnifyingGlassIcon"
+                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
                   />
                 </button>
               </td>
@@ -160,31 +91,16 @@
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
-      @pageChange="getProducts($event)"
+      @pageChange="getPurchases($event)"
     />
-    <delete-modal
-      :productId="selectedProductToDelete.id"
-      deleteAction="productModule/deleteProduct"
-      getAction="productModule/getProducts"
-      title="Product"
-      deleteRef="delete-modal"
-      @reload="reload"
-    >
-    </delete-modal>
   </div>
 </template>
 
 <script>
-import DeleteModal from "@/components/modals/DeleteModal.vue";
 export default {
-  components: {
-    DeleteModal,
-  },
   data() {
     return {
       isTableLoading: false,
-      selectedProduct: {},
-      selectedProductToDelete: {},
       currentPage: 1,
       searchQuery: "",
     };
@@ -209,7 +125,7 @@ export default {
       async handler(value) {
         this.isTableLoading = true;
         try {
-          await this.$store.dispatch("productModule/getProducts", {
+          await this.$store.dispatch("purchaseModule/getPurchases", {
             page: this.currentPage,
             search: value,
           });
@@ -220,31 +136,23 @@ export default {
       },
     },
   },
+  created() {
+    this.reload();
+  },
   computed: {
-    products() {
-      return this.$store.getters["productModule/getProductsList"];
+    purchases() {
+      return this.$store.getters["purchaseModule/getPurchasesList"];
     },
     pagination() {
-      return this.$store.getters["productModule/getProductsPagination"];
+      return this.$store.getters["purchaseModule/getPurchasesPagination"];
     },
-  },
-  created() {
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct).length === 0;
-        if (!isEmpty) {
-          this.deleteProduct(this.selectedProduct);
-        }
-      }
-    });
-    this.reload();
   },
   methods: {
     reload() {
       this.isTableLoading = true;
       this.selectedProduct = {};
       this.$store
-        .dispatch("productModule/getProducts", {
+        .dispatch("purchaseModule/getPurchases", {
           page: this.currentPage,
         })
         .then(() => {
@@ -254,22 +162,10 @@ export default {
           this.$toast.error("Something went wrong, please try again later!");
         });
     },
-    updateSelectedProduct(product) {
-      if (this.selectedProduct.id === product.id) {
-        this.selectedProduct = {};
-      } else {
-        this.selectedProduct = product;
-      }
-    },
-    deleteProduct(product) {
-      this.selectedProductToDelete = product;
-      this.$openModal("delete-modal");
-      this.$putOnFocus("delete-product-modal-btn");
-    },
-    getProducts(page) {
+    getPurchases(page) {
       this.isTableLoading = true;
       this.$store
-        .dispatch("productModule/getProducts", { page: page })
+        .dispatch("purchaseModule/getPurchases", { page: page })
         .then(() => {
           this.isTableLoading = false;
           this.currentPage = page;
@@ -278,21 +174,6 @@ export default {
           this.isTableLoading = false;
           this.$toast.error("Something went wrong, please try again later!");
         });
-    },
-    stockStatus(v) {
-      let color;
-      let text;
-      if (v >= 50) {
-        color = "text-green-500";
-        text = "In stock";
-      } else if (v < 50 && v > 0) {
-        color = "text-yellow-400";
-        text = "Low stock";
-      } else if (v <= 0) {
-        color = "text-red-700";
-        text = "Out of stock";
-      }
-      return { color, text };
     },
   },
 };

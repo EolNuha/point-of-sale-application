@@ -61,6 +61,48 @@ def getOrdersList(orders):
         orders_list.append(order_dict)
     return orders_list
 
+def getPurchaseItemsList(items):
+    purchases_list = []
+    for i in items:
+        purchase_dict = {
+            "id": i.id,
+            "product": {
+                "id": i.product_id,
+                "name": i.product_name,
+                "barcode": i.product_barcode,
+                "stock": i.product_stock,
+                "tax": i.product_tax,
+                "purchasedPrice": i.product_purchased_price,
+                "sellingPrice": i.product_selling_price,
+            },
+            "priceWithoutTax": i.price_without_tax,
+            "taxAmount": i.tax_amount,
+            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+        }
+        purchases_list.append(purchase_dict)
+    return purchases_list
+
+def getPurchasesList(purchases):
+    purchases_list = []
+    for i in purchases:
+        purchase_dict = {
+            "id": i.id,
+            "sellerName": i.seller_name,
+            "sellerInvoiceNumber": i.seller_invoice_number,
+            "sellerFiscalNumber": i.seller_fiscal_number,
+            "sellerTaxNumber": i.seller_tax_number,
+            "totalAmount": i.total_amount,
+            "subTotalAmount": i.subtotal_amount,
+            "eightTaxAmount": i.eight_tax_amount,
+            "eighteenTaxAmount": i.eighteen_tax_amount,
+            "purchaseItems": getPurchaseItemsList(i.purchase_items),
+            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+        }
+        purchases_list.append(purchase_dict)
+    return purchases_list
+
 def getPaginatedDict(data, paginated_items):
     return {
         "data": data,

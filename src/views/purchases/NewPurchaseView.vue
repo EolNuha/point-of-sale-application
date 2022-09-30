@@ -120,6 +120,7 @@
             >Tax</label
           >
           <select
+            v-model="product.tax"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="8">8%</option>
@@ -221,7 +222,7 @@ export default {
     addProduct() {
       const product = {
         barcode: "",
-        name: "",
+        productName: "",
         stock: "",
         tax: 8,
         purchasedPrice: "",
@@ -232,13 +233,41 @@ export default {
     removeProduct(productIdx) {
       this.products.splice(productIdx, 1);
     },
+    getProductsTotal() {
+      const products = this.products;
+      const sum = products.reduce((accumulator, object) => {
+        return accumulator + object.purchasedPrice * object.stock;
+      }, 0);
+      return sum.toFixed(2);
+    },
     submit() {
       this.isLoading = true;
+      const data = {
+        products: this.products,
+        seller: this.seller,
+        totalAmount: this.getProductsTotal(),
+      };
       this.$store
-        .dispatch("purchaseModule/createPurchase", this.products)
+        .dispatch("purchaseModule/createPurchase", data)
         .then(() => {
           this.isLoading = false;
-          this.$toast.success("Purchase created successfully!");
+          this.seller = {
+            sellerName: "",
+            invoiceNumber: "",
+            fiscalNumber: "",
+            taxNumber: "",
+          };
+          this.products = [
+            {
+              barcode: "",
+              productName: "",
+              stock: "",
+              tax: 8,
+              purchasedPrice: "",
+              sellingPrice: "",
+            },
+          ];
+          this.$toast.success("Purchase saved successfully!");
         })
         .catch(() => {
           this.isLoading = false;

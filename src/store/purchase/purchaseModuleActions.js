@@ -21,4 +21,17 @@ export default {
         });
     });
   },
+  getPurchases({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseURL}/api/purchases`, { params: data })
+        .then(async (response) => {
+          commit("SET_PURCHASES", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

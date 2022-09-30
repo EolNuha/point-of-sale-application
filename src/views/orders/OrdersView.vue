@@ -142,14 +142,6 @@ export default {
     },
   },
   created() {
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct).length === 0;
-        if (!isEmpty) {
-          this.openModal(this.selectedProduct);
-        }
-      }
-    });
     this.reload();
   },
   methods: {
@@ -166,20 +158,6 @@ export default {
         .catch(() => {
           this.$toast.error("Something went wrong, please try again later!");
         });
-    },
-    updateSelectedProduct(product) {
-      if (this.selectedProduct.id === product.id) {
-        this.selectedProduct = {};
-      } else {
-        this.selectedProduct = product;
-      }
-    },
-    openModal(product) {
-      this.selectedProductToDelete = product;
-      const el = document.getElementById("delete-modal");
-      // eslint-disable-next-line no-undef
-      const mod = new Modal(el);
-      mod.show();
     },
     getOrders(page) {
       this.isTableLoading = true;

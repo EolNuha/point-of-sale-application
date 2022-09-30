@@ -4,7 +4,10 @@ export default {
       const el = document.getElementById(ref);
       // eslint-disable-next-line no-undef
       const mod = new Modal(el);
-      return mod.show();
+      const modalBack = document.querySelector("[modal-backdrop]");
+      if (!modalBack) {
+        return mod.show();
+      }
     };
     app.config.globalProperties.$hideModal = (ref) => {
       const el = document.getElementById(ref);

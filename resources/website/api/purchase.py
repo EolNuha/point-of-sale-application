@@ -60,7 +60,10 @@ def createPurchase():
                 purchased_price=product["purchasedPrice"], 
                 selling_price= product["sellingPrice"]
             )
+
             db.session.add(created_product)
+            db.session.commit()
+
             purchase_item = PurchaseItem(
                 purchase=purchase,
                 product_id=created_product.id,
@@ -111,3 +114,8 @@ def getPurchases():
         .order_by(Purchase.id.desc()).paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
+
+@purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
+def getSaleDetails(purchaseId):
+    purchases = Purchase.query.filter_by(id=purchaseId).all()
+    return jsonify(getPurchasesList(purchases)[0])

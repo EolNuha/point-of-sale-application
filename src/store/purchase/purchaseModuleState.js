@@ -1,1 +1,1 @@
-export default { purchases: [] };
+export default { purchases: [], purchase: {} };

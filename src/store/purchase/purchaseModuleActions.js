@@ -34,4 +34,17 @@ export default {
         });
     });
   },
+  getPurchaseDetails({ commit }, purchaseId) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseURL}/api/purchases/${purchaseId}`)
+        .then(async (response) => {
+          commit("SET_PURCHASE", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

@@ -13,6 +13,7 @@ import NewSaleView from "../views/sales/NewSaleView.vue";
 import SaleDetailsView from "../views/sales/SaleDetailsView.vue";
 import PurchasesView from "../views/purchases/PurchasesView.vue";
 import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
+import PurchaseDetailsView from "../views/purchases/PurchaseDetailsView.vue";
 
 const routes = [
   {
@@ -163,6 +164,26 @@ const routes = [
         {
           text: (route) => "New Purchase",
           to: "new-purchase",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/purchases/:purchaseId",
+    name: "purchase-view",
+    component: PurchaseDetailsView,
+    meta: {
+      title: "Purchase Details",
+      breadcrumb: [
+        {
+          text: (route) => "Purchases",
+          to: "purchases",
+          active: false,
+        },
+        {
+          text: (route) => "Purchase Details",
+          to: "purchase-view",
           active: true,
         },
       ],

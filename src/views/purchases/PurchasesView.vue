@@ -75,6 +75,12 @@
               </td>
               <td class="py-2 px-6">
                 <button
+                  @click="
+                    $router.push({
+                      name: 'purchase-view',
+                      params: { purchaseId: purchase.id },
+                    })
+                  "
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
                 >
                   <IconC

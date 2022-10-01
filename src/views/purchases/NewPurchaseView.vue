@@ -247,29 +247,14 @@ export default {
       return sum.toFixed(2);
     },
     getProductDetails(e, idx) {
-      console.log(e, idx);
       this.$store
         .dispatch("productModule/getProductDetailsByBarcode", e)
         .then(async (res) => {
-          await this.$swal({
-            html: "<p class='text-gray-500 dark:text-gray-300'>We have found a product that matches this barcode, do you want to fill the rest of the fields?</p>",
-            position: "top-end",
-            iconColor: "#1c64f2",
-            confirmButtonText: "Confirm",
-            showCancelButton: true,
-            showCloseButton: true,
-            focusConfirm: true,
-            reverseButtons: true,
-            customClass: {
-              popup: "bg-gray-300 dark:bg-gray-700",
-              header: "bg-gray-300 dark:bg-gray-700",
-              confirmButton: "blue-gradient-btn",
-              cancelButton: "gray-outline-btn mr-2",
-              closeButton:
-                "text-gray-400 bg-transparent hover:text-gray-900 text-sm dark:hover:text-white",
-            },
-            buttonsStyling: false,
-          }).then((result) => {
+          const options = this.$swalConfirmObject();
+          options.position = "top-end";
+          options.html =
+            "<p class='text-gray-500 dark:text-gray-300'>We have found a product that matches this barcode, do you want to fill the rest of the fields?</p>";
+          await this.$swal(options).then((result) => {
             if (result.isConfirmed) {
               const foundProduct = this.products[idx];
               foundProduct.productName = res.data.name;

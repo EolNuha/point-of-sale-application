@@ -230,25 +230,11 @@ export default {
   },
   async beforeRouteLeave(to, from, next) {
     if (!(this.products.length === 0)) {
-      await this.$swal({
-        html: "<p class='text-gray-500 dark:text-gray-300'>The sale is not finished, are you sure you want to continue?</p>",
-        icon: "info",
-        iconColor: "#1c64f2",
-        confirmButtonText: "Confirm",
-        showCancelButton: true,
-        showCloseButton: true,
-        focusConfirm: true,
-        reverseButtons: true,
-        customClass: {
-          popup: "bg-gray-300 dark:bg-gray-700",
-          header: "bg-gray-300 dark:bg-gray-700",
-          confirmButton: "blue-gradient-btn",
-          cancelButton: "gray-outline-btn mr-2",
-          closeButton:
-            "text-gray-400 bg-transparent hover:text-gray-900 text-sm dark:hover:text-white",
-        },
-        buttonsStyling: false,
-      }).then((result) => {
+      const options = this.$swalConfirmObject();
+      options.html =
+        "<p class='text-gray-500 dark:text-gray-300'>The sale is not finished, are you sure you want to continue?</p>";
+      options.icon = "info";
+      await this.$swal(options).then((result) => {
         if (result.isDenied || result.isDismissed) {
           return;
         } else {

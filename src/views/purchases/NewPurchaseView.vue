@@ -252,8 +252,11 @@ export default {
         .then(async (res) => {
           const options = this.$swalConfirmObject();
           options.position = "top-end";
+          options.toast = true;
+          options.icon = "info";
+          options.timer = 10000;
           options.html =
-            "<p class='text-gray-500 dark:text-gray-300'>We have found a product that matches this barcode, do you want to fill the rest of the fields?</p>";
+            "<p class='text-gray-500 dark:text-gray-300'>We found a product with this barcode, do you want to automatically fill the rest of the fields?</p>";
           await this.$swal(options).then((result) => {
             if (result.isConfirmed) {
               const foundProduct = this.products[idx];

@@ -19,3 +19,9 @@ div[modal-backdrop] {
 :focus-visible {
   outline: none;
 }
+
+.swal2-popup.swal2-toast {
+  background: currentColor;
+  @apply bg-gray-300;
+  @apply dark:bg-gray-700;
+}

@@ -110,6 +110,10 @@ def getPurchases():
         
     paginated_items = Purchase.query.filter(or_(
         Purchase.id.ilike(looking_for),
+        Purchase.seller_name.ilike(looking_for),
+        Purchase.seller_invoice_number.ilike(looking_for),
+        Purchase.seller_fiscal_number.ilike(looking_for),
+        Purchase.seller_tax_number.ilike(looking_for),
         ))\
         .order_by(Purchase.id.desc()).paginate(page=page, per_page=per_page)
 

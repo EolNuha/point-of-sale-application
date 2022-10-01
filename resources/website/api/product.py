@@ -59,6 +59,11 @@ def getProductDetails(productId):
     products = Product.query.filter_by(id=productId).all()
     return jsonify(getProductsList(products)[0])
 
+@product.route('/products/barcode/<int:barcode>', methods=["GET"])
+def getProductDetailsByBarcode(barcode):
+    product = Product.query.filter_by(barcode=barcode).first_or_404()
+    return jsonify(getProductsList([product, product])[0])
+
 @product.route('/products/<int:productId>', methods=["POST"])
 def updateProductDetails(productId):
     name = request.json["name"]

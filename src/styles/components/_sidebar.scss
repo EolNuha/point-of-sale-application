@@ -2,7 +2,7 @@
   position: fixed;
   height: 100vh;
   overflow-y: auto;
-  z-index: 3205;
+  z-index: 999;
 }
 .sidebar .router-link-active {
   @apply bg-gray-200;

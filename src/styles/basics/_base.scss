@@ -15,3 +15,7 @@ div[modal-backdrop] {
 .h-modal{
   z-index: 9999 !important;
 }
+
+:focus-visible {
+  outline: none;
+}

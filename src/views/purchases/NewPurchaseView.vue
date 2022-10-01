@@ -83,6 +83,11 @@
             required
             type="number"
             v-model="product.barcode"
+            @input="
+              debounce(() => {
+                getProductDetails(product.barcode, index);
+              }, 300)
+            "
             placeholder="Product Barcode"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
@@ -198,6 +203,21 @@
 
 <script>
 export default {
+  setup() {
+    function createDebounce() {
+      let timeout = null;
+      return function (func, delayMs) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          func();
+        }, delayMs || 500);
+      };
+    }
+
+    return {
+      debounce: createDebounce(),
+    };
+  },
   data() {
     return {
       isLoading: false,
@@ -240,6 +260,42 @@ export default {
         return accumulator + object.purchasedPrice * object.stock;
       }, 0);
       return sum.toFixed(2);
+    },
+    getProductDetails(e, idx) {
+      console.log(e, idx);
+      this.$store
+        .dispatch("productModule/getProductDetailsByBarcode", e)
+        .then(async (res) => {
+          console.log("SUCCESS", res.data);
+          await this.$swal({
+            html: "<p class='text-gray-500 dark:text-gray-300'>We have found a product that matches this barcode, do you want to fill the rest of the fields?</p>",
+            icon: "info",
+            position: "top-end",
+            iconColor: "#1c64f2",
+            confirmButtonText: "Confirm",
+            showCancelButton: true,
+            showCloseButton: true,
+            focusConfirm: true,
+            reverseButtons: true,
+            customClass: {
+              popup: "bg-gray-300 dark:bg-gray-700",
+              header: "bg-gray-300 dark:bg-gray-700",
+              confirmButton: "blue-gradient-btn",
+              cancelButton: "gray-outline-btn mr-2",
+              closeButton:
+                "text-gray-400 bg-transparent hover:text-gray-900 text-sm dark:hover:text-white",
+            },
+            buttonsStyling: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const foundProduct = this.products[idx];
+              foundProduct.productName = res.data.name;
+              foundProduct.tax = res.data.tax;
+              foundProduct.sellingPrice = res.data.sellingPrice;
+              foundProduct.purchasedPrice = res.data.purchasedPrice;
+            }
+          });
+        });
     },
     submit() {
       this.isLoading = true;

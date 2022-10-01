@@ -75,4 +75,16 @@ export default {
         });
     });
   },
+  getProductDetailsByBarcode({ commit }, productBarcode) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseURL}/api/products/barcode/${productBarcode}`)
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

@@ -40,7 +40,7 @@
     </div>
 
     <div
-      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto overflow-y-hidden relative sm:rounded-lg my-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -76,12 +76,12 @@
                 <IconC
                   v-if="selectedProduct === product"
                   iconName="CheckCircleIcon"
-                  iconClass="h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                  iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
                 />
                 <IconC
                   v-else
                   iconName="MinusCircleIcon"
-                  iconClass="h-6 w-6 text-gray-900 dark:text-gray-300"
+                  iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
                 />
               </td>
               <th

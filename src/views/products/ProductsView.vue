@@ -40,7 +40,7 @@
     </div>
 
     <div
-      class="overflow-x-auto overflow-y-hidden relative sm:rounded-lg my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto overflow-y-hidden sm:rounded-lg my-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"

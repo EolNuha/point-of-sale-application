@@ -234,6 +234,7 @@ export default {
       options.html =
         "<p class='text-gray-500 dark:text-gray-300'>The sale is not finished, are you sure you want to continue?</p>";
       options.icon = "info";
+      options.position = "top";
       await this.$swal(options).then((result) => {
         if (result.isDenied || result.isDismissed) {
           return;

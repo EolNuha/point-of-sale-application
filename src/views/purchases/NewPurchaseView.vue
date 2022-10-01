@@ -2,7 +2,7 @@
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <form @submit.prevent="submit()">
       <h2
-        class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-900 md:text-3xl dark:text-white"
+        class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
       >
         Seller information:
       </h2>
@@ -16,6 +16,11 @@
             required
             type="text"
             v-model="seller.sellerName"
+            @input="
+              $debounce(() => {
+                getSellerDetails();
+              }, 300)
+            "
             placeholder="Seller Name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
@@ -65,7 +70,7 @@
         </div>
       </div>
       <h2
-        class="mb-4 mt-7 text-2xl font-extrabold tracking-tight leading-none text-gray-900 md:text-3xl dark:text-white"
+        class="mb-4 mt-7 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
       >
         Purchased products:
       </h2>
@@ -266,7 +271,28 @@ export default {
               foundProduct.purchasedPrice = res.data.purchasedPrice;
             }
           });
-        });
+        })
+        .catch(() => console.log());
+    },
+    getSellerDetails() {
+      this.$store
+        .dispatch("purchaseModule/getSellerDetails", this.seller.sellerName)
+        .then(async (res) => {
+          const options = this.$swalConfirmObject();
+          options.position = "top-end";
+          options.toast = true;
+          options.icon = "info";
+          options.timer = 10000;
+          options.html =
+            "<p class='text-gray-500 dark:text-gray-300'>We found a seller with this name, do you want to automatically fill the rest of the informations?</p>";
+          await this.$swal(options).then((result) => {
+            if (result.isConfirmed) {
+              this.seller.fiscalNumber = res.data.sellerFiscalNumber;
+              this.seller.taxNumber = res.data.sellerTaxNumber;
+            }
+          });
+        })
+        .catch(() => console.log());
     },
     submit() {
       this.isLoading = true;

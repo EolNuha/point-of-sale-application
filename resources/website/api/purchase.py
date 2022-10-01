@@ -120,6 +120,11 @@ def getPurchases():
     return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
-def getSaleDetails(purchaseId):
+def getPurchaseDetails(purchaseId):
     purchases = Purchase.query.filter_by(id=purchaseId).all()
     return jsonify(getPurchasesList(purchases)[0])
+
+@purchase.route('/sellers/<string:name>', methods=["GET"])
+def getSellerDetails(name):
+    purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
+    return jsonify(getPurchasesList([purchase, purchase])[0])

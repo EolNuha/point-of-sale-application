@@ -200,7 +200,7 @@ export default {
           await this.$store
             .dispatch("productModule/getProducts", {
               page: 1,
-              per_page: 30,
+              per_page: 10,
               search: value,
             })
             .then((res) => {

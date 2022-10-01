@@ -84,7 +84,7 @@
             type="number"
             v-model="product.barcode"
             @input="
-              debounce(() => {
+              $debounce(() => {
                 getProductDetails(product.barcode, index);
               }, 300)
             "
@@ -203,21 +203,6 @@
 
 <script>
 export default {
-  setup() {
-    function createDebounce() {
-      let timeout = null;
-      return function (func, delayMs) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          func();
-        }, delayMs || 500);
-      };
-    }
-
-    return {
-      debounce: createDebounce(),
-    };
-  },
   data() {
     return {
       isLoading: false,
@@ -266,10 +251,8 @@ export default {
       this.$store
         .dispatch("productModule/getProductDetailsByBarcode", e)
         .then(async (res) => {
-          console.log("SUCCESS", res.data);
           await this.$swal({
             html: "<p class='text-gray-500 dark:text-gray-300'>We have found a product that matches this barcode, do you want to fill the rest of the fields?</p>",
-            icon: "info",
             position: "top-end",
             iconColor: "#1c64f2",
             confirmButtonText: "Confirm",

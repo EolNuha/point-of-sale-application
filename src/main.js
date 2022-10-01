@@ -13,6 +13,7 @@ import { useToast } from "vue-toastification";
 import openModalPlugin from "./plugins/modals";
 import focusPlugin from "./plugins/focus";
 import tooltipsPlugin from "./plugins/tooltips";
+import debouncePlugin from "./plugins/debounce";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
@@ -44,4 +45,5 @@ app
   .use(openModalPlugin)
   .use(focusPlugin)
   .use(tooltipsPlugin)
+  .use(debouncePlugin)
   .mount("#app");

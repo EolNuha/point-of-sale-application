@@ -16,7 +16,7 @@
           </div>
           <input
             @input="
-              debounce(() => {
+              $debounce(() => {
                 searchQuery = $event.target.value;
               })
             "
@@ -111,21 +111,6 @@ export default {
       selectedProductToDelete: {},
       currentPage: 1,
       searchQuery: "",
-    };
-  },
-  setup() {
-    function createDebounce() {
-      let timeout = null;
-      return function (func, delayMs) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          func();
-        }, delayMs || 500);
-      };
-    }
-
-    return {
-      debounce: createDebounce(),
     };
   },
   watch: {

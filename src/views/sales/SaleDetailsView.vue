@@ -2,9 +2,14 @@
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="bg-white dark:bg-gray-900 rounded-3xl py-8 relative px-10">
       <OverlayC v-if="isLoading" />
-      <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
-        Sale #{{ $route.params.saleId }}
-      </h2>
+      <div class="flex items-center flex-row justify-between">
+        <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
+          Sale #{{ $route.params.saleId }}
+        </h2>
+        <p class="text-gray-700 dark:text-gray-300">
+          Date: {{ sale.dateCreated }}
+        </p>
+      </div>
       <div class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style">
         <table
           class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative my-5"

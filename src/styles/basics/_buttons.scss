@@ -36,6 +36,25 @@
 	@apply text-center;
 }
 
+.green-gradient-btn {
+	@apply text-white;
+	@apply bg-gradient-to-r #{!important};
+	@apply from-green-500 #{!important};
+	@apply via-green-600 #{!important};
+	@apply to-green-700 #{!important};
+	@apply hover:bg-gradient-to-br #{!important};
+	@apply focus:ring-4;
+	@apply focus:outline-none;
+	@apply focus:ring-green-300;
+	@apply dark:focus:ring-green-800;
+	@apply font-medium;
+	@apply rounded-xl;
+	@apply text-sm;
+	@apply px-5;
+	@apply py-2;
+	@apply text-center;
+}
+
 .gray-outline-btn {
 	@apply text-gray-500;
 	@apply bg-white;

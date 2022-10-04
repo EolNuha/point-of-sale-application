@@ -104,7 +104,7 @@
                   @click="
                     $router.push({
                       name: 'daily-sales',
-                      query: { saleDate: sale.dateCreated },
+                      query: { saleDate: sale.dateCreated.substring(0, 10) },
                     })
                   "
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"

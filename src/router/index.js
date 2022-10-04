@@ -148,6 +148,12 @@ const routes = [
           active: false,
         },
         {
+          text: (route) => "Daily Sales",
+          to: "daily-sales",
+          active: false,
+          query: true,
+        },
+        {
           text: (route) => `${route.meta.title}`,
           to: "sale-view",
           active: true,

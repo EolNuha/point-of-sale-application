@@ -78,6 +78,7 @@
                     $router.push({
                       name: 'sale-view',
                       params: { saleId: sale.id },
+                      query: { saleDate: saleDate },
                     })
                   "
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"

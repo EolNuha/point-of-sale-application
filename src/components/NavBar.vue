@@ -41,7 +41,7 @@
               iconClass="w-6 h-6 text-gray-400"
             />
             <router-link
-              :to="{ name: item.to }"
+              :to="{ name: item.to, query: item.query ? $route.query : {} }"
               class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white"
               :class="item.active ? '!text-blue-600' : ''"
               >{{ item.text($route) }}</router-link

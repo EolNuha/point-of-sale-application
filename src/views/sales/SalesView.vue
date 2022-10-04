@@ -1,16 +1,38 @@
 <!-- eslint-disable no-undef -->
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
         <select
           v-model="currentMonth"
           class="w-[120px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
-          <option v-for="month in months" :key="month" :value="month">
+          <option v-for="(month, index) in months" :key="month" :value="index">
             {{ month }}
           </option>
         </select>
+
+        <div class="flex items-center">
+          <input
+            v-model="startDate"
+            ref="startDate"
+            name="start"
+            type="date"
+            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Select date start"
+            :max="endDate"
+          />
+          <span class="mx-4 text-gray-500">to</span>
+          <input
+            v-model="endDate"
+            ref="endDate"
+            name="start"
+            type="date"
+            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Select date start"
+            :min="startDate"
+          />
+        </div>
       </div>
       <div>
         <button
@@ -95,8 +117,6 @@ export default {
     return {
       isTableLoading: false,
       isExcelLoading: false,
-      selectedProduct: {},
-      selectedProductToDelete: {},
       currentPage: 1,
       searchQuery: "",
       excelSales: [],
@@ -115,37 +135,73 @@ export default {
         "November",
         "December",
       ],
+      monthDates: [],
       currentMonth: "",
+      startDate: "",
+      endDate: "",
     };
   },
   watch: {
-    searchQuery: {
+    currentMonth: {
       async handler(value) {
-        this.isTableLoading = true;
-        try {
-          await this.$store.dispatch("saleModule/getSales", {
-            page: this.currentPage,
-            search: value,
-            month: this.currentMonth,
-          });
-          this.isTableLoading = false;
-        } catch {
-          this.isTableLoading = false;
+        if (value !== 0) {
+          const month = String(value).padStart(2, "0");
+          const year = new Date().getFullYear();
+          const days = String(new Date(year, month, 0).getDate()).padStart(
+            2,
+            "0"
+          );
+          this.startDate = `${year}-${month}-01`;
+          this.endDate = `${year}-${month}-${days}`;
         }
       },
     },
-    currentMonth: {
+    startDate: {
       async handler(value) {
         this.isTableLoading = true;
-        try {
-          await this.$store.dispatch("saleModule/getSales", {
-            page: this.currentPage,
-            month: value,
-          });
-          this.isTableLoading = false;
-        } catch {
-          this.isTableLoading = false;
+        const idx = this.checkIfMonth(value, this.endDate);
+        if (idx !== -1) {
+          this.currentMonth = idx + 1;
+        } else {
+          this.currentMonth = 0;
         }
+        this.$store
+          .dispatch("saleModule/getSales", {
+            startDate: value,
+            endDate: this.endDate,
+            page: this.currentPage,
+          })
+          .then(() => {
+            this.isTableLoading = false;
+          })
+          .catch(() => {
+            this.isTableLoading = false;
+            this.$toast.error("Something went wrong, please try again later!");
+          });
+      },
+    },
+    endDate: {
+      async handler(value) {
+        this.isTableLoading = true;
+        const idx = this.checkIfMonth(this.startDate, value);
+        if (idx !== -1) {
+          this.currentMonth = idx + 1;
+        } else {
+          this.currentMonth = 0;
+        }
+        this.$store
+          .dispatch("saleModule/getSales", {
+            startDate: this.startDate,
+            endDate: value,
+            page: this.currentPage,
+          })
+          .then(() => {
+            this.isTableLoading = false;
+          })
+          .catch(() => {
+            this.isTableLoading = false;
+            this.$toast.error("Something went wrong, please try again later!");
+          });
       },
     },
   },
@@ -158,16 +214,22 @@ export default {
     },
   },
   created() {
-    this.currentMonth = this.months[new Date().getMonth() + 1];
+    const currentMonth = this.getMonth(new Date().getMonth() + 1);
+    this.currentMonth = new Date().getMonth() + 1;
+    this.startDate = currentMonth.startDate;
+    this.endDate = currentMonth.endDate;
+    for (let i = 0; i < this.months.length; i++) {
+      this.monthDates.push(this.getMonth(i + 1));
+    }
     this.reload();
   },
   methods: {
     reload() {
       this.isTableLoading = true;
-      this.selectedProduct = {};
       this.$store
         .dispatch("saleModule/getSales", {
-          month: this.currentMonth,
+          startDate: this.startDate,
+          endDate: this.endDate,
           page: this.currentPage,
         })
         .then((res) => {
@@ -178,12 +240,28 @@ export default {
           this.$toast.error("Something went wrong, please try again later!");
         });
     },
+    getMonth(v) {
+      const month = String(v).padStart(2, "0");
+      const year = new Date().getFullYear();
+      const days = String(new Date(year, month, 0).getDate()).padStart(2, "0");
+
+      return {
+        startDate: `${year}-${month}-01`,
+        endDate: `${year}-${month}-${days}`,
+      };
+    },
+    checkIfMonth(start, end) {
+      return this.monthDates.findIndex(
+        (el) => el.startDate === start && el.endDate === end
+      );
+    },
     getSales(page) {
       this.isTableLoading = true;
       this.$store
         .dispatch("saleModule/getSales", {
           page: page,
-          month: this.currentMonth,
+          startDate: this.startDate,
+          endDate: this.endDate,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -195,10 +273,18 @@ export default {
         });
     },
     async downloadExcel() {
+      let month;
+      const idx = this.checkIfMonth(this.startDate, this.endDate);
+      if (idx !== -1) {
+        month = `${this.months[idx + 1]}-${this.startDate.substring(0, 4)}`;
+      } else {
+        month = `${this.startDate}--${this.endDate}`;
+      }
       let sales;
       await this.$store
         .dispatch("saleModule/getSalesForExcel", {
-          month: this.currentMonth,
+          startDate: this.startDate,
+          endDate: this.endDate,
           page: this.currentPage,
           per_page: this.pagination.total,
         })
@@ -206,7 +292,7 @@ export default {
           sales = res.data.data;
         });
       const data = {
-        month: this.currentMonth,
+        month: month,
         sales: sales,
       };
       this.isExcelLoading = true;

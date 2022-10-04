@@ -88,11 +88,17 @@ def createSale():
 
 @sale.route('/sales', methods=["GET"])
 def getSales():
-    year = request.args.get('year', 2022, type=int)
-    month = request.args.get('month', "October", type=str)
-    cal = calendar.monthrange(year, MONTHS[month])
-    date_start = datetime.combine(date(year=year, month=MONTHS[month], day=1), time.min)
-    date_end =  datetime.combine(date(year=year, month=MONTHS[month], day=cal[1]), time.max)
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+
+    custom_start_date = custom_start_date.split("-")
+    custom_end_date = custom_end_date.split("-")
+    # month = request.args.get('month', "October", type=str)
+    # year = request.args.get('year', 2022, type=int)
+    # month = request.args.get('month', "October", type=str)
+    # cal = calendar.monthrange(year, MONTHS[month])
+    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
+    date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)

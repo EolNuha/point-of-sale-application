@@ -4,6 +4,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+input[type="date"] {
+  color-scheme: light;
+}
+
+.dark input[type="date"] {
+  color-scheme: dark;
+}
+
 body {
   @apply bg-gray-200;
   @apply dark:bg-gray-800;

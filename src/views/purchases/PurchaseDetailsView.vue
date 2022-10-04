@@ -125,11 +125,11 @@
                 <td class="py-2">SUBTOTAL</td>
                 <td class="text-right py-2">{{ purchase.subTotalAmount }} €</td>
               </tr>
-              <tr v-if="purchase.eightTaxAmount > 0">
+              <tr>
                 <td class="py-2">TAX RATE (8%)</td>
                 <td class="text-right py-2">{{ purchase.eightTaxAmount }} €</td>
               </tr>
-              <tr v-if="purchase.eighteenTaxAmount > 0">
+              <tr>
                 <td class="py-2">TAX RATE (18%)</td>
                 <td class="text-right py-2">
                   {{ purchase.eighteenTaxAmount }} €

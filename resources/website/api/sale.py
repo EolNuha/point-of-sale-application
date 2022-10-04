@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta, time
 from flask import Blueprint, request, jsonify, request
 from website.models import Sale, SaleItem, Product
-from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList, get_total_of_daily_sales
+from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList
 from website import db
 from sqlalchemy import or_
 import sqlalchemy as sa
@@ -163,7 +163,7 @@ def downloadDailyExcel():
     col = 0
 
     for item in sales:
-        worksheet.write(row, col, item["dateCreated"])
+        worksheet.write(row, col, item["dateCreated"][0:10])
         worksheet.write(row, col + 1, "Qytetar")
         worksheet.write(row, col + 2, item["eightTaxAmount"], money)
         worksheet.write(row, col + 3, item["eighteenTaxAmount"], money)
@@ -173,7 +173,5 @@ def downloadDailyExcel():
         row += 1
         
     workbook.close()
-
-    tm.sleep(1)
 
     return jsonify(downloads_path)

@@ -1,47 +1,47 @@
 <!-- eslint-disable no-undef -->
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="flex items-center justify-between flex-wrap gap-4">
-      <div class="flex items-center gap-4">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2">
         <select
           v-model="currentMonth"
-          class="w-[120px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="w-[120px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           <option v-for="(month, index) in months" :key="month" :value="index">
             {{ month }}
           </option>
         </select>
 
-        <div class="flex items-center">
+        <div class="flex items-center gap-2">
           <input
             v-model="startDate"
             ref="startDate"
             name="start"
             type="date"
-            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Select date start"
             :max="endDate"
           />
-          <span class="mx-4 text-gray-500">to</span>
+          <span class="text-gray-500">to</span>
           <input
             v-model="endDate"
             ref="endDate"
             name="start"
             type="date"
-            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Select date start"
+            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Select date end"
             :min="startDate"
           />
         </div>
       </div>
-      <div>
+      <div class="flex flex-row items-center gap-2">
         <button
           @click="
             $router.push({
               name: 'new-sale',
             })
           "
-          class="blue-gradient-btn inline-flex items-center text-center mr-2"
+          class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
           New Sale
@@ -71,7 +71,7 @@
       </div>
     </div>
     <div
-      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto relative sm:rounded-xl my-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -93,7 +93,7 @@
             <tr
               class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
             >
-              <td class="py-2 px-6">{{ sale.dateCreated }}</td>
+              <td class="py-2 px-6">{{ sale.dateCreated.substring(0, 10) }}</td>
               <td class="py-2 px-6">{{ sale.eightTaxAmount }} €</td>
               <td class="py-2 px-6">{{ sale.eighteenTaxAmount }} €</td>
               <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
@@ -237,6 +237,7 @@ export default {
           this.excelSales = res.data.data;
         })
         .catch(() => {
+          this.isTableLoading = false;
           this.$toast.error("Something went wrong, please try again later!");
         });
     },
@@ -273,6 +274,7 @@ export default {
         });
     },
     async downloadExcel() {
+      this.isExcelLoading = true;
       let month;
       const idx = this.checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
@@ -295,7 +297,6 @@ export default {
         month: month,
         sales: sales,
       };
-      this.isExcelLoading = true;
       this.$store
         .dispatch("saleModule/downloadExcelFile", data)
         .then(() => {

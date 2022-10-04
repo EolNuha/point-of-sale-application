@@ -1,34 +1,3 @@
-from itertools import groupby
-
-def key_func(k):
-    return k['dateCreated']
-
-def get_total_of_daily_sales(sales):
-    sorted_sales = sorted(sales, key=key_func)
-    g_sales = []
-    for key, value in groupby(sorted_sales, key_func):
-        g_sales.append(list(value))
-    
-    results = []
-    for i in g_sales:
-        subtotal = sum(d['subTotalAmount'] for d in i)
-        total = sum(d['totalAmount'] for d in i)
-        eightTaxAmount = sum(d['eightTaxAmount'] for d in i)
-        eighteenTaxAmount = sum(d['eighteenTaxAmount'] for d in i)
-        customerAmount = sum(d['customerAmount'] for d in i)
-        changeAmount = sum(d['changeAmount'] for d in i)
-        res_dict = {
-            "dateCreated": i[0]["dateCreated"],
-            "subTotalAmount": subtotal,
-            "totalAmount": total,
-            "eightTaxAmount": eightTaxAmount,
-            "eighteenTaxAmount": eighteenTaxAmount,
-            "customerAmount": customerAmount,
-            "changeAmount": changeAmount
-        }
-        results.append(res_dict)
-    return results
-
 def get_page_range(page, total, show=5):
     start = max((page - (show // 2)), 1)
     stop = min(start + show, total) + 1
@@ -46,8 +15,8 @@ def getProductsList(products):
             "tax": i.tax,
             "purchasedPrice": i.purchased_price,
             "sellingPrice": i.selling_price,
-            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
-            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         products_list.append(product_dict)
     return products_list
@@ -68,8 +37,8 @@ def getSaleItemsList(items):
             "quantity": i.product_quantity,
             "priceWithoutTax": i.price_without_tax,
             "taxAmount": i.tax_amount,
-            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
-            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         sales_list.append(sale_dict)
     return sales_list
@@ -85,8 +54,8 @@ def getSalesList(sales):
             "eighteenTaxAmount": i.eighteen_tax_amount,
             "customerAmount": i.customer_amount,
             "changeAmount": i.change_amount,
-            "dateCreated": i.date_created.strftime('%d.%m.%Y'),
-            "dateModified": i.date_modified.strftime('%d.%m.%Y'),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         sales_list.append(sale_dict)
     return sales_list
@@ -107,8 +76,8 @@ def getPurchaseItemsList(items):
             },
             "priceWithoutTax": i.price_without_tax,
             "taxAmount": i.tax_amount,
-            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
-            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         purchases_list.append(purchase_dict)
     return purchases_list
@@ -127,8 +96,8 @@ def getPurchasesList(purchases):
             "eightTaxAmount": i.eight_tax_amount,
             "eighteenTaxAmount": i.eighteen_tax_amount,
             "purchaseItems": getPurchaseItemsList(i.purchase_items),
-            "dateCreated": i.date_created.strftime('%d-%m-%Y, %H:%M:%S'),
-            "dateModified": i.date_modified.strftime('%d-%m-%Y, %H:%M:%S'),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         purchases_list.append(purchase_dict)
     return purchases_list

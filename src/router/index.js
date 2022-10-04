@@ -9,6 +9,7 @@ import ProductsView from "../views/products/ProductsView.vue";
 import CreateProductView from "../views/products/CreateProductView.vue";
 import ProductDetailsView from "../views/products/ProductDetailsView.vue";
 import SalesView from "../views/sales/SalesView.vue";
+import DailySalesView from "../views/sales/DailySalesView.vue";
 import NewSaleView from "../views/sales/NewSaleView.vue";
 import SaleDetailsView from "../views/sales/SaleDetailsView.vue";
 import PurchasesView from "../views/purchases/PurchasesView.vue";
@@ -89,6 +90,26 @@ const routes = [
         {
           text: (route) => "Sales",
           to: "sales",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/sales/daily",
+    name: "daily-sales",
+    component: DailySalesView,
+    meta: {
+      title: "Sales",
+      breadcrumb: [
+        {
+          text: (route) => "Sales",
+          to: "sales",
+          active: false,
+        },
+        {
+          text: (route) => "Daily Sales",
+          to: "daily-sales",
           active: true,
         },
       ],

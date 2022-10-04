@@ -15,7 +15,6 @@ import focusPlugin from "./plugins/focus";
 import tooltipsPlugin from "./plugins/tooltips";
 import debouncePlugin from "./plugins/debounce";
 import swalPlugin from "./plugins/swal";
-import datepcikerPlugin from "./plugins/datepicker";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
@@ -49,5 +48,4 @@ app
   .use(tooltipsPlugin)
   .use(debouncePlugin)
   .use(swalPlugin)
-  .use(datepcikerPlugin)
   .mount("#app");

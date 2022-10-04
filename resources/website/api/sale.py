@@ -90,15 +90,12 @@ def createSale():
 def getSales():
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
-
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
-    # month = request.args.get('month', "October", type=str)
-    # year = request.args.get('year', 2022, type=int)
-    # month = request.args.get('month', "October", type=str)
-    # cal = calendar.monthrange(year, MONTHS[month])
+
     date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
     date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
+
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)
@@ -132,10 +129,41 @@ def getSales():
 
     return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
 
+@sale.route('/sales/daily', methods=["GET"])
+def getDailySales():
+    sale_date = request.args.get('date', type=str)
+    sale_date = sale_date.split(".")
+
+    sale_date_start = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.min)
+    sale_date_end = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.max)
+    
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    search = request.args.get('search', '*', type=str)
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = Sale.query.filter(or_(
+        Sale.id.ilike(looking_for),
+        ))\
+        .filter(Sale.date_created <= sale_date_end)\
+        .filter(Sale.date_created >= sale_date_start)\
+        .paginate(page=page, per_page=per_page)
+
+
+    return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
+
 @sale.route('/sales/<int:saleId>', methods=["GET"])
 def getSaleDetails(saleId):
-    sales = Sale.query.filter_by(id=saleId).all()
-    return jsonify(getSalesList(sales)[0])
+    sales = getSalesList(Sale.query.filter_by(id=saleId).all())[0]
+    sale_items = getSaleItemsList(SaleItem.query.filter_by(sale_id=saleId).all())
+    sales["saleItems"] = sale_items
+    return jsonify(sales)
 
 @sale.route('/sales/download-exel', methods=["POST"])
 def downloadDailyExcel():

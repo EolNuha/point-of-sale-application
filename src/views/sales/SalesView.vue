@@ -86,6 +86,7 @@
             <th scope="col" class="py-3 px-6">18%</th>
             <th scope="col" class="py-3 px-6">Subtotal Amount</th>
             <th scope="col" class="py-3 px-6">Total Amount</th>
+            <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>
         <tbody>
@@ -98,6 +99,22 @@
               <td class="py-2 px-6">{{ sale.eighteenTaxAmount }} €</td>
               <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
               <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
+              <td class="py-2 px-6">
+                <button
+                  @click="
+                    $router.push({
+                      name: 'daily-sales',
+                      query: { saleDate: sale.dateCreated },
+                    })
+                  "
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                >
+                  <IconC
+                    iconName="DocumentMagnifyingGlassIcon"
+                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                  />
+                </button>
+              </td>
             </tr>
           </template>
         </tbody>

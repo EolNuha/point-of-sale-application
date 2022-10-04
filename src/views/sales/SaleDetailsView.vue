@@ -1,13 +1,37 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl py-8 relative px-10">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2"></div>
+      <div class="flex flex-row items-center gap-2">
+        <button class="red-gradient-btn inline-flex items-center text-center">
+          <div class="inline-flex flex-row" role="status" v-if="isPdfLoading">
+            <IconC
+              iconType="custom"
+              iconName="SpinnerIcon"
+              iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
+            />
+            Downloading...
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div v-else class="inline-flex flex-row">
+            <IconC
+              iconType="custom"
+              iconName="SolidPdfIcon"
+              iconClass="w-5 h-5 fill-white mr-2"
+            />
+            Download PDF
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-900 rounded-3xl my-5 py-8 relative px-10">
       <OverlayC v-if="isLoading" />
       <div class="flex items-center flex-row justify-between">
         <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
           Sale #{{ $route.params.saleId }}
         </h2>
         <p class="text-gray-700 dark:text-gray-300">
-          Date: {{ sale.dateCreated }}
+          Date: {{ sale.dateCreated.substring(0, 10) }}
         </p>
       </div>
       <div class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style">
@@ -19,7 +43,7 @@
           >
             <tr>
               <th scope="col" class="py-3 px-6">ID</th>
-              <th scope="col" class="py-3 px-6">Name</th>
+              <th scope="col" class="py-3 px-6">Product Name</th>
               <th scope="col" class="py-3 px-6">Barcode</th>
               <th scope="col" class="py-3 px-6">Quantity</th>
               <th scope="col" class="py-3 px-6">Price</th>
@@ -32,15 +56,7 @@
             <template v-for="item in sale.saleItems" :key="item.id">
               <tr class="bg-white dark:bg-gray-900">
                 <td class="py-3 px-6">{{ item.product.id }}</td>
-                <td
-                  class="py-3 px-6 text-black dark:text-white cursor-pointer"
-                  @click="
-                    $router.push({
-                      name: 'product-view',
-                      params: { productId: item.product.id },
-                    })
-                  "
-                >
+                <td class="py-3 px-6">
                   {{ item.product.name }}
                 </td>
                 <td class="py-3 px-6">{{ item.product.barcode }}</td>
@@ -96,6 +112,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      isPdfLoading: false,
     };
   },
   computed: {
@@ -103,7 +120,7 @@ export default {
       return this.$store.state.saleModule.sale;
     },
   },
-  async mounted() {
+  async created() {
     await this.$store
       .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)
       .then(() => {

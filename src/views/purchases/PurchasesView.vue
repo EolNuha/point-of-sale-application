@@ -2,35 +2,27 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center gap-2">
-        <select
-          v-model="currentMonth"
-          class="w-[120px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          <option v-for="(month, index) in months" :key="month" :value="index">
-            {{ month }}
-          </option>
-        </select>
-
-        <div class="flex items-center gap-2">
+      <div class="flex items-center w-[480px] sm:max-w-full">
+        <label for="simple-search" class="sr-only">Search</label>
+        <div class="relative w-full">
+          <div
+            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+          >
+            <IconC
+              iconType="solid"
+              iconName="MagnifyingGlassIcon"
+              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+            />
+          </div>
           <input
-            v-model="startDate"
-            ref="startDate"
-            name="start"
-            type="date"
-            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Select date start"
-            :max="endDate"
-          />
-          <span class="text-gray-500">to</span>
-          <input
-            v-model="endDate"
-            ref="endDate"
-            name="start"
-            type="date"
-            class="w-[9.3rem] bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Select date end"
-            :min="startDate"
+            @input="
+              $debounce(() => {
+                searchQuery = $event.target.value;
+              })
+            "
+            type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search"
           />
         </div>
       </div>
@@ -70,9 +62,40 @@
         </button>
       </div>
     </div>
+    <div class="flex items-center my-3 gap-2 w-[480px] sm:max-w-full">
+      <select
+        v-model="currentMonth"
+        class="w-[120px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
+        <option v-for="(month, index) in months" :key="month" :value="index">
+          {{ month }}
+        </option>
+      </select>
 
+      <div class="flex items-center gap-2">
+        <input
+          v-model="startDate"
+          ref="startDate"
+          name="start"
+          type="date"
+          class="w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date start"
+          :max="endDate"
+        />
+        <span class="text-gray-500">to</span>
+        <input
+          v-model="endDate"
+          ref="endDate"
+          name="start"
+          type="date"
+          class="w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date end"
+          :min="startDate"
+        />
+      </div>
+    </div>
     <div
-      class="overflow-x-auto relative sm:rounded-xl my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto relative mb-5 sm:rounded-xl scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -171,6 +194,8 @@ export default {
           await this.$store.dispatch("purchaseModule/getPurchases", {
             page: this.currentPage,
             search: value,
+            startDate: this.startDate,
+            endDate: this.endDate,
           });
           this.isTableLoading = false;
         } catch {

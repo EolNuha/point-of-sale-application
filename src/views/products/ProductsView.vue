@@ -21,7 +21,7 @@
               })
             "
             type="text"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search"
           />
         </div>
@@ -40,7 +40,7 @@
     </div>
 
     <div
-      class="overflow-x-auto overflow-y-hidden sm:rounded-lg my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto overflow-y-hidden sm:rounded-xl my-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"

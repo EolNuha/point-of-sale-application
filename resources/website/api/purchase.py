@@ -7,7 +7,6 @@ from decimal import *
 from datetime import datetime, date, time
 import xlsxwriter
 from pathlib import Path
-import time as tm
 
 purchase = Blueprint('purchase', __name__)
 
@@ -184,7 +183,5 @@ def downloadDailyExcel():
         row += 1
         
     workbook.close()
-
-    tm.sleep(2)
 
     return jsonify(downloads_path)

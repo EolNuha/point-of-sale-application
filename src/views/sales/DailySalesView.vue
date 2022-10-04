@@ -3,9 +3,30 @@
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center gap-2">
-        <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold">
-          Date: {{ $route.query.saleDate.substring(0, 10) }}
-        </h2>
+        <div class="flex items-center w-[480px]">
+          <label for="simple-search" class="sr-only">Search</label>
+          <div class="relative w-full">
+            <div
+              class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+            >
+              <IconC
+                iconType="solid"
+                iconName="MagnifyingGlassIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+            </div>
+            <input
+              @input="
+                $debounce(() => {
+                  searchQuery = $event.target.value;
+                })
+              "
+              type="text"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Search"
+            />
+          </div>
+        </div>
       </div>
       <div class="flex flex-row items-center gap-2">
         <button
@@ -43,8 +64,11 @@
         </button>
       </div>
     </div>
+    <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold my-3">
+      Date: {{ $route.query.saleDate.substring(0, 10) }}
+    </h2>
     <div
-      class="overflow-x-auto relative sm:rounded-xl my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto relative sm:rounded-xl mb-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -122,6 +146,23 @@ export default {
     },
     saleDate() {
       return this.$route.query.saleDate;
+    },
+  },
+  watch: {
+    searchQuery: {
+      async handler(value) {
+        this.isTableLoading = true;
+        try {
+          await this.$store.dispatch("saleModule/getDailySales", {
+            page: this.currentPage,
+            search: value,
+            date: this.saleDate,
+          });
+          this.isTableLoading = false;
+        } catch {
+          this.isTableLoading = false;
+        }
+      },
     },
   },
   created() {

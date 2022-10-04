@@ -11,22 +11,6 @@ from pathlib import Path
 
 sale = Blueprint('sale', __name__)
 
-
-MONTHS = {
-    "January": 1,
-    "Febuarary": 2,
-    "March": 3,
-    "April": 4,
-    "May": 5,
-    "June": 6,
-    "July": 7,
-    "August": 8,
-    "September": 9,
-    "October": 10,
-    "November": 11,
-    "December": 12,
-}
-
 @sale.route('/sales', methods=["POST"])
 def createSale():
     products = request.json["products"]
@@ -107,6 +91,10 @@ def getSales():
         
     paginated_items = Sale.query.filter(or_(
         Sale.id.ilike(looking_for),
+        Sale.total_amount.ilike(looking_for),
+        Sale.subtotal_amount.ilike(looking_for),
+        Sale.eight_tax_amount.ilike(looking_for),
+        Sale.eighteen_tax_amount.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created > date_start)\
@@ -148,6 +136,10 @@ def getDailySales():
         
     paginated_items = Sale.query.filter(or_(
         Sale.id.ilike(looking_for),
+        Sale.total_amount.ilike(looking_for),
+        Sale.subtotal_amount.ilike(looking_for),
+        Sale.eight_tax_amount.ilike(looking_for),
+        Sale.eighteen_tax_amount.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= sale_date_end)\
         .filter(Sale.date_created >= sale_date_start)\
@@ -167,7 +159,7 @@ def getSaleDetails(saleId):
 def downloadDailyExcel():
     sales = request.json["sales"]
     FILENAME = request.json["fileName"]
-    FILENAME = FILENAME.lower() + "-SALES.xlsx"
+    FILENAME = FILENAME.upper() + "-SALES.xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  

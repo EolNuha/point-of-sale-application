@@ -1,6 +1,30 @@
 <template>
   <div class="flex flex-col bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl py-8 relative px-10">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2"></div>
+      <div class="flex flex-row items-center gap-2">
+        <button class="red-gradient-btn inline-flex items-center text-center">
+          <div class="inline-flex flex-row" role="status" v-if="isPdfLoading">
+            <IconC
+              iconType="custom"
+              iconName="SpinnerIcon"
+              iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
+            />
+            Downloading...
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div v-else class="inline-flex flex-row">
+            <IconC
+              iconType="custom"
+              iconName="SolidPdfIcon"
+              iconClass="w-5 h-5 fill-white mr-2"
+            />
+            Download PDF
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-900 rounded-3xl my-5 py-8 relative px-10">
       <OverlayC v-if="isLoading" />
       <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
         Purchase #{{ $route.params.purchaseId }}

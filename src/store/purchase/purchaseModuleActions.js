@@ -34,6 +34,34 @@ export default {
         });
     });
   },
+  getPurchasesForExcel({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${baseURL}/api/purchases`, { params: data })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  downloadExcelFile({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/purchases/download-exel`,
+        baseURL,
+        method: "POST",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getPurchaseDetails({ commit }, purchaseId) {
     return new Promise((resolve, reject) => {
       axios

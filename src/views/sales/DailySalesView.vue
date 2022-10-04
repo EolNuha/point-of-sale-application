@@ -121,7 +121,7 @@ export default {
       return this.$store.getters["saleModule/getSalesPagination"];
     },
     saleDate() {
-      return this.$route.query.saleDate.substring(0, 10);
+      return this.$route.query.saleDate;
     },
   },
   created() {

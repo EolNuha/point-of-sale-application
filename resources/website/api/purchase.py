@@ -4,6 +4,10 @@ from website.helpers import getPaginatedDict, getPurchasesList, getPurchaseItems
 from website import db
 from sqlalchemy import or_
 from decimal import *
+from datetime import datetime, date, time
+import xlsxwriter
+from pathlib import Path
+import time as tm
 
 purchase = Blueprint('purchase', __name__)
 
@@ -97,6 +101,13 @@ def createPurchase():
 
 @purchase.route('/purchases', methods=["GET"])
 def getPurchases():
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+    custom_start_date = custom_start_date.split("-")
+    custom_end_date = custom_end_date.split("-")
+
+    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
+    date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)
@@ -115,6 +126,8 @@ def getPurchases():
         Purchase.seller_fiscal_number.ilike(looking_for),
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
+        .filter(Purchase.date_created <= date_end)\
+        .filter(Purchase.date_created > date_start)\
         .order_by(Purchase.id.desc()).paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
@@ -128,3 +141,50 @@ def getPurchaseDetails(purchaseId):
 def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
     return jsonify(getPurchasesList([purchase, purchase])[0])
+
+@purchase.route('/purchases/download-exel', methods=["POST"])
+def downloadDailyExcel():
+    purhcases = request.json["purchases"]
+    month = request.json["month"]
+    FILENAME = month.lower() + ".xlsx"
+    downloads_path = str(Path.home() / "Downloads" / FILENAME)
+    workbook = xlsxwriter.Workbook(downloads_path)
+ 
+    worksheet = workbook.add_worksheet()
+    worksheet.set_column(0, 9, 20)
+    
+    header_format = workbook.add_format({'bold': True, 'bg_color': 'gray', 'align': 'center'})
+
+    money = workbook.add_format({'num_format': '€#,##0.00'})
+
+    worksheet.write('A1', 'Date', header_format)
+    worksheet.write('B1', 'Seller Name', header_format)
+    worksheet.write('C1', 'Invoice Number', header_format)
+    worksheet.write('D1', 'Fiscal Number', header_format)
+    worksheet.write('E1', 'Tax Number', header_format)
+    worksheet.write('F1', '8%', header_format)
+    worksheet.write('G1', '18%', header_format)
+    worksheet.write('H1', 'Subtotal', header_format)
+    worksheet.write('I1', 'Total', header_format)
+
+    row = 1
+    col = 0
+
+    for item in purhcases:
+        worksheet.write(row, col, item["dateCreated"][0:10])
+        worksheet.write(row, col + 1, item["sellerName"])
+        worksheet.write(row, col + 2, item["sellerInvoiceNumber"])
+        worksheet.write(row, col + 3, item["sellerFiscalNumber"])
+        worksheet.write(row, col + 4, item["sellerTaxNumber"])
+        worksheet.write(row, col + 5, item["eightTaxAmount"], money)
+        worksheet.write(row, col + 6, item["eighteenTaxAmount"], money)
+        worksheet.write(row, col + 7, item["subTotalAmount"], money)
+        worksheet.write(row, col + 8, item["totalAmount"], money)
+
+        row += 1
+        
+    workbook.close()
+
+    tm.sleep(2)
+
+    return jsonify(downloads_path)

@@ -8,8 +8,6 @@ import sqlalchemy as sa
 from decimal import *
 import xlsxwriter
 from pathlib import Path
-import calendar
-import time as tm
 
 sale = Blueprint('sale', __name__)
 

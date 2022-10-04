@@ -172,7 +172,7 @@ export default {
           sales = res.data.data;
         });
       const data = {
-        month: this.saleDate.replace(".", "-"),
+        fileName: this.saleDate.replace(".", "-"),
         sales: sales,
       };
       this.$store

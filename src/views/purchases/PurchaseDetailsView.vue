@@ -26,9 +26,14 @@
     </div>
     <div class="bg-white dark:bg-gray-900 rounded-3xl my-5 py-8 relative px-10">
       <OverlayC v-if="isLoading" />
-      <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
-        Purchase #{{ $route.params.purchaseId }}
-      </h2>
+      <div class="flex items-center flex-row justify-between">
+        <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
+          Purchase #{{ $route.params.purchaseId }}
+        </h2>
+        <p class="text-gray-700 dark:text-gray-300">
+          Date: {{ purchase.dateCreated.substring(0, 10) }}
+        </p>
+      </div>
       <div class="flex flex-row pt-5">
         <div class="basis-3/4 md:basis-1/2 lg:basis-1/4">
           <table class="text-gray-700 dark:text-gray-400 text-sm w-full">
@@ -154,7 +159,7 @@ export default {
       return this.$store.state.purchaseModule.purchase;
     },
   },
-  async mounted() {
+  async created() {
     await this.$store
       .dispatch(
         "purchaseModule/getPurchaseDetails",

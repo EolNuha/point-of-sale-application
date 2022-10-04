@@ -292,12 +292,12 @@ export default {
     },
     async downloadExcel() {
       this.isExcelLoading = true;
-      let month;
+      let fileName;
       const idx = this.checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
-        month = `${this.months[idx + 1]}-${this.startDate.substring(0, 4)}`;
+        fileName = `${this.months[idx + 1]}-${this.startDate.substring(0, 4)}`;
       } else {
-        month = `${this.startDate}--${this.endDate}`;
+        fileName = `${this.startDate}-TO-${this.endDate}`;
       }
       let sales;
       await this.$store
@@ -311,7 +311,7 @@ export default {
           sales = res.data.data;
         });
       const data = {
-        month: month,
+        month: fileName,
         sales: sales,
       };
       this.$store

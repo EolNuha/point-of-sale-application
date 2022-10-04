@@ -166,8 +166,8 @@ def getSaleDetails(saleId):
 @sale.route('/sales/download-exel', methods=["POST"])
 def downloadDailyExcel():
     sales = request.json["sales"]
-    month = request.json["month"]
-    FILENAME = month.lower() + ".xlsx"
+    FILENAME = request.json["fileName"]
+    FILENAME = FILENAME.lower() + "-SALES.xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  

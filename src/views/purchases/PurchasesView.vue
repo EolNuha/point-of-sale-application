@@ -38,13 +38,13 @@
         <button
           @click="
             $router.push({
-              name: 'new-sale',
+              name: 'new-purchase',
             })
           "
           class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-          New Sale
+          New Purchase
         </button>
         <button
           @click="downloadExcel()"
@@ -72,7 +72,7 @@
     </div>
 
     <div
-      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style min-h-65"
+      class="overflow-x-auto relative sm:rounded-xl my-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -310,12 +310,12 @@ export default {
     },
     async downloadExcel() {
       this.isExcelLoading = true;
-      let month;
+      let fileName;
       const idx = this.checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
-        month = `${this.months[idx + 1]}-${this.startDate.substring(0, 4)}`;
+        fileName = `${this.months[idx + 1]}-${this.startDate.substring(0, 4)}`;
       } else {
-        month = `${this.startDate}--${this.endDate}`;
+        fileName = `${this.startDate}-TO-${this.endDate}`;
       }
       let purchases;
       await this.$store
@@ -329,7 +329,7 @@ export default {
           purchases = res.data.data;
         });
       const data = {
-        month: month,
+        fileName: fileName,
         purchases: purchases,
       };
       this.$store

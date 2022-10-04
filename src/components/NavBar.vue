@@ -2,8 +2,8 @@
   <nav
     class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-1 sticky top-0 left-0 right-0"
   >
-    <div class="container flex flex-wrap items-center mx-auto">
-      <a href="https://eolnuha.com/" class="flex items-center w-64">
+    <div class="flex flex-wrap items-center mx-auto">
+      <router-link :to="{ name: 'home' }" class="flex items-center w-64">
         <img
           src="https://flowbite.com/docs/images/logo.svg"
           class="mr-3 h-6 sm:h-9"
@@ -21,7 +21,7 @@
             Market
           </span>
         </div>
-      </a>
+      </router-link>
       <ol class="inline-flex mr-auto space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
           <router-link

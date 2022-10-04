@@ -145,8 +145,8 @@ def getSellerDetails(name):
 @purchase.route('/purchases/download-exel', methods=["POST"])
 def downloadDailyExcel():
     purhcases = request.json["purchases"]
-    month = request.json["month"]
-    FILENAME = month.lower() + ".xlsx"
+    FILENAME = request.json["fileName"]
+    FILENAME = FILENAME.upper() + "-PURCHASES.xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  

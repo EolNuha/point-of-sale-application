@@ -156,7 +156,7 @@ def getSaleDetails(saleId):
     return jsonify(sales)
 
 @sale.route('/sales/download-exel', methods=["POST"])
-def downloadDailyExcel():
+def downloadSalesExcel():
     sales = request.json["sales"]
     FILENAME = request.json["fileName"]
     FILENAME = FILENAME.upper() + "-SALES.xlsx"
@@ -168,7 +168,7 @@ def downloadDailyExcel():
     
     header_format = workbook.add_format({'bold': True, 'bg_color': 'gray', 'align': 'center'})
 
-    money = workbook.add_format({'num_format': '€#,##0.00'})
+    euro = workbook.add_format({'num_format': '€#,##0.00'})
 
     worksheet.write('A1', 'Date', header_format)
     worksheet.write('B1', 'Buyer', header_format)
@@ -183,10 +183,10 @@ def downloadDailyExcel():
     for item in sales:
         worksheet.write(row, col, item["dateCreated"][0:10])
         worksheet.write(row, col + 1, "Qytetar")
-        worksheet.write(row, col + 2, item["eightTaxAmount"], money)
-        worksheet.write(row, col + 3, item["eighteenTaxAmount"], money)
-        worksheet.write(row, col + 4, item["subTotalAmount"], money)
-        worksheet.write(row, col + 5, item["totalAmount"], money)
+        worksheet.write(row, col + 2, Decimal(item["eightTaxAmount"]), euro)
+        worksheet.write(row, col + 3, Decimal(item["eighteenTaxAmount"]), euro)
+        worksheet.write(row, col + 4, Decimal(item["subTotalAmount"]), euro)
+        worksheet.write(row, col + 5, Decimal(item["totalAmount"]), euro)
 
         row += 1
         

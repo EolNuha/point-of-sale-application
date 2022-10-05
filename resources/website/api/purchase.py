@@ -142,7 +142,7 @@ def getSellerDetails(name):
     return jsonify(getPurchasesList([purchase, purchase])[0])
 
 @purchase.route('/purchases/download-exel', methods=["POST"])
-def downloadDailyExcel():
+def downloadPurchasesExcel():
     purhcases = request.json["purchases"]
     FILENAME = request.json["fileName"]
     FILENAME = FILENAME.upper() + "-PURCHASES.xlsx"
@@ -154,7 +154,7 @@ def downloadDailyExcel():
     
     header_format = workbook.add_format({'bold': True, 'bg_color': 'gray', 'align': 'center'})
 
-    money = workbook.add_format({'num_format': '€#,##0.00'})
+    euro = workbook.add_format({'num_format': '€#,##0.00'})
 
     worksheet.write('A1', 'Date', header_format)
     worksheet.write('B1', 'Seller Name', header_format)
@@ -175,10 +175,10 @@ def downloadDailyExcel():
         worksheet.write(row, col + 2, item["sellerInvoiceNumber"])
         worksheet.write(row, col + 3, item["sellerFiscalNumber"])
         worksheet.write(row, col + 4, item["sellerTaxNumber"])
-        worksheet.write(row, col + 5, item["eightTaxAmount"], money)
-        worksheet.write(row, col + 6, item["eighteenTaxAmount"], money)
-        worksheet.write(row, col + 7, item["subTotalAmount"], money)
-        worksheet.write(row, col + 8, item["totalAmount"], money)
+        worksheet.write(row, col + 5, item["eightTaxAmount"], euro)
+        worksheet.write(row, col + 6, item["eighteenTaxAmount"], euro)
+        worksheet.write(row, col + 7, item["subTotalAmount"], euro)
+        worksheet.write(row, col + 8, item["totalAmount"], euro)
 
         row += 1
         

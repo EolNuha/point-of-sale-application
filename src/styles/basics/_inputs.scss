@@ -13,7 +13,7 @@ input[type="date"] {
 .default-input {
 	@apply bg-gray-50;
   @apply border;
-  @apply border-gray-300;
+  @apply border-gray-300  #{!important};
   @apply text-gray-900;
   @apply text-sm #{!important};
   @apply rounded-xl #{!important};
@@ -21,7 +21,7 @@ input[type="date"] {
   @apply focus:border-blue-500;
   @apply block;
   @apply dark:bg-gray-700;
-  @apply dark:border-gray-600;
+  @apply dark:border-gray-600 #{!important};
   @apply dark:placeholder-gray-400;
   @apply dark:text-white;
   @apply dark:focus:ring-blue-500;

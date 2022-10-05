@@ -33,9 +33,9 @@
             <span class="sr-only">Previous</span>
             <IconC
               iconType="solid"
-              icontType="20"
+              iconSize="20"
               iconName="ChevronLeftIcon"
-              iconClass="w-4 h-4"
+              iconClass="w-5 h-5"
             />
           </button>
         </li>
@@ -70,9 +70,9 @@
             <span class="sr-only">Next</span>
             <IconC
               iconType="solid"
-              icontType="20"
+              iconSize="20"
               iconName="ChevronRightIcon"
-              iconClass="w-4 h-4"
+              iconClass="w-5 h-5"
             />
           </button>
         </li>

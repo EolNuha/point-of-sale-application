@@ -63,13 +63,16 @@
       </div>
     </div>
     <div class="flex items-center gap-2 search-input-width my-3">
-      <select v-model="currentMonth" class="w-full default-input">
+      <select
+        v-model="currentMonth"
+        class="sm:w-1/2 md:w-1/3 lg:w-1/4 default-input"
+      >
         <option v-for="(month, index) in months" :key="month" :value="index">
           {{ month }}
         </option>
       </select>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 w-full">
         <input
           v-model="startDate"
           ref="startDate"
@@ -95,9 +98,16 @@
       class="overflow-x-auto relative sm:rounded-xl mb-5 scrollbar-style min-h-65"
     >
       <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative table-fixed"
       >
         <OverlayC v-if="isTableLoading" />
+        <EmptyResultsC
+          v-if="sales.length === 0 && !isTableLoading"
+          pluralText="Sales"
+          singularText="Sale"
+          :search="searchQuery"
+          routeName="new-sale"
+        />
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
@@ -182,6 +192,7 @@ export default {
   watch: {
     searchQuery: {
       async handler(value) {
+        this.currentPage = 1;
         this.isTableLoading = true;
         try {
           await this.$store.dispatch("saleModule/getSales", {
@@ -248,6 +259,7 @@ export default {
             startDate: this.startDate,
             endDate: value,
             page: this.currentPage,
+            search: this.searchQuery,
           })
           .then(() => {
             this.isTableLoading = false;
@@ -285,6 +297,7 @@ export default {
           startDate: this.startDate,
           endDate: this.endDate,
           page: this.currentPage,
+          search: this.searchQuery,
         })
         .then((res) => {
           this.isTableLoading = false;
@@ -317,6 +330,7 @@ export default {
           page: page,
           startDate: this.startDate,
           endDate: this.endDate,
+          search: this.searchQuery,
         })
         .then(() => {
           this.isTableLoading = false;

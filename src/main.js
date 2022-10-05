@@ -9,6 +9,7 @@ import "flowbite";
 import Icon from "@/components/icons/IconComponent.vue";
 import Overlay from "@/components/OverlayComponent.vue";
 import Pagination from "@/components/PaginationComponent.vue";
+import EmptyResults from "@/components/EmptyResultsComponent.vue";
 import { useToast } from "vue-toastification";
 import openModalPlugin from "./plugins/modals";
 import focusPlugin from "./plugins/focus";
@@ -37,7 +38,8 @@ const options = {
 app
   .component("IconC", Icon)
   .component("OverlayC", Overlay)
-  .component("PaginationC", Pagination);
+  .component("PaginationC", Pagination)
+  .component("EmptyResultsC", EmptyResults);
 app
   .use(store)
   .use(router)

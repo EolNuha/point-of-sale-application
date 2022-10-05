@@ -98,9 +98,16 @@
       class="overflow-x-auto relative mb-5 sm:rounded-xl scrollbar-style min-h-65"
     >
       <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative table-fixed"
       >
         <OverlayC v-if="isTableLoading" />
+        <EmptyResultsC
+          v-if="purchases.length === 0 && !isTableLoading"
+          pluralText="Purchases"
+          singularText="Purchase"
+          routeName="new-purchase"
+          :search="searchQuery"
+        />
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
@@ -189,6 +196,7 @@ export default {
   watch: {
     searchQuery: {
       async handler(value) {
+        this.currentPage = 1;
         this.isTableLoading = true;
         try {
           await this.$store.dispatch("purchaseModule/getPurchases", {
@@ -231,6 +239,7 @@ export default {
             startDate: value,
             endDate: this.endDate,
             page: this.currentPage,
+            search: this.searchQuery,
           })
           .then(() => {
             this.isTableLoading = false;
@@ -255,6 +264,7 @@ export default {
             startDate: this.startDate,
             endDate: value,
             page: this.currentPage,
+            search: this.searchQuery,
           })
           .then(() => {
             this.isTableLoading = false;
@@ -293,6 +303,7 @@ export default {
           page: this.currentPage,
           startDate: this.startDate,
           endDate: this.endDate,
+          search: this.searchQuery,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -323,6 +334,7 @@ export default {
           page: page,
           startDate: this.startDate,
           endDate: this.endDate,
+          search: this.searchQuery,
         })
         .then(() => {
           this.isTableLoading = false;

@@ -46,6 +46,13 @@
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
       >
         <OverlayC v-if="isTableLoading" />
+        <EmptyResultsC
+          v-if="products.length === 0 && !isTableLoading"
+          pluralText="Products"
+          singularText="Product"
+          :search="searchQuery"
+          routeName="products-create"
+        />
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
@@ -193,6 +200,7 @@ export default {
     searchQuery: {
       async handler(value) {
         this.isTableLoading = true;
+        this.currentPage = 1;
         try {
           await this.$store.dispatch("productModule/getProducts", {
             page: this.currentPage,
@@ -231,6 +239,7 @@ export default {
       this.$store
         .dispatch("productModule/getProducts", {
           page: this.currentPage,
+          search: this.searchQuery,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -254,7 +263,10 @@ export default {
     getProducts(page) {
       this.isTableLoading = true;
       this.$store
-        .dispatch("productModule/getProducts", { page: page })
+        .dispatch("productModule/getProducts", {
+          page: page,
+          search: this.searchQuery,
+        })
         .then(() => {
           this.isTableLoading = false;
           this.currentPage = page;

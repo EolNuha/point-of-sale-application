@@ -1,0 +1,36 @@
+:focus-visible {
+  outline: none;
+}
+
+input[type="date"] {
+  color-scheme: light;
+}
+
+.dark input[type="date"] {
+  color-scheme: dark;
+}
+
+.default-input {
+	@apply bg-gray-50;
+  @apply border;
+  @apply border-gray-300;
+  @apply text-gray-900;
+  @apply text-sm #{!important};
+  @apply rounded-xl #{!important};
+  @apply focus:ring-blue-500;
+  @apply focus:border-blue-500;
+  @apply block;
+  @apply dark:bg-gray-700;
+  @apply dark:border-gray-600;
+  @apply dark:placeholder-gray-400;
+  @apply dark:text-white;
+  @apply dark:focus:ring-blue-500;
+  @apply dark:focus:border-blue-500;
+}
+
+.search-input-width {
+  @apply sm:w-full #{!important};
+  @apply md:w-[400px] #{!important};
+  @apply lg:w-[500px] #{!important};
+  @apply xl:w-[600px] #{!important};
+}

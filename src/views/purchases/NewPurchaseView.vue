@@ -22,7 +22,7 @@
               }, 300)
             "
             placeholder="Seller Name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <div class="w-full">
@@ -36,7 +36,7 @@
             step="1"
             v-model="seller.fiscalNumber"
             placeholder="Fiscal Number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
       </div>
@@ -51,7 +51,7 @@
             type="text"
             v-model="seller.invoiceNumber"
             placeholder="Invoice Number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <div class="w-full">
@@ -65,7 +65,7 @@
             step="1"
             v-model="seller.taxNumber"
             placeholder="Tax Number"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
       </div>
@@ -94,7 +94,7 @@
               }, 300)
             "
             placeholder="Product Barcode"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <div class="w-full">
@@ -107,7 +107,7 @@
             type="text"
             v-model="product.productName"
             placeholder="Product Name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <div class="w-full">
@@ -121,7 +121,7 @@
             step="0.01"
             v-model="product.stock"
             placeholder="Product Stock"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <div class="w-full">
@@ -129,10 +129,7 @@
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >Tax</label
           >
-          <select
-            v-model="product.tax"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
+          <select v-model="product.tax" class="default-input w-full">
             <option value="8">8%</option>
             <option value="18">18%</option>
           </select>
@@ -148,7 +145,7 @@
             step="0.01"
             v-model="product.purchasedPrice"
             placeholder="Product Purchased Price"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <div class="w-full">
@@ -162,7 +159,7 @@
             step="0.01"
             v-model="product.sellingPrice"
             placeholder="Product Selling Price"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
           />
         </div>
         <button

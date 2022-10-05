@@ -4,14 +4,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-input[type="date"] {
-  color-scheme: light;
-}
-
-.dark input[type="date"] {
-  color-scheme: dark;
-}
-
 body {
   @apply bg-gray-200;
   @apply dark:bg-gray-800;
@@ -22,10 +14,6 @@ div[modal-backdrop] {
 }
 .h-modal{
   z-index: 9999 !important;
-}
-
-:focus-visible {
-  outline: none;
 }
 
 .swal2-popup.swal2-toast {

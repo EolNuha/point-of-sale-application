@@ -2,7 +2,7 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center w-[480px] sm:max-w-full">
+      <div class="flex items-center search-input-width">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
           <div
@@ -21,7 +21,7 @@
               })
             "
             type="text"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full pl-10"
             placeholder="Search"
           />
         </div>
@@ -62,11 +62,8 @@
         </button>
       </div>
     </div>
-    <div class="flex items-center gap-2 w-[480px] sm:max-w-full my-3">
-      <select
-        v-model="currentMonth"
-        class="w-[120px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      >
+    <div class="flex items-center gap-2 search-input-width my-3">
+      <select v-model="currentMonth" class="w-full default-input">
         <option v-for="(month, index) in months" :key="month" :value="index">
           {{ month }}
         </option>
@@ -78,7 +75,7 @@
           ref="startDate"
           name="start"
           type="date"
-          class="w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="w-full default-input"
           placeholder="Select date start"
           :max="endDate"
         />
@@ -88,7 +85,7 @@
           ref="endDate"
           name="start"
           type="date"
-          class="w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="w-full default-input"
           placeholder="Select date end"
           :min="startDate"
         />

@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="flex items-center w-1/2 relative">
+    <div class="flex items-center search-input-width relative">
       <label for="simple-search" class="sr-only">Search</label>
       <div class="relative w-full">
         <div
@@ -16,7 +16,7 @@
           @keydown="keyEvent"
           v-model="searchQuery"
           type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="default-input w-full pl-10"
           placeholder="Search"
         />
       </div>
@@ -43,6 +43,7 @@
                 </th>
                 <td class="py-2 px-6">{{ product.barcode }}</td>
                 <td class="py-2 px-6">{{ product.name }}</td>
+                <td class="py-2 px-6">{{ product.sellingPrice }} €</td>
               </tr>
             </template>
           </tbody>

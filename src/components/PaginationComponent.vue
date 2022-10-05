@@ -17,7 +17,7 @@
         >{{ pagination.total }}</span
       >
     </div>
-    <div aria-label="Page navigation" v-if="!(pagination.pages === 1)">
+    <div aria-label="Page navigation" v-if="!(pagination.pages <= 1)">
       <ul class="inline-flex items-center -space-x-px">
         <li>
           <button

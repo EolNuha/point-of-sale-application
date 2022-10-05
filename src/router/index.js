@@ -5,6 +5,7 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import NotFound from "../views/errors/404View.vue";
 import ProductsView from "../views/products/ProductsView.vue";
 import CreateProductView from "../views/products/CreateProductView.vue";
 import ProductDetailsView from "../views/products/ProductDetailsView.vue";
@@ -24,6 +25,22 @@ const routes = [
       title: "Home Page",
     },
     component: HomeView,
+  },
+  { path: "/:catchAll(.*)", redirect: "/404" },
+  {
+    path: "/404",
+    name: "404",
+    component: NotFound,
+    meta: {
+      title: "Error 404 Page",
+      breadcrumb: [
+        {
+          text: (route) => "Error 404 Page",
+          to: "404",
+          active: true,
+        },
+      ],
+    },
   },
   {
     path: "/products",

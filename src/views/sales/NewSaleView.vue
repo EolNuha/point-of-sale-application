@@ -1,54 +1,62 @@
 <template>
   <div class="bg-gray-200 dark:bg-gray-800 min-h-screen p-4 relative">
-    <div class="flex items-center search-input-width relative">
-      <label for="simple-search" class="sr-only">Search</label>
-      <div class="relative w-full">
-        <div
-          class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-        >
-          <IconC
-            iconType="solid"
-            iconName="MagnifyingGlassIcon"
-            iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+    <div class="flex justify-between gap-2">
+      <div class="flex items-center search-input-width relative">
+        <label for="simple-search" class="sr-only">Search</label>
+        <div class="relative w-full">
+          <div
+            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+          >
+            <IconC
+              iconType="solid"
+              iconName="MagnifyingGlassIcon"
+              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+            />
+          </div>
+          <input
+            @keydown="keyEvent"
+            v-model="searchQuery"
+            type="text"
+            class="default-input w-full pl-10"
+            placeholder="Search"
           />
         </div>
-        <input
-          @keydown="keyEvent"
-          v-model="searchQuery"
-          type="text"
-          class="default-input w-full pl-10"
-          placeholder="Search"
-        />
-      </div>
-      <div class="search-results" v-if="searchQuery">
-        <table
-          class="w-full bg-white dark:bg-gray-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
-        >
-          <tbody>
-            <template v-for="product in searchedProducts" :key="product.id">
-              <tr
-                @click="onSearchedProductClick(product)"
-                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-100/75 hover:dark:bg-gray-800/50"
-                :class="
-                  searchedProducts[searchedProductsIndex] === product
-                    ? 'bg-blue-100 dark:bg-blue-900 hover:bg-blue-200/75 hover:dark:bg-blue-800/50'
-                    : ''
-                "
-              >
-                <th
-                  scope="row"
-                  class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+        <div class="search-results" v-if="searchQuery">
+          <table
+            class="w-full bg-white dark:bg-gray-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
+          >
+            <tbody>
+              <template v-for="product in searchedProducts" :key="product.id">
+                <tr
+                  @click="onSearchedProductClick(product)"
+                  class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-100/75 hover:dark:bg-gray-800/50"
+                  :class="
+                    searchedProducts[searchedProductsIndex] === product
+                      ? 'bg-blue-100 dark:bg-blue-900 hover:bg-blue-200/75 hover:dark:bg-blue-800/50'
+                      : ''
+                  "
                 >
-                  {{ product.id }}
-                </th>
-                <td class="py-2 px-6">{{ product.barcode }}</td>
-                <td class="py-2 px-6">{{ product.name }}</td>
-                <td class="py-2 px-6">{{ product.sellingPrice }} €</td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
+                  <th
+                    scope="row"
+                    class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {{ product.id }}
+                  </th>
+                  <td class="py-2 px-6">{{ product.barcode }}</td>
+                  <td class="py-2 px-6">{{ product.name }}</td>
+                  <td class="py-2 px-6">{{ product.sellingPrice }} €</td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <router-link :to="{ name: 'new-sale' }" target="_blank">
+        <button class="blue-gradient-btn flex items-center gap-2">
+          <IconC iconName="ArrowTopRightOnSquareIcon" iconClass="w-5 h-5" />
+          New Sale Page
+        </button>
+      </router-link>
     </div>
     <div
       class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style mb-[8.5rem]"

@@ -115,9 +115,7 @@
                   @focus="$event.target.select()"
                 />
               </td>
-              <td class="py-2 px-6 max-w-xs break-words">
-                {{ product.sellingPrice }} €
-              </td>
+              <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
               <td class="py-2 px-6">
                 <button
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"

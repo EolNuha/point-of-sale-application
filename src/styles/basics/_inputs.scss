@@ -29,8 +29,7 @@ input[type="date"] {
 }
 
 .search-input-width {
-  @apply sm:w-full #{!important};
-  @apply md:w-[400px] #{!important};
-  @apply lg:w-[500px] #{!important};
+  @apply w-full #{!important};
+  @apply md:w-[500px] #{!important};
   @apply xl:w-[600px] #{!important};
 }

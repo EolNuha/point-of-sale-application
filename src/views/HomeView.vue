@@ -37,7 +37,7 @@
     </div>
     <div class="grid grid-cols-6 gap-4">
       <div
-        class="overflow-x-hidden flex items-center justify-center flex-col bg-gray-300 dark:bg-gray-700 rounded-lg p-2.5 text-gray-700 dark:text-gray-300 break-words cursor-pointer"
+        class="overflow-x-hidden flex items-center justify-center flex-col bg-gray-300 dark:bg-gray-700 rounded-lg p-2.5 text-gray-700 dark:text-gray-300 cursor-pointer"
         v-for="icon in icons"
         :key="icon"
         @click="copy(icon)"
@@ -55,7 +55,6 @@
         {{ icon }}
       </div>
     </div>
-    <!-- <Icons @copy="copy" /> -->
   </div>
 </template>
 

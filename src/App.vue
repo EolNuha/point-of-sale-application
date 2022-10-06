@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <SideBar />
-  <router-view class="router-view duration-100" id="main" />
+  <router-view class="router-view duration-300" id="main" />
 </template>
 
 <script>

@@ -3,22 +3,31 @@
     class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-1 sticky top-0 left-0 right-0"
   >
     <div class="flex flex-wrap items-center justify-between">
-      <div class="flex items-center">
-        <button class="duration-100" @click="closeSide" v-show="sideBar">
+      <div class="inline-flex items-center">
+        <button
+          class="hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-xl mr-3 p-1"
+          @click="closeSide"
+          v-show="sideBar"
+        >
           <IconC
             iconName="XMarkIcon"
-            iconClass="w-6 h-6 mr-3 text-gray-700 dark:text-gray-300"
+            iconClass="w-6 h-6 text-gray-700 dark:text-gray-300"
           />
         </button>
-        <button class="duration-100" @click="openSide" v-show="!sideBar">
+        <button
+          class="hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-xl mr-3 p-1"
+          @click="openSide"
+          v-show="!sideBar"
+        >
           <IconC
-            iconType="solid"
-            iconSize="20"
             iconName="Bars3CenterLeftIcon"
-            iconClass="w-6 h-6 mr-3 text-gray-700 dark:text-gray-300"
+            iconClass="w-6 h-6 text-gray-700 dark:text-gray-300"
           />
         </button>
-        <router-link :to="{ name: 'home' }" class="flex items-center w-64">
+        <router-link
+          :to="{ name: 'home' }"
+          class="flex items-center w-auto sm:w-[14rem]"
+        >
           <img
             src="https://flowbite.com/docs/images/logo.svg"
             class="mr-3 h-6 sm:h-9"
@@ -68,7 +77,7 @@
       <button
         data-collapse-toggle="navbar-default"
         type="button"
-        class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        class="inline-flex items-center p-1 ml-3 text-sm text-gray-500 rounded-xl md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:focus:ring-gray-600"
         aria-controls="navbar-default"
         aria-expanded="false"
       >

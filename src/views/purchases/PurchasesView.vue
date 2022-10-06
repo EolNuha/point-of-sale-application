@@ -62,7 +62,9 @@
         </button>
       </div>
     </div>
-    <div class="flex items-center my-3 gap-2 search-input-width">
+    <div
+      class="flex items-center my-3 gap-2 search-input-width flex-wrap sm:flex-nowrap"
+    >
       <select
         v-model="currentMonth"
         class="sm:w-1/2 md:w-1/3 lg:w-1/4 default-input"
@@ -95,10 +97,10 @@
       </div>
     </div>
     <div
-      class="overflow-x-auto relative mb-5 sm:rounded-xl scrollbar-style min-h-65"
+      class="overflow-x-auto overflow-y-hidden relative mb-5 sm:rounded-xl scrollbar-style min-h-65"
     >
       <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative table-fixed"
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
       >
         <OverlayC v-if="isTableLoading" />
         <EmptyResultsC
@@ -131,7 +133,7 @@
               <td class="py-2 px-6">{{ purchase.id }}</td>
               <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
               <td class="py-2 px-6">{{ purchase.sellerName }}</td>
-              <td class="py-2 px-6 max-w-xs break-words">
+              <td class="py-2 px-6 max-w-xs">
                 {{ purchase.sellerInvoiceNumber }}
               </td>
               <td class="py-2 px-6">
@@ -354,17 +356,6 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      // let purchases;
-      // await this.$store
-      //   .dispatch("purchaseModule/getPurchasesForExcel", {
-      //     startDate: this.startDate,
-      //     endDate: this.endDate,
-      //     page: this.currentPage,
-      //     per_page: this.pagination.total,
-      //   })
-      //   .then((res) => {
-      //     purchases = res.data.data;
-      //   });
       const data = {
         fileName: fileName,
         page: 1,

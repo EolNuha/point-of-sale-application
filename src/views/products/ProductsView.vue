@@ -1,7 +1,7 @@
 <!-- eslint-disable no-undef -->
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center search-input-width">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
@@ -99,12 +99,8 @@
               </th>
               <td class="py-2 px-6">{{ product.name }}</td>
               <td class="py-2 px-6">{{ product.barcode }}</td>
-              <td class="py-2 px-6 max-w-xs break-words">
-                {{ product.purchasedPrice }} €
-              </td>
-              <td class="py-2 px-6 max-w-xs break-words">
-                {{ product.sellingPrice }} €
-              </td>
+              <td class="py-2 px-6 max-w-xs">{{ product.purchasedPrice }} €</td>
+              <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
               <td class="py-2 px-6">
                 <div
                   class="flex items-center"
@@ -128,7 +124,7 @@
                   <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
               </td>
-              <td class="py-2 px-6 max-w-xs break-words">{{ product.tax }}%</td>
+              <td class="py-2 px-6 max-w-xs">{{ product.tax }}%</td>
               <td
                 class="py-2 px-6"
                 @click="

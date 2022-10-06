@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center">
+  <div class="flex justify-between items-center flex-wrap gap-4">
     <div class="text-gray-700 dark:text-gray-400">
       Viewing page
       <span

@@ -99,16 +99,14 @@
                 </td>
                 <td class="py-3 px-6">{{ item.product.barcode }}</td>
                 <td class="py-3 px-6">x {{ item.product.stock }}</td>
-                <td class="py-3 px-6 max-w-xs break-words">
+                <td class="py-3 px-6 max-w-xs">
                   {{ item.product.purchasedPrice }} €
                 </td>
-                <td class="py-3 px-6 max-w-xs break-words">
-                  {{ item.priceWithoutTax }} €
-                </td>
-                <td class="py-3 px-6 max-w-xs break-words">
+                <td class="py-3 px-6 max-w-xs">{{ item.priceWithoutTax }} €</td>
+                <td class="py-3 px-6 max-w-xs">
                   {{ item.taxAmount }} € ({{ item.product.tax }}%)
                 </td>
-                <td class="py-3 px-6 max-w-xs break-words">
+                <td class="py-3 px-6 max-w-xs">
                   {{ item.product.sellingPrice }} €
                 </td>
               </tr>

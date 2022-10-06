@@ -62,7 +62,9 @@
         </button>
       </div>
     </div>
-    <div class="flex items-center gap-2 search-input-width my-3">
+    <div
+      class="flex items-center gap-2 search-input-width my-3 flex-wrap sm:flex-nowrap"
+    >
       <select
         v-model="currentMonth"
         class="sm:w-1/2 md:w-1/3 lg:w-1/4 default-input"
@@ -98,7 +100,7 @@
       class="overflow-x-auto relative sm:rounded-xl mb-5 scrollbar-style min-h-65"
     >
       <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative table-fixed"
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
       >
         <OverlayC v-if="isTableLoading" />
         <EmptyResultsC

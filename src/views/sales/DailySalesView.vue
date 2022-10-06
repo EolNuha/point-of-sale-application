@@ -212,19 +212,12 @@ export default {
     },
     async downloadExcel() {
       this.isExcelLoading = true;
-      let sales;
-      await this.$store
-        .dispatch("saleModule/getDailySalesForExcel", {
-          date: this.saleDate,
-          page: this.currentPage,
-          per_page: this.pagination.total,
-        })
-        .then((res) => {
-          sales = res.data.data;
-        });
       const data = {
         fileName: this.saleDate.replace(".", "-"),
-        sales: sales,
+        dailySales: true,
+        dailyDate: this.saleDate,
+        page: 1,
+        per_page: this.pagination.total,
       };
       this.$store
         .dispatch("saleModule/downloadExcelFile", data)

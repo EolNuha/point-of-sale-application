@@ -7,8 +7,10 @@ from decimal import *
 from datetime import datetime, date, time
 import xlsxwriter
 from pathlib import Path
+import requests
 
 purchase = Blueprint('purchase', __name__)
+BASE_URL = "http://localhost:5000"
 
 @purchase.route('/purchases', methods=["POST"])
 def createPurchase():
@@ -141,11 +143,18 @@ def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
     return jsonify(getPurchasesList([purchase, purchase])[0])
 
-@purchase.route('/purchases/download-exel', methods=["POST"])
+@purchase.route('/purchases/download-exel', methods=["GET"])
 def downloadPurchasesExcel():
-    purhcases = request.json["purchases"]
-    FILENAME = request.json["fileName"]
-    FILENAME = FILENAME.upper() + "-PURCHASES.xlsx"
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+    file_name = request.args.get('fileName', 'excelFile', type=str)
+
+    api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}')
+    purchases = api_response.json()["data"]
+
+    FILENAME = file_name.upper() + "-PURCHASES.xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  
@@ -169,7 +178,7 @@ def downloadPurchasesExcel():
     row = 1
     col = 0
 
-    for item in purhcases:
+    for item in purchases:
         worksheet.write(row, col, item["dateCreated"][0:10])
         worksheet.write(row, col + 1, item["sellerName"])
         worksheet.write(row, col + 2, item["sellerInvoiceNumber"])

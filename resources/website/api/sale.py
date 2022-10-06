@@ -8,8 +8,10 @@ import sqlalchemy as sa
 from decimal import *
 import xlsxwriter
 from pathlib import Path
+import requests
 
 sale = Blueprint('sale', __name__)
+BASE_URL = "http://localhost:5000"
 
 @sale.route('/sales', methods=["POST"])
 def createSale():
@@ -155,11 +157,25 @@ def getSaleDetails(saleId):
     sales["saleItems"] = sale_items
     return jsonify(sales)
 
-@sale.route('/sales/download-exel', methods=["POST"])
+@sale.route('/sales/download-exel', methods=["GET"])
 def downloadSalesExcel():
-    sales = request.json["sales"]
-    FILENAME = request.json["fileName"]
-    FILENAME = FILENAME.upper() + "-SALES.xlsx"
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+    file_name = request.args.get('fileName', 'excelFile', type=str)
+    daily = request.args.get('dailySales', False, type=bool)
+    daily_date = request.args.get('dailyDate', type=str)
+    
+    if daily:
+        URL = f'{BASE_URL}/api/sales/daily?page={page}&per_page={per_page}&date={daily_date}'
+    else:
+        URL = f'{BASE_URL}/api/sales?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}'
+
+    api_response = requests.get(URL)
+    sales = list(api_response.json()["data"])
+
+    FILENAME = file_name.upper() + "-SALES.xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  

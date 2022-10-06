@@ -47,38 +47,10 @@ export default {
         });
     });
   },
-  getSalesForExcel({ commit }, data) {
+  downloadExcelFile({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/sales`, { params: data })
-        .then(async (response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  },
-  getDailySalesForExcel({ commit }, data) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${baseURL}/api/sales/daily`, { params: data })
-        .then(async (response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  },
-  downloadExcelFile({ commit, state }, data) {
-    return new Promise((resolve, reject) => {
-      axios({
-        url: `/api/sales/download-exel`,
-        baseURL,
-        method: "POST",
-        data,
-      })
+        .get(`${baseURL}/api/sales/download-exel`, { params: data })
         .then(async (response) => {
           resolve(response);
         })

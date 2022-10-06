@@ -354,20 +354,23 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      let purchases;
-      await this.$store
-        .dispatch("purchaseModule/getPurchasesForExcel", {
-          startDate: this.startDate,
-          endDate: this.endDate,
-          page: this.currentPage,
-          per_page: this.pagination.total,
-        })
-        .then((res) => {
-          purchases = res.data.data;
-        });
+      // let purchases;
+      // await this.$store
+      //   .dispatch("purchaseModule/getPurchasesForExcel", {
+      //     startDate: this.startDate,
+      //     endDate: this.endDate,
+      //     page: this.currentPage,
+      //     per_page: this.pagination.total,
+      //   })
+      //   .then((res) => {
+      //     purchases = res.data.data;
+      //   });
       const data = {
         fileName: fileName,
-        purchases: purchases,
+        page: 1,
+        per_page: this.pagination.total,
+        startDate: this.startDate,
+        endDate: this.endDate,
       };
       this.$store
         .dispatch("purchaseModule/downloadExcelFile", data)

@@ -350,20 +350,12 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      let sales;
-      await this.$store
-        .dispatch("saleModule/getSalesForExcel", {
-          startDate: this.startDate,
-          endDate: this.endDate,
-          page: this.currentPage,
-          per_page: this.pagination.total,
-        })
-        .then((res) => {
-          sales = res.data.data;
-        });
       const data = {
         fileName: fileName,
-        sales: sales,
+        page: 1,
+        per_page: this.pagination.total,
+        startDate: this.startDate,
+        endDate: this.endDate,
       };
       this.$store
         .dispatch("saleModule/downloadExcelFile", data)

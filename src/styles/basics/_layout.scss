@@ -1,5 +1,6 @@
 .router-view {
-  margin-left: 16rem;
+  @apply ml-0;
+	@apply sm:ml-[16rem]
 }
 .min-h-screen {
 	min-height: calc(100vh - 65.6px) !important;

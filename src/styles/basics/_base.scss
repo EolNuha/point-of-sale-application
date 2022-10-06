@@ -9,6 +9,10 @@ body {
   @apply dark:bg-gray-800;
 }
 
+// #main {
+//   @apply ml-0 #{!important};
+// }
+
 div[modal-backdrop] {
 	z-index: 9998;
 }

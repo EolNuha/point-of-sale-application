@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="bg-gray-200 dark:bg-gray-800 min-h-screen p-4 relative">
     <div class="flex items-center search-input-width relative">
       <label for="simple-search" class="sr-only">Search</label>
       <div class="relative w-full">
@@ -135,7 +135,7 @@
       </table>
     </div>
     <div
-      class="fixed bottom-0 left-[16rem] right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-gray-700 px-2"
+      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-gray-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
     >
       <button
         :disabled="products.length === 0"

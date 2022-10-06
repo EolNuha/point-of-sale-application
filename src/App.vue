@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <SideBar />
-  <router-view class="router-view" :toast="toast" />
+  <router-view class="router-view duration-100" id="main" />
 </template>
 
 <script>

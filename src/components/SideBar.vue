@@ -1,9 +1,10 @@
 <template>
   <div
-    class="bg-white dark:bg-gray-900 w-64 sidebar h-screen overflow-y-auto"
+    class="bg-white dark:bg-gray-900 w-64 sidebar h-screen overflow-y-auto overflow-x-hidden duration-100"
+    id="sidebar"
     aria-label="Sidebar"
   >
-    <div class="overflow-y-auto py-4 px-3">
+    <div class="overflow-y-auto overflow-x-hidden py-4 px-3">
       <ul class="space-y-2">
         <li>
           <router-link

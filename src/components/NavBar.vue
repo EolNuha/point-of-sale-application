@@ -2,27 +2,43 @@
   <nav
     class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-1 sticky top-0 left-0 right-0"
   >
-    <div class="flex flex-wrap items-center mx-auto">
-      <router-link :to="{ name: 'home' }" class="flex items-center w-64">
-        <img
-          src="https://flowbite.com/docs/images/logo.svg"
-          class="mr-3 h-6 sm:h-9"
-          alt="Logo"
-        />
-        <div>
-          <span
-            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
-          >
-            Egzoni
-          </span>
-          <span
-            class="text-sm font-semibold whitespace-nowrap dark:text-gray-300"
-          >
-            Market
-          </span>
-        </div>
-      </router-link>
-      <ol class="inline-flex mr-auto space-x-1 md:space-x-3">
+    <div class="flex flex-wrap items-center justify-between">
+      <div class="flex items-center">
+        <button class="duration-100" @click="closeSide" v-show="sideBar">
+          <IconC
+            iconName="XMarkIcon"
+            iconClass="w-6 h-6 mr-3 text-gray-700 dark:text-gray-300"
+          />
+        </button>
+        <button class="duration-100" @click="openSide" v-show="!sideBar">
+          <IconC
+            iconType="solid"
+            iconSize="20"
+            iconName="Bars3CenterLeftIcon"
+            iconClass="w-6 h-6 mr-3 text-gray-700 dark:text-gray-300"
+          />
+        </button>
+        <router-link :to="{ name: 'home' }" class="flex items-center w-64">
+          <img
+            src="https://flowbite.com/docs/images/logo.svg"
+            class="mr-3 h-6 sm:h-9"
+            alt="Logo"
+          />
+          <div>
+            <span
+              class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+            >
+              Egzoni
+            </span>
+            <span
+              class="text-sm font-semibold whitespace-nowrap dark:text-gray-300"
+            >
+              Market
+            </span>
+          </div>
+        </router-link>
+      </div>
+      <ol class="hidden sm:inline-flex mr-auto space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
           <router-link
             :to="{ name: 'home' }"
@@ -186,6 +202,7 @@ export default {
   name: "NavBar",
   data() {
     return {
+      sideBar: true,
       isDarkMode:
         localStorage.getItem("theme-preference") === "dark" ? true : false,
     };
@@ -194,6 +211,16 @@ export default {
     toggleTheme() {
       this.isDarkMode = !this.isDarkMode;
       this.$parent.toggleTheme();
+    },
+    closeSide() {
+      document.getElementById("sidebar").style.width = "0";
+      document.getElementById("main").classList.add("ml-0");
+      this.sideBar = false;
+    },
+    openSide() {
+      document.getElementById("sidebar").style.width = "16rem";
+      document.getElementById("main").classList.remove("ml-0");
+      this.sideBar = true;
     },
   },
 };

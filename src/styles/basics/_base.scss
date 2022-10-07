@@ -4,14 +4,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#sidebar{
+  width: 0;
+}
+
+#main{
+  margin-left: 0;
+}
+
+.sidebar-opened #sidebar{
+  width: 16rem;
+}
+
+.sidebar-opened #main{
+  @apply ml-0;
+	@apply sm:ml-[16rem]
+}
+
 body {
   @apply bg-gray-200;
   @apply dark:bg-gray-800;
 }
-
-// #main {
-//   @apply ml-0 #{!important};
-// }
 
 div[modal-backdrop] {
 	z-index: 9998;

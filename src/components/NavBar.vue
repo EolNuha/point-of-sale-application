@@ -222,13 +222,11 @@ export default {
       this.$parent.toggleTheme();
     },
     closeSide() {
-      document.getElementById("sidebar").style.width = "0";
-      document.getElementById("main").classList.add("ml-0");
+      document.getElementById("app").classList.remove("sidebar-opened");
       this.sideBar = false;
     },
     openSide() {
-      document.getElementById("sidebar").style.width = "16rem";
-      document.getElementById("main").classList.remove("ml-0");
+      document.getElementById("app").classList.add("sidebar-opened");
       this.sideBar = true;
     },
   },

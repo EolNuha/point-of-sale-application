@@ -1,9 +1,21 @@
 .sidebar {
   position: fixed;
-  height: 100vh;
+  height: calc(100vh - 40px);
   overflow-y: auto;
   z-index: 999;
 }
+
+@media (min-width: 640px) { 
+  .sidebar {
+    height: calc(100vh - 45px);
+  }
+}
+@media (min-width: 768px) { 
+  .sidebar {
+    height: calc(100vh - 65.6px);
+  }
+}
+
 .sidebar .router-link-active {
   @apply bg-gray-200;
   @apply dark:bg-gray-700;

@@ -54,12 +54,12 @@
       <router-link :to="{ name: 'new-sale' }" target="_blank">
         <button class="blue-gradient-btn flex items-center gap-2">
           <IconC iconName="ArrowTopRightOnSquareIcon" iconClass="w-5 h-5" />
-          New Sale Page
+          <span class="hidden sm:inline">New Sale Page</span>
         </button>
       </router-link>
     </div>
     <div
-      class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style mb-[8.5rem]"
+      class="overflow-x-auto relative rounded-lg my-5 scrollbar-style mb-[8.5rem]"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -159,11 +159,11 @@
         Finish (F8)
       </button>
       <div
-        class="flex flex-row items-center text-7xl text-gray-700 dark:text-gray-300"
+        class="flex flex-row items-center text-3xl md:text-7xl text-gray-700 dark:text-gray-300"
       >
         Total:
         <div
-          class="min-w-64 max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg"
+          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg"
         >
           <span id="total">{{ total }}</span
           >€

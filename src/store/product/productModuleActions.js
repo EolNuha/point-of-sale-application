@@ -2,13 +2,16 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 
-const baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.headers.common["x-access-token"] = `${sessionStorage.getItem(
+  "token"
+)}`;
 
 export default {
   getProducts({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/products`, { params: data })
+        .get(`/api/products`, { params: data })
         .then(async (response) => {
           commit("SET_PRODUCTS", response.data);
           resolve(response);
@@ -21,7 +24,7 @@ export default {
   getProductDetails({ commit }, productId) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/products/${productId}`)
+        .get(`/api/products/${productId}`)
         .then(async (response) => {
           commit("SET_PRODUCT", response.data);
           resolve(response);
@@ -35,7 +38,6 @@ export default {
     return new Promise((resolve, reject) => {
       axios({
         url: `/api/products`,
-        baseURL,
         method: "POST",
         data,
       })
@@ -51,7 +53,6 @@ export default {
     return new Promise((resolve, reject) => {
       axios({
         url: `/api/products/${data.id}`,
-        baseURL,
         method: "POST",
         data,
       })
@@ -66,7 +67,7 @@ export default {
   deleteProduct({ commit }, productId) {
     return new Promise((resolve, reject) => {
       axios
-        .delete(`${baseURL}/api/products/${productId}`)
+        .delete(`/api/products/${productId}`)
         .then((response) => {
           resolve(response);
         })
@@ -78,7 +79,7 @@ export default {
   getProductDetailsByBarcode({ commit }, productBarcode) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/products/barcode/${productBarcode}`)
+        .get(`/api/products/barcode/${productBarcode}`)
         .then(async (response) => {
           resolve(response);
         })

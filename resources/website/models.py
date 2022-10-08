@@ -1,6 +1,16 @@
 from . import db
 from datetime import datetime
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), unique = True)
+    first_name = db.Column(db.String(200))
+    last_name = db.Column(db.String(200))
+    username = db.Column(db.String(200), unique=True)
+    email = db.Column(db.String(200), unique=True)
+    password = db.Column(db.String(200))
+    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_modified = db.Column(db.DateTime, default=datetime.now())
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)

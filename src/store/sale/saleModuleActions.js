@@ -2,14 +2,16 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 
-const baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.headers.common["x-access-token"] = `${sessionStorage.getItem(
+  "token"
+)}`;
 
 export default {
   createSale({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       axios({
         url: `/api/sales`,
-        baseURL,
         method: "POST",
         data,
       })
@@ -24,7 +26,7 @@ export default {
   getSales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/sales`, { params: data })
+        .get(`/api/sales`, { params: data })
         .then(async (response) => {
           commit("SET_SALES", response.data);
           resolve(response);
@@ -37,7 +39,7 @@ export default {
   getDailySales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/sales/daily`, { params: data })
+        .get(`/api/sales/daily`, { params: data })
         .then(async (response) => {
           commit("SET_SALES", response.data);
           resolve(response);
@@ -50,7 +52,7 @@ export default {
   downloadExcelFile({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/sales/download-exel`, { params: data })
+        .get(`/api/sales/download-exel`, { params: data })
         .then(async (response) => {
           resolve(response);
         })
@@ -62,7 +64,7 @@ export default {
   getSaleDetails({ commit }, saleId) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${baseURL}/api/sales/${saleId}`)
+        .get(`/api/sales/${saleId}`)
         .then(async (response) => {
           commit("SET_SALE", response.data);
           resolve(response);

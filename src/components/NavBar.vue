@@ -140,8 +140,8 @@
             >
               <ul class="py-1" role="none">
                 <li>
-                  <a
-                    href="#"
+                  <button
+                    @click="logout"
                     class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                   >
@@ -180,7 +180,7 @@
                       </svg>
                       English (US)
                     </div>
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -207,6 +207,7 @@
 </template>
 
 <script>
+import { logoutUser } from "@/router/auth/index";
 export default {
   name: "NavBar",
   data() {
@@ -215,6 +216,10 @@ export default {
       isDarkMode:
         localStorage.getItem("theme-preference") === "dark" ? true : false,
     };
+  },
+  created() {
+    this.closeSide();
+    this.openSide();
   },
   methods: {
     toggleTheme() {
@@ -228,6 +233,10 @@ export default {
     openSide() {
       document.getElementById("app").classList.add("sidebar-opened");
       this.sideBar = true;
+    },
+    logout() {
+      logoutUser("signin");
+      this.$toast.success("You have successfully signed out!");
     },
   },
 };

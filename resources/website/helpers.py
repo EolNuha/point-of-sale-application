@@ -4,6 +4,22 @@ def get_page_range(page, total, show=5):
     start = max(min(start, stop - show), 1)
     return list(range(start, stop)[:show])
 
+def getUsersList(users):
+    users_list = []
+    for i in users:
+        user_dict = {
+            "id": i.id,
+            "firstName": i.first_name,
+            "lastName": i.last_name,
+            "username": i.username,
+            "password": i.password,
+            "email": i.email,
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+        }
+        users_list.append(user_dict)
+    return users_list
+
 def getProductsList(products):
     products_list = []
     for i in products:

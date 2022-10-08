@@ -4,6 +4,7 @@ import {
   createWebHistory,
   createWebHashHistory,
 } from "vue-router";
+import { authRoutesGuard } from "./auth/index";
 import HomeView from "../views/HomeView.vue";
 import NotFound from "../views/errors/404View.vue";
 import ProductsView from "../views/products/ProductsView.vue";
@@ -16,8 +17,28 @@ import SaleDetailsView from "../views/sales/SaleDetailsView.vue";
 import PurchasesView from "../views/purchases/PurchasesView.vue";
 import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
 import PurchaseDetailsView from "../views/purchases/PurchaseDetailsView.vue";
+import SigninView from "../views/user/SigninView.vue";
+import SignupView from "../views/user/SignupView.vue";
 
 const routes = [
+  {
+    path: "/signin",
+    name: "signin",
+    meta: {
+      title: "Sign In Page",
+      isPublic: true,
+    },
+    component: SigninView,
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    meta: {
+      title: "Sign Up",
+      isPublic: true,
+    },
+    component: SignupView,
+  },
   {
     path: "/",
     name: "home",
@@ -241,5 +262,7 @@ const router = createRouter({
     : createWebHistory(),
   routes,
 });
+
+authRoutesGuard(router);
 
 export default router;

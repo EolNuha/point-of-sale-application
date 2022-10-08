@@ -31,7 +31,7 @@ export default {
       })
         .then(async (response) => {
           resolve(response);
-          console.log(response.data);
+          commit("SET_CURRENT_USER", response.data);
         })
         .catch((error) => {
           reject(error);

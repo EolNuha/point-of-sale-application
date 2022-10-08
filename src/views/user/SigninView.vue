@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-50 dark:bg-gray-900">
+  <section class="bg-gray-100 dark:bg-gray-900">
     <div
       class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
@@ -125,7 +125,9 @@ export default {
         password: this.password,
       };
       this.$store.dispatch("userModule/signinUser", data).then((res) => {
+        sessionStorage.removeItem("token");
         sessionStorage.setItem("token", res.data.token);
+        this.$store.dispatch("userModule/getCurrentUser");
         this.$router
           .push({
             name: "home",

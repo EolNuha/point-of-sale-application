@@ -27,6 +27,7 @@ const routes = [
     meta: {
       title: "Sign In Page",
       isPublic: true,
+      hideNavbar: true,
     },
     component: SigninView,
   },
@@ -36,6 +37,7 @@ const routes = [
     meta: {
       title: "Sign Up",
       isPublic: true,
+      hideNavbar: true,
     },
     component: SignupView,
   },

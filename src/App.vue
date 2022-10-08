@@ -1,5 +1,5 @@
 <template>
-  <NavBar v-if="!($route.name === 'signin' || $route.name === 'signup')" />
+  <NavBar v-if="!$route.meta.hideNavbar" />
   <SideBar />
   <router-view class="router-view duration-300" id="main" />
 </template>

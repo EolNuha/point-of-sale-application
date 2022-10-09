@@ -95,7 +95,8 @@
       </button>
       <div
         id="dropdownUserAvatarMenu"
-        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md dark:bg-gray-700 dark:divide-gray-600"
+        style="inset: 0px auto auto -10px !important"
       >
         <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
           <div>{{ user.firstName }} {{ user.lastName }}</div>
@@ -110,9 +111,28 @@
           <li>
             <router-link
               :to="{ name: 'home' }"
-              class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
-              >Settings</router-link
+              class="inline-flex items-center gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
+              <IconC iconName="Cog6ToothIcon" iconClass="w-5 h-5" />
+              Settings</router-link
+            >
+          </li>
+          <li>
+            <button
+              @click="toggleTheme"
+              id="theme-toggle"
+              type="button"
+              class="inline-flex items-center w-full gap-1 py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
+            >
+              <template v-if="!isDarkMode">
+                <IconC iconName="MoonIcon" iconClass="w-5 h-5" />
+                Dark Mode
+              </template>
+              <template v-if="isDarkMode">
+                <IconC iconName="SunIcon" iconClass="w-5 h-5" />
+                Light Mode
+              </template>
+            </button>
           </li>
         </ul>
         <div class="py-1">

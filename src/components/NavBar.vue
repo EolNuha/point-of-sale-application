@@ -95,7 +95,7 @@
       </button>
       <div
         id="dropdownUserAvatarMenu"
-        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md dark:bg-gray-700 dark:divide-gray-600"
+        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md dark:bg-gray-900 dark:divide-gray-600"
         style="inset: 0px auto auto -10px !important"
       >
         <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">

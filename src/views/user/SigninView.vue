@@ -125,8 +125,8 @@ export default {
         password: this.password,
       };
       this.$store.dispatch("userModule/signinUser", data).then((res) => {
-        sessionStorage.removeItem("token");
-        sessionStorage.setItem("token", res.data.token);
+        localStorage.removeItem("token");
+        localStorage.setItem("token", res.data.token);
         this.$store.dispatch("userModule/getCurrentUser");
         this.$router
           .push({

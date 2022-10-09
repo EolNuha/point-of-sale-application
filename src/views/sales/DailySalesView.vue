@@ -68,7 +68,7 @@
       Date: {{ $route.query.saleDate.substring(0, 10) }}
     </h2>
     <div
-      class="overflow-x-auto relative rounded-xl mb-5 scrollbar-style min-h-65"
+      class="overflow-x-auto overflow-y-hidden relative rounded-xl mb-5 scrollbar-style min-h-65"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"

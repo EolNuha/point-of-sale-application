@@ -177,7 +177,6 @@ export default {
     this.openSide();
   },
   mounted() {
-    console.log("MOUNTEDDDD");
     this.$store.dispatch("userModule/getCurrentUser");
   },
   computed: {

@@ -1,11 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
-import axios from "axios";
-
-axios.defaults.baseURL = "http://localhost:5000";
-axios.defaults.headers.common["x-access-token"] = `${sessionStorage.getItem(
-  "token"
-)}`;
+import axios from "../axiosAuth";
 
 export default {
   getUsers({ commit }, data) {

@@ -95,7 +95,7 @@
       </button>
       <div
         id="dropdownUserAvatarMenu"
-        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md dark:bg-gray-900 dark:divide-gray-600"
+        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md dark:shadow-gray-600 dark:bg-gray-900 dark:divide-gray-600"
         style="inset: 0px auto auto -10px !important"
       >
         <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
@@ -111,7 +111,7 @@
           <li>
             <router-link
               :to="{ name: 'home' }"
-              class="inline-flex items-center gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="Cog6ToothIcon" iconClass="w-5 h-5" />
               Settings</router-link

@@ -173,7 +173,7 @@
             v-model="product.tax"
             placeholder="Product Tax"
             class="default-input w-full"
-            :class="errors[`${index}tax`] ? 'ring-4 ring-red-500' : ''"
+            :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
             :name="`${index}tax`"
             :id="`${index}tax`"
             as="select"

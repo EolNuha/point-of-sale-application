@@ -55,7 +55,7 @@ def sigin():
   
     if not user:
         return make_response(
-            'Could not verify',
+            'User with this email does not exist!',
             401,
             {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
         )
@@ -68,7 +68,11 @@ def sigin():
   
         return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
     # returns 403 if password is wrong
-    return jsonify(check_password_hash(user.password, password))
+    return make_response(
+            'Password is incorrect!',
+            403,
+            {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
+        )
   
 # signup route
 @auth.route('/signup', methods=['POST'])

@@ -1,1 +1,1 @@
-export default { user: {}, currentUser: {} };
+export default { users: [], user: {}, currentUser: {} };

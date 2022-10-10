@@ -11,6 +11,7 @@ export default {
         })
         .then(async (response) => {
           resolve(response);
+          commit("SET_USERS", response.data);
         })
         .catch((error) => {
           reject(error);

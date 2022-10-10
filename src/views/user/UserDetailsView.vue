@@ -3,8 +3,9 @@
     class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4 relative"
   >
     <div
-      class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded-xl bg-white dark:bg-gray-900 px-5 py-10 sm:px-20"
+      class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded-xl bg-white dark:bg-gray-900 px-5 py-10 sm:px-20 relative"
     >
+      <OverlayC v-if="isDataLoading" />
       <div class="flex items-center justify-center gap-4">
         <img
           class="w-24 h-24 rounded-full border-4 border-gray-500"
@@ -38,7 +39,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="name@company.com"
             required
-            :disabled="currentUser.id !== user.id"
+            :disabled="isDisabled()"
           />
           <span class="text-red-700">{{ errors.email }}</span>
         </div>
@@ -58,7 +59,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="John"
             required=""
-            :disabled="currentUser.id !== user.id"
+            :disabled="isDisabled()"
           />
           <span class="text-red-700">{{ errors.firstName }}</span>
         </div>
@@ -78,7 +79,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Doe"
             required=""
-            :disabled="currentUser.id !== user.id"
+            :disabled="isDisabled()"
           />
           <span class="text-red-700">{{ errors.lastName }}</span>
         </div>
@@ -98,7 +99,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="johndoe"
             required
-            :disabled="currentUser.id !== user.id"
+            :disabled="isDisabled()"
           />
           <span class="text-red-700">{{ errors.username }}</span>
         </div>
@@ -132,6 +133,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isDataLoading: true,
     };
   },
   computed: {
@@ -143,10 +145,14 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch(
-      "userModule/getUserDetails",
-      this.$route.params.userId
-    );
+    this.$store
+      .dispatch("userModule/getUserDetails", this.$route.params.userId)
+      .then(() => {
+        this.isDataLoading = false;
+      })
+      .catch(() => {
+        this.isDataLoading = false;
+      });
   },
   methods: {
     isRequired(value) {
@@ -165,6 +171,16 @@ export default {
           this.isLoading = false;
           this.$toast.error("Something went wrong, please try again later!");
         });
+    },
+    isDisabled() {
+      if (
+        this.currentUser.userType === "admin" ||
+        this.currentUser.id === this.user.id
+      ) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
 };

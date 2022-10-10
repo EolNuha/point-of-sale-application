@@ -1,0 +1,268 @@
+<!-- eslint-disable no-undef -->
+<template>
+  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center search-input-width">
+        <label for="simple-search" class="sr-only">Search</label>
+        <div class="relative w-full">
+          <div
+            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+          >
+            <IconC
+              iconType="solid"
+              iconName="MagnifyingGlassIcon"
+              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+            />
+          </div>
+          <input
+            @input="
+              $debounce(() => {
+                searchQuery = $event.target.value;
+              })
+            "
+            type="text"
+            class="default-input w-full pl-10"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+      <button
+        v-if="currentUser.userType === 'admin'"
+        @click="
+          $router.push({
+            name: 'new-user',
+          })
+        "
+        class="blue-gradient-btn flex items-center text-center"
+      >
+        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+        Create New User
+      </button>
+    </div>
+
+    <div
+      class="overflow-x-auto overflow-y-hidden rounded-xl my-5 scrollbar-style min-h-65"
+    >
+      <table
+        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
+      >
+        <OverlayC v-if="isTableLoading" />
+        <EmptyResultsC
+          v-if="users.length === 0 && !isTableLoading"
+          pluralText="Users"
+          singularText="User"
+          :search="searchQuery"
+          routeName="new-user"
+        />
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="py-3 px-6"></th>
+            <th scope="col" class="py-3 px-6">Image</th>
+            <th scope="col" class="py-3 px-6">ID</th>
+            <th scope="col" class="py-3 px-6">First Name</th>
+            <th scope="col" class="py-3 px-6">Last Name</th>
+            <th scope="col" class="py-3 px-6">Username</th>
+            <th scope="col" class="py-3 px-6">Email</th>
+            <th scope="col" class="py-3 px-6">Type</th>
+            <th scope="col" class="py-3 px-6"></th>
+            <th scope="col" class="py-3 px-6"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="user in users" :key="user.id">
+            <tr
+              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              :class="
+                selectedUser === user
+                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
+                  : ''
+              "
+            >
+              <td class="py-2 px-6" @click="updateSelectedUser(user)">
+                <IconC
+                  v-if="selectedUser === user"
+                  iconName="CheckCircleIcon"
+                  iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                />
+                <IconC
+                  v-else
+                  iconName="MinusCircleIcon"
+                  iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                />
+              </td>
+              <th
+                scope="row"
+                class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                <img
+                  class="w-7 h-7 rounded-full border-2 border-gray-500"
+                  src="http://localhost:5000/static/profile-2.png"
+                  alt="user photo"
+                />
+              </th>
+              <th
+                scope="row"
+                class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ user.id }}
+              </th>
+              <td class="py-2 px-6">{{ user.firstName }}</td>
+              <td class="py-2 px-6">{{ user.lastName }}</td>
+              <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
+              <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
+              <td class="py-2 px-6 max-w-xs">{{ user.userType }}</td>
+              <td
+                class="py-2 px-6"
+                @click="
+                  $router.push({
+                    name: 'user-details',
+                    params: { userId: user.id },
+                  })
+                "
+              >
+                <button
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                >
+                  <IconC
+                    iconType="solid"
+                    iconName="PencilIcon"
+                    iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                  />
+                </button>
+              </td>
+              <td class="py-2 px-6">
+                <button
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  @click="deleteUser(user)"
+                >
+                  <IconC
+                    iconName="TrashIcon"
+                    iconClass="w-5 h-5 text-red-700 cursor-pointer"
+                  />
+                </button>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+    <PaginationC
+      :pagination="pagination"
+      :currentPage="currentPage"
+      @pageChange="getUsers($event)"
+    />
+    <delete-modal
+      :productId="selectedUserToDelete.id"
+      deleteAction="productModule/deleteProduct"
+      getAction="userModule/getUsers"
+      title="User"
+      deleteRef="delete-modal"
+      @reload="reload"
+    >
+    </delete-modal>
+  </div>
+</template>
+
+<script>
+import DeleteModal from "@/components/modals/DeleteModal.vue";
+export default {
+  components: {
+    DeleteModal,
+  },
+  data() {
+    return {
+      isTableLoading: false,
+      selectedUser: {},
+      selectedUserToDelete: {},
+      currentPage: 1,
+      searchQuery: "",
+    };
+  },
+  watch: {
+    searchQuery: {
+      async handler(value) {
+        this.isTableLoading = true;
+        this.currentPage = 1;
+        try {
+          await this.$store.dispatch("userModule/getUsers", {
+            page: this.currentPage,
+            search: value,
+          });
+          this.isTableLoading = false;
+        } catch {
+          this.isTableLoading = false;
+        }
+      },
+    },
+  },
+  computed: {
+    users() {
+      return this.$store.getters["userModule/getUsersList"];
+    },
+    pagination() {
+      return this.$store.getters["userModule/getUsersPagination"];
+    },
+    currentUser() {
+      return this.$store.state.userModule.currentUser;
+    },
+  },
+  created() {
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "Delete") {
+        const isEmpty = Object.keys(this.selectedUser).length === 0;
+        if (!isEmpty) {
+          this.deleteUser(this.selectedUser);
+        }
+      }
+    });
+    this.reload();
+  },
+  methods: {
+    reload() {
+      this.isTableLoading = true;
+      this.selectedUser = {};
+      this.$store
+        .dispatch("userModule/getUsers", {
+          page: this.currentPage,
+          search: this.searchQuery,
+        })
+        .then(() => {
+          this.isTableLoading = false;
+        })
+        .catch(() => {
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
+    updateSelectedUser(user) {
+      if (this.selectedUser.id === user.id) {
+        this.selectedUser = {};
+      } else {
+        this.selectedUser = user;
+      }
+    },
+    deleteUser(user) {
+      this.selectedUserToDelete = user;
+      this.$openModal("delete-modal");
+      this.$putOnFocus("delete-product-modal-btn");
+    },
+    getUsers(page) {
+      this.isTableLoading = true;
+      this.$store
+        .dispatch("userModule/getUsers", {
+          page: page,
+          search: this.searchQuery,
+        })
+        .then(() => {
+          this.isTableLoading = false;
+          this.currentPage = page;
+        })
+        .catch(() => {
+          this.isTableLoading = false;
+          this.$toast.error("Something went wrong, please try again later!");
+        });
+    },
+  },
+};
+</script>

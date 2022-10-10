@@ -19,7 +19,9 @@ import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
 import PurchaseDetailsView from "../views/purchases/PurchaseDetailsView.vue";
 import SigninView from "../views/user/SigninView.vue";
 import SignupView from "../views/user/SignupView.vue";
+import UsersView from "../views/user/UsersView.vue";
 import UserDetailsView from "../views/user/UserDetailsView.vue";
+import CreateUserView from "../views/user/CreateUserView.vue";
 
 const routes = [
   {
@@ -280,7 +282,27 @@ const routes = [
         },
       ],
     },
-    component: SignupView,
+    component: UsersView,
+  },
+  {
+    path: "/users/new-user",
+    name: "new-user",
+    meta: {
+      title: "New User",
+      breadcrumb: [
+        {
+          text: (route) => "Users",
+          to: "users",
+          active: false,
+        },
+        {
+          text: (route) => "New User",
+          to: "new-user",
+          active: true,
+        },
+      ],
+    },
+    component: CreateUserView,
   },
   {
     path: "/users/:userId",

@@ -5,8 +5,9 @@ from  werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from datetime import datetime, timedelta
 from website import db
-from website.helpers import getUsersList, getUserDict
+from website.helpers import getUsersList, getUserDict, getPaginatedDict
 from website.token import token_required
+from sqlalchemy import or_
 
 auth = Blueprint('auth', __name__)
 
@@ -55,6 +56,7 @@ def signup():
     first_name = request.json["firstName"]
     last_name = request.json["lastName"]
     username = request.json["username"]
+    user_type = request.json["userType"]
   
     # checking for existing user
     user = User.query\
@@ -74,7 +76,7 @@ def signup():
             password = generate_password_hash(password)
         )
         if users:
-            user.user_type = "staff"
+            user.user_type = user_type or "staff"
         else:
             user.user_type = "admin"
 
@@ -91,6 +93,27 @@ def signup():
 
 @auth.route('/users', methods=['GET'])
 def users():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    search = request.args.get('search', '*', type=str)
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = User.query.filter(or_(
+        User.first_name.ilike(looking_for),
+        User.last_name.ilike(looking_for),
+        User.id.ilike(looking_for),
+        User.username.ilike(looking_for),
+        User.email.ilike(looking_for),
+        ))\
+        .paginate(page=page, per_page=per_page)
+
+    return jsonify(getPaginatedDict(getUsersList(paginated_items.items), paginated_items))
     return jsonify(getUsersList(User.query.all()))
 
 @auth.route('/users/<int:id>', methods=['GET'])

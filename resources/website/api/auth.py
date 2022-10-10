@@ -1,12 +1,11 @@
 from flask import Flask, Blueprint, request, jsonify, make_response, current_app
 from website.models import User
-import uuid # for public id
+import uuid
 from  werkzeug.security import generate_password_hash, check_password_hash
-# imports for PyJWT authentication
 import jwt
 from datetime import datetime, timedelta
 from website import db
-from website.helpers import getUsersList
+from website.helpers import getUsersList, getUserDict
 from website.token import token_required
 
 auth = Blueprint('auth', __name__)
@@ -91,9 +90,32 @@ def signup():
 
 
 @auth.route('/users', methods=['GET'])
-@token_required
 def users():
     return jsonify(getUsersList(User.query.all()))
+
+@auth.route('/users/<int:id>', methods=['GET'])
+@token_required
+def getUserDetails(id):
+    return jsonify(getUserDict(User.query.filter_by(id=id).first()))
+
+@auth.route('/users/<int:id>', methods=['PUT'])
+@token_required
+def updateProductDetails(id):
+    email = request.json["email"]
+    first_name = request.json["firstName"]
+    last_name = request.json["lastName"]
+    username = request.json["username"]
+    user = User.query.filter_by(id=id).first()
+
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.username = username
+    user.date_modified = datetime.now()
+
+    db.session.commit()
+
+    return "Success", 200
 
 @auth.route('/verify-token', methods=['POST'])
 @token_required

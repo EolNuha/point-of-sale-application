@@ -88,8 +88,8 @@
         {{ user.firstName }} {{ user.lastName }}
         <span class="sr-only">Open user menu</span>
         <img
-          class="w-7 h-7 rounded-full"
-          src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+          class="w-7 h-7 rounded-full border-2 border-gray-500"
+          src="http://localhost:5000/static/profile-2.png"
           alt="user photo"
         />
       </button>
@@ -110,10 +110,22 @@
         >
           <li>
             <router-link
+              :to="{ name: 'user-details', params: { userId: user.id || '1' } }"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
+            >
+              <IconC iconName="UserIcon" iconClass="w-5 h-5" />
+              Profile</router-link
+            >
+          </li>
+          <li>
+            <router-link
               :to="{ name: 'home' }"
               class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
-              <IconC iconName="Cog6ToothIcon" iconClass="w-5 h-5" />
+              <IconC
+                iconName="Cog6ToothIcon"
+                iconClass="w-5 h-5 hover:animate-spin"
+              />
               Settings</router-link
             >
           </li>

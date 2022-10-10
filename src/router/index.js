@@ -19,6 +19,7 @@ import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
 import PurchaseDetailsView from "../views/purchases/PurchaseDetailsView.vue";
 import SigninView from "../views/user/SigninView.vue";
 import SignupView from "../views/user/SignupView.vue";
+import UserDetailsView from "../views/user/UserDetailsView.vue";
 
 const routes = [
   {
@@ -34,6 +35,16 @@ const routes = [
   {
     path: "/signup",
     name: "signup",
+    meta: {
+      title: "Sign Up",
+      isPublic: true,
+      hideNavbar: true,
+    },
+    component: SignupView,
+  },
+  {
+    path: "/users/:userId",
+    name: "user-details",
     meta: {
       title: "Sign Up",
       isPublic: true,
@@ -255,6 +266,41 @@ const routes = [
         },
       ],
     },
+  },
+  {
+    path: "/users",
+    name: "users",
+    meta: {
+      title: "Users",
+      breadcrumb: [
+        {
+          text: (route) => "Users",
+          to: "users",
+          active: true,
+        },
+      ],
+    },
+    component: SignupView,
+  },
+  {
+    path: "/users/:userId",
+    name: "user-details",
+    meta: {
+      title: "User Details",
+      breadcrumb: [
+        {
+          text: (route) => "Users",
+          to: "users",
+          active: false,
+        },
+        {
+          text: (route) => "User Details",
+          to: "user-details",
+          active: true,
+        },
+      ],
+    },
+    component: UserDetailsView,
   },
 ];
 

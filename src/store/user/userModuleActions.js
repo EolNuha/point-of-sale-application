@@ -17,6 +17,36 @@ export default {
         });
     });
   },
+  updateUserDetails({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/users/${data.id}`,
+        method: "PUT",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getUserDetails({ commit, state }, userId) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/users/${userId}`,
+        method: "GET",
+      })
+        .then(async (response) => {
+          resolve(response);
+          commit("SET_USER", response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getCurrentUser({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       axios({

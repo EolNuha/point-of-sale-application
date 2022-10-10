@@ -25,7 +25,7 @@ def token_required(f):
             return jsonify({
                 'message' : 'Token is invalid !!'
             }), 401
-        return  f()
+        return  f(*args, **kwargs)
   
     return decorated
     

@@ -52,8 +52,11 @@ def createSale():
             price_without_tax=price_without_tax,
             tax_amount=tax_amount
         )
-
-        product_query.stock -= Decimal(product["quantity"])
+        stock_diff = product_query.stock - Decimal(product["quantity"])
+        if stock_diff >= 0:
+            product_query.stock -= Decimal(product["quantity"])
+        else:
+            product_query.stock = 0
         
         db.session.add(sale_item)
 

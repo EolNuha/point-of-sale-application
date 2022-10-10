@@ -58,7 +58,11 @@
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="py-3 px-6"></th>
+            <th
+              scope="col"
+              class="py-3 px-6"
+              v-if="currentUser.userType !== 'staff'"
+            ></th>
             <th scope="col" class="py-3 px-6">Image</th>
             <th scope="col" class="py-3 px-6">ID</th>
             <th scope="col" class="py-3 px-6">First Name</th>
@@ -67,7 +71,11 @@
             <th scope="col" class="py-3 px-6">Email</th>
             <th scope="col" class="py-3 px-6">Type</th>
             <th scope="col" class="py-3 px-6"></th>
-            <th scope="col" class="py-3 px-6"></th>
+            <th
+              scope="col"
+              class="py-3 px-6"
+              v-if="currentUser.userType !== 'staff'"
+            ></th>
           </tr>
         </thead>
         <tbody>
@@ -80,17 +88,23 @@
                   : ''
               "
             >
-              <td class="py-2 px-6" @click="updateSelectedUser(user)">
-                <IconC
-                  v-if="selectedUser === user"
-                  iconName="CheckCircleIcon"
-                  iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
-                />
-                <IconC
-                  v-else
-                  iconName="MinusCircleIcon"
-                  iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                />
+              <td
+                class="py-2 px-6"
+                @click="updateSelectedUser(user)"
+                v-if="currentUser.userType !== 'staff'"
+              >
+                <template v-if="currentUser.id !== user.id">
+                  <IconC
+                    v-if="selectedUser === user"
+                    iconName="CheckCircleIcon"
+                    iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                  />
+                  <IconC
+                    v-else
+                    iconName="MinusCircleIcon"
+                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                  />
+                </template>
               </td>
               <th
                 scope="row"
@@ -132,10 +146,11 @@
                   />
                 </button>
               </td>
-              <td class="py-2 px-6">
+              <td class="py-2 px-6" v-if="currentUser.userType !== 'staff'">
                 <button
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
                   @click="deleteUser(user)"
+                  v-if="currentUser.id !== user.id"
                 >
                   <IconC
                     iconName="TrashIcon"
@@ -155,7 +170,7 @@
     />
     <delete-modal
       :productId="selectedUserToDelete.id"
-      deleteAction="productModule/deleteProduct"
+      deleteAction="userModule/deleteUser"
       getAction="userModule/getUsers"
       title="User"
       deleteRef="delete-modal"

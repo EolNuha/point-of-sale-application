@@ -48,6 +48,18 @@ export default {
         });
     });
   },
+  deleteUser({ commit }, userId) {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`/users/${userId}`)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getCurrentUser({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       axios({

@@ -98,7 +98,8 @@ export default {
         .catch((error) => {
           this.isLoading = false;
           this.$toast.error(
-            error.data || "Something went wrong, please try again later!"
+            error.response.data ||
+              "Something went wrong, please try again later!"
           );
         });
     },

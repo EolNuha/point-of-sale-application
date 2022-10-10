@@ -114,7 +114,6 @@ def users():
         .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getUsersList(paginated_items.items), paginated_items))
-    return jsonify(getUsersList(User.query.all()))
 
 @auth.route('/users/<int:id>', methods=['GET'])
 @token_required
@@ -138,6 +137,15 @@ def updateProductDetails(id):
 
     db.session.commit()
 
+    return "Success", 200
+
+@auth.route('/users/<int:id>', methods=["DELETE"])
+def deleteUser(id):
+    user = User.query.filter_by(id=id).first()
+    if user.sales or user.purchases:
+        return "This user can not be deleted because it has sales or purchases connected to it!", 500
+    User.query.filter_by(id=id).delete()
+    db.session.commit()
     return "Success", 200
 
 @auth.route('/verify-token', methods=['POST'])

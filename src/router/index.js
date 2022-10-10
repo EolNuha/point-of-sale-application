@@ -95,7 +95,7 @@ const routes = [
   },
   {
     path: "/products/create",
-    name: "products-create",
+    name: "new-product",
     component: CreateProductView,
     meta: {
       title: "Create Product",
@@ -107,7 +107,7 @@ const routes = [
         },
         {
           text: (route) => "Create Product",
-          to: "products-create",
+          to: "new-product",
           active: true,
         },
       ],

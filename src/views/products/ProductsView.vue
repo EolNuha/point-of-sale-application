@@ -29,7 +29,7 @@
       <button
         @click="
           $router.push({
-            name: 'products-create',
+            name: 'new-product',
           })
         "
         class="blue-gradient-btn flex items-center text-center"
@@ -51,7 +51,7 @@
           pluralText="Products"
           singularText="Product"
           :search="searchQuery"
-          routeName="products-create"
+          routeName="new-product"
         />
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"

@@ -5,40 +5,14 @@ from  werkzeug.security import generate_password_hash, check_password_hash
 # imports for PyJWT authentication
 import jwt
 from datetime import datetime, timedelta
-from functools import wraps
 from website import db
 from website.helpers import getUsersList
+from website.token import token_required
 
 auth = Blueprint('auth', __name__)
 
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = None
-        # jwt is passed in the request header
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        # return 401 if token is not passed
-        if not token:
-            return jsonify({'message' : 'Token is missing !!'}), 401
-  
-        try:
-            # decoding the payload to fetch the stored details
-            data = jwt.decode(token, current_app.config['SECRET_KEY'])
-            current_user = User.query\
-                .filter_by(public_id = data['public_id'])\
-                .first()
-        except:
-            return jsonify({
-                'message' : 'Token is invalid !!'
-            }), 401
-        return  f()
-  
-    return decorated
-
-
-@auth.route('/sigin', methods=['POST'])
-def sigin():
+@auth.route('/signin', methods=['POST'])
+def signin():
     email = request.json["email"]
     password = request.json["password"]
   
@@ -88,6 +62,8 @@ def signup():
         .filter_by(email = email)\
         .first()
 
+    users = User.query.all()
+
     if not user:
         # database ORM object
         user = User(
@@ -98,6 +74,11 @@ def signup():
             email = email,
             password = generate_password_hash(password)
         )
+        if users:
+            user.user_type = "staff"
+        else:
+            user.user_type = "admin"
+
         # insert user
         db.session.add(user)
         db.session.commit()

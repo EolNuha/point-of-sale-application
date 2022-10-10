@@ -12,7 +12,7 @@ def getUsersList(users):
             "firstName": i.first_name,
             "lastName": i.last_name,
             "username": i.username,
-            "password": i.password,
+            "userType": i.user_type,
             "email": i.email,
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),

@@ -195,8 +195,6 @@ export default {
   created() {
     this.closeSide();
     this.openSide();
-  },
-  mounted() {
     this.$store.dispatch("userModule/getCurrentUser");
   },
   computed: {

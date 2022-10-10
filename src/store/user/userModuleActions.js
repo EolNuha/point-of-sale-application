@@ -27,6 +27,7 @@ export default {
         .then(async (response) => {
           resolve(response);
           commit("SET_CURRENT_USER", response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -36,7 +37,7 @@ export default {
   signinUser({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       axios({
-        url: `/sigin`,
+        url: `/signin`,
         method: "POST",
         data,
       })

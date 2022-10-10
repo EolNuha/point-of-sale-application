@@ -8,26 +8,30 @@ from datetime import datetime, date, time
 import xlsxwriter
 from pathlib import Path
 import requests
+from website.token import token_required, currentUser
 
 purchase = Blueprint('purchase', __name__)
 BASE_URL = "http://localhost:5000"
 
 @purchase.route('/purchases', methods=["POST"])
+@token_required
 def createPurchase():
     products = request.json["products"]
     seller = request.json["seller"]
     total_amount = request.json["totalAmount"]
+    current_user = currentUser(request)
 
     purchase = Purchase(
         total_amount=total_amount,
-            seller_name=seller["sellerName"],
-            seller_invoice_number=seller["invoiceNumber"],
-            seller_fiscal_number=seller["fiscalNumber"],
-            seller_tax_number=seller["taxNumber"],
+        seller_name=seller["sellerName"],
+        seller_invoice_number=seller["invoiceNumber"],
+        seller_fiscal_number=seller["fiscalNumber"],
+        seller_tax_number=seller["taxNumber"],
+        user=current_user,
     )
 
     db.session.add(purchase)
-    
+
 
     for product in products:
         decimal_price = Decimal(product["purchasedPrice"])

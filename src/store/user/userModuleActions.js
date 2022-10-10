@@ -27,7 +27,6 @@ export default {
         .then(async (response) => {
           resolve(response);
           commit("SET_CURRENT_USER", response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           reject(error);

@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta, time
 from flask import Blueprint, request, jsonify, request
 from website.models import Sale, SaleItem, Product
-from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList
+from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList, getDailySalesList
 from website import db
 from sqlalchemy import or_
 import sqlalchemy as sa
@@ -9,21 +9,25 @@ from decimal import *
 import xlsxwriter
 from pathlib import Path
 import requests
+from website.token import token_required, currentUser
 
 sale = Blueprint('sale', __name__)
 BASE_URL = "http://localhost:5000"
 
 @sale.route('/sales', methods=["POST"])
+@token_required
 def createSale():
     products = request.json["products"]
     total_amount = request.json["totalAmount"]
     customer_amount = request.json["customerAmount"]
     change_amount = request.json["changeAmount"]
+    current_user = currentUser(request)
 
     sale = Sale(
         total_amount=total_amount,
         customer_amount=customer_amount,
         change_amount=change_amount,
+        user=current_user,
     )
 
     db.session.add(sale)
@@ -147,8 +151,7 @@ def getDailySales():
         .filter(Sale.date_created >= sale_date_start)\
         .paginate(page=page, per_page=per_page)
 
-
-    return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
+    return jsonify(getPaginatedDict(getDailySalesList(paginated_items.items), paginated_items))
 
 @sale.route('/sales/<int:saleId>', methods=["GET"])
 def getSaleDetails(saleId):

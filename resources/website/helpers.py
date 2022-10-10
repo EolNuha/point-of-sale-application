@@ -4,6 +4,18 @@ def get_page_range(page, total, show=5):
     start = max(min(start, stop - show), 1)
     return list(range(start, stop)[:show])
 
+def getUserDict(user):
+    return {
+        "id": user.id,
+        "firstName": user.first_name,
+        "lastName": user.last_name,
+        "username": user.username,
+        "userType": user.user_type,
+        "email": user.email,
+        "dateCreated": user.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+        "dateModified": user.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+    }
+
 def getUsersList(users):
     users_list = []
     for i in users:
@@ -76,6 +88,24 @@ def getSalesList(sales):
         sales_list.append(sale_dict)
     return sales_list
 
+def getDailySalesList(sales):
+    sales_list = []
+    for i in sales:
+        sale_dict = {
+            "id": i.id,
+            "totalAmount": i.total_amount,
+            "subTotalAmount": i.subtotal_amount,
+            "eightTaxAmount": i.eight_tax_amount,
+            "eighteenTaxAmount": i.eighteen_tax_amount,
+            "customerAmount": i.customer_amount,
+            "changeAmount": i.change_amount,
+            "user": getUserDict(i.user),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+        }
+        sales_list.append(sale_dict)
+    return sales_list
+
 def getPurchaseItemsList(items):
     purchases_list = []
     for i in items:
@@ -112,6 +142,7 @@ def getPurchasesList(purchases):
             "eightTaxAmount": i.eight_tax_amount,
             "eighteenTaxAmount": i.eighteen_tax_amount,
             "purchaseItems": getPurchaseItemsList(i.purchase_items),
+            "user": getUserDict(i.user),
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }

@@ -30,9 +30,9 @@ def token_required(f):
     return decorated
     
 
-def currentUser(token):
+def currentUser(request):
+    token = request.headers["x-access-token"]
     data = jwt.decode(token, current_app.config['SECRET_KEY'])
-    current_user = User.query\
+    return User.query\
         .filter_by(public_id = data['public_id'])\
-        .all()
-    return jsonify(current_user)
+        .first()

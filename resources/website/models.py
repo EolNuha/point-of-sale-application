@@ -12,6 +12,8 @@ class User(db.Model):
     user_type = db.Column(db.Enum("staff", "admin"), default="staff")
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
+    sales = db.relationship('Sale', backref='user', lazy=True)
+    purchases = db.relationship('Purchase', backref='user', lazy=True)
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +28,7 @@ class Product(db.Model):
 
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     total_amount = db.Column(db.Numeric(precision=10, scale=2))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=2))
     eight_tax_amount = db.Column(db.Numeric(precision=10, scale=2))
@@ -53,6 +56,7 @@ class SaleItem(db.Model):
 
 class Purchase(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     seller_name = db.Column(db.String(200))
     seller_invoice_number = db.Column(db.String(200))
     seller_fiscal_number = db.Column(db.Integer)

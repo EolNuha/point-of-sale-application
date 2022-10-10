@@ -13,8 +13,8 @@ input[type="date"] {
 .default-input {
 	@apply bg-gray-50;
   @apply border;
-  @apply border-gray-300  #{!important};
-  @apply text-gray-900;
+  @apply border-gray-300 #{!important};
+  @apply text-gray-900 #{!important};
   @apply text-sm #{!important};
   @apply rounded-xl #{!important};
   @apply focus:ring-blue-500;
@@ -23,7 +23,7 @@ input[type="date"] {
   @apply dark:bg-gray-700;
   @apply dark:border-gray-600 #{!important};
   @apply dark:placeholder-gray-400;
-  @apply dark:text-white;
+  @apply dark:text-white #{!important};
   @apply dark:focus:ring-blue-500;
   @apply dark:focus:border-blue-500;
 }
@@ -32,4 +32,14 @@ input[type="date"] {
   @apply w-full #{!important};
   @apply md:w-[500px] #{!important};
   @apply xl:w-[600px] #{!important};
+}
+
+.dark .vs__selected {
+  color: white !important;
+}
+.dark .vs__open-indicator {
+  @apply fill-gray-400 #{!important};
+}
+.dark .vs__dropdown-menu {
+  @apply bg-gray-700 #{!important};
 }

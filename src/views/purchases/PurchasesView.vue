@@ -65,14 +65,15 @@
     <div
       class="flex items-center my-3 gap-2 search-input-width flex-wrap sm:flex-nowrap"
     >
-      <select
+      <v-select
+        class="w-full sm:w-1/2 md:w-1/3 default-input"
         v-model="currentMonth"
-        class="sm:w-1/2 md:w-1/3 lg:w-1/4 default-input"
-      >
-        <option v-for="(month, index) in months" :key="month" :value="index">
-          {{ month }}
-        </option>
-      </select>
+        :value="months"
+        :options="months"
+        :clearable="false"
+        :reduce="(months) => months.id"
+        label="value"
+      ></v-select>
 
       <div class="flex items-center gap-2 w-full">
         <input
@@ -175,19 +176,19 @@ export default {
       isExcelLoading: false,
       excelSales: [],
       months: [
-        "Custom",
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
+        { id: 0, value: "Custom" },
+        { id: 1, value: "January" },
+        { id: 2, value: "February" },
+        { id: 3, value: "March" },
+        { id: 4, value: "April" },
+        { id: 5, value: "May" },
+        { id: 6, value: "June" },
+        { id: 7, value: "July" },
+        { id: 8, value: "August" },
+        { id: 9, value: "September" },
+        { id: 10, value: "October" },
+        { id: 11, value: "November" },
+        { id: 12, value: "December" },
       ],
       monthDates: [],
       currentMonth: "",

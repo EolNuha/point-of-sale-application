@@ -19,6 +19,8 @@ import debouncePlugin from "./plugins/debounce";
 import swalPlugin from "./plugins/swal";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 const app = createApp(App);
 app.config.globalProperties.$toast = useToast();
@@ -40,7 +42,8 @@ app
   .component("IconC", Icon)
   .component("OverlayC", Overlay)
   .component("PaginationC", Pagination)
-  .component("EmptyResultsC", EmptyResults);
+  .component("EmptyResultsC", EmptyResults)
+  .component("v-select", vSelect);
 app
   .use(store)
   .use(router)

@@ -10,6 +10,7 @@ import Icon from "@/components/icons/IconComponent.vue";
 import Overlay from "@/components/OverlayComponent.vue";
 import Pagination from "@/components/PaginationComponent.vue";
 import EmptyResults from "@/components/EmptyResultsComponent.vue";
+import DateFilter from "@/components/DateFilterComponent.vue";
 import { useToast } from "vue-toastification";
 import openModalPlugin from "./plugins/modals";
 import focusPlugin from "./plugins/focus";
@@ -17,6 +18,7 @@ import tooltipsPlugin from "./plugins/tooltips";
 import dropdownPlugin from "./plugins/dropdown";
 import debouncePlugin from "./plugins/debounce";
 import swalPlugin from "./plugins/swal";
+import customPlugins from "./plugins/custom";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import vSelect from "vue-select";
@@ -43,6 +45,7 @@ app
   .component("OverlayC", Overlay)
   .component("PaginationC", Pagination)
   .component("EmptyResultsC", EmptyResults)
+  .component("DateFilter", DateFilter)
   .component("v-select", vSelect);
 app
   .use(store)
@@ -55,4 +58,5 @@ app
   .use(dropdownPlugin)
   .use(debouncePlugin)
   .use(swalPlugin)
+  .use(customPlugins)
   .mount("#app");

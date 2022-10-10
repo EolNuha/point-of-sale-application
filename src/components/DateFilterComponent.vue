@@ -1,0 +1,141 @@
+<template>
+  <div
+    class="flex items-center my-3 gap-2 search-input-width flex-wrap sm:flex-nowrap"
+  >
+    <v-select
+      class="w-full sm:w-1/2 md:w-1/3 default-input"
+      v-model="currentMonth"
+      :value="months"
+      :options="months"
+      :clearable="false"
+      :reduce="(months) => months.id"
+      label="value"
+    ></v-select>
+
+    <div class="flex items-center gap-2 w-full">
+      <input
+        v-model="dateStart"
+        ref="startDate"
+        name="start"
+        type="date"
+        class="w-full default-input"
+        placeholder="Select date start"
+        :max="dateEnd"
+      />
+      <span class="text-gray-500">to</span>
+      <input
+        v-model="dateEnd"
+        ref="endDate"
+        name="start"
+        type="date"
+        class="w-full default-input"
+        placeholder="Select date end"
+        :min="dateStart"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    startDate: String,
+    endDate: String,
+    dispatchModule: String,
+    searchQuery: String,
+  },
+  data() {
+    return {
+      months: [
+        { id: 0, value: "Custom" },
+        { id: 1, value: "January" },
+        { id: 2, value: "February" },
+        { id: 3, value: "March" },
+        { id: 4, value: "April" },
+        { id: 5, value: "May" },
+        { id: 6, value: "June" },
+        { id: 7, value: "July" },
+        { id: 8, value: "August" },
+        { id: 9, value: "September" },
+        { id: 10, value: "October" },
+        { id: 11, value: "November" },
+        { id: 12, value: "December" },
+      ],
+      currentMonth: "",
+      dateStart: this.startDate,
+      dateEnd: this.endDate,
+    };
+  },
+  watch: {
+    currentMonth: {
+      async handler(value) {
+        if (value !== 0) {
+          const month = String(value).padStart(2, "0");
+          const year = new Date().getFullYear();
+          const days = String(new Date(year, month, 0).getDate()).padStart(
+            2,
+            "0"
+          );
+          this.dateStart = `${year}-${month}-01`;
+          this.dateEnd = `${year}-${month}-${days}`;
+        }
+      },
+    },
+    dateStart: {
+      async handler(value) {
+        this.$emit("startDateChange", value);
+        this.$emit("isTableLoading", true);
+        const idx = this.$checkIfMonth(value, this.dateEnd);
+        if (idx !== -1) {
+          this.currentMonth = idx + 1;
+        } else {
+          this.currentMonth = 0;
+        }
+        this.$store
+          .dispatch(this.dispatchModule, {
+            startDate: value,
+            endDate: this.dateEnd,
+            page: 1,
+            search: this.searchQuery,
+          })
+          .then(() => {
+            this.$emit("isTableLoading", false);
+          })
+          .catch(() => {
+            this.$emit("isTableLoading", false);
+            this.$toast.error("Something went wrong, please try again later!");
+          });
+      },
+    },
+    dateEnd: {
+      async handler(value) {
+        this.$emit("endDateChange", value);
+        this.$emit("isTableLoading", true);
+        const idx = this.$checkIfMonth(this.dateStart, value);
+        if (idx !== -1) {
+          this.currentMonth = idx + 1;
+        } else {
+          this.currentMonth = 0;
+        }
+        this.$store
+          .dispatch(this.dispatchModule, {
+            startDate: this.dateStart,
+            endDate: value,
+            page: 1,
+            search: this.searchQuery,
+          })
+          .then(() => {
+            this.$emit("isTableLoading", false);
+          })
+          .catch(() => {
+            this.$emit("isTableLoading", false);
+            this.$toast.error("Something went wrong, please try again later!");
+          });
+      },
+    },
+  },
+  created() {
+    this.currentMonth = new Date().getMonth() + 1;
+  },
+};
+</script>

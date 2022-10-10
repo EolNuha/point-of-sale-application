@@ -2,6 +2,10 @@
   outline: none;
 }
 
+:root {
+  --vs-border-color: transparent !important;
+}
+
 input[type="date"] {
   color-scheme: light;
 }

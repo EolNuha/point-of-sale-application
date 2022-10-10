@@ -62,41 +62,16 @@
         </button>
       </div>
     </div>
-    <div
-      class="flex items-center gap-2 search-input-width my-3 flex-wrap sm:flex-nowrap"
-    >
-      <v-select
-        class="w-full sm:w-1/2 md:w-1/3 default-input"
-        v-model="currentMonth"
-        :value="months"
-        :options="months"
-        :clearable="false"
-        :reduce="(months) => months.id"
-        label="value"
-      ></v-select>
-
-      <div class="flex items-center gap-2 w-full">
-        <input
-          v-model="startDate"
-          ref="startDate"
-          name="start"
-          type="date"
-          class="w-full default-input"
-          placeholder="Select date start"
-          :max="endDate"
-        />
-        <span class="text-gray-500">to</span>
-        <input
-          v-model="endDate"
-          ref="endDate"
-          name="start"
-          type="date"
-          class="w-full default-input"
-          placeholder="Select date end"
-          :min="startDate"
-        />
-      </div>
-    </div>
+    <DateFilter
+      :startDate="startDate"
+      :endDate="endDate"
+      :searchQuery="searchQuery"
+      :dispatchModule="`saleModule/getSales`"
+      @isTableLoading="isTableLoading = $event"
+      @startDateChange="startDate = $event"
+      @endDateChange="endDate = $event"
+      @changeMonthDates="monthDates = $event"
+    />
     <div
       class="overflow-x-auto overflow-y-hidden relative rounded-xl mb-5 scrollbar-style min-h-65"
     >
@@ -171,23 +146,6 @@ export default {
       currentPage: 1,
       searchQuery: "",
       excelSales: [],
-      months: [
-        { id: 0, value: "Custom" },
-        { id: 1, value: "January" },
-        { id: 2, value: "February" },
-        { id: 3, value: "March" },
-        { id: 4, value: "April" },
-        { id: 5, value: "May" },
-        { id: 6, value: "June" },
-        { id: 7, value: "July" },
-        { id: 8, value: "August" },
-        { id: 9, value: "September" },
-        { id: 10, value: "October" },
-        { id: 11, value: "November" },
-        { id: 12, value: "December" },
-      ],
-      monthDates: [],
-      currentMonth: "",
       startDate: "",
       endDate: "",
     };
@@ -210,69 +168,6 @@ export default {
         }
       },
     },
-    currentMonth: {
-      async handler(value) {
-        if (value !== 0) {
-          const month = String(value).padStart(2, "0");
-          const year = new Date().getFullYear();
-          const days = String(new Date(year, month, 0).getDate()).padStart(
-            2,
-            "0"
-          );
-          this.startDate = `${year}-${month}-01`;
-          this.endDate = `${year}-${month}-${days}`;
-        }
-      },
-    },
-    startDate: {
-      async handler(value) {
-        this.isTableLoading = true;
-        const idx = this.checkIfMonth(value, this.endDate);
-        if (idx !== -1) {
-          this.currentMonth = idx + 1;
-        } else {
-          this.currentMonth = 0;
-        }
-        this.$store
-          .dispatch("saleModule/getSales", {
-            startDate: value,
-            endDate: this.endDate,
-            page: this.currentPage,
-          })
-          .then(() => {
-            this.isTableLoading = false;
-          })
-          .catch(() => {
-            this.isTableLoading = false;
-            this.$toast.error("Something went wrong, please try again later!");
-          });
-      },
-    },
-    endDate: {
-      async handler(value) {
-        this.isTableLoading = true;
-        const idx = this.checkIfMonth(this.startDate, value);
-        if (idx !== -1) {
-          this.currentMonth = idx + 1;
-        } else {
-          this.currentMonth = 0;
-        }
-        this.$store
-          .dispatch("saleModule/getSales", {
-            startDate: this.startDate,
-            endDate: value,
-            page: this.currentPage,
-            search: this.searchQuery,
-          })
-          .then(() => {
-            this.isTableLoading = false;
-          })
-          .catch(() => {
-            this.isTableLoading = false;
-            this.$toast.error("Something went wrong, please try again later!");
-          });
-      },
-    },
   },
   computed: {
     sales() {
@@ -287,9 +182,6 @@ export default {
     this.currentMonth = new Date().getMonth() + 1;
     this.startDate = currentMonth.startDate;
     this.endDate = currentMonth.endDate;
-    for (let i = 0; i < this.months.length; i++) {
-      this.monthDates.push(this.getMonth(i + 1));
-    }
     this.reload();
   },
   methods: {
@@ -321,11 +213,6 @@ export default {
         endDate: `${year}-${month}-${days}`,
       };
     },
-    checkIfMonth(start, end) {
-      return this.monthDates.findIndex(
-        (el) => el.startDate === start && el.endDate === end
-      );
-    },
     getSales(page) {
       this.isTableLoading = true;
       this.$store
@@ -347,9 +234,12 @@ export default {
     async downloadExcel() {
       this.isExcelLoading = true;
       let fileName;
-      const idx = this.checkIfMonth(this.startDate, this.endDate);
+      const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
-        fileName = `${this.months[idx + 1]}-${this.startDate.substring(0, 4)}`;
+        fileName = `${this.$getMonths()[idx + 1]}-${this.startDate.substring(
+          0,
+          4
+        )}`;
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }

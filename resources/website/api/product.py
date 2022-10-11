@@ -91,3 +91,30 @@ def deleteProductDetails(productId):
     Product.query.filter_by(id=productId).delete()
     db.session.commit()
     return "Success", 200
+
+
+@product.route('/products/demo', methods=["GET"])
+def createDemoProducts():
+    demo = [
+        ["test 1", "100100100", 100, 8, 1.5, 2],
+        ["test 2", "100200100", 100, 18, 15, 18],
+        ["test 3", "100300100", 100, 18, 5, 7.5],
+        ["test 4", "100400100", 100, 8, 1.2, 1.6],
+        ["test 5", "100500100", 100, 8, 1.5, 2],
+        ["test 6", "100600100", 100, 8, 3, 4],
+        ["test 7", "100700100", 100, 18, 20, 25],
+        ["test 8", "100800100", 100, 18, 3.4, 4],
+        ["test 9", "100900100", 100, 8, 4.5, 6],
+        ["test 10", "1001000100", 100, 8, 1.5, 2],
+    ]
+    for i in demo:
+        db.session.add( Product(
+            name=i[0], 
+            barcode=i[1], 
+            stock=i[2], 
+            tax=i[3], 
+            purchased_price=i[4], 
+            selling_price=i[5]
+            ))
+        db.session.commit()
+    return "success", 200

@@ -32,6 +32,7 @@
 <script>
 // @ is an alias to /src
 import Icons from "@/components/icons/icons.json";
+import { logoutUser } from "@/router/auth/index";
 export default {
   name: "HomeView",
   data() {
@@ -44,7 +45,26 @@ export default {
     };
   },
   async created() {
-    const data = { startDate: "2022-10-1", endDate: "2022-10-31" };
+    this.$store.dispatch("userModule/getCurrentUser").catch(() => {
+      logoutUser();
+      this.$router.push({ name: "signin" });
+    });
+    const date = new Date();
+    date.setDate(date.getDate() - 7);
+    const startDate =
+      String(date.getFullYear()).padStart(2, "0") +
+      "-" +
+      String(date.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(date.getDate()).padStart(2, "0");
+    const endDate =
+      String(new Date().getFullYear()).padStart(2, "0") +
+      "-" +
+      String(new Date().getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(new Date().getDate()).padStart(2, "0");
+
+    const data = { startDate: startDate, endDate: endDate };
     await this.$store.dispatch("analyticsModule/getSales", data).then(() => {
       this.isFetchingSales = false;
     });

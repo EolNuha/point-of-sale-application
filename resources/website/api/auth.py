@@ -6,7 +6,7 @@ import jwt
 from datetime import datetime, timedelta
 from website import db
 from website.helpers import getUsersList, getUserDict, getPaginatedDict
-from website.token import token_required
+from website.token import token_required, currentUser
 from sqlalchemy import or_
 
 auth = Blueprint('auth', __name__)
@@ -162,3 +162,24 @@ def currentUser():
         .filter_by(public_id = data['public_id'])\
         .all())[0]
     return jsonify(current_user)
+
+@auth.route('/users/demo', methods=["GET"])
+def createDemoUsers():
+    demo = [
+        ["eol", "nuha", "eolnuha", "eol@gmail.com", "admin"],
+        ["ledri", "nuha", "ledrinuha", "ledri@gmail.com", "staff"],
+        ["lela", "nuha", "lelanuha", "lela@gmail.com", "staff"],
+        ["edona", "saliu", "edonasaliu", "edona@gmail.com", "staff"],
+    ]
+    for i in demo:
+        db.session.add(User(
+            public_id=str(uuid.uuid4()),
+            first_name=i[0], 
+            last_name=i[1], 
+            username=i[2], 
+            email=i[3], 
+            password=generate_password_hash("kosova22"), 
+            user_type=i[4],
+            ))
+        db.session.commit()
+    return "success", 200

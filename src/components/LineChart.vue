@@ -48,6 +48,12 @@ export default {
         enabled: true,
         enabledOnSeries: true,
         followCursor: false,
+        custom: ({ series, seriesIndex, dataPointIndex }) =>
+          `${
+            '<div class="bg-white dark:bg-gray-700">' +
+            '<div class="px-3 py-1 rounded text-sm text-black dark:text-white">'
+          }
+          ${series[seriesIndex][dataPointIndex]} €</div>` + "</div>",
       },
     };
     this.series = [

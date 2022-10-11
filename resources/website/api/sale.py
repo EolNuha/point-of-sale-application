@@ -1,6 +1,6 @@
 from datetime import datetime, date, timedelta, time
 from flask import Blueprint, request, jsonify, request
-from website.models import Sale, SaleItem, Product
+from website.models import Sale, SaleItem, Product, User
 from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList, getDailySalesList
 from website import db
 from sqlalchemy import or_
@@ -215,3 +215,58 @@ def downloadSalesExcel():
     workbook.close()
 
     return jsonify(downloads_path)
+
+@sale.route('/sales/demo', methods=["GET"])
+def createDemoSales():
+
+    current_user = User.query.first()
+    demo = [
+        [100, 100, 0, "2022-10-1"],
+        [95, 100, 5, "2022-10-2"],
+        [80, 100, 20, "2022-10-3"],
+        [55, 60, 5, "2022-10-4"],
+        [43.2, 45, 1.8, "2022-10-5"],
+        [30, 10, 0, "2022-10-6"],
+        [55, 20, 5, "2022-10-7"],
+        [40, 5, 1, "2022-10-8"],
+        [100, 100, 0, "2022-10-9"],
+        [100, 100, 0, "2022-10-10"],
+    ]
+    for index, i in enumerate(demo):
+        sale_date = i[3].split("-")
+        s = Sale(
+            total_amount=i[0],
+            customer_amount=i[1],
+            change_amount=i[2],
+            eight_tax_amount=5,
+            eighteen_tax_amount=10,
+            subtotal_amount=5,
+            user=current_user,
+            date_created=datetime.combine(date(year=int(sale_date[0]), month=int(sale_date[1]), day=int(index + 2)), time.min),
+            date_modified=datetime.combine(date(year=int(sale_date[0]), month=int(sale_date[1]), day=int(index + 2)), time.min)
+        )
+        db.session.add(s)
+        db.session.commit()
+
+        products = Product.query.limit(3).all()
+        for index, product in enumerate(products):
+            decimal_price = Decimal(product.selling_price)
+            decimal_tax = Decimal(product.tax)
+            price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
+            tax_amount = (decimal_tax / 100) * decimal_price
+            sale_item = SaleItem(
+                sale=s,
+                product_id=product.id,
+                product_barcode=product.barcode,
+                product_name=product.name,
+                product_tax=product.tax,
+                product_purchased_price=product.purchased_price,
+                product_selling_price=product.selling_price,
+                product_quantity=Decimal(index + 1),
+                price_without_tax=price_without_tax,
+                tax_amount=tax_amount
+            )
+            
+            db.session.add(sale_item)
+            db.session.commit()
+    return "success", 200

@@ -12,7 +12,7 @@
       label="value"
     ></v-select>
 
-    <div class="flex items-center gap-2 w-full">
+    <div class="flex items-center gap-2 w-full" v-if="currentMonth === 0">
       <input
         v-model="dateStart"
         ref="startDate"

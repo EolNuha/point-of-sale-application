@@ -17,10 +17,12 @@ def create_app():
     from website.api.sale import sale
     from website.api.purchase import purchase
     from website.api.auth import auth
+    from website.api.analytics import analytics
 
     app.register_blueprint(product, url_prefix='/api/')
     app.register_blueprint(sale, url_prefix='/api/')
     app.register_blueprint(purchase, url_prefix='/api/')
+    app.register_blueprint(analytics, url_prefix='/api/')
     app.register_blueprint(auth, url_prefix='/')
 
     create_database(app)

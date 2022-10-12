@@ -16,9 +16,7 @@ const MONTHS = [
 
 export default {
   install: (app) => {
-    app.config.globalProperties.$getMonths = () => {
-      return MONTHS;
-    };
+    app.config.globalProperties.$getMonths = MONTHS;
     app.config.globalProperties.$checkIfMonth = (start, end) => {
       const getMonth = (v) => {
         const month = String(v).padStart(2, "0");

@@ -25,7 +25,7 @@
           />
         </button>
         <router-link
-          :to="{ name: 'home' }"
+          :to="{ name: 'dashboard' }"
           class="flex items-center w-auto sm:w-[14rem]"
         >
           <img
@@ -50,7 +50,7 @@
       <ol class="hidden sm:inline-flex mr-auto space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
           <router-link
-            :to="{ name: 'home' }"
+            :to="{ name: 'dashboard' }"
             class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
             <IconC iconName="HomeIcon" iconClass="w-4 h-4 mr-2" />
@@ -119,7 +119,7 @@
           </li>
           <li>
             <router-link
-              :to="{ name: 'home' }"
+              :to="{ name: 'dashboard' }"
               class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC

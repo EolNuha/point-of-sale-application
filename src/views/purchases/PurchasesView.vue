@@ -239,7 +239,7 @@ export default {
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
         fileName = `${
-          this.$getMonths()[idx + 1].value
+          this.$getMonths[idx + 1].value
         }-${this.startDate.substring(0, 4)}`;
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;

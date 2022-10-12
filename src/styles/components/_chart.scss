@@ -1,0 +1,20 @@
+.apexcharts-tooltip-title {
+  @apply text-gray-700 #{!important};
+  @apply dark:text-gray-200 #{!important};
+  @apply bg-white #{!important};
+  @apply dark:bg-black/25 #{!important};
+  border: 0 !important;
+}
+.apexcharts-tooltip {
+  @apply text-gray-700 #{!important};
+  @apply dark:text-gray-200 #{!important};
+  @apply bg-gray-200 #{!important};
+  @apply dark:bg-gray-700 #{!important};
+  border: 0 !important;
+}
+.apexcharts-xaxistooltip {
+  @apply text-gray-700 #{!important};
+  @apply dark:text-gray-200 #{!important};
+  @apply bg-gray-200 #{!important};
+  @apply dark:bg-gray-700 #{!important};
+}

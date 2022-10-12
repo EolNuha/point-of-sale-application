@@ -149,7 +149,7 @@ export default {
           localStorage.setItem("token", res.data.token);
           this.$store.dispatch("userModule/getCurrentUser");
           this.$router.push({
-            name: "home",
+            name: "dashboard",
           });
           this.$toast.success("You have successfully signed in!");
         })

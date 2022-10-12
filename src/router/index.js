@@ -5,7 +5,7 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import { authRoutesGuard } from "./auth/index";
-import HomeView from "../views/HomeView.vue";
+import DashboardView from "../views/DashboardView.vue";
 import NotFound from "../views/errors/404View.vue";
 import ProductsView from "../views/products/ProductsView.vue";
 import CreateProductView from "../views/products/CreateProductView.vue";
@@ -22,6 +22,7 @@ import SignupView from "../views/user/SignupView.vue";
 import UsersView from "../views/user/UsersView.vue";
 import UserDetailsView from "../views/user/UserDetailsView.vue";
 import CreateUserView from "../views/user/CreateUserView.vue";
+import IconsView from "../views/IconsView.vue";
 
 const routes = [
   {
@@ -56,11 +57,11 @@ const routes = [
   },
   {
     path: "/",
-    name: "home",
+    name: "dashboard",
     meta: {
-      title: "Home Page",
+      title: "Dashboard Page",
     },
-    component: HomeView,
+    component: DashboardView,
   },
   { path: "/:catchAll(.*)", redirect: "/404" },
   {
@@ -323,6 +324,21 @@ const routes = [
       ],
     },
     component: UserDetailsView,
+  },
+  {
+    path: "/dev/icons",
+    name: "icons",
+    meta: {
+      title: "Icons Page",
+      breadcrumb: [
+        {
+          text: (route) => "Icons",
+          to: "icons",
+          active: true,
+        },
+      ],
+    },
+    component: IconsView,
   },
 ];
 

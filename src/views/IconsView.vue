@@ -64,7 +64,6 @@ import Icons from "@/components/icons/icons.json";
 import OutlineHeroIcons from "@/components/icons/OutlineIcon24.vue";
 import SolidHeroIcons from "@/components/icons/SolidIcon24.vue";
 export default {
-  name: "HomeView",
   components: { OutlineHeroIcons, SolidHeroIcons },
   data() {
     return {

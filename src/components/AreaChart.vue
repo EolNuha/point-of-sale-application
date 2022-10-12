@@ -48,12 +48,19 @@ export default {
         enabled: true,
         enabledOnSeries: true,
         followCursor: false,
-        custom: ({ series, seriesIndex, dataPointIndex }) =>
-          `${
-            '<div class="bg-white dark:bg-gray-700">' +
-            '<div class="px-3 py-1 rounded text-sm text-black dark:text-white">'
-          }
-          ${series[seriesIndex][dataPointIndex]} €</div>` + "</div>",
+        x: {
+          show: true,
+          format: "dd MMM",
+          formatter: undefined,
+        },
+        y: {
+          formatter: function (value) {
+            return value + "€";
+          },
+          title: {
+            formatter: () => "",
+          },
+        },
       },
     };
     this.series = [
@@ -65,3 +72,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "/src/styles/components/_chart.scss";
+</style>

@@ -3,11 +3,13 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Products</h3>
-        <router-link class="text-blue-500 block mb-2" :to="{ name: 'products' }"
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'products' }"
           >Manage Products</router-link
         >
         <router-link
-          class="text-blue-500 block mb-2"
+          class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-product' }"
           >Create Product</router-link
         >
@@ -18,10 +20,14 @@
       </div>
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Sales</h3>
-        <router-link class="text-blue-500 block mb-2" :to="{ name: 'sales' }"
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'sales' }"
           >Manage Sales</router-link
         >
-        <router-link class="text-blue-500 block mb-2" :to="{ name: 'new-sale' }"
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'new-sale' }"
           >Create Sale</router-link
         >
         <IconC
@@ -32,12 +38,12 @@
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Purchases</h3>
         <router-link
-          class="text-blue-500 block mb-2"
+          class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchases' }"
           >Manage Purchases</router-link
         >
         <router-link
-          class="text-blue-500 block mb-2"
+          class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-purchase' }"
           >Create Purchase</router-link
         >
@@ -48,10 +54,14 @@
       </div>
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Users</h3>
-        <router-link class="text-blue-500 block mb-2" :to="{ name: 'users' }"
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'users' }"
           >Manage Users</router-link
         >
-        <router-link class="text-blue-500 block mb-2" :to="{ name: 'new-user' }"
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'new-user' }"
           >Create User</router-link
         >
         <IconC
@@ -67,7 +77,7 @@
       </p>
       <div class="relative min-h-[350px]">
         <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetchingSales" />
-        <LineChart
+        <AreaChart
           v-if="!isFetchingSales"
           :chartData="$store.state.analyticsModule.sales"
         />
@@ -80,7 +90,7 @@
       </p>
       <div class="relative min-h-[350px]">
         <OverlayC v-if="isFetchingPurchases" />
-        <LineChart
+        <AreaChart
           v-if="!isFetchingPurchases"
           :chartData="$store.state.analyticsModule.purchases"
         />
@@ -94,7 +104,6 @@
 import Icons from "@/components/icons/icons.json";
 import { logoutUser } from "@/router/auth/index";
 export default {
-  name: "HomeView",
   data() {
     return {
       isLoading: false,

@@ -14,7 +14,7 @@
       class="blue-gradient-btn flex items-center"
       @click="
         $router.push({
-          name: 'home',
+          name: 'dashboard',
         })
       "
     >

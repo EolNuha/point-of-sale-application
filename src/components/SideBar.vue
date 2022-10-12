@@ -163,6 +163,56 @@
             </li>
           </ul>
         </li>
+        <li>
+          <button
+            type="button"
+            class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+            aria-controls="analytics-sidebar-dropdown"
+            data-collapse-toggle="analytics-sidebar-dropdown"
+          >
+            <IconC
+              iconType="outline"
+              iconName="ArrowTrendingUpIcon"
+              iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+            />
+            <span
+              class="flex-1 ml-3 text-left whitespace-nowrap"
+              sidebar-toggle-item=""
+              >Analytics</span
+            >
+            <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
+          </button>
+          <ul id="analytics-sidebar-dropdown" class="hidden py-2 space-y-2">
+            <li v-if="user.userType === 'admin'">
+              <router-link
+                :to="{ name: 'new-user' }"
+                class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                >Products Analytics</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'users' }"
+                class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                >Sales Analytics</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'users' }"
+                class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                >Purchases Analytics</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'users' }"
+                class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                >Users Analytics</router-link
+              >
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

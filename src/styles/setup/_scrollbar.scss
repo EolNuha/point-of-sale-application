@@ -2,11 +2,16 @@
   height: 4px;
   width: 4px;
 }
+.scrollbar-style::-webkit-scrollbar:hover {
+  height: 20px;
+  width: 20px;
+}
 .scrollbar-style::-webkit-scrollbar-track {
   @apply bg-gray-400;
   @apply dark:bg-gray-400;
 }
 .scrollbar-style::-webkit-scrollbar-thumb {
-  @apply bg-blue-700;
+  @apply bg-blue-500;
+  @apply dark:bg-blue-700;
   border-radius: 20px;
 }

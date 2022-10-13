@@ -29,4 +29,30 @@ export default {
         });
     });
   },
+  getProductsSoldbyAmount({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/products-sold-by-amount`, { params: data })
+        .then(async (response) => {
+          commit("SET_PRODUCTS_SOLD_BY_AMOUNT", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getProductStats({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/products/${data.id}`, { params: data })
+        .then(async (response) => {
+          commit("SET_PRODUCT_STATS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

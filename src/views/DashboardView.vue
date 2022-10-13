@@ -101,14 +101,10 @@
 
 <script>
 // @ is an alias to /src
-import Icons from "@/components/icons/icons.json";
 import { logoutUser } from "@/router/auth/index";
 export default {
   data() {
     return {
-      isLoading: false,
-      activeTab: "outline",
-      icons: Icons,
       isFetchingSales: true,
       isFetchingPurchases: true,
     };
@@ -145,9 +141,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.dark .apexcharts-text tspan {
-  fill: white !important;
-}
-</style>

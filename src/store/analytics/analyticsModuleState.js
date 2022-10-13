@@ -1,1 +1,6 @@
-export default { sales: [], purchases: [] };
+export default {
+  sales: [],
+  purchases: [],
+  productsSoldbyAmount: [],
+  productStats: [],
+};

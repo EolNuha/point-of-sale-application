@@ -48,6 +48,9 @@ export default {
         enabled: true,
         enabledOnSeries: true,
         followCursor: false,
+        style: {
+          fontSize: "16px",
+        },
         x: {
           show: true,
           format: "dd MMM",

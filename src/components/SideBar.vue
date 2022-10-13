@@ -183,32 +183,32 @@
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
           <ul id="analytics-sidebar-dropdown" class="hidden py-2 space-y-2">
-            <li v-if="user.userType === 'admin'">
+            <li>
               <router-link
-                :to="{ name: 'new-user' }"
+                :to="{ name: 'product-analytics' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Products Analytics</router-link
+                >Products</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'users' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Sales Analytics</router-link
+                >Sales</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'users' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Purchases Analytics</router-link
+                >Purchases</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'users' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Users Analytics</router-link
+                >Users</router-link
               >
             </li>
           </ul>

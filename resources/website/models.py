@@ -51,6 +51,7 @@ class SaleItem(db.Model):
     product_quantity = db.Column(db.Numeric(precision=10, scale=2))
     price_without_tax = db.Column(db.Numeric(precision=10, scale=2))
     tax_amount = db.Column(db.Numeric(precision=10, scale=2))
+    total_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
 

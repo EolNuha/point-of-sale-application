@@ -2,7 +2,7 @@
   <div>
     <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
       <v-select
-        class="w-[150px] md:w-[200px] default-input"
+        class="w-full min-w-[150px] md:w-[200px] default-input"
         v-model="currentDate"
         :value="ranges"
         :options="ranges"
@@ -11,7 +11,10 @@
         label="value"
       ></v-select>
 
-      <div class="flex items-center gap-2 w-full" v-if="currentDate === null">
+      <div
+        class="flex items-center flex-wrap sm:flex-nowrap gap-2 w-full"
+        v-if="currentDate === null"
+      >
         <input
           v-model="startDate"
           ref="startDate"

@@ -15,11 +15,11 @@
       :textContent="`Revenue made`"
     >
       <div
-        class="flex flex-row items-center gap-2 text-gray-700 dark:text-gray-200"
+        class="flex flex-row flex-wrap sm:flew-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
       >
-        Product:
+        <span class="font-bold">Product:</span>
         <v-select
-          class="w-[150px] md:w-[200px] default-input"
+          class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedProduct"
           :value="products"
           :options="products"

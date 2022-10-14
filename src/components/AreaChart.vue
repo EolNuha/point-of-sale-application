@@ -18,7 +18,6 @@ export default {
     };
   },
   async created() {
-    console.log(this.chartData.info.series);
     this.options = {
       colors: ["#008ffb", "#fdba8c"],
       chart: {
@@ -68,12 +67,7 @@ export default {
         },
       },
     };
-    this.series = [
-      {
-        name: this.chartData.info.series[0],
-        data: this.chartData.series,
-      },
-    ];
+    this.series = this.chartData.series;
   },
 };
 </script>

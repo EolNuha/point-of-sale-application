@@ -1,16 +1,19 @@
 <template>
   <div class="bg-white dark:bg-gray-900 rounded-xl my-5 relative">
     <div
-      class="flex items-center rounded-t-xl flex-row flex-wrap lg:flex-nowrap justify-between p-3 sm:px-8 gap-2 bg-gray-100 dark:bg-gray-700/75 relative"
+      class="flex items-center rounded-t-xl flex-row flex-wrap lg:flex-nowrap justify-between p-3 px-8 gap-2 bg-gray-100 dark:bg-gray-700/75"
     >
       <div
-        class="w-full flex flex-column flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
+        class="w-full flex flex-column items-center gap-2 text-gray-700 dark:text-gray-200"
       >
         <span class="font-bold">Date:</span>
-        <RangeDateFilter
-          @startDateChange="startDate = $event"
-          @endDateChange="endDate = $event"
-          @currentDateChange="currentDate = $event"
+        <input
+          v-model="startDate"
+          ref="startDate"
+          name="start"
+          type="date"
+          class="w-[150px] md:w-[200px] default-input"
+          placeholder="Select date start"
         />
       </div>
       <slot></slot>
@@ -22,11 +25,11 @@
       >
         <div>
           <h3 class="text-gray-900 dark:text-white text-3xl">
-            {{ titleContent }}
+            {{ titleContent }} {{ startDate }}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
             {{ textContent }}
-            <b>{{ setCurrentDateText(currentDate) }}</b>
+            <b>on {{ startDate }}</b>
           </p>
         </div>
         <div class="inline-flex items-center text-green-500 text-3xl">
@@ -71,33 +74,28 @@ export default {
     return {
       isFetching: true,
       totalAmountSold: "",
-      currentDate: "",
       startDate: "",
-      endDate: "",
     };
   },
   watch: {
     startDate: {
       async handler() {
-        if (this.endDate) this.getData();
-      },
-    },
-    endDate: {
-      async handler() {
-        if (this.startDate) this.getData();
-      },
-    },
-    id: {
-      async handler() {
-        if (this.startDate) this.getData();
+        this.getData();
       },
     },
   },
+  created() {
+    this.startDate = this.formatDate(new Date());
+  },
   methods: {
-    setCurrentDateText(e) {
-      if (e === "Today") return "today";
-      if (e && e !== "Today") return `in the ${e.toLowerCase()}`;
-      if (!e) return `from: ${this.startDate} to: ${this.endDate}`;
+    formatDate(date) {
+      return (
+        String(date.getFullYear()).padStart(2, "0") +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(date.getDate()).padStart(2, "0")
+      );
     },
     async getData() {
       this.isFetching = true;

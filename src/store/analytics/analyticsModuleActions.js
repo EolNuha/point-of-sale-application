@@ -16,6 +16,19 @@ export default {
         });
     });
   },
+  getSaleStats({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/sales/${data.startDate}`)
+        .then(async (response) => {
+          commit("SET_SALE_STATS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getPurchases({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

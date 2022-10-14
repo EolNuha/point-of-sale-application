@@ -27,6 +27,8 @@ def createSale():
         customer_amount=customer_amount,
         change_amount=change_amount,
         user=current_user,
+        date_created=datetime.now(),
+        date_modified=datetime.now(),
     )
 
     db.session.add(sale)

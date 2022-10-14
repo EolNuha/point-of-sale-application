@@ -2,6 +2,9 @@ export default {
   SET_SALES(state, payload) {
     state.sales = payload;
   },
+  SET_SALE_STATS(state, payload) {
+    state.sale = payload;
+  },
   SET_PURCHASES(state, payload) {
     state.purchases = payload;
   },

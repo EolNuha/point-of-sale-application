@@ -42,6 +42,19 @@ export default {
         });
     });
   },
+  getPurchaseStats({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/purchases/${data.startDate}`)
+        .then(async (response) => {
+          commit("SET_PURCHASE_STATS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getProductsSoldbyAmount({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

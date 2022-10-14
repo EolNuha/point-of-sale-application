@@ -59,7 +59,7 @@
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
-          :to="{ name: 'sale-analytics' }"
+          :to="{ name: 'purchase-analytics' }"
           >Purchase Analytics</router-link
         >
         <IconC

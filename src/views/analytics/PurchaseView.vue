@@ -1,17 +1,17 @@
 <template>
   <div class="bg-gray-200 dark:bg-gray-800 min-h-screen px-4">
     <AreaChartMoney
-      :dispatchModule="`analyticsModule/getSales`"
-      :chartData="$store.state.analyticsModule.sales"
-      :titleContent="`Sales`"
-      :textContent="`Total day revenue of sales`"
+      :dispatchModule="`analyticsModule/getPurchases`"
+      :chartData="$store.state.analyticsModule.purchases"
+      :titleContent="`Purchases`"
+      :textContent="`Total day purchase spendings`"
     >
     </AreaChartMoney>
     <AreaChartSpecificDate
-      :dispatchModule="`analyticsModule/getSaleStats`"
-      :chartData="$store.state.analyticsModule.sale"
-      :titleContent="`Sales on`"
-      :textContent="`Revenue made`"
+      :dispatchModule="`analyticsModule/getPurchaseStats`"
+      :chartData="$store.state.analyticsModule.purchase"
+      :titleContent="`Purchases on`"
+      :textContent="`Spendings made`"
     >
     </AreaChartSpecificDate>
   </div>

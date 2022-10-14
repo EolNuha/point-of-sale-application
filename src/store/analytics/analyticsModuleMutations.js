@@ -8,6 +8,9 @@ export default {
   SET_PURCHASES(state, payload) {
     state.purchases = payload;
   },
+  SET_PURCHASE_STATS(state, payload) {
+    state.purchase = payload;
+  },
   SET_PRODUCTS_SOLD_BY_AMOUNT(state, payload) {
     state.productsSoldbyAmount = payload;
   },

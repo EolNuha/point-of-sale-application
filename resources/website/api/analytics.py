@@ -40,9 +40,9 @@ def getSales():
     return jsonify(sale_analytics)
 
 
-@analytics.route('/analytics/sales/<string:selecteddate>', methods=["GET"])
-def getSaleStats(selecteddate):
-    startdate = selecteddate.split("-")
+@analytics.route('/analytics/sales/<string:day>', methods=["GET"])
+def getSaleStats(day):
+    startdate = day.split("-")
 
     date_start = datetime.combine(date(year=int(startdate[0]), month=int(startdate[1]), day=int(startdate[2])), time.min)
     date_end =  datetime.combine(date(year=int(startdate[0]), month=int(startdate[1]), day=int(startdate[2])), time.max)
@@ -66,7 +66,7 @@ def getSaleStats(selecteddate):
         curr_series.append(item.total_amount)
 
     sale_analytics["series"].append({"name": "revenue", "data": curr_series})
-    sale_analytics["info"].update({"chartName": f"{selecteddate}--sale-revenue"})
+    sale_analytics["info"].update({"chartName": f"{day}--sale-revenue"})
     return jsonify(sale_analytics)
 
 
@@ -96,9 +96,38 @@ def getPurchases():
         purchases_analytics["options"].append(item.date_created.strftime('%d/%m/%Y'))
         curr_series.append(item.total_amount)
 
-    purchases_analytics["series"].append({"name": "revenue", "data": curr_series})
+    purchases_analytics["series"].append({"name": "purchase", "data": curr_series})
     purchases_analytics["info"].update({"chartName": "purchases-revenue"})
     return jsonify(purchases_analytics)
+
+@analytics.route('/analytics/purchases/<string:day>', methods=["GET"])
+def getPurchaseStats(day):
+    startdate = day.split("-")
+
+    date_start = datetime.combine(date(year=int(startdate[0]), month=int(startdate[1]), day=int(startdate[2])), time.min)
+    date_end =  datetime.combine(date(year=int(startdate[0]), month=int(startdate[1]), day=int(startdate[2])), time.max)
+        
+    purchases = Purchase.query.filter(Purchase.date_created <= date_end)\
+        .filter(Purchase.date_created >= date_start)\
+        .with_entities(
+            Purchase.id.label("id"), 
+            Purchase.date_created.label("date_created"), 
+            sa.func.sum(Purchase.total_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d-%H-%M", Purchase.date_created))\
+        .all()
+
+    purchase_analytics = {"options": [], "series": [], "info": {}}
+
+    curr_series = []
+
+    for item in purchases:
+        purchase_analytics["options"].append(item.date_created.strftime('%H:%M'))
+        curr_series.append(item.total_amount)
+
+    purchase_analytics["series"].append({"name": "purchase", "data": curr_series})
+    purchase_analytics["info"].update({"chartName": f"{day}--purchase-revenue"})
+    return jsonify(purchase_analytics)
 
 @analytics.route('/analytics/products-sold-by-amount', methods=["GET"])
 def getTopProducts():

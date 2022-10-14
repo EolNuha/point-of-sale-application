@@ -15,7 +15,7 @@
       :textContent="`Revenue made`"
     >
       <div
-        class="flex flex-row flex-wrap sm:flew-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
+        class="flex flex-row flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
       >
         <span class="font-bold">Product:</span>
         <v-select

@@ -22,7 +22,9 @@ def createProduct():
         stock=stock, 
         tax=tax, 
         purchased_price=purchased_price, 
-        selling_price=selling_price
+        selling_price=selling_price,
+        date_created=datetime.now(),
+        date_modified=datetime.now(),
         )
 
     db.session.add(product)
@@ -114,7 +116,9 @@ def createDemoProducts():
             stock=i[2], 
             tax=i[3], 
             purchased_price=i[4], 
-            selling_price=i[5]
+            selling_price=i[5],
+            date_created=datetime.now(),
+            date_modified=datetime.now(),
             ))
         db.session.commit()
     return "success", 200

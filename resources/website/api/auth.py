@@ -73,7 +73,9 @@ def signup():
             last_name = last_name,
             username = username,
             email = email,
-            password = generate_password_hash(password)
+            password = generate_password_hash(password),
+            date_created=datetime.now(),
+            date_modified=datetime.now(),
         )
         if users:
             user.user_type = user_type or "staff"
@@ -180,6 +182,8 @@ def createDemoUsers():
             email=i[3], 
             password=generate_password_hash("kosova22"), 
             user_type=i[4],
+            date_created=datetime.now(),
+            date_modified=datetime.now(),
             ))
         db.session.commit()
     return "success", 200

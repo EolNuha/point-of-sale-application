@@ -13,6 +13,11 @@
           :to="{ name: 'new-product' }"
           >Create Product</router-link
         >
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'product-analytics' }"
+          >Product Analytics</router-link
+        >
         <IconC
           iconName="TagIcon"
           iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-blue-500/50"
@@ -29,6 +34,11 @@
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-sale' }"
           >Create Sale</router-link
+        >
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'sale-analytics' }"
+          >Sale Analytics</router-link
         >
         <IconC
           iconName="ShoppingCartIcon"
@@ -47,6 +57,11 @@
           :to="{ name: 'new-purchase' }"
           >Create Purchase</router-link
         >
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'sale-analytics' }"
+          >Purchase Analytics</router-link
+        >
         <IconC
           iconName="BuildingStorefrontIcon"
           iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-blue-500/50"
@@ -63,6 +78,11 @@
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-user' }"
           >Create User</router-link
+        >
+        <router-link
+          class="text-blue-500 hover:text-blue-400 block mb-2"
+          :to="{ name: 'sale-analytics' }"
+          >User Analytics</router-link
         >
         <IconC
           iconName="UserGroupIcon"
@@ -89,7 +109,7 @@
         Total day purchases over the last seven days
       </p>
       <div class="relative min-h-[350px]">
-        <OverlayC v-if="isFetchingPurchases" />
+        <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetchingPurchases" />
         <AreaChart
           v-if="!isFetchingPurchases"
           :chartData="$store.state.analyticsModule.purchases"

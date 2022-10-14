@@ -28,6 +28,8 @@ def createPurchase():
         seller_fiscal_number=seller["fiscalNumber"],
         seller_tax_number=seller["taxNumber"],
         user=current_user,
+        date_created=datetime.now(),
+        date_modified=datetime.now(),
     )
 
     db.session.add(purchase)
@@ -52,7 +54,9 @@ def createPurchase():
                 product_selling_price=product["sellingPrice"],
                 product_stock=Decimal(product["stock"]),
                 price_without_tax=price_without_tax,
-                tax_amount=tax_amount
+                tax_amount=tax_amount,
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
             )
 
             product_query.name = product["productName"]
@@ -67,7 +71,9 @@ def createPurchase():
                 stock=product["stock"], 
                 tax=product["tax"], 
                 purchased_price=product["purchasedPrice"], 
-                selling_price= product["sellingPrice"]
+                selling_price= product["sellingPrice"],
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
             )
 
             db.session.add(created_product)
@@ -83,7 +89,9 @@ def createPurchase():
                 product_selling_price=created_product.selling_price,
                 product_stock=created_product.stock,
                 price_without_tax=price_without_tax,
-                tax_amount=tax_amount
+                tax_amount=tax_amount,
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
             )
         db.session.add(purchase_item)
 

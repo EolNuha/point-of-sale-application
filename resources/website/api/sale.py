@@ -52,7 +52,9 @@ def createSale():
             product_quantity=Decimal(product["quantity"]),
             price_without_tax=price_without_tax,
             tax_amount=tax_amount,
-            total_amount=Decimal(product_query.selling_price * Decimal(product["quantity"]))
+            total_amount=Decimal(product_query.selling_price * Decimal(product["quantity"])),
+            date_created=datetime.now(),
+            date_modified=datetime.now(),
         )
         stock_diff = product_query.stock - Decimal(product["quantity"])
         if stock_diff >= 0:

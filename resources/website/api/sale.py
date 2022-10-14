@@ -15,7 +15,6 @@ sale = Blueprint('sale', __name__)
 BASE_URL = "http://localhost:5000"
 
 @sale.route('/sales', methods=["POST"])
-@token_required
 def createSale():
     products = request.json["products"]
     total_amount = request.json["totalAmount"]

@@ -85,7 +85,9 @@
         class="inline-flex items-center mx-3 text-sm font-medium text-gray-900 dark:text-white gap-1 mr-2 capitalize"
         type="button"
       >
-        {{ user.firstName }} {{ user.lastName }}
+        <span class="hidden sm:inline"
+          >{{ user.firstName }} {{ user.lastName }}</span
+        >
         <span class="sr-only">Open user menu</span>
         <img
           class="w-7 h-7 rounded-full border-2 border-gray-500"

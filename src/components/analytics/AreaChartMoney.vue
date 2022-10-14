@@ -1,9 +1,12 @@
 <template>
-  <div class="bg-white dark:bg-gray-900 rounded-xl my-5 py-8 relative px-5">
+  <div class="bg-white dark:bg-gray-900 rounded-xl my-5 relative">
     <div
-      class="flex items-center flex-row flex-wrap sm:flex-nowrap justify-between px-3 gap-2"
+      class="flex items-center rounded-t-xl flex-row flex-wrap lg:flex-nowrap justify-between p-3 px-8 gap-2 bg-gray-100 dark:bg-gray-700/75"
     >
-      <div class="w-full">
+      <div
+        class="w-full flex flex-column items-center gap-2 text-gray-700 dark:text-gray-200"
+      >
+        Date:
         <RangeDateFilter
           @startDateChange="startDate = $event"
           @endDateChange="endDate = $event"
@@ -13,25 +16,29 @@
       <slot></slot>
     </div>
     <!-- from: ${this.startDate} to: ${this.endDate} -->
-    <div class="flex items-center justify-between px-3">
-      <div>
-        <h3 class="text-gray-900 dark:text-white text-3xl">
-          {{ titleContent }}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400">
-          {{ textContent }}
-          <b>{{ setCurrentDateText(currentDate) }}</b>
-        </p>
+    <div class="p-5">
+      <div
+        class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
+      >
+        <div>
+          <h3 class="text-gray-900 dark:text-white text-3xl">
+            {{ titleContent }}
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            {{ textContent }}
+            <b>{{ setCurrentDateText(currentDate) }}</b>
+          </p>
+        </div>
+        <div class="inline-flex items-center text-green-500 text-3xl">
+          <IconC iconName="ArrowLongUpIcon" iconClass="w-8 h-8" />
+          {{ totalAmountSold }}€
+        </div>
       </div>
-      <div class="inline-flex items-center text-green-500 text-3xl">
-        <IconC iconName="ArrowLongUpIcon" iconClass="w-8 h-8" />
-        {{ totalAmountSold }}€
-      </div>
-    </div>
 
-    <div class="relative min-h-[350px]">
-      <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetching" />
-      <AreaChart v-if="!isFetching" :chartData="chartData" />
+      <div class="relative min-h-[350px] mt-5">
+        <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetching" />
+        <AreaChart v-if="!isFetching" :chartData="chartData" />
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +50,7 @@ export default {
       required: true,
     },
     id: {
-      type: String,
+      type: Number,
       required: false,
       default: null,
     },

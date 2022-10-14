@@ -34,12 +34,13 @@ def getSales():
         .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
         .all()
 
-    sale_analytics = {"options": [], "series": []}
+    sale_analytics = {"options": [], "series": [], "info": {}}
 
     for item in sales:
         sale_analytics["options"].append(item.date_created.strftime('%d/%m/%Y'))
         sale_analytics["series"].append(item.total_amount)
 
+    sale_analytics["info"].update({"chartName": "sales-revenue", "series": ["", "previous revenue"]})
     return jsonify(sale_analytics)
 
 
@@ -63,12 +64,13 @@ def getPurchases():
         .group_by(sa.func.strftime("%Y-%m-%d", Purchase.date_created))\
         .order_by(Purchase.id.desc()).all()
 
-    purchases_analytics = {"options": [], "series": []}
+    purchases_analytics = {"options": [], "series": [], "info": {}}
 
     for item in purchases:
         purchases_analytics["options"].append(item.date_created.strftime('%d/%m/%Y'))
         purchases_analytics["series"].append(item.total_amount)
 
+    purchases_analytics["info"].update({"chartName": "purchases-revenue", "series": [""]})
     return jsonify(purchases_analytics)
 
 @analytics.route('/analytics/products-sold-by-amount', methods=["GET"])
@@ -92,12 +94,13 @@ def getTopProducts():
         .group_by(SaleItem.product_name)\
         .order_by(sa.func.sum(SaleItem.total_amount)).limit(10).all()
 
-    products_analytics = {"options": [], "series": []}
+    products_analytics = {"options": [], "series": [], "info": {}}
 
     for item in products:
         products_analytics["options"].append(item.product_name)
         products_analytics["series"].append(item.total_amount)
 
+    products_analytics["info"].update({"chartName": "top-products-revenue", "series": [""]})
     return jsonify(products_analytics)
 
 @analytics.route('/analytics/products/<int:id>', methods=["GET"])
@@ -124,13 +127,15 @@ def getProductStats(id):
             SaleItem.date_created.label("date_created"), 
             sa.func.sum(SaleItem.total_amount).label("total_amount"),
         )\
-        .group_by(SaleItem.date_created)\
+        .group_by(sa.func.strftime("%Y-%m-%d", SaleItem.date_created))\
         .order_by(SaleItem.date_created).all()
 
-    products_analytics = {"options": [], "series": [], "info": []}
+    products_analytics = {"options": [], "series": [], "info": {}}
 
     for item in products:
         products_analytics["options"].append(item.date_created.strftime('%d/%m/%Y'))
         products_analytics["series"].append(item.total_amount)
+    
+    products_analytics["info"].update({"chartName": "product-stats", "series": [""]})
 
     return jsonify(products_analytics)

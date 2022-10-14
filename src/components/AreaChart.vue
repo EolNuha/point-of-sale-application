@@ -18,9 +18,11 @@ export default {
     };
   },
   async created() {
+    console.log(this.chartData.info.series);
     this.options = {
+      colors: ["#008ffb", "#fdba8c"],
       chart: {
-        id: "vuechart-example",
+        id: this.chartData.info.chartName,
       },
       xaxis: {
         categories: this.chartData.options,
@@ -61,14 +63,14 @@ export default {
             return value + "€";
           },
           title: {
-            formatter: () => "",
+            formatter: (seriesName) => seriesName,
           },
         },
       },
     };
     this.series = [
       {
-        name: "Current Sales",
+        name: this.chartData.info.series[0],
         data: this.chartData.series,
       },
     ];

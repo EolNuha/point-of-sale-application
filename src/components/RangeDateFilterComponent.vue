@@ -1,10 +1,8 @@
 <template>
   <div>
-    <div
-      class="flex items-center mb-3 gap-2 search-input-width flex-wrap sm:flex-nowrap"
-    >
+    <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
       <v-select
-        class="w-full sm:w-1/2 md:w-1/3 default-input"
+        class="w-[150px] md:w-[200px] default-input"
         v-model="currentDate"
         :value="ranges"
         :options="ranges"

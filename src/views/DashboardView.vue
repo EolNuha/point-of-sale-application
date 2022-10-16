@@ -91,29 +91,96 @@
       </div>
     </div>
     <div class="bg-white dark:bg-gray-900 rounded-xl my-5 py-8 relative px-5">
-      <h3 class="text-gray-900 dark:text-white text-3xl">Sales</h3>
-      <p class="text-gray-500 dark:text-gray-400">
-        Total day sales over the last seven days
-      </p>
-      <div class="relative min-h-[350px]">
+      <div
+        class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
+      >
+        <div>
+          <h3 class="text-gray-900 dark:text-white text-3xl">Sales</h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            Total day sales over the last seven days
+          </p>
+        </div>
+        <div class="inline-flex items-center flex-col" v-if="!isFetchingSales">
+          <h3 class="text-3xl text-gray-900 dark:text-white">
+            {{ sales.info.currTotal }}€
+          </h3>
+          <p
+            class="inline-flex items-center text-green-500"
+            v-if="sales.info.percentageDiff > 0"
+          >
+            +{{ sales.info.percentageDiff }}%<IconC
+              iconName="ArrowLongUpIcon"
+              iconClass="w-5 h-5"
+            />
+          </p>
+          <p
+            class="inline-flex items-center text-gray-500"
+            v-if="sales.info.percentageDiff === 0"
+          >
+            {{ sales.info.percentageDiff }}%<IconC
+              iconName="ArrowLongUpIcon"
+              iconClass="w-5 h-5"
+            />
+          </p>
+          <p
+            class="inline-flex items-center text-red-700"
+            v-if="sales.info.percentageDiff < 0"
+          >
+            {{ chartData.info.percentageDiff }}%
+          </p>
+        </div>
+      </div>
+      <div class="relative min-h-[350px] mt-5">
         <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetchingSales" />
-        <AreaChart
-          v-if="!isFetchingSales"
-          :chartData="$store.state.analyticsModule.sales"
-        />
+        <AreaChart v-if="!isFetchingSales" :chartData="sales" />
       </div>
     </div>
     <div class="bg-white dark:bg-gray-900 rounded-xl py-8 relative px-5">
-      <h3 class="text-gray-900 dark:text-white text-3xl">Purchases</h3>
-      <p class="text-gray-500 dark:text-gray-400">
-        Total day purchases over the last seven days
-      </p>
+      <div
+        class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
+      >
+        <div>
+          <h3 class="text-gray-900 dark:text-white text-3xl">Purchases</h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            Total day purchases over the last seven days
+          </p>
+        </div>
+        <div
+          class="inline-flex items-center flex-col"
+          v-if="!isFetchingPurchases"
+        >
+          <h3 class="text-3xl text-gray-900 dark:text-white">
+            {{ purchases.info.currTotal }}€
+          </h3>
+          <p
+            class="inline-flex items-center text-green-500"
+            v-if="purchases.info.percentageDiff > 0"
+          >
+            +{{ purchases.info.percentageDiff }}%<IconC
+              iconName="ArrowLongUpIcon"
+              iconClass="w-5 h-5"
+            />
+          </p>
+          <p
+            class="inline-flex items-center text-gray-500"
+            v-if="purchases.info.percentageDiff === 0"
+          >
+            {{ purchases.info.percentageDiff }}%<IconC
+              iconName="ArrowLongUpIcon"
+              iconClass="w-5 h-5"
+            />
+          </p>
+          <p
+            class="inline-flex items-center text-red-700"
+            v-if="purchases.info.percentageDiff < 0"
+          >
+            {{ purchases.info.percentageDiff }}%
+          </p>
+        </div>
+      </div>
       <div class="relative min-h-[350px]">
         <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetchingPurchases" />
-        <AreaChart
-          v-if="!isFetchingPurchases"
-          :chartData="$store.state.analyticsModule.purchases"
-        />
+        <AreaChart v-if="!isFetchingPurchases" :chartData="purchases" />
       </div>
     </div>
   </div>
@@ -158,6 +225,14 @@ export default {
       .then(() => {
         this.isFetchingPurchases = false;
       });
+  },
+  computed: {
+    sales() {
+      return this.$store.state.analyticsModule.sales;
+    },
+    purchases() {
+      return this.$store.state.analyticsModule.purchases;
+    },
   },
 };
 </script>

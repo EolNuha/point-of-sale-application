@@ -1,5 +1,7 @@
 
 from decimal import *
+import pandas as pd
+from datetime import timedelta
 def get_page_range(page, total, show=5):
     start = max((page - (show // 2)), 1)
     stop = min(start + show, total) + 1
@@ -177,3 +179,39 @@ def get_change(current, previous):
         return format(((current - previous) / previous) * Decimal(100.00), ".2f")
     except ZeroDivisionError:
         return ""
+
+
+def get_curr_prev_chart(date_start, date_end, curr, prev):
+    date_ranges = pd.date_range(date_start, date_end)
+    date_ranges = [d.strftime("%d/%m/%Y") for d in date_ranges]
+    date_diff = abs((date_start - date_end).days)
+
+    curr_incomp_series = []
+    curr_comp_series = [0] * len(date_ranges)
+    curr_options = []
+    prev_incomp_series = []
+    prev_comp_series = [0] * len(date_ranges)
+    prev_options = []
+
+    for item in curr:
+        curr_options.append(item.date_created.strftime('%d/%m/%Y'))
+        curr_incomp_series.append(item.total_amount)
+
+    for item in prev:
+        option_date = item.date_created + timedelta(date_diff)
+        prev_options.append(option_date.strftime('%d/%m/%Y'))
+        prev_incomp_series.append(item.total_amount)
+    
+    for index, d in enumerate(date_ranges):
+        if d in curr_options:
+            curr_idx = curr_options.index(d)
+            curr_comp_series[index] = curr_incomp_series[curr_idx]
+        if d in prev_options:
+            prev_idx = prev_options.index(d)
+            prev_comp_series[index] = prev_incomp_series[prev_idx]
+
+    return {
+        "curr_series": curr_comp_series,
+        "prev_series": prev_comp_series,
+        "options": date_ranges
+    }

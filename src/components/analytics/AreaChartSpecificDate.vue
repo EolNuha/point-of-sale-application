@@ -8,7 +8,12 @@
       >
         <span class="font-bold">Date:</span>
         <input
-          v-model="startDate"
+          @input="
+            $debounce(() => {
+              startDate = $event.target.value;
+            })
+          "
+          :value="startDate"
           ref="startDate"
           name="start"
           type="date"
@@ -32,9 +37,13 @@
             <b>on {{ startDate }}</b>
           </p>
         </div>
-        <div class="inline-flex items-center text-green-500 text-3xl">
-          <IconC iconName="ArrowLongUpIcon" iconClass="w-8 h-8" />
-          {{ totalAmountSold }}€
+        <div
+          class="inline-flex items-center text-green-500 text-3xl"
+          v-if="!isFetching"
+        >
+          <h3 class="text-3xl text-gray-900 dark:text-white">
+            {{ chartData.info.currTotal }}€
+          </h3>
         </div>
       </div>
 

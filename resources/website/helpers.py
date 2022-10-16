@@ -1,3 +1,5 @@
+
+from decimal import *
 def get_page_range(page, total, show=5):
     start = max((page - (show // 2)), 1)
     stop = min(start + show, total) + 1
@@ -166,3 +168,12 @@ def getPaginatedDict(data, paginated_items):
         },
         
     }
+
+
+def get_change(current, previous):
+    if current == previous:
+        return 0
+    try:
+        return format(((current - previous) / previous) * Decimal(100.00), ".2f")
+    except ZeroDivisionError:
+        return ""

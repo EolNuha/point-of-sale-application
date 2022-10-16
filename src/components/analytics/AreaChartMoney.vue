@@ -29,9 +29,34 @@
             <b>{{ setCurrentDateText(currentDate) }}</b>
           </p>
         </div>
-        <div class="inline-flex items-center text-green-500 text-3xl">
-          <IconC iconName="ArrowLongUpIcon" iconClass="w-8 h-8" />
-          {{ totalAmountSold }}€
+        <div class="inline-flex items-center flex-col" v-if="!isFetching">
+          <h3 class="text-3xl text-gray-900 dark:text-white">
+            {{ chartData.info.currTotal }}€
+          </h3>
+          <p
+            class="inline-flex items-center text-green-500"
+            v-if="chartData.info.percentageDiff > 0"
+          >
+            +{{ chartData.info.percentageDiff }}%<IconC
+              iconName="ArrowLongUpIcon"
+              iconClass="w-5 h-5"
+            />
+          </p>
+          <p
+            class="inline-flex items-center text-gray-500"
+            v-if="chartData.info.percentageDiff === 0"
+          >
+            {{ chartData.info.percentageDiff }}%<IconC
+              iconName="ArrowLongUpIcon"
+              iconClass="w-5 h-5"
+            />
+          </p>
+          <p
+            class="inline-flex items-center text-red-700"
+            v-if="chartData.info.percentageDiff < 0"
+          >
+            {{ chartData.info.percentageDiff }}%
+          </p>
         </div>
       </div>
 

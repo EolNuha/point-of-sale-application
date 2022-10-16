@@ -16,7 +16,12 @@
         v-if="currentDate === null"
       >
         <input
-          v-model="startDate"
+          @input="
+            $debounce(() => {
+              startDate = $event.target.value;
+            })
+          "
+          :value="startDate"
           ref="startDate"
           name="start"
           type="date"
@@ -26,7 +31,12 @@
         />
         <span class="text-gray-500">to</span>
         <input
-          v-model="endDate"
+          @input="
+            $debounce(() => {
+              endDate = $event.target.value;
+            })
+          "
+          :value="endDate"
           ref="endDate"
           name="start"
           type="date"
@@ -100,8 +110,10 @@ export default {
       );
     },
     getDates(days) {
+      if (days !== 0) days--;
       const date = new Date();
       date.setDate(date.getDate() - days);
+      console.log(date);
       const startDate = this.formatDate(date);
       const endDate = this.formatDate(new Date());
 

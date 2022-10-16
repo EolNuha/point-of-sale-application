@@ -135,7 +135,7 @@ export default {
       this.$router.push({ name: "signin" });
     });
     const date = new Date();
-    date.setDate(date.getDate() - 7);
+    date.setDate(date.getDate() - 6);
     const startDate =
       String(date.getFullYear()).padStart(2, "0") +
       "-" +

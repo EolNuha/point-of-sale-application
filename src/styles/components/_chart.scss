@@ -23,3 +23,7 @@
 .dark .apexcharts-text tspan {
   fill: white !important;
 }
+
+.dark .apexcharts-legend-text {
+  @apply text-gray-200  #{!important};
+}

@@ -62,7 +62,7 @@ export default {
             return value + "€";
           },
           title: {
-            formatter: (seriesName) => seriesName,
+            formatter: (seriesName) => seriesName + ":",
           },
         },
       },

@@ -1,27 +1,20 @@
 from datetime import datetime, date, time, timedelta
 from flask import Blueprint, request, jsonify, request
-from website.models import Sale, Purchase, Product, SaleItem
+from website.models import Sale, Purchase, Product, SaleItem, User
 import sqlalchemy as sa
 from decimal import *
-from website.helpers import get_change, get_curr_prev_chart
+from website.helpers import get_percentage_change, get_curr_prev_chart, get_curr_prev_dates
+from website.token import currentUser
 
 analytics = Blueprint('analytics', __name__)
 
 @analytics.route('/analytics/sales', methods=["GET"])
 def getSales():
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
-
-    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
-    date_end = datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
-        
-    date_diff = abs((date_start - date_end).days)
-
-    prev_date_start = date_start - timedelta(days=date_diff)
-    prev_date_end = datetime.combine((date_start - timedelta(days=1)), time.max)
-
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+    prev_date_start = request_dates["prev_date_start"]
+    prev_date_end = request_dates["prev_date_end"]
 
     curr_sales = Sale.query.filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created >= date_start)\
@@ -56,7 +49,7 @@ def getSales():
     sale_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
     sale_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
     
-    percentage_diff = get_change(Decimal(curr_total), Decimal(prev_total))
+    percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     sale_analytics["info"].update({
         "chartName": "sales-revenue", 
         "currTotal": curr_total, 
@@ -99,17 +92,11 @@ def getSaleStats(day):
 
 @analytics.route('/analytics/purchases', methods=["GET"])
 def getPurchases():
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
-
-    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
-    date_end = datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
-    date_diff = abs((date_start - date_end).days)
-
-    prev_date_start = date_start - timedelta(days=date_diff)
-    prev_date_end = datetime.combine((date_start - timedelta(days=1)), time.max)
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+    prev_date_start = request_dates["prev_date_start"]
+    prev_date_end = request_dates["prev_date_end"]
 
     curr_purchases = Purchase.query.filter(Purchase.date_created <= date_end)\
         .filter(Purchase.date_created >= date_start)\
@@ -144,7 +131,7 @@ def getPurchases():
     purchases_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
     purchases_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
     
-    percentage_diff = get_change(Decimal(curr_total), Decimal(prev_total))
+    percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     purchases_analytics["info"].update({
         "chartName": "purchases-revenue", 
         "currTotal": curr_total, 
@@ -184,13 +171,9 @@ def getPurchaseStats(day):
 
 @analytics.route('/analytics/products-sold-by-amount', methods=["GET"])
 def getTopProducts():
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
-
-    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
-    date_end = datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
 
     products = SaleItem.query.filter(SaleItem.date_created <= date_end)\
         .filter(SaleItem.date_created >= date_start)\
@@ -216,17 +199,11 @@ def getTopProducts():
 
 @analytics.route('/analytics/products/<int:id>', methods=["GET"])
 def getProductStats(id):
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
-
-    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
-    date_end = datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
-    date_diff = abs((date_start - date_end).days)
-
-    prev_date_start = date_start - timedelta(days=date_diff)
-    prev_date_end = datetime.combine((date_start - timedelta(days=1)), time.max)    
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+    prev_date_start = request_dates["prev_date_start"]
+    prev_date_end = request_dates["prev_date_end"]   
 
     curr_products = SaleItem.query.filter(SaleItem.date_created <= date_end)\
         .filter(SaleItem.date_created >= date_start)
@@ -271,7 +248,7 @@ def getProductStats(id):
     products_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
     products_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
     
-    percentage_diff = get_change(Decimal(curr_total), Decimal(prev_total))
+    percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     products_analytics["info"].update({
         "chartName": "product-stats", 
         "currTotal": curr_total, 
@@ -279,3 +256,93 @@ def getProductStats(id):
         "percentageDiff": percentage_diff
     })
     return jsonify(products_analytics)
+
+
+@analytics.route('/analytics/users-revenue', methods=["GET"])
+def getTopUsers():
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+
+    users = Sale.query.filter(Sale.date_created <= date_end)\
+        .filter(Sale.date_created >= date_start)\
+        .with_entities(
+            Sale.id.label("id"), 
+            Sale.date_created.label("date_created"), 
+            Sale.user_id.label("user_id"), 
+            sa.func.sum(Sale.total_amount).label("total_amount"),
+        )\
+        .group_by(Sale.user_id)\
+        .order_by(sa.func.sum(Sale.total_amount)).limit(10).all()
+
+    users_analytics = {"options": [], "series": [], "info": {}}
+    curr_series = []
+
+    for item in users:
+        user = User.query.filter_by(id=item.user_id).first()
+        users_analytics["options"].append(user.first_name + ' ' + user.last_name)
+        curr_series.append(item.total_amount)
+
+    users_analytics["series"].append({"name": "revenue", "data": curr_series})
+    users_analytics["info"].update({"chartName": "top-users-revenue", "currTotal": sum(curr_series)})
+    return jsonify(users_analytics)
+
+@analytics.route('/analytics/users/<int:id>', methods=["GET"])
+def getUserStats(id):
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+    prev_date_start = request_dates["prev_date_start"]
+    prev_date_end = request_dates["prev_date_end"]
+
+    curr_user_analytics = Sale.query.filter(Sale.date_created <= date_end)\
+        .filter(Sale.date_created >= date_start)
+
+    prev_user_analytics = Sale.query.filter(Sale.date_created <= prev_date_end)\
+        .filter(Sale.date_created >= prev_date_start)
+    
+    if id:
+        curr_user_analytics = curr_user_analytics.filter_by(user_id=id)
+        prev_user_analytics = prev_user_analytics.filter_by(user_id=id)
+    else:
+        logged_in_user = currentUser(request)
+        curr_user_analytics = curr_user_analytics.filter_by(user_id=logged_in_user.id)
+        prev_user_analytics = prev_user_analytics.filter_by(user_id=logged_in_user.id)
+    
+    curr_user_analytics = curr_user_analytics.with_entities(
+            Sale.id.label("id"), 
+            Sale.date_created.label("date_created"), 
+            sa.func.sum(Sale.total_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
+        .order_by(Sale.date_created).all()
+    
+    prev_user_analytics = prev_user_analytics.with_entities(
+            Sale.id.label("id"), 
+            Sale.date_created.label("date_created"), 
+            sa.func.sum(Sale.total_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
+        .order_by(Sale.date_created).all()
+
+    user_analytics = {"options": [], "series": [], "info": {}}
+
+    dates = get_curr_prev_chart(date_start, date_end, curr_user_analytics, prev_user_analytics)
+    
+    curr_comp_series = dates["curr_series"]
+    prev_comp_series = dates["prev_series"]
+    user_analytics["options"] = dates["options"]
+    curr_total = sum(curr_comp_series)
+    prev_total = sum(prev_comp_series)
+
+    user_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
+    user_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
+    
+    percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
+    user_analytics["info"].update({
+        "chartName": "product-stats", 
+        "currTotal": curr_total, 
+        "prevTotal": prev_total, 
+        "percentageDiff": percentage_diff
+    })
+    return jsonify(user_analytics)

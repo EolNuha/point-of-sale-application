@@ -5,4 +5,6 @@ export default {
   purchase: [],
   productsSoldbyAmount: [],
   productStats: [],
+  usersRevenue: [],
+  userStats: [],
 };

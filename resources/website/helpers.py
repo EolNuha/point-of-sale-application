@@ -1,7 +1,7 @@
 
 from decimal import *
 import pandas as pd
-from datetime import timedelta
+from datetime import datetime, date, time, timedelta
 def get_page_range(page, total, show=5):
     start = max((page - (show // 2)), 1)
     stop = min(start + show, total) + 1
@@ -172,7 +172,7 @@ def getPaginatedDict(data, paginated_items):
     }
 
 
-def get_change(current, previous):
+def get_percentage_change(current, previous):
     if current == previous:
         return 0
     try:
@@ -214,4 +214,24 @@ def get_curr_prev_chart(date_start, date_end, curr, prev):
         "curr_series": curr_comp_series,
         "prev_series": prev_comp_series,
         "options": date_ranges
+    }
+
+def get_curr_prev_dates(request):
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+    custom_start_date = custom_start_date.split("-")
+    custom_end_date = custom_end_date.split("-")
+
+    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
+    date_end = datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
+    date_diff = abs((date_start - date_end).days)
+
+    prev_date_start = date_start - timedelta(days=date_diff)
+    prev_date_end = datetime.combine((date_start - timedelta(days=1)), time.max) 
+
+    return {
+        "date_start": date_start,
+        "date_end": date_end,
+        "prev_date_start": prev_date_start,
+        "prev_date_end": prev_date_end,
     }

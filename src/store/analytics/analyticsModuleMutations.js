@@ -17,4 +17,10 @@ export default {
   SET_PRODUCT_STATS(state, payload) {
     state.productStats = payload;
   },
+  SET_USERS_REVENUE(state, payload) {
+    state.usersRevenue = payload;
+  },
+  SET_USER_STATS(state, payload) {
+    state.userStats = payload;
+  },
 };

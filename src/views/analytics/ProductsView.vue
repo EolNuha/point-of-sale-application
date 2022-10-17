@@ -3,8 +3,8 @@
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getProductsSoldbyAmount`"
       :chartData="$store.state.analyticsModule.productsSoldbyAmount"
-      :titleContent="`Top 10 Products`"
-      :textContent="`That made the most revenue`"
+      :titleContent="`Top Products`"
+      :textContent="`Top 10 products that made the most revenue`"
     >
     </AreaChartMoney>
     <AreaChartMoney
@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       isFetching: true,
-      currentDate: "",
       startDate: "",
       endDate: "",
       selectedProduct: {},

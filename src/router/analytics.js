@@ -2,6 +2,7 @@
 import ProductAnalytics from "../views/analytics/ProductsView.vue";
 import SaleAnalytics from "../views/analytics/SalesView.vue";
 import PurchaseAnalytics from "../views/analytics/PurchaseView.vue";
+import UserAnalytics from "../views/analytics/UsersView.vue";
 export default [
   {
     path: "/analytics/products",
@@ -43,6 +44,21 @@ export default [
         {
           text: (route) => "Purchase Analytics",
           to: "purchase-analytics",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/analytics/users",
+    name: "user-analytics",
+    component: UserAnalytics,
+    meta: {
+      title: "User Analytics",
+      breadcrumb: [
+        {
+          text: (route) => "User Analytics",
+          to: "user-analytics",
           active: true,
         },
       ],

@@ -81,7 +81,7 @@
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
-          :to="{ name: 'sale-analytics' }"
+          :to="{ name: 'user-analytics' }"
           >User Analytics</router-link
         >
         <IconC
@@ -134,6 +134,11 @@
         <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetchingSales" />
         <AreaChart v-if="!isFetchingSales" :chartData="sales" />
       </div>
+      <router-link
+        class="flex flex-row items-center justify-end text-blue-500 hover:text-blue-600 uppercase text-sm"
+        :to="{ name: 'sale-analytics' }"
+        >Sales report <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
+      /></router-link>
     </div>
     <div class="bg-white dark:bg-gray-900 rounded-xl py-8 relative px-5">
       <div
@@ -182,6 +187,12 @@
         <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetchingPurchases" />
         <AreaChart v-if="!isFetchingPurchases" :chartData="purchases" />
       </div>
+      <router-link
+        class="flex flex-row items-center justify-end text-blue-500 hover:text-blue-600 uppercase text-sm"
+        :to="{ name: 'purchase-analytics' }"
+        >Purchases report
+        <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
+      /></router-link>
     </div>
   </div>
 </template>

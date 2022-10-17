@@ -81,4 +81,30 @@ export default {
         });
     });
   },
+  getUsersSaleRevenue({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/users-revenue`, { params: data })
+        .then(async (response) => {
+          commit("SET_USERS_REVENUE", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getUserStats({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/users/${data.id}`, { params: data })
+        .then(async (response) => {
+          commit("SET_USER_STATS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

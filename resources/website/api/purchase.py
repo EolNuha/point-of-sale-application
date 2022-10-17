@@ -116,6 +116,7 @@ def createPurchase():
 def getPurchases():
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
+    desc = request.args.get('desc', True, type=bool)
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
 
@@ -140,8 +141,12 @@ def getPurchases():
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
         .filter(Purchase.date_created <= date_end)\
-        .filter(Purchase.date_created > date_start)\
-        .order_by(Purchase.id.desc()).paginate(page=page, per_page=per_page)
+        .filter(Purchase.date_created > date_start)
+
+    if (desc):
+        paginated_items = paginated_items.order_by(Purchase.id.desc())
+
+    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
 
@@ -163,7 +168,7 @@ def downloadPurchasesExcel():
     custom_end_date = request.args.get('endDate', type=str)
     file_name = request.args.get('fileName', 'excelFile', type=str)
 
-    api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}')
+    api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&desc=')
     purchases = api_response.json()["data"]
 
     FILENAME = file_name.upper() + "-PURCHASES.xlsx"

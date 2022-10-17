@@ -209,7 +209,6 @@ export default {
   created() {
     this.closeSide();
     this.openSide();
-    this.$store.dispatch("userModule/getCurrentUser");
   },
   computed: {
     user() {

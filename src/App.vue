@@ -7,6 +7,7 @@
 <script>
 import NavBar from "@/components/NavBar.vue";
 import SideBar from "@/components/SideBar.vue";
+import { logoutUser } from "@/router/auth/index";
 
 export default {
   components: {
@@ -25,6 +26,12 @@ export default {
     return {
       userTheme: "light",
     };
+  },
+  created() {
+    this.$store.dispatch("userModule/getCurrentUser").catch(() => {
+      logoutUser();
+      this.$router.push({ name: "signin" });
+    });
   },
   mounted() {
     const initUserTheme = this.getTheme() || this.getMediaPreference();

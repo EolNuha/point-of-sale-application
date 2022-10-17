@@ -199,7 +199,6 @@
 
 <script>
 // @ is an alias to /src
-import { logoutUser } from "@/router/auth/index";
 export default {
   data() {
     return {
@@ -208,10 +207,6 @@ export default {
     };
   },
   async created() {
-    this.$store.dispatch("userModule/getCurrentUser").catch(() => {
-      logoutUser();
-      this.$router.push({ name: "signin" });
-    });
     const date = new Date();
     date.setDate(date.getDate() - 6);
     const startDate =

@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, request
 from website.models import Sale, SaleItem, Product, User
 from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList, getDailySalesList
 from website import db
-from sqlalchemy import or_
+from sqlalchemy import desc, or_
 import sqlalchemy as sa
 from decimal import *
 import xlsxwriter
@@ -85,6 +85,8 @@ def createSale():
 def getSales():
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
+    desc = request.args.get('desc', True, type=bool)
+    
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
 
@@ -122,8 +124,12 @@ def getSales():
             sa.func.sum(Sale.eight_tax_amount).label("eight_tax_amount"),
             sa.func.sum(Sale.eighteen_tax_amount).label("eighteen_tax_amount"),
         )\
-        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
-        .paginate(page=page, per_page=per_page)
+        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))
+
+    if (desc):
+        paginated_items = paginated_items.order_by(Sale.id.desc())
+
+    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
 
 
     return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
@@ -132,6 +138,7 @@ def getSales():
 def getDailySales():
     sale_date = request.args.get('date', type=str)
     sale_date = sale_date.split(".")
+    desc = request.args.get('desc', True, type=bool)
 
     sale_date_start = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.min)
     sale_date_end = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.max)
@@ -155,8 +162,12 @@ def getDailySales():
         Sale.eighteen_tax_amount.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= sale_date_end)\
-        .filter(Sale.date_created >= sale_date_start)\
-        .paginate(page=page, per_page=per_page)
+        .filter(Sale.date_created >= sale_date_start)
+
+    if (desc):
+        paginated_items = paginated_items.order_by(Sale.id.desc())
+
+    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getDailySalesList(paginated_items.items), paginated_items))
 
@@ -178,9 +189,9 @@ def downloadSalesExcel():
     daily_date = request.args.get('dailyDate', type=str)
     
     if daily:
-        URL = f'{BASE_URL}/api/sales/daily?page={page}&per_page={per_page}&date={daily_date}'
+        URL = f'{BASE_URL}/api/sales/daily?page={page}&per_page={per_page}&date={daily_date}&desc='
     else:
-        URL = f'{BASE_URL}/api/sales?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}'
+        URL = f'{BASE_URL}/api/sales?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&desc='
 
     api_response = requests.get(URL)
     sales = list(api_response.json()["data"])

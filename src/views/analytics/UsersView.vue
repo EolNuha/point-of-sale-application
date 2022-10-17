@@ -4,7 +4,7 @@
       :dispatchModule="`analyticsModule/getUsersSaleRevenue`"
       :chartData="$store.state.analyticsModule.usersRevenue"
       :titleContent="`Top Employees`"
-      :textContent="`That made the most sales revenue`"
+      :textContent="`Top users that made the most sales revenue`"
     >
     </AreaChartMoney>
     <AreaChartMoney

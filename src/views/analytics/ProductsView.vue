@@ -4,7 +4,7 @@
       :dispatchModule="`analyticsModule/getProductsSoldbyAmount`"
       :chartData="$store.state.analyticsModule.productsSoldbyAmount"
       :titleContent="`Top Products`"
-      :textContent="`Top 10 products that made the most revenue`"
+      :textContent="`Top products that made the most revenue`"
     >
     </AreaChartMoney>
     <AreaChartMoney

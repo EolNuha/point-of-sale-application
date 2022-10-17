@@ -20,18 +20,20 @@ def signin():
         return make_response(
             'Could not verify',
             401,
-            {'WWW-Authenticate' : 'Basic realm ="Signin required !!"'}
+            {'WWW-Authenticate' : 'Basic realm ="Signin required!"'}
         )
   
     user = User.query\
-        .filter_by(email = email)\
-        .first()
+        .filter(or_(
+        User.username.ilike(email),
+        User.email.ilike(email),
+        )).first()
   
     if not user:
         return make_response(
-            'User with this email does not exist!',
+            'User with this email/username does not exist!',
             401,
-            {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
+            {'WWW-Authenticate' : 'Basic realm ="User does not exist!"'}
         )
   
     if check_password_hash(user.password, password):
@@ -45,7 +47,7 @@ def signin():
     return make_response(
             'Password is incorrect!',
             403,
-            {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
+            {'WWW-Authenticate' : 'Basic realm ="User does not exist!"'}
         )
   
 # signup route

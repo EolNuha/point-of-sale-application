@@ -5,7 +5,7 @@
         <label
           for="product_name"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Product Name</label
+          >{{ $t("productName") }}</label
         >
         <Field
           name="product_name"
@@ -24,7 +24,7 @@
         <label
           for="product_barcode"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Product barcode</label
+          >{{ $t("barcode") }}</label
         >
         <Field
           name="product_barcode"
@@ -44,7 +44,7 @@
           <label
             for="product_stock"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product stock</label
+            >{{ $t("stock") }}</label
           >
           <Field
             name="product_stock"
@@ -63,7 +63,7 @@
           <label
             for="product_stock"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product Tax</label
+            >{{ $t("tax") }}</label
           >
           <Field
             name="product_tax"
@@ -86,7 +86,7 @@
           <label
             for="product_purchasedprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product purchased price</label
+            >{{ $t("purchasedPrice") }}</label
           >
           <Field
             name="product_purchasedprice"
@@ -106,7 +106,7 @@
           <label
             for="product_sellingprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product selling price</label
+            >{{ $t("sellingPrice") }}</label
           >
           <Field
             name="product_sellingprice"
@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     createProduct() {
       this.isLoading = true;
@@ -177,11 +177,11 @@ export default {
           this.$router.push({
             name: "products",
           });
-          this.$toast.success("Product created successfully!");
+          this.$toast.success(this.$t("productCreatedSuccessfully"));
         })
         .catch(() => {
           this.isLoading = false;
-          this.$toast.error("Something went wrong!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
   },

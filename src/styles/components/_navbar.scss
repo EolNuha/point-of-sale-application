@@ -8,3 +8,11 @@ nav {
 #dropdownUserAvatarMenu {
   inset: 0 auto auto -10px !important;
 }
+#dropdownLangMenu {
+  inset: 0 auto auto 0 !important;
+}
+@media (min-width: 768px) {
+  #dropdownLangMenu {
+    inset: -50px auto auto -150px !important;
+  }
+}

@@ -103,7 +103,7 @@ export default {
           })
           .catch(() => {
             this.$emit("isTableLoading", false);
-            this.$toast.error("Something went wrong, please try again later!");
+            this.$toast.error(this.$t("somethingWrong"));
           });
       },
     },
@@ -129,7 +129,7 @@ export default {
           })
           .catch(() => {
             this.$emit("isTableLoading", false);
-            this.$toast.error("Something went wrong, please try again later!");
+            this.$toast.error(this.$t("somethingWrong"));
           });
       },
     },

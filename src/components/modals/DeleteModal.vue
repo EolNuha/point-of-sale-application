@@ -9,7 +9,7 @@
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="flex items-center p-2.5">
           <p class="text-gray-700 dark:text-gray-200 text-xl">
-            Delete {{ title }}
+            {{ $t("delete") }} {{ title }}
           </p>
           <button
             type="button"
@@ -24,7 +24,7 @@
         <div class="p-6 text-center">
           <IconC :iconName="icon.name" :iconClass="icon.class" />
           <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-            Are you sure you want to delete this?
+            {{ $t("areYouSureToDelete") }}
           </h3>
           <button
             @click="$hideModal(deleteRef)"
@@ -32,7 +32,7 @@
             type="button"
             class="gray-outline-btn mr-2 h-10 w-20 inline-flex items-center justify-center"
           >
-            Cancel
+            {{ $t("cancel") }}
           </button>
           <button
             @click="deleteFunc"
@@ -46,7 +46,7 @@
               iconName="SpinnerIcon"
               iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-red-600"
             />
-            <span v-else>Delete</span>
+            <span v-else>{{ $t("delete") }}</span>
           </button>
         </div>
       </div>
@@ -90,17 +90,14 @@ export default {
       this.$store
         .dispatch(this.deleteAction, this.productId)
         .then(() => {
-          this.$toast.success(`${this.title} deleted successfully!`);
+          this.$toast.success(this.$t("deleteSuccess", { title: this.title }));
           this.$emit("reload");
           this.$hideModal(this.deleteRef);
           this.isLoading = false;
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$toast.error(
-            error.response.data ||
-              "Something went wrong, please try again later!"
-          );
+          this.$toast.error(error.response.data || this.$t("somethingWrong"));
         });
     },
   },

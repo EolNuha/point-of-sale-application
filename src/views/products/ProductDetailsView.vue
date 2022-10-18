@@ -6,7 +6,7 @@
         <label
           for="product_name"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Product Name</label
+          >{{ $t("productName") }}</label
         >
         <Field
           name="product_name"
@@ -24,7 +24,7 @@
         <label
           for="product_barcode"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Product barcode</label
+          >{{ $t("barcode") }}</label
         >
         <Field
           name="product_barcode"
@@ -43,7 +43,7 @@
           <label
             for="product_stock"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product stock</label
+            >{{ $t("stock") }}</label
           >
           <Field
             name="product_stock"
@@ -61,7 +61,7 @@
           <label
             for="product_stock"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product Tax</label
+            >{{ $t("tax") }}</label
           >
           <Field
             name="product_tax"
@@ -83,7 +83,7 @@
           <label
             for="product_purchasedprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product purchased price</label
+            >{{ $t("purchasedPrice") }}</label
           >
           <Field
             name="product_purchasedprice"
@@ -102,7 +102,7 @@
           <label
             for="product_sellingprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Product selling price</label
+            >{{ $t("sellingPrice") }}</label
           >
           <Field
             name="product_sellingprice"
@@ -122,7 +122,7 @@
         <label
           for="product_price"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Date Created</label
+          >{{ $t("dateCreated") }}</label
         >
         <input
           name="product_price"
@@ -139,7 +139,7 @@
         <label
           for="product_price"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Last Modified</label
+          >{{ $t("dateModified") }}</label
         >
         <input
           name="product_price"
@@ -164,7 +164,7 @@
           />
           <span class="sr-only">Loading...</span>
         </div>
-        <div v-else>Update</div>
+        <div v-else>{{ $t("update") }}</div>
       </button>
     </Form>
   </div>
@@ -200,7 +200,7 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     updateProduct() {
       this.isUpdateLoading = true;
@@ -208,11 +208,11 @@ export default {
         .dispatch("productModule/updateProduct", this.product)
         .then(() => {
           this.isUpdateLoading = false;
-          this.$toast.success("Product updated successfully!");
+          this.$toast.success(this.$t("productUpdatedSuccessfully"));
         })
         .catch(() => {
           this.isUpdateLoading = false;
-          this.$toast.error("Something went wrong!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
   },

@@ -3,7 +3,7 @@
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center search-input-width">
-        <label for="simple-search" class="sr-only">Search</label>
+        <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
         <div class="relative w-full">
           <div
             class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
@@ -22,7 +22,7 @@
             "
             type="text"
             class="default-input w-full pl-10"
-            placeholder="Search"
+            :placeholder="$t('search')"
           />
         </div>
       </div>
@@ -35,7 +35,7 @@
         class="blue-gradient-btn flex items-center text-center"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-        Create Product
+        {{ $t("createProduct") }}
       </button>
     </div>
 
@@ -59,12 +59,14 @@
           <tr>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">Product name</th>
-            <th scope="col" class="py-3 px-6">Barcode</th>
-            <th scope="col" class="py-3 px-6">Purchased Price</th>
-            <th scope="col" class="py-3 px-6">Selling Price</th>
-            <th scope="col" class="py-3 px-6">Stock</th>
-            <th scope="col" class="py-3 px-6">Tax</th>
+            <th scope="col" class="py-3 px-6">
+              {{ $t("productName") }}
+            </th>
+            <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("purchasedPrice") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("stock") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("tax") }}</th>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
@@ -169,7 +171,7 @@
       :productId="selectedProductToDelete.id"
       deleteAction="productModule/deleteProduct"
       getAction="productModule/getProducts"
-      title="Product"
+      :title="$t('product')"
       deleteRef="delete-modal"
       @reload="reload"
     >
@@ -241,7 +243,7 @@ export default {
           this.isTableLoading = false;
         })
         .catch(() => {
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
     updateSelectedProduct(product) {
@@ -269,7 +271,7 @@ export default {
         })
         .catch(() => {
           this.isTableLoading = false;
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
     stockStatus(v) {
@@ -277,13 +279,13 @@ export default {
       let text;
       if (v >= 50) {
         color = "text-green-500";
-        text = "In stock";
+        text = this.$t("inStock");
       } else if (v < 50 && v > 0) {
         color = "text-yellow-400";
-        text = "Low stock";
+        text = this.$t("lowStock");
       } else if (v <= 0) {
         color = "text-red-700";
-        text = "Out of stock";
+        text = this.$t("outStock");
       }
       return { color, text };
     },

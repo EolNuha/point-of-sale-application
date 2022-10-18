@@ -2,7 +2,7 @@
   <div class="bg-gray-200 dark:bg-gray-800 min-h-screen p-4 relative">
     <div class="flex justify-between gap-2">
       <div class="flex items-center search-input-width relative">
-        <label for="simple-search" class="sr-only">Search</label>
+        <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
         <div class="relative w-full">
           <div
             class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
@@ -18,7 +18,7 @@
             v-model="searchQuery"
             type="text"
             class="default-input w-full pl-10"
-            placeholder="Search"
+            :placeholder="$t('search')"
           />
         </div>
         <div class="search-results" v-if="searchQuery">
@@ -350,7 +350,7 @@ export default {
         })
         .catch(() => {
           this.isFinishSaleLoading = false;
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
   },

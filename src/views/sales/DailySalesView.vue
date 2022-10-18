@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center gap-2">
         <div class="flex items-center search-input-width">
-          <label for="simple-search" class="sr-only">Search</label>
+          <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
           <div class="relative w-full">
             <div
               class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
@@ -23,7 +23,7 @@
               "
               type="text"
               class="default-input w-full pl-10"
-              placeholder="Search"
+              :placeholder="$t('search')"
             />
           </div>
         </div>
@@ -190,7 +190,7 @@ export default {
         })
         .catch(() => {
           this.isTableLoading = false;
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
     getSales(page) {
@@ -207,7 +207,7 @@ export default {
         })
         .catch(() => {
           this.isTableLoading = false;
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
     async downloadExcel() {
@@ -229,7 +229,7 @@ export default {
         })
         .catch(() => {
           this.isExcelLoading = false;
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
   },

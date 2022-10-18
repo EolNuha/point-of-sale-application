@@ -54,7 +54,7 @@
             class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
             <IconC iconName="HomeIcon" iconClass="w-4 h-4 mr-2" />
-            Dashboard
+            {{ $t("dashboard") }}
           </router-link>
         </li>
         <li v-for="item in $route.meta.breadcrumb" :key="item">
@@ -80,6 +80,7 @@
           $toggleDropdown({
             targetEl: `dropdownUserAvatarMenu`,
             triggerEl: `dropdownUserAvatarButton`,
+            placement: `top`,
           })
         "
         class="inline-flex items-center mx-3 text-sm font-medium text-gray-900 dark:text-white gap-1 mr-2 capitalize"
@@ -120,18 +121,6 @@
             >
           </li>
           <li>
-            <router-link
-              :to="{ name: 'dashboard' }"
-              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
-            >
-              <IconC
-                iconName="Cog6ToothIcon"
-                iconClass="w-5 h-5 hover:animate-spin"
-              />
-              Settings</router-link
-            >
-          </li>
-          <li>
             <button
               @click="toggleTheme"
               id="theme-toggle"
@@ -148,6 +137,81 @@
               </template>
             </button>
           </li>
+          <li>
+            <div class="flex items-center md:order-2">
+              <button
+                type="button"
+                id="dropdownLangButton"
+                @click="
+                  $toggleDropdown({
+                    targetEl: `dropdownLangMenu`,
+                    triggerEl: `dropdownLangButton`,
+                    placement: 'left',
+                  })
+                "
+                data-dropdown-placement="left"
+                class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <template v-if="$i18n.locale === 'en'">
+                  <IconC
+                    iconType="custom"
+                    iconName="EnglishFlagIcon"
+                    iconClass="w-5 h-5 rounded-full"
+                  />
+                  English
+                </template>
+                <template v-if="$i18n.locale === 'sq'">
+                  <IconC
+                    iconType="custom"
+                    iconName="AlbanianFlagIcon"
+                    iconClass="w-5 h-5 rounded-full"
+                  />
+                  Shqip
+                </template>
+              </button>
+              <!-- Dropdown -->
+              <div
+                class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-md dark:shadow-gray-600 dark:bg-gray-900 border dark:border-gray-600 dark:divide-gray-600"
+                id="dropdownLangMenu"
+                style="inset: 0px auto auto -50px !important"
+              >
+                <ul class="py-1 divide-y" role="none">
+                  <li v-if="$i18n.locale !== 'en'">
+                    <button
+                      @click="() => $parent.setLang('en')"
+                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem"
+                    >
+                      <div class="inline-flex items-center">
+                        <IconC
+                          iconType="custom"
+                          iconName="EnglishFlagIcon"
+                          iconClass="mr-2 w-5 h-5 rounded-full"
+                        />
+                        English
+                      </div>
+                    </button>
+                  </li>
+                  <li v-if="$i18n.locale !== 'sq'">
+                    <button
+                      @click="() => $parent.setLang('sq')"
+                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem"
+                    >
+                      <div class="inline-flex items-center">
+                        <IconC
+                          iconType="custom"
+                          iconName="AlbanianFlagIcon"
+                          iconClass="mr-2 w-5 h-5 rounded-full"
+                        />
+                        Shqip
+                      </div>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
         </ul>
         <div class="py-1">
           <button
@@ -159,38 +223,6 @@
           </button>
         </div>
       </div>
-      <!-- <button
-        data-collapse-toggle="navbar-default"
-        type="button"
-        class="inline-flex items-center p-1 ml-3 text-sm text-gray-500 rounded-xl md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:focus:ring-gray-600"
-        aria-controls="navbar-default"
-        aria-expanded="false"
-      >
-        <span class="sr-only">Open main menu</span>
-        <IconC iconName="Bars3Icon" iconClass="w-6 h-6" />
-      </button> -->
-      <!-- <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-        <ul
-          class="flex flex-col items-center p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
-        >
-          <li></li>
-          <li>
-            <button
-              @click="toggleTheme"
-              id="theme-toggle"
-              type="button"
-              class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm"
-            >
-              <IconC
-                iconName="MoonIcon"
-                iconClass="w-5 h-5"
-                v-if="!isDarkMode"
-              />
-              <IconC iconName="SunIcon" iconClass="w-5 h-5" v-if="isDarkMode" />
-            </button>
-          </li>
-        </ul>
-      </div> -->
     </div>
   </nav>
 </template>

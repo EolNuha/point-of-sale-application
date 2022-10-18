@@ -2,21 +2,23 @@
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
-        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Products</h3>
+        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
+          {{ $t("products") }}
+        </h3>
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'products' }"
-          >Manage Products</router-link
+          >{{ $t("manageProducts") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-product' }"
-          >Create Product</router-link
+          >{{ $t("createProduct") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'product-analytics' }"
-          >Product Analytics</router-link
+          >{{ $t("productAnalytics") }}</router-link
         >
         <IconC
           iconName="TagIcon"
@@ -24,21 +26,23 @@
         />
       </div>
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
-        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Sales</h3>
+        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
+          {{ $t("sales") }}
+        </h3>
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'sales' }"
-          >Manage Sales</router-link
+          >{{ $t("manageSales") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-sale' }"
-          >Create Sale</router-link
+          >{{ $t("createSale") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'sale-analytics' }"
-          >Sale Analytics</router-link
+          >{{ $t("saleAnalytics") }}</router-link
         >
         <IconC
           iconName="ShoppingCartIcon"
@@ -46,21 +50,23 @@
         />
       </div>
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
-        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Purchases</h3>
+        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
+          {{ $t("purchases") }}
+        </h3>
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchases' }"
-          >Manage Purchases</router-link
+          >{{ $t("managePurchases") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-purchase' }"
-          >Create Purchase</router-link
+          >{{ $t("createPurchase") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchase-analytics' }"
-          >Purchase Analytics</router-link
+          >{{ $t("purchaseAnalytics") }}</router-link
         >
         <IconC
           iconName="BuildingStorefrontIcon"
@@ -68,21 +74,23 @@
         />
       </div>
       <div class="bg-white dark:bg-gray-900 p-5 rounded-xl relative">
-        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">Users</h3>
+        <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
+          {{ $t("users") }}
+        </h3>
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'users' }"
-          >Manage Users</router-link
+          >{{ $t("manageUsers") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-user' }"
-          >Create User</router-link
+          >{{ $t("createUser") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'user-analytics' }"
-          >User Analytics</router-link
+          >{{ $t("userAnalytics") }}</router-link
         >
         <IconC
           iconName="UserGroupIcon"
@@ -95,9 +103,11 @@
         class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
       >
         <div>
-          <h3 class="text-gray-900 dark:text-white text-3xl">Sales</h3>
+          <h3 class="text-gray-900 dark:text-white text-3xl">
+            {{ $t("sales") }}
+          </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Total day sales over the last seven days
+            {{ $t("totalDaySales") }}
           </p>
         </div>
         <div class="inline-flex items-center flex-col" v-if="!isFetchingSales">
@@ -137,7 +147,8 @@
       <router-link
         class="flex flex-row items-center justify-end text-blue-500 hover:text-blue-600 uppercase text-sm"
         :to="{ name: 'sale-analytics' }"
-        >Sales report <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
+        >{{ $t("salesReport") }}
+        <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
       /></router-link>
     </div>
     <div class="bg-white dark:bg-gray-900 rounded-xl py-8 relative px-5">
@@ -145,9 +156,11 @@
         class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
       >
         <div>
-          <h3 class="text-gray-900 dark:text-white text-3xl">Purchases</h3>
+          <h3 class="text-gray-900 dark:text-white text-3xl">
+            {{ $t("purchases") }}
+          </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Total day purchases over the last seven days
+            {{ $t("totalDayPurchases") }}
           </p>
         </div>
         <div
@@ -190,7 +203,7 @@
       <router-link
         class="flex flex-row items-center justify-end text-blue-500 hover:text-blue-600 uppercase text-sm"
         :to="{ name: 'purchase-analytics' }"
-        >Purchases report
+        >{{ $t("purchasesReport") }}
         <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
       /></router-link>
     </div>

@@ -16,7 +16,7 @@
               iconName="ChartPieIcon"
               iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
             />
-            <span class="ml-3">Dashboard</span>
+            <span class="ml-3">{{ $t("dashboard") }}</span>
           </router-link>
         </li>
         <li>
@@ -34,7 +34,7 @@
             <span
               class="flex-1 ml-3 text-left whitespace-nowrap"
               sidebar-toggle-item=""
-              >Products</span
+              >{{ $t("products") }}</span
             >
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
@@ -43,14 +43,14 @@
               <router-link
                 :to="{ name: 'new-product' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >New Product</router-link
+                >{{ $t("newProduct") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'products' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Products List</router-link
+                >{{ $t("productList") }}</router-link
               >
             </li>
           </ul>
@@ -70,7 +70,7 @@
             <span
               class="flex-1 ml-3 text-left whitespace-nowrap"
               sidebar-toggle-item=""
-              >Sales</span
+              >{{ $t("sales") }}</span
             >
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
@@ -79,14 +79,14 @@
               <router-link
                 :to="{ name: 'new-sale' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >New Sale</router-link
+                >{{ $t("newSale") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'sales' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Sales List</router-link
+                >{{ $t("salesList") }}</router-link
               >
             </li>
           </ul>
@@ -106,7 +106,7 @@
             <span
               class="flex-1 ml-3 text-left whitespace-nowrap"
               sidebar-toggle-item=""
-              >Purchases</span
+              >{{ $t("purchases") }}</span
             >
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
@@ -115,14 +115,14 @@
               <router-link
                 :to="{ name: 'new-purchase' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >New Purchase</router-link
+                >{{ $t("newPurchase") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'purchases' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Purchases List</router-link
+                >{{ $t("purchasesList") }}</router-link
               >
             </li>
           </ul>
@@ -142,7 +142,7 @@
             <span
               class="flex-1 ml-3 text-left whitespace-nowrap"
               sidebar-toggle-item=""
-              >Users</span
+              >{{ $t("users") }}</span
             >
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
@@ -151,14 +151,14 @@
               <router-link
                 :to="{ name: 'new-user' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >New User</router-link
+                >{{ $t("newUser") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'users' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Users List</router-link
+                >{{ $t("usersList") }}</router-link
               >
             </li>
           </ul>
@@ -178,7 +178,7 @@
             <span
               class="flex-1 ml-3 text-left whitespace-nowrap"
               sidebar-toggle-item=""
-              >Analytics</span
+              >{{ $t("analytics") }}</span
             >
             <IconC iconName="ChevronDownIcon" iconClass="w-4 h-4" />
           </button>
@@ -187,28 +187,28 @@
               <router-link
                 :to="{ name: 'product-analytics' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Products</router-link
+                >{{ $t("products") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'sale-analytics' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Sales</router-link
+                >{{ $t("sales") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'purchase-analytics' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Purchases</router-link
+                >{{ $t("purchases") }}</router-link
               >
             </li>
             <li>
               <router-link
                 :to="{ name: 'user-analytics' }"
                 class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                >Users</router-link
+                >{{ $t("users") }}</router-link
               >
             </li>
           </ul>

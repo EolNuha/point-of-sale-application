@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       userTheme: "light",
+      userLang: "en",
     };
   },
   created() {
@@ -36,6 +37,8 @@ export default {
   mounted() {
     const initUserTheme = this.getTheme() || this.getMediaPreference();
     this.setTheme(initUserTheme);
+    const initUserLang = this.getLang();
+    this.setLang(initUserLang);
   },
   methods: {
     setTheme(theme) {
@@ -63,6 +66,14 @@ export default {
     },
     getTheme() {
       return localStorage.getItem("theme-preference");
+    },
+    getLang() {
+      return localStorage.getItem("lang");
+    },
+    setLang(lang) {
+      localStorage.setItem("lang", lang);
+      this.$i18n.locale = lang;
+      this.userLang = lang;
     },
   },
 };

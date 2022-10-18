@@ -398,7 +398,7 @@ export default {
         })
         .catch(() => {
           this.isLoading = false;
-          this.$toast.error("Something went wrong, please try again later!");
+          this.$toast.error(this.$t("somethingWrong"));
         });
     },
   },

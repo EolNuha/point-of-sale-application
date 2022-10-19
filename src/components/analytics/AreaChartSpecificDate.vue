@@ -92,6 +92,13 @@ export default {
         this.getData();
       },
     },
+    "$i18n.locale": {
+      async handler() {
+        this.isFetching = true;
+        await setTimeout(() => {}, 100);
+        this.isFetching = false;
+      },
+    },
   },
   created() {
     this.startDate = this.formatDate(new Date());

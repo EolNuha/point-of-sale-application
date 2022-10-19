@@ -112,31 +112,27 @@
         </div>
         <div class="inline-flex items-center flex-col" v-if="!isFetchingSales">
           <h3 class="text-3xl text-gray-900 dark:text-white">
-            {{ sales.info.currTotal }}€
+            {{ $store.state.analyticsModule.sales.info.currTotal }}€
           </h3>
           <p
             class="inline-flex items-center text-green-500"
-            v-if="sales.info.percentageDiff > 0"
+            v-if="$store.state.analyticsModule.sales.info.percentageDiff > 0"
           >
-            +{{ sales.info.percentageDiff }}%<IconC
-              iconName="ArrowLongUpIcon"
-              iconClass="w-5 h-5"
-            />
+            +{{ $store.state.analyticsModule.sales.info.percentageDiff }}%
+            <IconC iconName="ArrowLongUpIcon" iconClass="w-5 h-5" />
           </p>
           <p
             class="inline-flex items-center text-gray-500"
-            v-if="sales.info.percentageDiff === 0"
+            v-if="$store.state.analyticsModule.sales.info.percentageDiff === 0"
           >
-            {{ sales.info.percentageDiff }}%<IconC
-              iconName="ArrowLongUpIcon"
-              iconClass="w-5 h-5"
-            />
+            {{ $store.state.analyticsModule.sales.info.percentageDiff }}%
           </p>
           <p
             class="inline-flex items-center text-red-700"
-            v-if="sales.info.percentageDiff < 0"
+            v-if="$store.state.analyticsModule.sales.info.percentageDiff < 0"
           >
-            {{ chartData.info.percentageDiff }}%
+            {{ $store.state.analyticsModule.sales.info.percentageDiff }}%
+            <IconC iconName="ArrowLongDownIcon" iconClass="w-5 h-5" />
           </p>
         </div>
       </div>
@@ -168,31 +164,34 @@
           v-if="!isFetchingPurchases"
         >
           <h3 class="text-3xl text-gray-900 dark:text-white">
-            {{ purchases.info.currTotal }}€
+            {{ $store.state.analyticsModule.purchases.info.currTotal }}€
           </h3>
           <p
             class="inline-flex items-center text-green-500"
-            v-if="purchases.info.percentageDiff > 0"
+            v-if="
+              $store.state.analyticsModule.purchases.info.percentageDiff > 0
+            "
           >
-            +{{ purchases.info.percentageDiff }}%<IconC
-              iconName="ArrowLongUpIcon"
-              iconClass="w-5 h-5"
-            />
+            +{{
+              $store.state.analyticsModule.purchases.info.percentageDiff
+            }}%<IconC iconName="ArrowLongUpIcon" iconClass="w-5 h-5" />
           </p>
           <p
             class="inline-flex items-center text-gray-500"
-            v-if="purchases.info.percentageDiff === 0"
+            v-if="
+              $store.state.analyticsModule.purchases.info.percentageDiff === 0
+            "
           >
-            {{ purchases.info.percentageDiff }}%<IconC
-              iconName="ArrowLongUpIcon"
-              iconClass="w-5 h-5"
-            />
+            {{ $store.state.analyticsModule.purchases.info.percentageDiff }}%
           </p>
           <p
             class="inline-flex items-center text-red-700"
-            v-if="purchases.info.percentageDiff < 0"
+            v-if="
+              $store.state.analyticsModule.purchases.info.percentageDiff < 0
+            "
           >
-            {{ purchases.info.percentageDiff }}%
+            {{ $store.state.analyticsModule.purchases.info.percentageDiff }}%
+            <IconC iconName="ArrowLongDownIcon" iconClass="w-5 h-5" />
           </p>
         </div>
       </div>
@@ -219,6 +218,17 @@ export default {
       isFetchingPurchases: true,
     };
   },
+  watch: {
+    "$i18n.locale": {
+      async handler() {
+        this.isFetchingSales = true;
+        this.isFetchingPurchases = true;
+        await setTimeout(() => {}, 100);
+        this.isFetchingSales = false;
+        this.isFetchingPurchases = false;
+      },
+    },
+  },
   async created() {
     const date = new Date();
     date.setDate(date.getDate() - 6);
@@ -236,14 +246,15 @@ export default {
       String(new Date().getDate()).padStart(2, "0");
 
     const data = { startDate: startDate, endDate: endDate };
-    await this.$store.dispatch("analyticsModule/getSales", data).then(() => {
+    this.$store.dispatch("analyticsModule/getSales", data).then(() => {
       this.isFetchingSales = false;
     });
-    await this.$store
-      .dispatch("analyticsModule/getPurchases", data)
-      .then(() => {
-        this.isFetchingPurchases = false;
-      });
+    this.$store.dispatch("analyticsModule/getPurchases", data).then(() => {
+      this.isFetchingPurchases = false;
+    });
+  },
+  mounted() {
+    console.log(this.sales);
   },
   computed: {
     sales() {

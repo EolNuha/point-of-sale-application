@@ -9,7 +9,7 @@
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="flex items-center p-2.5">
           <p class="text-gray-700 dark:text-gray-200 text-xl">
-            Remove {{ title }}
+            {{ $t("remove") }} {{ title }}
           </p>
           <button
             type="button"
@@ -24,7 +24,7 @@
         <div class="p-6 text-center">
           <IconC :iconName="icon.name" :iconClass="icon.class" />
           <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-            Are you sure you want to remove this?
+            {{ $t("areYouSureToRemove") }}
           </h3>
           <div class="flex items-center justify-center gap-2">
             <button
@@ -33,7 +33,7 @@
               type="button"
               class="gray-outline-btn h-10 w-20 inline-flex items-center justify-center"
             >
-              Cancel
+              {{ $t("cancel") }}
             </button>
             <button
               @click="$emit('remove', productId)"
@@ -47,7 +47,7 @@
                 iconName="SpinnerIcon"
                 iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-red-600"
               />
-              <span v-else>Remove</span>
+              <span v-else>{{ $t("remove") }}</span>
             </button>
           </div>
         </div>

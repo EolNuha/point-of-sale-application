@@ -65,7 +65,7 @@
       </div>
     </div>
     <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold my-3">
-      Date: {{ $route.query.saleDate.substring(0, 10) }}
+      {{ $t("date") }}: {{ saleDate.substring(0, 10) }}
     </h2>
     <div
       class="overflow-x-auto overflow-y-hidden relative rounded-xl mb-5 scrollbar-style min-h-65"
@@ -88,8 +88,8 @@
             <th scope="col" class="py-3 px-6">ID</th>
             <th scope="col" class="py-3 px-6">8%</th>
             <th scope="col" class="py-3 px-6">18%</th>
-            <th scope="col" class="py-3 px-6">Subtotal Amount</th>
-            <th scope="col" class="py-3 px-6">Total Amount</th>
+            <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>
@@ -213,7 +213,7 @@ export default {
     async downloadExcel() {
       this.isExcelLoading = true;
       const data = {
-        fileName: this.saleDate.replace(".", "-"),
+        fileName: this.saleDate.replaceAll(".", "-") + `-${this.$t("sales")}`,
         dailySales: true,
         dailyDate: this.saleDate,
         page: 1,
@@ -223,9 +223,7 @@ export default {
         .dispatch("saleModule/downloadExcelFile", data)
         .then(() => {
           this.isExcelLoading = false;
-          this.$toast.success(
-            "Excel file downloaded successfully! You can find the file in the Downloads folder."
-          );
+          this.$toast.success(this.$t("excelFileDownloaded"));
         })
         .catch(() => {
           this.isExcelLoading = false;

@@ -196,7 +196,7 @@ def downloadSalesExcel():
     api_response = requests.get(URL)
     sales = list(api_response.json()["data"])
 
-    FILENAME = file_name.upper() + "-SALES.xlsx"
+    FILENAME = file_name.upper() + ".xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  

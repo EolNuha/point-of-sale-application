@@ -171,7 +171,7 @@ def downloadPurchasesExcel():
     api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&desc=')
     purchases = api_response.json()["data"]
 
-    FILENAME = file_name.upper() + "-PURCHASES.xlsx"
+    FILENAME = file_name.upper() + ".xlsx"
     downloads_path = str(Path.home() / "Downloads" / FILENAME)
     workbook = xlsxwriter.Workbook(downloads_path)
  

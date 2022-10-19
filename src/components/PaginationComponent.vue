@@ -1,17 +1,17 @@
 <template>
   <div class="flex justify-between items-center flex-wrap gap-4">
     <div class="text-gray-700 dark:text-gray-400">
-      Viewing page
+      {{ $t("viewingPage") }}
       <span
         class="rounded-lg font-semibold text-gray-900 dark:text-white p-1"
         >{{ currentPage }}</span
       >
-      with
+      {{ $t("with") }}
       <span
         class="rounded-lg font-semibold text-gray-900 dark:text-gray-300 p-1"
         >{{ pagination.items }}</span
       >
-      items of total
+      {{ $t("itemsTotal") }}
       <span
         class="rounded-lg font-semibold text-gray-900 dark:text-gray-300 p-1"
         >{{ pagination.total }}</span

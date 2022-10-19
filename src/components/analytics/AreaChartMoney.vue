@@ -46,16 +46,16 @@
             class="inline-flex items-center text-gray-500"
             v-if="chartData.info.percentageDiff === 0"
           >
-            {{ chartData.info.percentageDiff }}%<IconC
-              iconName="ArrowLongUpIcon"
-              iconClass="w-5 h-5"
-            />
+            {{ chartData.info.percentageDiff }}%
           </p>
           <p
             class="inline-flex items-center text-red-700"
             v-if="chartData.info.percentageDiff < 0"
           >
-            {{ chartData.info.percentageDiff }}%
+            {{ chartData.info.percentageDiff }}%<IconC
+              iconName="ArrowLongDownIcon"
+              iconClass="w-5 h-5"
+            />
           </p>
         </div>
       </div>
@@ -115,6 +115,13 @@ export default {
     id: {
       async handler() {
         if (this.startDate) this.getData();
+      },
+    },
+    "$i18n.locale": {
+      async handler() {
+        this.isFetching = true;
+        await setTimeout(() => {}, 100);
+        this.isFetching = false;
       },
     },
   },

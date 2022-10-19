@@ -46,8 +46,8 @@ def getSales():
     curr_total = sum(curr_comp_series)
     prev_total = sum(prev_comp_series)
 
-    sale_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
-    sale_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
+    sale_analytics["series"].append({"name": "revenue", "data": curr_comp_series})
+    sale_analytics["series"].append({"name": "revenuePreviousPeriod", "data": prev_comp_series})
     
     percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     sale_analytics["info"].update({
@@ -128,8 +128,8 @@ def getPurchases():
     curr_total = sum(curr_comp_series)
     prev_total = sum(prev_comp_series)
 
-    purchases_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
-    purchases_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
+    purchases_analytics["series"].append({"name": "purchase", "data": curr_comp_series})
+    purchases_analytics["series"].append({"name": "purchasePreviousPeriod", "data": prev_comp_series})
     
     percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     purchases_analytics["info"].update({
@@ -245,8 +245,8 @@ def getProductStats(id):
     curr_total = sum(curr_comp_series)
     prev_total = sum(prev_comp_series)
 
-    products_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
-    products_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
+    products_analytics["series"].append({"name": "revenue", "data": curr_comp_series})
+    products_analytics["series"].append({"name": "revenuePreviousPeriod", "data": prev_comp_series})
     
     percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     products_analytics["info"].update({
@@ -335,8 +335,8 @@ def getUserStats(id):
     curr_total = sum(curr_comp_series)
     prev_total = sum(prev_comp_series)
 
-    user_analytics["series"].append({"name": "Revenue", "data": curr_comp_series})
-    user_analytics["series"].append({"name": "Revenue (previous period)", "data": prev_comp_series})
+    user_analytics["series"].append({"name": "revenue", "data": curr_comp_series})
+    user_analytics["series"].append({"name": "revenuePreviousPeriod", "data": prev_comp_series})
     
     percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
     user_analytics["info"].update({

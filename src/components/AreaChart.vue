@@ -55,16 +55,18 @@ export default {
         x: {
           show: true,
           format: "dd MMM",
-          formatter: undefined,
         },
         y: {
           formatter: function (value) {
             return value + "€";
           },
           title: {
-            formatter: (seriesName) => seriesName + ":",
+            formatter: (seriesName) => this.$t(seriesName) + ":",
           },
         },
+      },
+      legend: {
+        formatter: (value) => this.$t(value),
       },
     };
     this.series = this.chartData.series;

@@ -36,7 +36,7 @@
           class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-          New Sale
+          {{ $t("newSale") }}
         </button>
         <button
           @click="downloadExcel()"
@@ -90,11 +90,11 @@
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="py-3 px-6">Date</th>
+            <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
             <th scope="col" class="py-3 px-6">8%</th>
             <th scope="col" class="py-3 px-6">18%</th>
-            <th scope="col" class="py-3 px-6">Subtotal Amount</th>
-            <th scope="col" class="py-3 px-6">Total Amount</th>
+            <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>
@@ -236,9 +236,9 @@ export default {
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
-        fileName = `${
+        fileName = `${this.$t(
           this.$getMonths[idx + 1].value
-        }-${this.startDate.substring(0, 4)}`;
+        )}-${this.startDate.substring(0, 4)}-${this.$t("sales")}`;
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
@@ -253,9 +253,7 @@ export default {
         .dispatch("saleModule/downloadExcelFile", data)
         .then(() => {
           this.isExcelLoading = false;
-          this.$toast.success(
-            "Excel file downloaded successfully! You can find the file in the Downloads folder."
-          );
+          this.$toast.success(this.$t("excelFileDownloaded"));
         })
         .catch(() => {
           this.isExcelLoading = false;

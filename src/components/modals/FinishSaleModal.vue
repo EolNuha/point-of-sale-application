@@ -18,7 +18,7 @@
         </button>
         <div class="py-6 px-6 lg:px-8">
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-            Finish Sale
+            {{ $t("finishSale") }}
           </h3>
           <Form
             v-slot="{ errors }"
@@ -29,7 +29,8 @@
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Sale total</label
+              >
+                {{ $t("saleTotal") }}</label
               >
               <input
                 :value="total"
@@ -46,7 +47,8 @@
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Customer amount</label
+              >
+                {{ $t("customerAmount") }}</label
               >
               <Field
                 :rules="isRequired"
@@ -58,7 +60,7 @@
                 ref="customer_amount"
                 step="0.01"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Customer amount"
+                :placeholder="$t('customerAmount')"
                 required
                 :disabled="isLoading"
               />
@@ -68,7 +70,8 @@
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Change Amount</label
+              >
+                {{ $t("changeAmount") }}</label
               >
               <Field
                 :rules="isChangeAmountValid"
@@ -77,7 +80,7 @@
                 name="change_amount"
                 id="change_amount"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                placeholder="Change amount"
+                :placeholder="$t('changeAmount')"
                 disabled
               />
               <span class="text-red-700">{{ errors.change_amount }}</span>
@@ -95,7 +98,7 @@
                 />
                 <span class="sr-only">Loading...</span>
               </div>
-              <template v-else>Finish Sale</template>
+              <template v-else>{{ $t("finishSale") }}</template>
             </button>
           </Form>
         </div>
@@ -136,23 +139,16 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     isChangeAmountValid() {
       const value = this.customerAmount - this.total;
       if (value >= 0) {
         return true;
       } else {
-        return "The change amount can not be less than 0";
+        return this.$t("changeAmountLessThanZero");
       }
     },
-    // $hideModal() {
-    //   const el = document.getElementById(this.modalRef);
-    //   // eslint-disable-next-line no-undef
-    //   const mod = new Modal(el);
-    //   mod.hide();
-    //   document.querySelector("[modal-backdrop]").remove();
-    // },
   },
 };
 </script>

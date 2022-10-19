@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+    <div class="flex items-center gap-2 flex-wrap md:flex-nowrap">
       <v-select
-        class="w-full min-w-[150px] md:w-[200px] default-input"
+        class="w-full min-w-[150px] sm:w-[200px] default-input"
         v-model="currentDate"
         :value="ranges"
         :options="ranges"
@@ -12,7 +12,7 @@
       ></v-select>
 
       <div
-        class="flex items-center flex-wrap sm:flex-nowrap gap-2 w-full"
+        class="flex items-center flex-wrap md:flex-nowrap gap-2 w-full"
         v-if="currentDate === null"
       >
         <input
@@ -55,12 +55,12 @@ export default {
     return {
       ranges: [
         { id: null, value: "Custom" },
-        { id: 0, value: "Today" },
-        { id: 7, value: "Last 7 days" },
-        { id: 30, value: "Last 30 days" },
-        { id: 60, value: "Last 60 days" },
-        { id: 90, value: "Last 90 days" },
-        { id: 365, value: "Last 12 months" },
+        { id: 0, value: this.$t("today") },
+        { id: 7, value: this.$t("last7days") },
+        { id: 30, value: this.$t("last30days") },
+        { id: 60, value: this.$t("last60days") },
+        { id: 90, value: this.$t("last90days") },
+        { id: 365, value: this.$t("last12months") },
       ],
       currentDate: "",
       startDate: "",

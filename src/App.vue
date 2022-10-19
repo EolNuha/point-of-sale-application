@@ -38,7 +38,7 @@ export default {
     const initUserTheme = this.getTheme() || this.getMediaPreference();
     this.setTheme(initUserTheme);
     const initUserLang = this.getLang();
-    this.setLang(initUserLang);
+    this.setLang(initUserLang || "en");
   },
   methods: {
     setTheme(theme) {

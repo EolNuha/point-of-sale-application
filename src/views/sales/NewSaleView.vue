@@ -54,7 +54,7 @@
       <router-link :to="{ name: 'new-sale' }" target="_blank">
         <button class="blue-gradient-btn flex items-center gap-2">
           <IconC iconName="ArrowTopRightOnSquareIcon" iconClass="w-5 h-5" />
-          <span class="hidden sm:inline">New Sale Page</span>
+          <span class="hidden sm:inline">{{ $t("newSale") }}</span>
         </button>
       </router-link>
     </div>
@@ -70,10 +70,10 @@
           <tr>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">Product name</th>
-            <th scope="col" class="py-3 px-6">Barcode</th>
-            <th scope="col" class="py-3 px-6">Quantity</th>
-            <th scope="col" class="py-3 px-6">Selling Price</th>
+            <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>
@@ -156,12 +156,12 @@
           iconName="CheckIcon"
           iconClass="w-6 h-6"
         />
-        Finish (F8)
+        {{ $t("finish") }} (F8)
       </button>
       <div
         class="flex flex-row items-center text-3xl md:text-7xl text-gray-700 dark:text-gray-300"
       >
-        Total:
+        {{ $t("total") }}:
         <div
           class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg"
         >
@@ -248,8 +248,9 @@ export default {
   async beforeRouteLeave(to, from, next) {
     if (!(this.products.length === 0)) {
       const options = this.$swalConfirmObject();
-      options.html =
-        "<p class='text-gray-500 dark:text-gray-300'>The sale is not finished, are you sure you want to continue?</p>";
+      options.html = `<p class='text-gray-500 dark:text-gray-300'>${this.$t(
+        "saleNotFinished"
+      )}</p>`;
       options.icon = "info";
       options.position = "top";
       await this.$swal(options).then((result) => {
@@ -346,7 +347,7 @@ export default {
           this.selectedProduct = {};
           this.total = (0).toFixed(2);
           this.$hideModal(this.finishSaleModalRef);
-          this.$toast.success("Sale was successful!");
+          this.$toast.success(this.$t("saleSuccess"));
         })
         .catch(() => {
           this.isFinishSaleLoading = false;

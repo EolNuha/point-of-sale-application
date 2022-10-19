@@ -238,9 +238,9 @@ export default {
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
-        fileName = `${
+        fileName = `${this.$t(
           this.$getMonths[idx + 1].value
-        }-${this.startDate.substring(0, 4)}`;
+        )}-${this.startDate.substring(0, 4)}-${this.$t("purchases")}`;
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
@@ -255,9 +255,7 @@ export default {
         .dispatch("purchaseModule/downloadExcelFile", data)
         .then(() => {
           this.isExcelLoading = false;
-          this.$toast.success(
-            "Excel file downloaded successfully! You can find the file in the Downloads folder."
-          );
+          this.$toast.success(this.$t("excelFileDownloaded"));
         })
         .catch(() => {
           this.isExcelLoading = false;

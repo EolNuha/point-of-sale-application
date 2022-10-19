@@ -7,6 +7,7 @@ module.exports = defineConfig({
         win: {
           icon: "./icon.svg",
         },
+        extraResources: [{ from: "./resources/dist/app", to: "./" }],
       },
     },
   },

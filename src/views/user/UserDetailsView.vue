@@ -27,7 +27,7 @@
           <label
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your email</label
+            >{{ $t("email") }}</label
           >
           <Field
             v-model="user.email"
@@ -47,7 +47,7 @@
           <label
             for="firstName"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your First Name</label
+            >{{ $t("firstName") }}</label
           >
           <Field
             v-model="user.firstName"
@@ -67,7 +67,7 @@
           <label
             for="lastName"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your Last Name</label
+            >{{ $t("lastName") }}</label
           >
           <Field
             v-model="user.lastName"
@@ -87,7 +87,7 @@
           <label
             for="username"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your Username</label
+            >{{ $t("username") }}</label
           >
           <Field
             v-model="user.username"
@@ -103,10 +103,29 @@
           />
           <span class="text-red-700">{{ errors.username }}</span>
         </div>
+        <div>
+          <label
+            for="userType"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >{{ $t("userType") }}</label
+          >
+          <v-select
+            class="block w-full default-input !p-1"
+            v-model="user.userType"
+            :clearable="false"
+            :options="['staff', 'admin']"
+            type="text"
+            name="userType"
+            id="userType"
+            placeholder="User Type"
+            :disabled="isDisabled()"
+            required
+          />
+        </div>
         <button
           type="submit"
           class="w-full blue-gradient-btn flex justify-center items-center"
-          :disabled="isLoading"
+          :disabled="isLoading || isDisabled()"
         >
           <div role="status" v-if="isLoading">
             <IconC
@@ -156,7 +175,7 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     update() {
       this.isLoading = true;
@@ -164,7 +183,7 @@ export default {
         .dispatch("userModule/updateUserDetails", this.user)
         .then(() => {
           this.isLoading = false;
-          this.$toast.success("User details updated successfully!");
+          this.$toast.success(this.$t("userUpdateSuccess"));
           this.$store.dispatch("userModule/getCurrentUser");
         })
         .catch(() => {

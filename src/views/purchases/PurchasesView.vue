@@ -36,7 +36,7 @@
           class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-          New Purchase
+          {{ $t("newPurchase") }}
         </button>
         <button
           @click="downloadExcel()"
@@ -90,11 +90,11 @@
           class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="py-3 px-6">Date</th>
+            <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
             <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">Total Amount</th>
-            <th scope="col" class="py-3 px-6">Seller Name</th>
-            <th scope="col" class="py-3 px-6">Seller Invoice Number</th>
+            <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("sellerName") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("invoiceNumber") }}</th>
             <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>

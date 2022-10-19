@@ -31,7 +31,7 @@
           <h1
             class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
           >
-            Sign in to your account
+            {{ $t("signinToAccount") }}
           </h1>
           <Form
             v-slot="{ errors }"
@@ -42,7 +42,7 @@
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Email / Username</label
+                >{{ $t("email") }} / {{ $t("username") }}</label
               >
               <Field
                 v-model="email"
@@ -52,7 +52,7 @@
                 id="email"
                 :class="errors.email ? 'ring-2 ring-red-500' : ''"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Enter email or username"
+                :placeholder="$t('enterEmailOrUsername')"
                 required
               />
               <span class="text-red-700">{{ errors.email }}</span>
@@ -61,7 +61,7 @@
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Password</label
+                >{{ $t("password") }}</label
               >
               <Field
                 v-model="password"
@@ -69,20 +69,20 @@
                 type="password"
                 name="password"
                 id="password"
-                placeholder="Enter password"
+                :placeholder="$t('enterPassword')"
                 :class="errors.password ? 'ring-2 ring-red-500' : ''"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
               <span class="text-red-700">{{ errors.password }}</span>
             </div>
-            <div class="flex justify-end items-center">
+            <!-- <div class="flex justify-end items-center">
               <router-link
                 :to="{ name: 'signup' }"
                 class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >Forgot password?</router-link
               >
-            </div>
+            </div> -->
             <button
               type="submit"
               class="w-full blue-gradient-btn flex justify-center items-center"
@@ -96,16 +96,16 @@
                 />
                 <span class="sr-only">Loading...</span>
               </div>
-              <div v-else>Sign in</div>
+              <div v-else>{{ $t("signin") }}</div>
             </button>
-            <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+            <!-- <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?
               <router-link
                 :to="{ name: 'signup' }"
                 class="font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >Sign up</router-link
               >
-            </p>
+            </p> -->
           </Form>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     signin() {
       this.isLoading = true;
@@ -151,7 +151,7 @@ export default {
           this.$router.push({
             name: "dashboard",
           });
-          this.$toast.success("You have successfully signed in!");
+          this.$toast.success(this.$t("signinSuccess"));
         })
         .catch((err) => {
           this.$toast.error(err.response.data);

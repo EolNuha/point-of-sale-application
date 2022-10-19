@@ -10,7 +10,7 @@
           <h1
             class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
           >
-            Create user account
+            {{ $t("createUserAccount") }}
           </h1>
           <Form
             v-slot="{ errors }"
@@ -21,7 +21,7 @@
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Your email</label
+                >{{ $t("email") }}</label
               >
               <Field
                 v-model="email"
@@ -40,7 +40,7 @@
               <label
                 for="firstName"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Your First Name</label
+                >{{ $t("firstName") }}</label
               >
               <Field
                 v-model="firstName"
@@ -59,7 +59,7 @@
               <label
                 for="lastName"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Your Last Name</label
+                >{{ $t("lastName") }}</label
               >
               <Field
                 v-model="lastName"
@@ -76,9 +76,9 @@
             </div>
             <div>
               <label
-                for="lastName"
+                for="userType"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >User Type</label
+                >{{ $t("userType") }}</label
               >
               <v-select
                 class="block w-full default-input !p-1"
@@ -96,7 +96,7 @@
               <label
                 for="username"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Your Username</label
+                >{{ $t("username") }}</label
               >
               <Field
                 v-model="username"
@@ -115,7 +115,7 @@
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Password</label
+                >{{ $t("password") }}</label
               >
               <Field
                 v-model="password"
@@ -143,7 +143,7 @@
                 />
                 <span class="sr-only">Loading...</span>
               </div>
-              <div v-else>Create User</div>
+              <div v-else>{{ $t("createUser") }}</div>
             </button>
           </Form>
         </div>
@@ -171,7 +171,7 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     create() {
       this.isLoading = true;
@@ -187,7 +187,7 @@ export default {
         .dispatch("userModule/createUser", data)
         .then(() => {
           this.$router.push({ name: "users" });
-          this.$toast.success("You have successfully created an account!");
+          this.$toast.success(this.$t("successfullyCreatedAccount"));
         })
         .catch(() => {
           this.isLoading = false;

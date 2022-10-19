@@ -28,10 +28,10 @@
       <OverlayC v-if="isLoading" />
       <div class="flex items-center flex-row justify-between">
         <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
-          Purchase #{{ $route.params.purchaseId }}
+          {{ $t("purchase") }} #{{ $route.params.purchaseId }}
         </h2>
         <p class="text-gray-700 dark:text-gray-300">
-          Date: {{ purchase.dateCreated.substring(0, 10) }}
+          {{ $t("date") }}: {{ purchase.dateCreated.substring(0, 10) }}
         </p>
       </div>
       <div class="flex flex-row pt-5">
@@ -39,23 +39,23 @@
           <table class="text-gray-700 dark:text-gray-400 text-sm w-full">
             <tbody>
               <tr>
-                <td class="py-2">Seller name</td>
+                <td class="py-2">{{ $t("sellerName") }}</td>
                 <td class="text-right py-2">{{ purchase.sellerName }}</td>
               </tr>
               <tr>
-                <td class="py-2">Invoice number</td>
+                <td class="py-2">{{ $t("invoiceNumber") }}</td>
                 <td class="text-right py-2">
                   {{ purchase.sellerInvoiceNumber }}
                 </td>
               </tr>
               <tr>
-                <td class="py-2">Fiscal number</td>
+                <td class="py-2">{{ $t("fiscalNumber") }}</td>
                 <td class="text-right py-2">
                   {{ purchase.sellerFiscalNumber }}
                 </td>
               </tr>
               <tr>
-                <td class="py-2">Tax number</td>
+                <td class="py-2">{{ $t("taxNumber") }}</td>
                 <td class="text-right py-2">
                   {{ purchase.sellerTaxNumber }}
                 </td>
@@ -73,13 +73,14 @@
           >
             <tr>
               <th scope="col" class="py-3 px-6">ID</th>
-              <th scope="col" class="py-3 px-6">Name</th>
-              <th scope="col" class="py-3 px-6">Barcode</th>
-              <th scope="col" class="py-3 px-6">Stock</th>
-              <th scope="col" class="py-3 px-6">Purchased Price</th>
-              <th scope="col" class="py-3 px-6">Price w/o Tax</th>
-              <th scope="col" class="py-3 px-6">Tax</th>
-              <th scope="col" class="py-3 px-6">Selling Price</th>
+              <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("stock") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("purchasedPrice") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("priceWithoutTax") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("tax") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("total") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -109,6 +110,7 @@
                 <td class="py-3 px-6 max-w-xs">
                   {{ item.product.sellingPrice }} €
                 </td>
+                <td class="py-3 px-6 max-w-xs">{{ item.totalAmount }} €</td>
               </tr>
             </template>
           </tbody>
@@ -120,21 +122,21 @@
           <table class="text-gray-700 dark:text-gray-300 w-full">
             <tbody>
               <tr>
-                <td class="py-2">SUBTOTAL</td>
+                <td class="py-2">{{ $t("subTotal") }}</td>
                 <td class="text-right py-2">{{ purchase.subTotalAmount }} €</td>
               </tr>
               <tr>
-                <td class="py-2">TAX RATE (8%)</td>
+                <td class="py-2">{{ $t("tax") }} (8%)</td>
                 <td class="text-right py-2">{{ purchase.eightTaxAmount }} €</td>
               </tr>
               <tr>
-                <td class="py-2">TAX RATE (18%)</td>
+                <td class="py-2">{{ $t("tax") }} (18%)</td>
                 <td class="text-right py-2">
                   {{ purchase.eighteenTaxAmount }} €
                 </td>
               </tr>
               <tr class="font-bold text-xl">
-                <td class="py-2">TOTAL</td>
+                <td class="py-2">{{ $t("total") }}</td>
                 <td class="text-right py-2">{{ purchase.totalAmount }} €</td>
               </tr>
             </tbody>

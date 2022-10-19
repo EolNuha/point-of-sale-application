@@ -117,7 +117,7 @@
               class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="UserIcon" iconClass="w-5 h-5" />
-              Profile</router-link
+              {{ $t("profile") }}</router-link
             >
           </li>
           <li>
@@ -129,11 +129,11 @@
             >
               <template v-if="!isDarkMode">
                 <IconC iconName="MoonIcon" iconClass="w-5 h-5" />
-                Dark Mode
+                {{ $t("darkMode") }}
               </template>
               <template v-if="isDarkMode">
                 <IconC iconName="SunIcon" iconClass="w-5 h-5" />
-                Light Mode
+                {{ $t("lightMode") }}
               </template>
             </button>
           </li>
@@ -178,7 +178,15 @@
                 <ul class="py-1 divide-y" role="none">
                   <li v-if="$i18n.locale !== 'en'">
                     <button
-                      @click="() => $parent.setLang('en')"
+                      @click="
+                        () => {
+                          $parent.setLang('en'),
+                            $toggleDropdown({
+                              targetEl: `dropdownLangMenu`,
+                              triggerEl: `dropdownLangButton`,
+                            });
+                        }
+                      "
                       class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
                     >
@@ -194,7 +202,15 @@
                   </li>
                   <li v-if="$i18n.locale !== 'sq'">
                     <button
-                      @click="() => $parent.setLang('sq')"
+                      @click="
+                        () => {
+                          $parent.setLang('sq'),
+                            $toggleDropdown({
+                              targetEl: `dropdownLangMenu`,
+                              triggerEl: `dropdownLangButton`,
+                            });
+                        }
+                      "
                       class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
                     >
@@ -219,7 +235,7 @@
             class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
           >
             <IconC iconName="ArrowRightOnRectangleIcon" iconClass="h-5 w-5" />
-            Sign out
+            {{ $t("signout") }}
           </button>
         </div>
       </div>
@@ -262,7 +278,7 @@ export default {
     },
     logout() {
       logoutUser("signin");
-      this.$toast.success("You have successfully signed out!");
+      this.$toast.success(this.$t("signoutSuccess"));
     },
   },
 };

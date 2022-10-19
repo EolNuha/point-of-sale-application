@@ -36,7 +36,7 @@
         class="blue-gradient-btn flex items-center text-center"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-        Create New User
+        {{ $t("createNewUser") }}
       </button>
     </div>
 
@@ -63,13 +63,13 @@
               class="py-3 px-6"
               v-if="currentUser.userType !== 'staff'"
             ></th>
-            <th scope="col" class="py-3 px-6">Image</th>
+            <th scope="col" class="py-3 px-6">{{ $t("image") }}</th>
             <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">First Name</th>
-            <th scope="col" class="py-3 px-6">Last Name</th>
-            <th scope="col" class="py-3 px-6">Username</th>
-            <th scope="col" class="py-3 px-6">Email</th>
-            <th scope="col" class="py-3 px-6">Type</th>
+            <th scope="col" class="py-3 px-6">{{ $t("firstName") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("lastName") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("username") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("email") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("type") }}</th>
             <th scope="col" class="py-3 px-6"></th>
             <th
               scope="col"

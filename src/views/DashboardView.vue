@@ -253,9 +253,6 @@ export default {
       this.isFetchingPurchases = false;
     });
   },
-  mounted() {
-    console.log(this.sales);
-  },
   computed: {
     sales() {
       return this.$store.state.analyticsModule.sales;

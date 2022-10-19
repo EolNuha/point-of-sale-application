@@ -4,13 +4,13 @@
       <h2
         class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
       >
-        Seller information:
+        {{ $t("sellerInfo") }}:
       </h2>
       <div class="mb-6 flex gap-2">
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Seller Name</label
+            >{{ $t("sellerName") }}</label
           >
           <Field
             required
@@ -22,7 +22,7 @@
                 getSellerDetails();
               }, 300)
             "
-            placeholder="Seller Name"
+            :placeholder="$t('sellerName')"
             class="default-input w-full"
             :class="errors.sellerName ? 'ring-2 ring-red-500' : ''"
             name="sellerName"
@@ -33,7 +33,7 @@
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Seller Fiscal Number</label
+            >{{ $t("fiscalNumber") }}:</label
           >
           <Field
             required
@@ -41,7 +41,7 @@
             type="number"
             step="1"
             v-model="seller.fiscalNumber"
-            placeholder="Fiscal Number"
+            :placeholder="$t('fiscalNumber')"
             class="default-input w-full"
             :class="errors.fiscalNumber ? 'ring-2 ring-red-500' : ''"
             name="fiscalNumber"
@@ -54,14 +54,14 @@
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Invoice Number</label
+            >{{ $t("invoiceNumber") }}</label
           >
           <Field
             required
             :rules="isRequired"
             type="text"
             v-model="seller.invoiceNumber"
-            placeholder="Invoice Number"
+            :placeholder="$t('invoiceNumber')"
             class="default-input w-full"
             :class="errors.invoiceNumber ? 'ring-2 ring-red-500' : ''"
             name="invoiceNumber"
@@ -72,7 +72,7 @@
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Seller Tax Number</label
+            >{{ $t("taxNumber") }}</label
           >
           <Field
             required
@@ -80,7 +80,7 @@
             type="number"
             step="1"
             v-model="seller.taxNumber"
-            placeholder="Tax Number"
+            :placeholder="$t('taxNumber')"
             class="default-input w-full"
             :class="errors.taxNumber ? 'ring-2 ring-red-500' : ''"
             name="taxNumber"
@@ -92,7 +92,7 @@
       <h2
         class="mb-4 mt-7 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
       >
-        Purchased products:
+        {{ $t("purchasedProducts") }}:
       </h2>
       <div
         v-for="(product, index) in products"
@@ -102,7 +102,7 @@
         <div class="basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Barcode</label
+            >{{ $t("barcode") }}</label
           >
           <Field
             required
@@ -115,7 +115,7 @@
             type="number"
             step="1"
             v-model="product.barcode"
-            placeholder="Product Barcode"
+            :placeholder="$t('barcode')"
             class="default-input w-full"
             :class="errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''"
             :name="`${index}barcode`"
@@ -126,14 +126,14 @@
         <div class="basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Name</label
+            >{{ $t("productName") }}</label
           >
           <Field
             required
             :rules="isRequired"
             type="text"
             v-model="product.productName"
-            placeholder="Product Name"
+            :placeholder="$t('productName')"
             class="default-input w-full"
             :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
             :name="`${index}name`"
@@ -144,7 +144,7 @@
         <div class="basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Stock</label
+            >{{ $t("stock") }}</label
           >
           <Field
             required
@@ -152,7 +152,7 @@
             type="number"
             step="1"
             v-model="product.stock"
-            placeholder="Product Stock"
+            :placeholder="$t('stock')"
             class="default-input w-full"
             :class="errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''"
             :name="`${index}stock`"
@@ -163,7 +163,7 @@
         <div class="basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Tax</label
+            >{{ $t("tax") }}</label
           >
           <Field
             required
@@ -171,7 +171,7 @@
             type="number"
             step="1"
             v-model="product.tax"
-            placeholder="Product Tax"
+            :placeholder="$t('tax')"
             class="default-input w-full"
             :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
             :name="`${index}tax`"
@@ -186,7 +186,7 @@
         <div class="basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Purchased Price</label
+            >{{ $t("purchasedPrice") }}</label
           >
           <Field
             required
@@ -194,7 +194,7 @@
             type="number"
             step="0.01"
             v-model="product.purchasedPrice"
-            placeholder="Product Purchased Price"
+            :placeholder="$t('purchasedPrice')"
             class="default-input w-full"
             :class="
               errors[`${index}purchasedPrice`] ? 'ring-2 ring-red-500' : ''
@@ -209,7 +209,7 @@
         <div class="basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Selling Price</label
+            >{{ $t("sellingPrice") }}</label
           >
           <div class="flex items-center gap-2">
             <Field
@@ -218,7 +218,7 @@
               type="number"
               step="0.01"
               v-model="product.sellingPrice"
-              placeholder="Product Selling Price"
+              :placeholder="$t('sellingPrice')"
               class="default-input w-full"
               :class="
                 errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''
@@ -300,7 +300,7 @@ export default {
   },
   methods: {
     isRequired(value) {
-      return value ? true : "This field is required";
+      return value ? true : this.$t("isRequired");
     },
     addProduct() {
       const product = {

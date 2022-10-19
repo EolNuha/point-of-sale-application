@@ -55,6 +55,7 @@ def createPurchase():
                 product_stock=Decimal(product["stock"]),
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
+                total_amount=Decimal(Decimal(product["purchasedPrice"]) * Decimal(product["stock"])),
                 date_created=datetime.now(),
                 date_modified=datetime.now(),
             )
@@ -90,6 +91,7 @@ def createPurchase():
                 product_stock=created_product.stock,
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
+                total_amount=Decimal(created_product.purchased_price * Decimal(created_product.stock)),
                 date_created=datetime.now(),
                 date_modified=datetime.now(),
             )

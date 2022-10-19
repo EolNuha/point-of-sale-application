@@ -126,17 +126,19 @@ def getUserDetails(id):
 
 @auth.route('/users/<int:id>', methods=['PUT'])
 @token_required
-def updateProductDetails(id):
+def updateUserDetails(id):
     email = request.json["email"]
     first_name = request.json["firstName"]
     last_name = request.json["lastName"]
     username = request.json["username"]
+    user_type = request.json["userType"]
     user = User.query.filter_by(id=id).first()
 
     user.first_name = first_name
     user.last_name = last_name
     user.email = email
     user.username = username
+    user.user_type = user_type
     user.date_modified = datetime.now()
 
     db.session.commit()

@@ -126,6 +126,7 @@ def getPurchaseItemsList(items):
             },
             "priceWithoutTax": i.price_without_tax,
             "taxAmount": i.tax_amount,
+            "totalAmount": i.total_amount,
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }

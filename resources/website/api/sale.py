@@ -32,7 +32,6 @@ def createSale():
     )
 
     db.session.add(sale)
-    
 
     for product in products:
         decimal_price = Decimal(product["sellingPrice"])

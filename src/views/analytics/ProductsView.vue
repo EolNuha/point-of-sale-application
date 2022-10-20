@@ -3,21 +3,21 @@
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getProductsSoldbyAmount`"
       :chartData="$store.state.analyticsModule.productsSoldbyAmount"
-      :titleContent="`Top Products`"
-      :textContent="`Top products that made the most revenue`"
+      :titleContent="$t('topProducts')"
+      :textContent="$t('topProductsMostRevenue')"
     >
     </AreaChartMoney>
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getProductStats`"
       :id="selectedProduct.id"
       :chartData="$store.state.analyticsModule.productStats"
-      :titleContent="`Product: ${selectedProduct.name}`"
-      :textContent="`Revenue made`"
+      :titleContent="`${$t('product')}: ${selectedProduct.name}`"
+      :textContent="$t('revenueMade')"
     >
       <div
         class="flex flex-row flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
       >
-        <span class="font-bold">Product:</span>
+        <span class="font-bold">{{ $t("product") }}:</span>
         <v-select
           class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedProduct"

@@ -6,7 +6,7 @@
       <div
         class="w-full flex flex-column flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
       >
-        <span class="font-bold">Date:</span>
+        <span class="font-bold">{{ $t("date") }}:</span>
         <RangeDateFilter
           @startDateChange="startDate = $event"
           @endDateChange="endDate = $event"
@@ -127,9 +127,12 @@ export default {
   },
   methods: {
     setCurrentDateText(e) {
-      if (e === "Today") return "today";
-      if (e && e !== "Today") return `in the ${e.toLowerCase()}`;
-      if (!e) return `from: ${this.startDate} to: ${this.endDate}`;
+      if (e === "Today" || e === "Sot") return this.$t("today").toLowerCase();
+      if (e && e !== "Today") return `${this.$t("inThe")} ${e.toLowerCase()}`;
+      if (!e)
+        return `${this.$t("from")}: ${this.startDate} ${this.$t("to")}: ${
+          this.endDate
+        }`;
     },
     async getData() {
       this.isFetching = true;

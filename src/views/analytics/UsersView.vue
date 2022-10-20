@@ -3,21 +3,23 @@
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getUsersSaleRevenue`"
       :chartData="$store.state.analyticsModule.usersRevenue"
-      :titleContent="`Top Employees`"
-      :textContent="`Top users that made the most sales revenue`"
+      :titleContent="$t('topEmployees')"
+      :textContent="$t('topUsersMostRevenue')"
     >
     </AreaChartMoney>
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getUserStats`"
       :id="selectedUser.id"
       :chartData="$store.state.analyticsModule.userStats"
-      :titleContent="`User: ${selectedUser.firstName} ${selectedUser.lastName}`"
-      :textContent="`Revenue made`"
+      :titleContent="`${$t('user')}: ${selectedUser.firstName} ${
+        selectedUser.lastName
+      }`"
+      :textContent="$t('revenueMade')"
     >
       <div
         class="flex flex-row flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
       >
-        <span class="font-bold">User:</span>
+        <span class="font-bold">{{ $t("user") }}:</span>
         <v-select
           class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedUser"

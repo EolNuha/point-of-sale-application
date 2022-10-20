@@ -8,10 +8,10 @@ export default [
     name: "products",
     component: ProductsView,
     meta: {
-      title: "Products",
+      title: "products",
       breadcrumb: [
         {
-          text: (route) => "Products",
+          text: (route) => "products",
           to: "products",
           active: true,
         },
@@ -23,15 +23,15 @@ export default [
     name: "new-product",
     component: CreateProductView,
     meta: {
-      title: "Create Product",
+      title: "createProduct",
       breadcrumb: [
         {
-          text: (route) => "Products",
+          text: (route) => "products",
           to: "products",
           active: false,
         },
         {
-          text: (route) => "Create Product",
+          text: (route) => "createProduct",
           to: "new-product",
           active: true,
         },
@@ -43,10 +43,10 @@ export default [
     name: "product-view",
     component: ProductDetailsView,
     meta: {
-      title: "Product Details",
+      title: "productDetails",
       breadcrumb: [
         {
-          text: (route) => "Products",
+          text: (route) => "products",
           to: "products",
           active: false,
         },

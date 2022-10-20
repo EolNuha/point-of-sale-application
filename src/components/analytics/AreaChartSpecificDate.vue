@@ -6,7 +6,7 @@
       <div
         class="w-full flex flex-column items-center gap-2 text-gray-700 dark:text-gray-200"
       >
-        <span class="font-bold">Date:</span>
+        <span class="font-bold">{{ $t("date") }}:</span>
         <input
           @input="
             $debounce(() => {
@@ -34,7 +34,7 @@
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
             {{ textContent }}
-            <b>on {{ startDate }}</b>
+            <b>{{ $t("on") }} {{ startDate }}</b>
           </p>
         </div>
         <div

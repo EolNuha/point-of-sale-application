@@ -9,10 +9,10 @@ export default [
     name: "product-analytics",
     component: ProductAnalytics,
     meta: {
-      title: "Product Analytics",
+      title: "productAnalytics",
       breadcrumb: [
         {
-          text: (route) => "Product Analytics",
+          text: (route) => "productAnalytics",
           to: "product-analytics",
           active: true,
         },
@@ -24,10 +24,10 @@ export default [
     name: "sale-analytics",
     component: SaleAnalytics,
     meta: {
-      title: "Sale Analytics",
+      title: "saleAnalytics",
       breadcrumb: [
         {
-          text: (route) => "Sale Analytics",
+          text: (route) => "saleAnalytics",
           to: "sale-analytics",
           active: true,
         },
@@ -39,10 +39,10 @@ export default [
     name: "purchase-analytics",
     component: PurchaseAnalytics,
     meta: {
-      title: "Purchase Analytics",
+      title: "purchaseAnalytics",
       breadcrumb: [
         {
-          text: (route) => "Purchase Analytics",
+          text: (route) => "purchaseAnalytics",
           to: "purchase-analytics",
           active: true,
         },
@@ -54,10 +54,10 @@ export default [
     name: "user-analytics",
     component: UserAnalytics,
     meta: {
-      title: "User Analytics",
+      title: "userAnalytics",
       breadcrumb: [
         {
-          text: (route) => "User Analytics",
+          text: (route) => "userAnalytics",
           to: "user-analytics",
           active: true,
         },

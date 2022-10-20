@@ -16,9 +16,8 @@ export default {
   },
   watch: {
     $route: {
-      immediate: true,
       handler(to) {
-        document.title = to.meta.title || "Desktop App";
+        document.title = this.$t(to.meta.title) || "Desktop App";
       },
     },
   },

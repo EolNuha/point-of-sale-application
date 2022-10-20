@@ -5,7 +5,7 @@ export default [
     path: "/",
     name: "dashboard",
     meta: {
-      title: "Dashboard Page",
+      title: "dashboardPage",
     },
     component: DashboardView,
   },

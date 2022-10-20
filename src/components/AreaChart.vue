@@ -34,7 +34,7 @@ export default {
         strokeWidth: 3,
       },
       noData: {
-        text: "There is missing data for this chart.",
+        text: this.$t("missingChartData"),
         align: "center",
         verticalAlign: "middle",
         offsetX: 0,

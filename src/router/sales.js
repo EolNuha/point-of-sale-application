@@ -10,10 +10,10 @@ export default [
     name: "sales",
     component: SalesView,
     meta: {
-      title: "Sales",
+      title: "sales",
       breadcrumb: [
         {
-          text: (route) => "Sales",
+          text: (route) => "sales",
           to: "sales",
           active: true,
         },
@@ -25,15 +25,15 @@ export default [
     name: "daily-sales",
     component: DailySalesView,
     meta: {
-      title: "Sales",
+      title: "sales",
       breadcrumb: [
         {
-          text: (route) => "Sales",
+          text: (route) => "sales",
           to: "sales",
           active: false,
         },
         {
-          text: (route) => "Daily Sales",
+          text: (route) => "dailySales",
           to: "daily-sales",
           active: true,
         },
@@ -45,15 +45,15 @@ export default [
     name: "new-sale",
     component: NewSaleView,
     meta: {
-      title: "New Sale",
+      title: "newSale",
       breadcrumb: [
         {
-          text: (route) => "Sales",
+          text: (route) => "sales",
           to: "sales",
           active: false,
         },
         {
-          text: (route) => "New Sale",
+          text: (route) => "newSale",
           to: "new-sale",
           active: true,
         },
@@ -65,15 +65,15 @@ export default [
     name: "sale-view",
     component: SaleDetailsView,
     meta: {
-      title: "Sale Details",
+      title: "saleDetails",
       breadcrumb: [
         {
-          text: (route) => "Sales",
+          text: (route) => "sales",
           to: "sales",
           active: false,
         },
         {
-          text: (route) => "Daily Sales",
+          text: (route) => "dailySales",
           to: "daily-sales",
           active: false,
           query: true,

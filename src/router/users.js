@@ -7,10 +7,10 @@ export default [
     path: "/users",
     name: "users",
     meta: {
-      title: "Users",
+      title: "users",
       breadcrumb: [
         {
-          text: (route) => "Users",
+          text: (route) => "users",
           to: "users",
           active: true,
         },
@@ -22,15 +22,15 @@ export default [
     path: "/users/new-user",
     name: "new-user",
     meta: {
-      title: "New User",
+      title: "newUser",
       breadcrumb: [
         {
-          text: (route) => "Users",
+          text: (route) => "users",
           to: "users",
           active: false,
         },
         {
-          text: (route) => "New User",
+          text: (route) => "newUser",
           to: "new-user",
           active: true,
         },
@@ -42,15 +42,15 @@ export default [
     path: "/users/:userId",
     name: "user-details",
     meta: {
-      title: "User Details",
+      title: "userDetails",
       breadcrumb: [
         {
-          text: (route) => "Users",
+          text: (route) => "users",
           to: "users",
           active: false,
         },
         {
-          text: (route) => "User Details",
+          text: (route) => "userDetails",
           to: "user-details",
           active: true,
         },

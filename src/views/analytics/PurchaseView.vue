@@ -3,15 +3,15 @@
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getPurchases`"
       :chartData="$store.state.analyticsModule.purchases"
-      :titleContent="`Purchases`"
-      :textContent="`Total day purchase spendings`"
+      :titleContent="$t('purchases')"
+      :textContent="$t('totalDayPurchaseSpendings')"
     >
     </AreaChartMoney>
     <AreaChartSpecificDate
       :dispatchModule="`analyticsModule/getPurchaseStats`"
       :chartData="$store.state.analyticsModule.purchase"
-      :titleContent="`Purchases on`"
-      :textContent="`Spendings made`"
+      :titleContent="`${$t('purchases')} ${$t('on')}`"
+      :textContent="$t('purchasesMade')"
     >
     </AreaChartSpecificDate>
   </div>

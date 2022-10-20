@@ -9,10 +9,10 @@ export default [
     name: "purchases",
     component: PurchasesView,
     meta: {
-      title: "Purchases",
+      title: "purchases",
       breadcrumb: [
         {
-          text: (route) => "Purchases",
+          text: (route) => "purchases",
           to: "purchases",
           active: true,
         },
@@ -24,15 +24,15 @@ export default [
     name: "new-purchase",
     component: NewPurchaseView,
     meta: {
-      title: "New Purchase",
+      title: "newPurchase",
       breadcrumb: [
         {
-          text: (route) => "Purchases",
+          text: (route) => "purchases",
           to: "purchases",
           active: false,
         },
         {
-          text: (route) => "New Purchase",
+          text: (route) => "newPurchase",
           to: "new-purchase",
           active: true,
         },
@@ -44,15 +44,15 @@ export default [
     name: "purchase-view",
     component: PurchaseDetailsView,
     meta: {
-      title: "Purchase Details",
+      title: "purchaseDetails",
       breadcrumb: [
         {
-          text: (route) => "Purchases",
+          text: (route) => "purchases",
           to: "purchases",
           active: false,
         },
         {
-          text: (route) => "Purchase Details",
+          text: (route) => "purchaseDetails",
           to: "purchase-view",
           active: true,
         },

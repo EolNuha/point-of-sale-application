@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
-import PurchasesView from "../views/purchases/PurchasesView.vue";
-import NewPurchaseView from "../views/purchases/NewPurchaseView.vue";
-import PurchaseDetailsView from "../views/purchases/PurchaseDetailsView.vue";
+const PurchasesView = () => import("../views/purchases/PurchasesView.vue");
+const NewPurchaseView = () => import("../views/purchases/NewPurchaseView.vue");
+const PurchaseDetailsView = () =>
+  import("../views/purchases/PurchaseDetailsView.vue");
 
 export default [
   {

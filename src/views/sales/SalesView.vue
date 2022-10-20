@@ -72,62 +72,64 @@
       @endDateChange="endDate = $event"
       @changeMonthDates="monthDates = $event"
     />
-    <div
-      class="overflow-x-auto overflow-y-hidden relative rounded-xl mb-5 scrollbar-style min-h-65"
-    >
-      <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
-      >
-        <OverlayC v-if="isTableLoading" />
-        <EmptyResultsC
-          v-if="sales.length === 0 && !isTableLoading"
-          pluralText="Sales"
-          singularText="Sale"
-          :search="searchQuery"
-          routeName="new-sale"
-        />
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+    <div class="overflow-hidden rounded-xl mb-5 min-h-65 relative">
+      <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
+        <table
+          class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
         >
-          <tr>
-            <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
-            <th scope="col" class="py-3 px-6">8%</th>
-            <th scope="col" class="py-3 px-6">18%</th>
-            <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
-            <th scope="col" class="py-3 px-6"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="sale in sales" :key="sale.id">
-            <tr
-              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
-            >
-              <td class="py-2 px-6">{{ sale.dateCreated.substring(0, 10) }}</td>
-              <td class="py-2 px-6">{{ sale.eightTaxAmount }} €</td>
-              <td class="py-2 px-6">{{ sale.eighteenTaxAmount }} €</td>
-              <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
-              <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
-              <td class="py-2 px-6">
-                <button
-                  @click="
-                    $router.push({
-                      name: 'daily-sales',
-                      query: { saleDate: sale.dateCreated.substring(0, 10) },
-                    })
-                  "
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                >
-                  <IconC
-                    iconName="DocumentMagnifyingGlassIcon"
-                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                  />
-                </button>
-              </td>
+          <OverlayC v-if="isTableLoading" />
+          <EmptyResultsC
+            v-if="sales.length === 0 && !isTableLoading"
+            pluralText="Sales"
+            singularText="Sale"
+            :search="searchQuery"
+            routeName="new-sale"
+          />
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
+              <th scope="col" class="py-3 px-6">8%</th>
+              <th scope="col" class="py-3 px-6">18%</th>
+              <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
+              <th scope="col" class="py-3 px-6"></th>
             </tr>
-          </template>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template v-for="sale in sales" :key="sale.id">
+              <tr
+                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              >
+                <td class="py-2 px-6">
+                  {{ sale.dateCreated.substring(0, 10) }}
+                </td>
+                <td class="py-2 px-6">{{ sale.eightTaxAmount }} €</td>
+                <td class="py-2 px-6">{{ sale.eighteenTaxAmount }} €</td>
+                <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
+                <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
+                <td class="py-2 px-6">
+                  <button
+                    @click="
+                      $router.push({
+                        name: 'daily-sales',
+                        query: { saleDate: sale.dateCreated.substring(0, 10) },
+                      })
+                    "
+                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  >
+                    <IconC
+                      iconName="DocumentMagnifyingGlassIcon"
+                      iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                    />
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
     <PaginationC
       :pagination="pagination"

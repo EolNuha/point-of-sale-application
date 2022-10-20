@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import IconsView from "../views/IconsView.vue";
+const IconsView = () => import("../views/IconsView.vue");
 export default [
   {
     path: "/dev/icons",

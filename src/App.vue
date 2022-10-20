@@ -1,7 +1,15 @@
 <template>
   <NavBar v-if="!$route.meta.hideNavbar" />
   <SideBar />
-  <router-view class="router-view duration-300" id="main" />
+  <router-view
+    class="router-view duration-300"
+    id="main"
+    v-slot="{ Component }"
+  >
+    <transition name="fade" mode="out-in">
+      <component :is="Component" :key="$route.path" />
+    </transition>
+  </router-view>
 </template>
 
 <script>

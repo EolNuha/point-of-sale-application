@@ -72,66 +72,66 @@
       @endDateChange="endDate = $event"
       @changeMonthDates="monthDates = $event"
     />
-    <div
-      class="overflow-x-auto overflow-y-hidden relative mb-5 rounded-xl scrollbar-style min-h-65"
-    >
-      <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
-      >
-        <OverlayC v-if="isTableLoading" />
-        <EmptyResultsC
-          v-if="purchases.length === 0 && !isTableLoading"
-          pluralText="Purchases"
-          singularText="Purchase"
-          routeName="new-purchase"
-          :search="searchQuery"
-        />
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+    <div class="overflow-hidden rounded-xl mb-5 min-h-65 relative">
+      <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
+        <table
+          class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
         >
-          <tr>
-            <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
-            <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("sellerName") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("invoiceNumber") }}</th>
-            <th scope="col" class="py-3 px-6"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="purchase in purchases" :key="purchase.id">
-            <tr
-              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
-            >
-              <td class="py-2 px-6">
-                {{ purchase.dateCreated.substring(0, 10) }}
-              </td>
-              <td class="py-2 px-6">{{ purchase.id }}</td>
-              <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
-              <td class="py-2 px-6">{{ purchase.sellerName }}</td>
-              <td class="py-2 px-6 max-w-xs">
-                {{ purchase.sellerInvoiceNumber }}
-              </td>
-              <td class="py-2 px-6">
-                <button
-                  @click="
-                    $router.push({
-                      name: 'purchase-view',
-                      params: { purchaseId: purchase.id },
-                    })
-                  "
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                >
-                  <IconC
-                    iconName="DocumentMagnifyingGlassIcon"
-                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                  />
-                </button>
-              </td>
+          <OverlayC v-if="isTableLoading" />
+          <EmptyResultsC
+            v-if="purchases.length === 0 && !isTableLoading"
+            pluralText="Purchases"
+            singularText="Purchase"
+            routeName="new-purchase"
+            :search="searchQuery"
+          />
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
+              <th scope="col" class="py-3 px-6">ID</th>
+              <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("sellerName") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("invoiceNumber") }}</th>
+              <th scope="col" class="py-3 px-6"></th>
             </tr>
-          </template>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template v-for="purchase in purchases" :key="purchase.id">
+              <tr
+                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              >
+                <td class="py-2 px-6">
+                  {{ purchase.dateCreated.substring(0, 10) }}
+                </td>
+                <td class="py-2 px-6">{{ purchase.id }}</td>
+                <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
+                <td class="py-2 px-6">{{ purchase.sellerName }}</td>
+                <td class="py-2 px-6 max-w-xs">
+                  {{ purchase.sellerInvoiceNumber }}
+                </td>
+                <td class="py-2 px-6">
+                  <button
+                    @click="
+                      $router.push({
+                        name: 'purchase-view',
+                        params: { purchaseId: purchase.id },
+                      })
+                    "
+                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  >
+                    <IconC
+                      iconName="DocumentMagnifyingGlassIcon"
+                      iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                    />
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
     <PaginationC
       :pagination="pagination"

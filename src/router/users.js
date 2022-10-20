@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import UsersView from "../views/user/UsersView.vue";
-import UserDetailsView from "../views/user/UserDetailsView.vue";
-import CreateUserView from "../views/user/CreateUserView.vue";
+const UsersView = () => import("../views/user/UsersView.vue");
+const UserDetailsView = () => import("../views/user/UserDetailsView.vue");
+const CreateUserView = () => import("../views/user/CreateUserView.vue");
 export default [
   {
     path: "/users",

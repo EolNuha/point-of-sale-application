@@ -33,6 +33,9 @@ const router = createRouter({
     ? createWebHashHistory()
     : createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  },
 });
 
 authRoutesGuard(router);

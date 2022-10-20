@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-import ProductAnalytics from "../views/analytics/ProductsView.vue";
-import SaleAnalytics from "../views/analytics/SalesView.vue";
-import PurchaseAnalytics from "../views/analytics/PurchaseView.vue";
-import UserAnalytics from "../views/analytics/UsersView.vue";
+const ProductAnalytics = () => import("../views/analytics/ProductsView.vue");
+const SaleAnalytics = () => import("../views/analytics/SalesView.vue");
+const PurchaseAnalytics = () => import("../views/analytics/PurchaseView.vue");
+const UserAnalytics = () => import("../views/analytics/UsersView.vue");
 export default [
   {
     path: "/analytics/products",

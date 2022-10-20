@@ -2,10 +2,6 @@
   height: 4px;
   width: 4px;
 }
-.scrollbar-style:hover::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
 .scrollbar-style::-webkit-scrollbar-track {
   @apply bg-gray-400;
   @apply dark:bg-gray-400;

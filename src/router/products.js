@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
-import ProductsView from "../views/products/ProductsView.vue";
-import CreateProductView from "../views/products/CreateProductView.vue";
-import ProductDetailsView from "../views/products/ProductDetailsView.vue";
+const ProductsView = () => import("../views/products/ProductsView.vue");
+const CreateProductView = () =>
+  import("../views/products/CreateProductView.vue");
+const ProductDetailsView = () =>
+  import("../views/products/ProductDetailsView.vue");
 export default [
   {
     path: "/products",

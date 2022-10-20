@@ -38,3 +38,10 @@ div[modal-backdrop] {
   @apply bg-gray-300;
   @apply dark:bg-gray-700;
 }
+
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-leave-to {
+  opacity: 0;
+}

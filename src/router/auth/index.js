@@ -12,7 +12,7 @@ export function authRoutesGuard(router) {
       next({
         path: "/signin",
         query: {
-          redirectTo: `${window.location.pathname}${window.location.search}`,
+          redirectTo: to.fullPath,
         },
       });
       return;
@@ -23,7 +23,7 @@ export function authRoutesGuard(router) {
       next({
         path: "/signin",
         query: {
-          redirectTo: `${window.location.pathname}${window.location.search}`,
+          redirectTo: to.fullPath,
         },
       });
       return;

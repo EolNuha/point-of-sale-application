@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-import SalesView from "../views/sales/SalesView.vue";
-import DailySalesView from "../views/sales/DailySalesView.vue";
-import NewSaleView from "../views/sales/NewSaleView.vue";
-import SaleDetailsView from "../views/sales/SaleDetailsView.vue";
+const SalesView = () => import("../views/sales/SalesView.vue");
+const DailySalesView = () => import("../views/sales/DailySalesView.vue");
+const NewSaleView = () => import("../views/sales/NewSaleView.vue");
+const SaleDetailsView = () => import("../views/sales/SaleDetailsView.vue");
 
 export default [
   {

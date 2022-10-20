@@ -39,128 +39,130 @@
       </button>
     </div>
 
-    <div
-      class="overflow-x-auto overflow-y-hidden rounded-xl my-5 scrollbar-style min-h-65"
-    >
-      <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
-      >
-        <OverlayC v-if="isTableLoading" />
-        <EmptyResultsC
-          v-if="products.length === 0 && !isTableLoading"
-          pluralText="Products"
-          singularText="Product"
-          :search="searchQuery"
-          routeName="new-product"
-        />
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+    <div class="overflow-hidden rounded-xl my-5 min-h-65 relative">
+      <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
+        <table
+          class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
         >
-          <tr>
-            <th scope="col" class="py-3 px-6"></th>
-            <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">
-              {{ $t("productName") }}
-            </th>
-            <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("purchasedPrice") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("stock") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("tax") }}</th>
-            <th scope="col" class="py-3 px-6"></th>
-            <th scope="col" class="py-3 px-6"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="product in products" :key="product.id">
-            <tr
-              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
-              :class="
-                selectedProduct === product
-                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
-                  : ''
-              "
-            >
-              <td class="py-2 px-6" @click="updateSelectedProduct(product)">
-                <IconC
-                  v-if="selectedProduct === product"
-                  iconName="CheckCircleIcon"
-                  iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
-                />
-                <IconC
-                  v-else
-                  iconName="MinusCircleIcon"
-                  iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                />
-              </td>
-              <th
-                scope="row"
-                class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                {{ product.id }}
+          <OverlayC v-if="isTableLoading" />
+          <EmptyResultsC
+            v-if="products.length === 0 && !isTableLoading"
+            pluralText="Products"
+            singularText="Product"
+            :search="searchQuery"
+            routeName="new-product"
+          />
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="py-3 px-6"></th>
+              <th scope="col" class="py-3 px-6">ID</th>
+              <th scope="col" class="py-3 px-6">
+                {{ $t("productName") }}
               </th>
-              <td class="py-2 px-6">{{ product.name }}</td>
-              <td class="py-2 px-6">{{ product.barcode }}</td>
-              <td class="py-2 px-6 max-w-xs">{{ product.purchasedPrice }} €</td>
-              <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
-              <td class="py-2 px-6">
-                <div
-                  class="flex items-center"
-                  :id="`product-${product.id}-tooltip-btn`"
-                  @mouseover="
-                    $showTooltip({
-                      targetEl: `product-${product.id}-tooltip`,
-                      triggerEl: `product-${product.id}-tooltip-btn`,
-                    })
-                  "
-                  :class="stockStatus(product.stock).color"
-                >
-                  &#9679; {{ stockStatus(product.stock).text }}
-                </div>
-                <div
-                  :id="`product-${product.id}-tooltip`"
-                  role="tooltip"
-                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-                >
-                  {{ product.stock }}
-                  <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
-              </td>
-              <td class="py-2 px-6 max-w-xs">{{ product.tax }}%</td>
-              <td
-                class="py-2 px-6"
-                @click="
-                  $router.push({
-                    name: 'product-view',
-                    params: { productId: product.id },
-                  })
+              <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("purchasedPrice") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("stock") }}</th>
+              <th scope="col" class="py-3 px-6">{{ $t("tax") }}</th>
+              <th scope="col" class="py-3 px-6"></th>
+              <th scope="col" class="py-3 px-6"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="product in products" :key="product.id">
+              <tr
+                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+                :class="
+                  selectedProduct === product
+                    ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
+                    : ''
                 "
               >
-                <button
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                >
+                <td class="py-2 px-6" @click="updateSelectedProduct(product)">
                   <IconC
-                    iconType="solid"
-                    iconName="PencilIcon"
-                    iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                    v-if="selectedProduct === product"
+                    iconName="CheckCircleIcon"
+                    iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
                   />
-                </button>
-              </td>
-              <td class="py-2 px-6">
-                <button
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                  @click="deleteProduct(product)"
-                >
                   <IconC
-                    iconName="TrashIcon"
-                    iconClass="w-5 h-5 text-red-700 cursor-pointer"
+                    v-else
+                    iconName="MinusCircleIcon"
+                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
                   />
-                </button>
-              </td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
+                </td>
+                <th
+                  scope="row"
+                  class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {{ product.id }}
+                </th>
+                <td class="py-2 px-6">{{ product.name }}</td>
+                <td class="py-2 px-6">{{ product.barcode }}</td>
+                <td class="py-2 px-6 max-w-xs">
+                  {{ product.purchasedPrice }} €
+                </td>
+                <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
+                <td class="py-2 px-6">
+                  <div
+                    class="flex items-center"
+                    :id="`product-${product.id}-tooltip-btn`"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `product-${product.id}-tooltip`,
+                        triggerEl: `product-${product.id}-tooltip-btn`,
+                      })
+                    "
+                    :class="stockStatus(product.stock).color"
+                  >
+                    &#9679; {{ stockStatus(product.stock).text }}
+                  </div>
+                  <div
+                    :id="`product-${product.id}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                  >
+                    {{ product.stock }}
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                  </div>
+                </td>
+                <td class="py-2 px-6 max-w-xs">{{ product.tax }}%</td>
+                <td
+                  class="py-2 px-6"
+                  @click="
+                    $router.push({
+                      name: 'product-view',
+                      params: { productId: product.id },
+                    })
+                  "
+                >
+                  <button
+                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  >
+                    <IconC
+                      iconType="solid"
+                      iconName="PencilIcon"
+                      iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                    />
+                  </button>
+                </td>
+                <td class="py-2 px-6">
+                  <button
+                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                    @click="deleteProduct(product)"
+                  >
+                    <IconC
+                      iconName="TrashIcon"
+                      iconClass="w-5 h-5 text-red-700 cursor-pointer"
+                    />
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
     <PaginationC
       :pagination="pagination"

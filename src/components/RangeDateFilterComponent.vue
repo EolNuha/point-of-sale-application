@@ -113,7 +113,6 @@ export default {
       if (days !== 0) days--;
       const date = new Date();
       date.setDate(date.getDate() - days);
-      console.log(date);
       const startDate = this.formatDate(date);
       const endDate = this.formatDate(new Date());
 

@@ -16,6 +16,8 @@ import registerComponents from "./global-components";
 import registerPlugins from "./global-plugins";
 import en from "./langs/en.json";
 import sq from "./langs/sq.json";
+import Vue3Tour from "vue3-tour";
+// import "vue3-tour/dist/vue3-tour.css";
 
 const messages = {
   en: en,
@@ -50,6 +52,7 @@ app
   .use(Toast, options)
   .use(i18n)
   .use(VueSweetalert2)
+  .use(Vue3Tour)
   .use(VueApexCharts);
 
 registerComponents(app);

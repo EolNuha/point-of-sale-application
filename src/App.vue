@@ -10,6 +10,12 @@
       <component :is="Component" :key="$route.path" />
     </transition>
   </router-view>
+  <!-- <v-tour
+    name="dashboardTour"
+    :steps="steps"
+    :callbacks="myCallbacks"
+    :options="{ highlight: true, backdrop: true }"
+  ></v-tour> -->
 </template>
 
 <script>
@@ -33,6 +39,36 @@ export default {
     return {
       userTheme: "light",
       userLang: "en",
+      // steps: [
+      //   {
+      //     target: "#dashboard-step-0",
+      //     header: {
+      //       title: "Get Started",
+      //     },
+      //     content: `Discover <strong>Vue Tour</strong>!`,
+      //   },
+      //   {
+      //     target: "#dashboard-step-1",
+      //     content: "An awesome plugin made with Vue.js!",
+      //   },
+      //   {
+      //     target: "#dashboard-step-2",
+      //     content:
+      //       "Try it, you'll love it!<br>You can put HTML in the steps and completely customize the DOM to suit your needs.",
+      //   },
+      //   {
+      //     target: "#navbar",
+      //     content:
+      //       "Try it, you'll love it!<br>You can put HTML in the steps and completely customize the DOM to suit your needs.",
+      //   },
+      //   {
+      //     target: "#sidebar",
+      //     content: "An awesome plugin made with Vue.js!",
+      //     params: {
+      //       placement: "right",
+      //     },
+      //   },
+      // ],
     };
   },
   created() {
@@ -46,6 +82,7 @@ export default {
     this.setTheme(initUserTheme);
     const initUserLang = this.getLang();
     this.setLang(initUserLang || "en");
+    // this.$tours["dashboardTour"].start();
   },
   methods: {
     setTheme(theme) {

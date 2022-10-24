@@ -1,6 +1,7 @@
 <template>
   <nav
     class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-3 sticky top-0 left-0 right-0"
+    id="navbar"
   >
     <div class="flex flex-wrap items-center justify-between">
       <div class="inline-flex items-center">

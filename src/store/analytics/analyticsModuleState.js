@@ -7,4 +7,5 @@ export default {
   productStats: [],
   usersRevenue: [],
   userStats: [],
+  sellerStats: [],
 };

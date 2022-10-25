@@ -154,6 +154,21 @@ def getPurchasesList(purchases):
         purchases_list.append(purchase_dict)
     return purchases_list
 
+def getSellersList(sellers):
+    sellers_list = []
+    for i in sellers:
+        seller_dict = {
+            "id": i.id,
+            "sellerName": i.seller_name,
+            "sellerInvoiceNumber": i.seller_invoice_number,
+            "sellerFiscalNumber": i.seller_fiscal_number,
+            "sellerTaxNumber": i.seller_tax_number,
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+        }
+        sellers_list.append(seller_dict)
+    return sellers_list
+
 def getPaginatedDict(data, paginated_items):
     return {
         "data": data,

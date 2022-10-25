@@ -75,7 +75,7 @@ export default {
       required: true,
     },
     id: {
-      type: Number,
+      type: null,
       required: false,
       default: null,
     },

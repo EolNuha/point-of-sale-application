@@ -107,4 +107,17 @@ export default {
         });
     });
   },
+  getSellerStats({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/sellers/${data.id}`, { params: data })
+        .then(async (response) => {
+          commit("SET_SELLER_STATS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

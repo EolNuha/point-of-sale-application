@@ -5,4 +5,7 @@ export default {
   SET_PURCHASE(state, payload) {
     state.purchase = payload;
   },
+  SET_SELLERS(state, payload) {
+    state.sellers = payload;
+  },
 };

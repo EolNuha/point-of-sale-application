@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify, request
 from website.models import Purchase, PurchaseItem, Product
-from website.helpers import getPaginatedDict, getPurchasesList, getPurchaseItemsList
+from website.helpers import getPaginatedDict, getPurchasesList, getPurchaseItemsList, getSellersList
 from website import db
 from sqlalchemy import or_
+import sqlalchemy as sa
 from decimal import *
 from datetime import datetime, date, time
 import xlsxwriter
@@ -152,6 +153,45 @@ def getPurchases():
 
     return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
 
+@purchase.route('/sellers', methods=["GET"])
+def getSellers():
+    desc = request.args.get('desc', True, type=bool)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    search = request.args.get('search', '*', type=str)
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = Purchase.query.filter(or_(
+        Purchase.id.ilike(looking_for),
+        Purchase.seller_name.ilike(looking_for),
+        Purchase.seller_invoice_number.ilike(looking_for),
+        Purchase.seller_fiscal_number.ilike(looking_for),
+        Purchase.seller_tax_number.ilike(looking_for),
+        ))\
+        .with_entities(
+            Purchase.id.label("id"), 
+            Purchase.seller_name.label("seller_name"), 
+            Purchase.seller_fiscal_number.label("seller_fiscal_number"), 
+            Purchase.seller_tax_number.label("seller_tax_number"), 
+            Purchase.seller_invoice_number.label("seller_invoice_number"), 
+            Purchase.date_created.label("date_created"), 
+            Purchase.date_modified.label("date_modified"), 
+        )\
+        .group_by(Purchase.seller_name)\
+
+    if (desc):
+        paginated_items = paginated_items.order_by(Purchase.id.desc())
+
+    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
+
+    return jsonify(getPaginatedDict(getSellersList(paginated_items.items), paginated_items))
+
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
     purchases = Purchase.query.filter_by(id=purchaseId).all()
@@ -160,7 +200,7 @@ def getPurchaseDetails(purchaseId):
 @purchase.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
-    return jsonify(getPurchasesList([purchase, purchase])[0])
+    return jsonify(getSellerDetails([purchase, purchase])[0])
 
 @purchase.route('/purchases/download-exel', methods=["GET"])
 def downloadPurchasesExcel():

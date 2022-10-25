@@ -1,5 +1,6 @@
 from datetime import datetime, date, time, timedelta
 from flask import Blueprint, request, jsonify, request
+from requests import Response
 from website.models import Sale, Purchase, Product, SaleItem, User
 import sqlalchemy as sa
 from decimal import *
@@ -169,6 +170,64 @@ def getPurchaseStats(day):
     purchase_analytics["info"].update({"chartName": f"{day}--purchase-revenue", "currTotal": sum(curr_series)})
     return jsonify(purchase_analytics)
 
+@analytics.route('/analytics/sellers/<string:name>', methods=["GET"])
+def getSellerStats(name):
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+    prev_date_start = request_dates["prev_date_start"]
+    prev_date_end = request_dates["prev_date_end"]   
+
+    curr_purchases = Purchase.query.filter(Purchase.date_created <= date_end)\
+        .filter(Purchase.date_created >= date_start)
+
+    prev_purchases = Purchase.query.filter(Purchase.date_created <= prev_date_end)\
+        .filter(Purchase.date_created >= prev_date_start)
+    
+    if name and name != 'null':
+        curr_purchases = curr_purchases.filter_by(seller_name=name)
+        prev_purchases = prev_purchases.filter_by(seller_name=name)
+    else:
+        return "Not Found", 404
+    
+    curr_purchases = curr_purchases.with_entities(
+            Purchase.id.label("id"), 
+            Purchase.date_created.label("date_created"), 
+            sa.func.sum(Purchase.total_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Purchase.date_created))\
+        .order_by(Purchase.date_created).all()
+    
+    prev_purchases = prev_purchases.with_entities(
+            Purchase.id.label("id"), 
+            Purchase.date_created.label("date_created"), 
+            sa.func.sum(Purchase.total_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Purchase.date_created))\
+        .order_by(Purchase.date_created).all()
+
+    seller_analytics = {"options": [], "series": [], "info": {}}
+
+    dates = get_curr_prev_chart(date_start, date_end, curr_purchases, prev_purchases)
+    
+    curr_comp_series = dates["curr_series"]
+    prev_comp_series = dates["prev_series"]
+    seller_analytics["options"] = dates["options"]
+    curr_total = sum(curr_comp_series)
+    prev_total = sum(prev_comp_series)
+
+    seller_analytics["series"].append({"name": "purchase", "data": curr_comp_series})
+    seller_analytics["series"].append({"name": "purchasePreviousPeriod", "data": prev_comp_series})
+    
+    percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
+    seller_analytics["info"].update({
+        "chartName": "seller-stats", 
+        "currTotal": curr_total, 
+        "prevTotal": prev_total, 
+        "percentageDiff": percentage_diff
+    })
+    return jsonify(seller_analytics)
+
 @analytics.route('/analytics/products-sold-by-amount', methods=["GET"])
 def getTopProducts():
     request_dates = get_curr_prev_dates(request)
@@ -215,9 +274,7 @@ def getProductStats(id):
         curr_products = curr_products.filter_by(product_id=id)
         prev_products = prev_products.filter_by(product_id=id)
     else:
-        product = Product.query.order_by(Purchase.id.desc()).all()
-        curr_products = curr_products.filter_by(product_id=product.id)
-        prev_products = prev_products.filter_by(product_id=product.id)
+        return "Not Found", 404
     
     curr_products = curr_products.with_entities(
             SaleItem.id.label("id"), 

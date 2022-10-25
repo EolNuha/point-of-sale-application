@@ -56,6 +56,19 @@ export default {
         });
     });
   },
+  getSellers({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/sellers`, { params: data })
+        .then(async (response) => {
+          commit("SET_SELLERS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getSellerDetails({ commit }, sellerName) {
     return new Promise((resolve, reject) => {
       axios

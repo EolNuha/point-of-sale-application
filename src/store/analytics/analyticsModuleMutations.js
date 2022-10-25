@@ -23,4 +23,7 @@ export default {
   SET_USER_STATS(state, payload) {
     state.userStats = payload;
   },
+  SET_SELLER_STATS(state, payload) {
+    state.sellerStats = payload;
+  },
 };

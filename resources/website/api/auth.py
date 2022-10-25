@@ -5,7 +5,8 @@ from  werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from datetime import datetime, timedelta
 from website import db
-from website.helpers import getUsersList, getUserDict, getPaginatedDict
+from website.helpers import getPaginatedDict
+from website.json import getUsersList, getUserDict
 from website.token import token_required, currentUser
 from sqlalchemy import or_
 

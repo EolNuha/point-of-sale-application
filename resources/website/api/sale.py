@@ -1,7 +1,8 @@
 from datetime import datetime, date, timedelta, time
 from flask import Blueprint, request, jsonify, request
 from website.models import Sale, SaleItem, Product, User
-from website.helpers import getPaginatedDict, getSalesList, getSaleItemsList, getDailySalesList
+from website.helpers import getPaginatedDict
+from website.json import getSalesList, getSaleItemsList, getDailySalesList
 from website import db
 from sqlalchemy import desc, or_
 import sqlalchemy as sa

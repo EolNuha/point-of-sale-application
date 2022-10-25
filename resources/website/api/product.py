@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, request, Response
 from website.models import Product
-from website.helpers import getProductsList, getPaginatedDict
+from website.helpers import getPaginatedDict
+from website.json import getProductsList
 from datetime import datetime
 from website import db
 from sqlalchemy import or_

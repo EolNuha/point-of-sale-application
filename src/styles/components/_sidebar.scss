@@ -1,7 +1,7 @@
 .sidebar {
   position: fixed;
   height: calc(100vh - 40px);
-  overflow-y: auto;
+  overflow-y: scroll;
   z-index: 999;
 }
 

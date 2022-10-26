@@ -18,8 +18,8 @@
       :dispatchModule="`analyticsModule/getSellerStats`"
       :id="selectedSeller.sellerName"
       :chartData="$store.state.analyticsModule.sellerStats"
-      :titleContent="`${$t('product')}: ${selectedSeller.sellerName}`"
-      :textContent="$t('revenueMade')"
+      :titleContent="`${$t('sellerName')}: ${selectedSeller.sellerName}`"
+      :textContent="$t('purchasesMade')"
     >
       <div
         class="flex flex-row flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"

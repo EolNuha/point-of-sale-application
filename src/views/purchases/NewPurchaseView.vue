@@ -17,16 +17,22 @@
             :rules="isRequired"
             type="text"
             v-model="seller.sellerName"
-            @input="
-              $debounce(() => {
-                getSellerDetails();
-              }, 300)
-            "
-            :placeholder="$t('sellerName')"
-            class="default-input w-full"
-            :class="errors.sellerName ? 'ring-2 ring-red-500' : ''"
+            class="hidden"
             name="sellerName"
             id="sellerName"
+          />
+          <v-select
+            class="block w-full default-input !p-[1px]"
+            :class="errors.sellerName ? 'ring-2 ring-red-500' : ''"
+            v-model="seller.sellerName"
+            :clearable="true"
+            :options="sellers"
+            :reduce="(sellers) => sellers.sellerName"
+            label="sellerName"
+            type="text"
+            :placeholder="$t('sellerName')"
+            taggable
+            @option:selected="getSellerDetails($event)"
           />
           <span class="text-red-700">{{ errors.sellerName }}</span>
         </div>
@@ -97,9 +103,9 @@
       <div
         v-for="(product, index) in products"
         :key="index"
-        class="flex gap-2 mb-6"
+        class="flex gap-2 mb-6 flex-wrap md:flex-nowrap"
       >
-        <div class="basis-1/6">
+        <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("barcode") }}</label
@@ -123,7 +129,7 @@
           />
           <span class="text-red-700">{{ errors[`${index}barcode`] }}</span>
         </div>
-        <div class="basis-1/6">
+        <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("productName") }}</label
@@ -141,7 +147,7 @@
           />
           <span class="text-red-700">{{ errors[`${index}name`] }}</span>
         </div>
-        <div class="basis-1/6">
+        <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("stock") }}</label
@@ -160,7 +166,7 @@
           />
           <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
         </div>
-        <div class="basis-1/6">
+        <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("tax") }}</label
@@ -183,7 +189,7 @@
           >
           <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
         </div>
-        <div class="basis-1/6">
+        <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("purchasedPrice") }}</label
@@ -206,7 +212,7 @@
             errors[`${index}purchasedPrice`]
           }}</span>
         </div>
-        <div class="basis-1/6">
+        <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("sellingPrice") }}</label
@@ -298,6 +304,17 @@ export default {
       ],
     };
   },
+  computed: {
+    sellers() {
+      return this.$store.getters["purchaseModule/getSellersList"];
+    },
+  },
+  async created() {
+    await this.$store.dispatch("purchaseModule/getSellers", {
+      page: 1,
+      per_page: 1000000000,
+    });
+  },
   methods: {
     isRequired(value) {
       return value ? true : this.$t("isRequired");
@@ -343,28 +360,16 @@ export default {
               foundProduct.purchasedPrice = res.data.purchasedPrice;
             }
           });
-        })
-        .catch(() => console.log());
+        });
     },
-    getSellerDetails() {
-      this.$store
-        .dispatch("purchaseModule/getSellerDetails", this.seller.sellerName)
-        .then(async (res) => {
-          const options = this.$swalConfirmObject();
-          options.position = "top-end";
-          options.toast = true;
-          options.icon = "info";
-          options.timer = 10000;
-          options.html =
-            "<p class='text-gray-500 dark:text-gray-300'>We found a seller with this name, do you want to automatically fill the rest of the informations?</p>";
-          await this.$swal(options).then((result) => {
-            if (result.isConfirmed) {
-              this.seller.fiscalNumber = res.data.sellerFiscalNumber;
-              this.seller.taxNumber = res.data.sellerTaxNumber;
-            }
-          });
-        })
-        .catch(() => console.log());
+    getSellerDetails(e) {
+      const sellerInfo = this.sellers.find(
+        (x) => x.sellerName.toLowerCase() === e.sellerName.toLowerCase()
+      );
+      if (sellerInfo) {
+        this.seller.fiscalNumber = sellerInfo?.sellerFiscalNumber;
+        this.seller.taxNumber = sellerInfo?.sellerTaxNumber;
+      }
     },
     submit() {
       this.isLoading = true;
@@ -404,3 +409,8 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.vs__search::placeholder {
+  @apply text-sm;
+}
+</style>

@@ -1,0 +1,65 @@
+<template>
+  <li v-if="item.children">
+    <button
+      type="button"
+      class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+      :aria-controls="item.title"
+      :data-collapse-toggle="item.title"
+      @click="() => (isOpened = !isOpened)"
+    >
+      <IconC
+        iconType="outline"
+        :iconName="item.icon"
+        iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+      />
+      <span
+        class="flex-1 ml-3 text-left whitespace-nowrap"
+        sidebar-toggle-item=""
+        >{{ $t(item.title) }}</span
+      >
+      <IconC
+        iconName="ChevronDownIcon"
+        :iconClass="
+          isOpened
+            ? 'w-4 h-4 transform rotate-180 transition duration-250 ease-in-out'
+            : 'w-4 h-4 transition duration-250 ease-in-out'
+        "
+      />
+    </button>
+    <ul :id="item.title" class="hidden py-2 space-y-2">
+      <li v-for="child in item.children" :key="child.route">
+        <router-link
+          :to="{ name: child.route }"
+          class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+          >{{ $t(child.title) }}</router-link
+        >
+      </li>
+    </ul>
+  </li>
+  <li v-else>
+    <router-link
+      :to="{ name: item.route }"
+      class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+    >
+      <IconC
+        iconType="outline"
+        :iconName="item.icon"
+        iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+      />
+      <span class="ml-3">{{ $t(item.title) }}</span>
+    </router-link>
+  </li>
+</template>
+
+<script>
+export default {
+  props: {
+    item: null,
+  },
+  data() {
+    return {
+      isOpened: false,
+    };
+  },
+};
+</script>

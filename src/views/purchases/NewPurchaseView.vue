@@ -10,7 +10,7 @@
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("sellerName") }}</label
+            >{{ $t("sellerName") }} {{ seller.sellerName }}</label
           >
           <Field
             required
@@ -31,7 +31,7 @@
             label="sellerName"
             type="text"
             :placeholder="$t('sellerName')"
-            taggable
+            :taggable="true"
             @option:selected="getSellerDetails($event)"
           />
           <span class="text-red-700">{{ errors.sellerName }}</span>
@@ -363,6 +363,7 @@ export default {
         });
     },
     getSellerDetails(e) {
+      this.seller.sellerName = e.sellerName ? e.sellerName : e;
       const sellerInfo = this.sellers.find(
         (x) => x.sellerName.toLowerCase() === e.sellerName.toLowerCase()
       );

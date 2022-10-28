@@ -18,10 +18,10 @@
         >{{ $t(item.title) }}</span
       >
       <IconC
-        iconName="ChevronDownIcon"
+        iconName="ChevronRightIcon"
         :iconClass="
           isOpened
-            ? 'w-4 h-4 transform -rotate-180 transition duration-300 ease-in-out'
+            ? 'w-4 h-4 transform rotate-90 transition duration-300 ease-in-out'
             : 'w-4 h-4 transition duration-300 ease-in-out'
         "
       />

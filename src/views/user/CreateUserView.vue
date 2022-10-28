@@ -189,9 +189,11 @@ export default {
           this.$router.push({ name: "users" });
           this.$toast.success(this.$t("successfullyCreatedAccount"));
         })
-        .catch(() => {
+        .catch((err) => {
           this.isLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
+          this.$toast.error(
+            this.$t(err.response.data) || this.$t("somethingWrong")
+          );
         });
     },
   },

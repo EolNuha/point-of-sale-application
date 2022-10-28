@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, jsonify, make_response, current_app
+from flask import Blueprint, request, jsonify, make_response, current_app
 from website.models import User
 import uuid
 from  werkzeug.security import generate_password_hash, check_password_hash
@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from website import db
 from website.helpers import getPaginatedDict
 from website.json import getUsersList, getUserDict
-from website.token import token_required, currentUser
+from website.token import token_required
 from sqlalchemy import or_
 
 auth = Blueprint('auth', __name__)
@@ -32,7 +32,7 @@ def signin():
   
     if not user:
         return make_response(
-            'User with this email/username does not exist!',
+            'userWithThisEmailDoesNotExist',
             401,
             {'WWW-Authenticate' : 'Basic realm ="User does not exist!"'}
         )
@@ -40,18 +40,17 @@ def signin():
     if check_password_hash(user.password, password):
         token = jwt.encode({
             'public_id': user.public_id,
-            'exp' : datetime.utcnow() + timedelta(days = 365)
+            'exp' : datetime.utcnow() + timedelta(days = 1)
         }, current_app.config['SECRET_KEY'])
   
         return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
-    # returns 403 if password is wrong
+    
     return make_response(
-            'Password is incorrect!',
+            'passwordIncorrect',
             403,
             {'WWW-Authenticate' : 'Basic realm ="User does not exist!"'}
         )
   
-# signup route
 @auth.route('/signup', methods=['POST'])
 def signup():
     email = request.json["email"]
@@ -60,39 +59,30 @@ def signup():
     last_name = request.json["lastName"]
     username = request.json["username"]
     user_type = request.json["userType"]
-  
-    # checking for existing user
+
     user = User.query\
         .filter_by(email = email)\
         .first()
 
-    users = User.query.all()
-
     if not user:
-        # database ORM object
         user = User(
             public_id = str(uuid.uuid4()),
             first_name = first_name,
             last_name = last_name,
             username = username,
             email = email,
+            user_type = user_type or "staff",
             password = generate_password_hash(password),
             date_created=datetime.now(),
             date_modified=datetime.now(),
         )
-        if users:
-            user.user_type = user_type or "staff"
-        else:
-            user.user_type = "admin"
 
-        # insert user
         db.session.add(user)
         db.session.commit()
   
         return make_response('Successfully registered.', 201)
     else:
-        # returns 202 if user already exists
-        return make_response('User already exists. Please Log in.', 202)
+        return make_response('userExists', 500)
 
 
 

@@ -154,7 +154,7 @@ export default {
           this.$toast.success(this.$t("signinSuccess"));
         })
         .catch((err) => {
-          this.$toast.error(err.response.data);
+          this.$toast.error(this.$t(err.response.data));
           this.isLoading = false;
         });
     },

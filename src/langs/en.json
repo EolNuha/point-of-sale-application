@@ -137,6 +137,7 @@
 	"signinToAccount": "Sign in to your account",
 	"signinSuccess": "You have successfully signed in!",
 	"signoutSuccess": "You have successfully signed out!",
+	"userExists": "User already exists. Please sign in.",
 	"profile": "Profile",
 	"lightMode": "Light Mode",
 	"darkMode": "Dark Mode",
@@ -145,5 +146,7 @@
 	"to": "to",
 	"on": "on",
 	"dashboardPage": "Dashboard Page",
-	"missingChartData": "There is missing data for this chart."
+	"missingChartData": "There is missing data for this chart.",
+	"userWithThisEmailDoesNotExist": "User with this email/username does not exist!",
+	"passwordIncorrect": "Password is incorrect!"
 }

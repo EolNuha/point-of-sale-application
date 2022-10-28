@@ -1,15 +1,11 @@
 <template>
   <NavBar v-if="!$route.meta.hideNavbar" />
   <SideBar />
-  <router-view
-    class="router-view duration-300"
-    id="main"
-    v-slot="{ Component }"
-  >
-    <transition name="fade" mode="out-in">
+  <router-view class="router-view" id="main"></router-view>
+  <!-- v-slot="{ Component }" -->
+  <!-- <transition name="fade" mode="out-in">
       <component :is="Component" :key="$route.path" />
-    </transition>
-  </router-view>
+    </transition> -->
   <!-- <v-tour
     name="dashboardTour"
     :steps="steps"
@@ -39,36 +35,6 @@ export default {
     return {
       userTheme: "light",
       userLang: "en",
-      // steps: [
-      //   {
-      //     target: "#dashboard-step-0",
-      //     header: {
-      //       title: "Get Started",
-      //     },
-      //     content: `Discover <strong>Vue Tour</strong>!`,
-      //   },
-      //   {
-      //     target: "#dashboard-step-1",
-      //     content: "An awesome plugin made with Vue.js!",
-      //   },
-      //   {
-      //     target: "#dashboard-step-2",
-      //     content:
-      //       "Try it, you'll love it!<br>You can put HTML in the steps and completely customize the DOM to suit your needs.",
-      //   },
-      //   {
-      //     target: "#navbar",
-      //     content:
-      //       "Try it, you'll love it!<br>You can put HTML in the steps and completely customize the DOM to suit your needs.",
-      //   },
-      //   {
-      //     target: "#sidebar",
-      //     content: "An awesome plugin made with Vue.js!",
-      //     params: {
-      //       placement: "right",
-      //     },
-      //   },
-      // ],
     };
   },
   created() {

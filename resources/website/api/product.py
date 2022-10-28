@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, request, Response
+from flask import Blueprint, request, jsonify, request
 from website.models import Product
 from website.helpers import getPaginatedDict
 from website.json import getProductsList

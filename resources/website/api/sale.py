@@ -1,16 +1,16 @@
-from datetime import datetime, date, timedelta, time
+from datetime import datetime, date, time
 from flask import Blueprint, request, jsonify, request
 from website.models import Sale, SaleItem, SaleTax, Product, User, Settings
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.json import getSalesList, getSaleItemsList, getDailySalesList, getTaxesList
 from website import db
-from sqlalchemy import desc, or_
+from sqlalchemy import or_
 import sqlalchemy as sa
 from decimal import *
 import xlsxwriter
 from pathlib import Path
 import requests
-from website.token import token_required, currentUser
+from website.token import currentUser
 
 sale = Blueprint('sale', __name__)
 BASE_URL = "http://localhost:5000"

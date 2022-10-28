@@ -137,6 +137,7 @@
 	"signinToAccount": "Kyçuni në llogarinë tuaj",
 	"signinSuccess": "Jeni kyçur me sukses!",
 	"signoutSuccess": "Jeni ç'kyçur me sukses!",
+	"userExists": "Ky përdorues ekziston. Ju lutemi kyçuni.",
 	"profile": "Profili",
 	"lightMode": "Moda e dritës",
 	"darkMode": "Moda e errët",
@@ -145,5 +146,7 @@
 	"to": "deri më",
 	"on": "në",
 	"dashboardPage": "Faqja Kryesore",
-	"missingChartData": "Mungojnë të dhëna për këtë statistikë."
+	"missingChartData": "Mungojnë të dhëna për këtë statistikë.",
+	"userWithThisEmailDoesNotExist": "Përdoruesi me këtë email/username nuk ekziston!",
+	"passwordIncorrect": "Fjalëkalimi është i pasaktë!"
 }

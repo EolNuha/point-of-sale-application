@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white dark:bg-gray-900 w-64 sidebar overflow-y-auto overflow-x-hidden duration-300 scrollbar-style"
+    class="bg-white dark:bg-gray-900 w-64 sidebar overflow-y-auto overflow-x-hidden duration-300 scrollbar-style shadow-md"
     id="sidebar"
     aria-label="Sidebar"
   >

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -10,7 +10,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    app.config['SECRET_KEY'] = 'hjshjhdjahkjshkjdhjs'
+    app.config['SECRET_KEY'] = 'D2GECauenaubK6eA1JWwJ7Lpo7C2Ta4P'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
@@ -27,8 +27,8 @@ def create_app():
     app.register_blueprint(sale, url_prefix='/api/')
     app.register_blueprint(purchase, url_prefix='/api/')
     app.register_blueprint(analytics, url_prefix='/api/')
-    app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(settings, url_prefix='/api/')
+    app.register_blueprint(auth, url_prefix='/')
 
     create_database(app)
 

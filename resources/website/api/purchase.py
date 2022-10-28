@@ -9,7 +9,7 @@ from datetime import datetime, date, time
 import xlsxwriter
 from pathlib import Path
 import requests
-from website.token import token_required, currentUser
+from website.token import currentUser
 
 purchase = Blueprint('purchase', __name__)
 BASE_URL = "http://localhost:5000"

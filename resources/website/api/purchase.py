@@ -23,7 +23,7 @@ def createPurchase():
 
     purchase = Purchase(
         total_amount=total_amount,
-        seller_name=seller["sellerName"],
+        seller_name=seller["sellerName"].lower(),
         seller_invoice_number=seller["invoiceNumber"],
         seller_fiscal_number=seller["fiscalNumber"],
         seller_tax_number=seller["taxNumber"],
@@ -59,14 +59,14 @@ def createPurchase():
                 date_modified=datetime.now(),
             )
 
-            product_query.name = product["productName"]
+            product_query.name = product["productName"].lower()
             product_query.tax = product["tax"]
             product_query.purchased_price = product["purchasedPrice"]
             product_query.selling_price = product["sellingPrice"]
             product_query.stock += Decimal(product["stock"])
         else:
             created_product = Product(
-                name=product["productName"], 
+                name=product["productName"].lower(), 
                 barcode=product["barcode"], 
                 stock=product["stock"], 
                 tax=product["tax"], 

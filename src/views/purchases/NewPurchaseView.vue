@@ -108,16 +108,41 @@
         <div class="basis-1/4 md:basis-1/6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("productName") }}</label
+          >
+          <Field
+            required
+            :rules="isRequired"
+            type="text"
+            v-model="product.productName"
+            :placeholder="$t('productName')"
+            class="hidden"
+            :name="`${index}name`"
+            :id="`${index}name`"
+          />
+          <v-select
+            class="block w-full default-input !p-[1px]"
+            :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
+            v-model="product.productName"
+            :clearable="true"
+            :options="productsList"
+            :reduce="(productsList) => productsList.name"
+            label="name"
+            type="text"
+            :placeholder="$t('productName')"
+            :taggable="true"
+            @option:selected="getProductDetails($event, index)"
+          />
+          <span class="text-red-700">{{ errors[`${index}name`] }}</span>
+        </div>
+        <div class="basis-1/4 md:basis-1/6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("barcode") }}</label
           >
           <Field
             required
             :rules="isRequired"
-            @input="
-              $debounce(() => {
-                getProductDetails(product.barcode, index);
-              }, 300)
-            "
             type="number"
             step="1"
             v-model="product.barcode"
@@ -128,43 +153,6 @@
             :id="`${index}barcode`"
           />
           <span class="text-red-700">{{ errors[`${index}barcode`] }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("productName") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="text"
-            v-model="product.productName"
-            :placeholder="$t('productName')"
-            class="default-input w-full"
-            :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
-            :name="`${index}name`"
-            :id="`${index}name`"
-          />
-          <span class="text-red-700">{{ errors[`${index}name`] }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("stock") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="number"
-            step="1"
-            v-model="product.stock"
-            :placeholder="$t('stock')"
-            class="default-input w-full"
-            :class="errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''"
-            :name="`${index}stock`"
-            :id="`${index}stock`"
-          />
-          <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
         </div>
         <div class="basis-1/4 md:basis-1/6">
           <label
@@ -217,20 +205,37 @@
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("sellingPrice") }}</label
           >
+          <Field
+            required
+            :rules="isRequired"
+            type="number"
+            step="0.01"
+            v-model="product.sellingPrice"
+            :placeholder="$t('sellingPrice')"
+            class="default-input w-full"
+            :class="errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''"
+            :name="`${index}sellingPrice`"
+            :id="`${index}sellingPrice`"
+          />
+          <span class="text-red-700">{{ errors[`${index}sellingPrice`] }}</span>
+        </div>
+        <div class="basis-1/4 md:basis-1/6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("stock") }}</label
+          >
           <div class="flex items-center gap-2">
             <Field
               required
               :rules="isRequired"
               type="number"
-              step="0.01"
-              v-model="product.sellingPrice"
-              :placeholder="$t('sellingPrice')"
+              step="1"
+              v-model="product.stock"
+              :placeholder="$t('stock')"
               class="default-input w-full"
-              :class="
-                errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''
-              "
-              :name="`${index}sellingPrice`"
-              :id="`${index}sellingPrice`"
+              :class="errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''"
+              :name="`${index}stock`"
+              :id="`${index}stock`"
             />
             <button
               v-show="products.length != 1"
@@ -244,7 +249,7 @@
               />
             </button>
           </div>
-          <span class="text-red-700">{{ errors[`${index}sellingPrice`] }}</span>
+          <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
         </div>
       </div>
       <div class="flex justify-end my-3 gap-2">
@@ -305,12 +310,19 @@ export default {
     };
   },
   computed: {
+    productsList() {
+      return this.$store.getters["productModule/getProductsList"];
+    },
     sellers() {
       return this.$store.getters["purchaseModule/getSellersList"];
     },
   },
   async created() {
     await this.$store.dispatch("purchaseModule/getSellers", {
+      page: 1,
+      per_page: 1000000000,
+    });
+    await this.$store.dispatch("productModule/getProducts", {
       page: 1,
       per_page: 1000000000,
     });
@@ -340,28 +352,6 @@ export default {
       }, 0);
       return sum.toFixed(2);
     },
-    getProductDetails(e, idx) {
-      this.$store
-        .dispatch("productModule/getProductDetailsByBarcode", e)
-        .then(async (res) => {
-          const options = this.$swalConfirmObject();
-          options.position = "top-end";
-          options.toast = true;
-          options.icon = "info";
-          options.timer = 10000;
-          options.html =
-            "<p class='text-gray-500 dark:text-gray-300'>We found a product with this barcode, do you want to automatically fill the rest of the fields?</p>";
-          await this.$swal(options).then((result) => {
-            if (result.isConfirmed) {
-              const foundProduct = this.products[idx];
-              foundProduct.productName = res.data.name;
-              foundProduct.tax = res.data.tax;
-              foundProduct.sellingPrice = res.data.sellingPrice;
-              foundProduct.purchasedPrice = res.data.purchasedPrice;
-            }
-          });
-        });
-    },
     getSellerDetails(e) {
       this.seller.sellerName = e.sellerName ? e.sellerName : e;
       const sellerInfo = this.sellers.find(
@@ -370,6 +360,19 @@ export default {
       if (sellerInfo) {
         this.seller.fiscalNumber = sellerInfo?.sellerFiscalNumber;
         this.seller.taxNumber = sellerInfo?.sellerTaxNumber;
+      }
+    },
+    getProductDetails(e, idx) {
+      this.products[idx].productName = e.name ? e.name : e;
+      const productInfo = this.productsList.find(
+        (x) => x.name.toLowerCase() === e.name.toLowerCase()
+      );
+      if (productInfo) {
+        this.products[idx].productName = productInfo.name;
+        this.products[idx].barcode = productInfo.barcode;
+        this.products[idx].tax = productInfo.tax;
+        this.products[idx].sellingPrice = productInfo.sellingPrice;
+        this.products[idx].purchasedPrice = productInfo.purchasedPrice;
       }
     },
     submit() {
@@ -382,6 +385,7 @@ export default {
       this.$store
         .dispatch("purchaseModule/createPurchase", data)
         .then(() => {
+          this.$router.push({ name: "purchases" });
           this.isLoading = false;
           this.seller = {
             sellerName: "",
@@ -399,8 +403,7 @@ export default {
               sellingPrice: "",
             },
           ];
-          this.$toast.success("Purchase saved successfully!");
-          this.$router.push({ name: "purchases" });
+          this.$toast.success(this.$t("purchaseSaved"));
         })
         .catch(() => {
           this.isLoading = false;
@@ -413,5 +416,6 @@ export default {
 <style lang="scss">
 .vs__search::placeholder {
   @apply text-sm;
+  @apply text-gray-600;
 }
 </style>

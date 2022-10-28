@@ -18,7 +18,7 @@ def createProduct():
     selling_price = request.json["sellingPrice"]
 
     product = Product(
-        name=name, 
+        name=name.lower(), 
         barcode=barcode, 
         stock=stock, 
         tax=tax, 

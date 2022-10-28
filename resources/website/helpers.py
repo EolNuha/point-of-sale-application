@@ -2,6 +2,7 @@
 from decimal import *
 import pandas as pd
 from datetime import datetime, date, time, timedelta
+from collections import Counter
 def get_page_range(page, total, show=5):
     start = max((page - (show // 2)), 1)
     stop = min(start + show, total) + 1
@@ -88,3 +89,10 @@ def get_curr_prev_dates(request):
         "prev_date_start": prev_date_start,
         "prev_date_end": prev_date_end,
     }
+
+def sumListOfDicts(arr):
+    my_dict = Counter()
+    for d in arr:
+        for key, value in d.items():
+            my_dict[key] += value
+    return dict(my_dict)

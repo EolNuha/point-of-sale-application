@@ -21,8 +21,8 @@
         iconName="ChevronDownIcon"
         :iconClass="
           isOpened
-            ? 'w-4 h-4 transform rotate-180 transition duration-250 ease-in-out'
-            : 'w-4 h-4 transition duration-250 ease-in-out'
+            ? 'w-4 h-4 transform -rotate-180 transition duration-300 ease-in-out'
+            : 'w-4 h-4 transition duration-300 ease-in-out'
         "
       />
     </button>

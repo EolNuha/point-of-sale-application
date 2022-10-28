@@ -115,8 +115,8 @@
             </template>
           </tbody>
         </table>
-        <hr class="border-gray-500" />
       </div>
+      <hr class="border-gray-500" />
       <div class="flex flex-row justify-end p-5">
         <div class="basis-3/4 md:basis-1/2 lg:basis-1/4">
           <table class="text-gray-700 dark:text-gray-300 w-full">
@@ -125,14 +125,12 @@
                 <td class="py-2">{{ $t("subTotal") }}</td>
                 <td class="text-right py-2">{{ purchase.subTotalAmount }} €</td>
               </tr>
-              <tr>
-                <td class="py-2">{{ $t("tax") }} (8%)</td>
-                <td class="text-right py-2">{{ purchase.eightTaxAmount }} €</td>
-              </tr>
-              <tr>
-                <td class="py-2">{{ $t("tax") }} (18%)</td>
+              <tr v-for="item in taxes" :key="item.settingsValue">
+                <td class="py-2 uppercase">
+                  {{ $t("tax") }} ({{ item.settingsValue }}%)
+                </td>
                 <td class="text-right py-2">
-                  {{ purchase.eighteenTaxAmount }} €
+                  {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
                 </td>
               </tr>
               <tr class="font-bold text-xl">
@@ -158,8 +156,14 @@ export default {
     purchase() {
       return this.$store.state.purchaseModule.purchase;
     },
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
   },
   async created() {
+    this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
     await this.$store
       .dispatch(
         "purchaseModule/getPurchaseDetails",
@@ -168,6 +172,11 @@ export default {
       .then(() => {
         this.isLoading = false;
       });
+  },
+  methods: {
+    getTaxValue(arr, alias) {
+      return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
+    },
   },
 };
 </script>

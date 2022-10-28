@@ -85,8 +85,14 @@
           >
             <tr>
               <th scope="col" class="py-3 px-6">ID</th>
-              <th scope="col" class="py-3 px-6">8%</th>
-              <th scope="col" class="py-3 px-6">18%</th>
+              <th
+                scope="col"
+                class="py-3 px-6"
+                v-for="item in taxes"
+                :key="item.settingsValue"
+              >
+                {{ item.settingsName }}%
+              </th>
               <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
               <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
               <th scope="col" class="py-3 px-6"></th>
@@ -98,8 +104,13 @@
                 class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
               >
                 <td class="py-2 px-6">{{ sale.id }}</td>
-                <td class="py-2 px-6">{{ sale.eightTaxAmount }} €</td>
-                <td class="py-2 px-6">{{ sale.eighteenTaxAmount }} €</td>
+                <td
+                  class="py-2 px-6"
+                  v-for="item in taxes"
+                  :key="item.settingsValue"
+                >
+                  {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+                </td>
                 <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                 <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
                 <td class="py-2 px-6">
@@ -154,6 +165,9 @@ export default {
     saleDate() {
       return this.$route.query.saleDate;
     },
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
   },
   watch: {
     searchQuery: {
@@ -174,9 +188,15 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
     this.reload();
   },
   methods: {
+    getTaxValue(arr, alias) {
+      return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
+    },
     reload() {
       this.isTableLoading = true;
       this.$store

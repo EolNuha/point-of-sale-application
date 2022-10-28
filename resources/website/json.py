@@ -72,8 +72,6 @@ def getSalesList(sales):
             "id": i.id,
             "totalAmount": i.total_amount,
             "subTotalAmount": i.subtotal_amount,
-            "eightTaxAmount": i.eight_tax_amount,
-            "eighteenTaxAmount": i.eighteen_tax_amount,
             "customerAmount": i.customer_amount,
             "changeAmount": i.change_amount,
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
@@ -89,10 +87,9 @@ def getDailySalesList(sales):
             "id": i.id,
             "totalAmount": i.total_amount,
             "subTotalAmount": i.subtotal_amount,
-            "eightTaxAmount": i.eight_tax_amount,
-            "eighteenTaxAmount": i.eighteen_tax_amount,
             "customerAmount": i.customer_amount,
             "changeAmount": i.change_amount,
+            "taxes": getTaxesList(i.sale_taxes),
             "user": getUserDict(i.user),
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
@@ -136,6 +133,7 @@ def getPurchasesList(purchases):
             "subTotalAmount": i.subtotal_amount,
             "eightTaxAmount": i.eight_tax_amount,
             "eighteenTaxAmount": i.eighteen_tax_amount,
+            "taxes": getTaxesList(i.purchase_taxes),
             "purchaseItems": getPurchaseItemsList(i.purchase_items),
             "user": getUserDict(i.user),
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
@@ -158,3 +156,30 @@ def getSellersList(sellers):
         }
         sellers_list.append(seller_dict)
     return sellers_list
+
+def getSettingsList(items):
+    items_list = []
+    for i in items:
+        item_dict = {
+            "id": i.id,
+            "settingsName": i.settings_name,
+            "settingsAlias": i.settings_alias,
+            "settingsType": i.settings_type,
+            "settingsValue": i.settings_value,
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+        }
+        items_list.append(item_dict)
+    return items_list
+
+def getTaxesList(items):
+    items_list = []
+    for i in items:
+        item_dict = {
+            "id": i.id,
+            "taxName": i.tax_name,
+            "taxAlias": i.tax_alias,
+            "taxValue": i.tax_value,
+        }
+        items_list.append(item_dict)
+    return items_list

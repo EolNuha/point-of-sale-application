@@ -1,6 +1,14 @@
-from email.policy import default
 from . import db
 from datetime import datetime
+
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    settings_name = db.Column(db.String(200))
+    settings_alias = db.Column(db.String(200))
+    settings_type = db.Column(db.String(200))
+    settings_value = db.Column(db.String(200))
+    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_modified = db.Column(db.DateTime, default=datetime.now())
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,13 +40,19 @@ class Sale(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     total_amount = db.Column(db.Numeric(precision=10, scale=2))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=2))
-    eight_tax_amount = db.Column(db.Numeric(precision=10, scale=2))
-    eighteen_tax_amount = db.Column(db.Numeric(precision=10, scale=2))
     customer_amount = db.Column(db.Numeric(precision=10, scale=2))
     change_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
+    sale_taxes = db.relationship('SaleTax', backref='sale', lazy=True)
     sale_items = db.relationship('SaleItem', backref='sale', lazy=True)
+
+class SaleTax(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sale_id = db.Column(db.Integer, db.ForeignKey('sale.id'), nullable=False)
+    tax_name = db.Column(db.String(200))
+    tax_alias = db.Column(db.String(200))
+    tax_value = db.Column(db.Numeric(precision=10, scale=2))
 
 class SaleItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,7 +83,15 @@ class Purchase(db.Model):
     eighteen_tax_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
+    purchase_taxes = db.relationship('PurchaseTax', backref='purchase', lazy=True)
     purchase_items = db.relationship('PurchaseItem', backref='purchase', lazy=True)
+
+class PurchaseTax(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    purchase_id = db.Column(db.Integer, db.ForeignKey('purchase.id'), nullable=False)
+    tax_name = db.Column(db.String(200))
+    tax_alias = db.Column(db.String(200))
+    tax_value = db.Column(db.Numeric(precision=10, scale=2))
 
 class PurchaseItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)

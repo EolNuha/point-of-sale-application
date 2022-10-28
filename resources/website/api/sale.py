@@ -1,8 +1,8 @@
 from datetime import datetime, date, timedelta, time
 from flask import Blueprint, request, jsonify, request
-from website.models import Sale, SaleItem, Product, User
-from website.helpers import getPaginatedDict
-from website.json import getSalesList, getSaleItemsList, getDailySalesList
+from website.models import Sale, SaleItem, SaleTax, Product, User, Settings
+from website.helpers import getPaginatedDict, sumListOfDicts
+from website.json import getSalesList, getSaleItemsList, getDailySalesList, getTaxesList
 from website import db
 from sqlalchemy import desc, or_
 import sqlalchemy as sa
@@ -64,19 +64,28 @@ def createSale():
         
         db.session.add(sale_item)
 
-    subtotal, eight, eighteen = [], [], []
+    subtotal, sale_taxes = [], []
+    taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in getSaleItemsList(sale.sale_items):
         subtotal.append(item['priceWithoutTax'] * Decimal(item['quantity']))
-        if item['product']['tax'] == 8:
-            eight.append(item['taxAmount'] * Decimal(item['quantity']))
-        if item['product']['tax'] == 18:
-            eighteen.append(item['taxAmount'] * Decimal(item['quantity']))
+        for tax in taxes:
+            if item['product']['tax'] == int(tax.settings_value):
+                key_v = tax.settings_name + "+" + tax.settings_alias
+                sale_taxes.append({key_v: item['taxAmount'] * Decimal(item['quantity'])})
     
     sale.subtotal_amount = sum(subtotal)
-    sale.eight_tax_amount = sum(eight)
-    sale.eighteen_tax_amount = sum(eighteen)
-    
+    sale_taxes = sumListOfDicts(sale_taxes)
+    for key, value in sale_taxes.items():
+        split_key = key.split("+")
+        db.session.add(
+            SaleTax(
+                sale=sale, 
+                tax_name=str(split_key[0]), 
+                tax_alias=str(split_key[1]), 
+                tax_value=value
+            )
+        )
     db.session.commit()
     
     return jsonify("success"), 200
@@ -108,8 +117,6 @@ def getSales():
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),
-        Sale.eight_tax_amount.ilike(looking_for),
-        Sale.eighteen_tax_amount.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created > date_start)\
@@ -121,8 +128,6 @@ def getSales():
             sa.func.sum(Sale.total_amount).label("total_amount"),
             sa.func.sum(Sale.change_amount).label("change_amount"),
             sa.func.sum(Sale.customer_amount).label("customer_amount"),
-            sa.func.sum(Sale.eight_tax_amount).label("eight_tax_amount"),
-            sa.func.sum(Sale.eighteen_tax_amount).label("eighteen_tax_amount"),
         )\
         .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))
 
@@ -158,8 +163,6 @@ def getDailySales():
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),
-        Sale.eight_tax_amount.ilike(looking_for),
-        Sale.eighteen_tax_amount.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= sale_date_end)\
         .filter(Sale.date_created >= sale_date_start)
@@ -175,7 +178,9 @@ def getDailySales():
 def getSaleDetails(saleId):
     sales = getSalesList(Sale.query.filter_by(id=saleId).all())[0]
     sale_items = getSaleItemsList(SaleItem.query.filter_by(sale_id=saleId).all())
+    sale_taxes = getTaxesList(SaleTax.query.filter_by(sale_id=saleId).all())
     sales["saleItems"] = sale_items
+    sales["taxes"] = sale_taxes
     return jsonify(sales)
 
 @sale.route('/sales/download-exel', methods=["GET"])

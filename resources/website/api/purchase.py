@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, request
-from website.models import Purchase, PurchaseItem, Product
-from website.helpers import getPaginatedDict
+from website.models import Purchase, PurchaseItem, Product, Settings, PurchaseTax
+from website.helpers import getPaginatedDict, sumListOfDicts
 from website.json import getPurchasesList, getPurchaseItemsList, getSellersList
 from website import db
 from sqlalchemy import or_
@@ -15,7 +15,6 @@ purchase = Blueprint('purchase', __name__)
 BASE_URL = "http://localhost:5000"
 
 @purchase.route('/purchases', methods=["POST"])
-@token_required
 def createPurchase():
     products = request.json["products"]
     seller = request.json["seller"]
@@ -34,7 +33,6 @@ def createPurchase():
     )
 
     db.session.add(purchase)
-
 
     for product in products:
         decimal_price = Decimal(product["purchasedPrice"])
@@ -98,19 +96,28 @@ def createPurchase():
             )
         db.session.add(purchase_item)
 
-    subtotal, eight, eighteen = [], [], []
+    subtotal, purchase_taxes = [], []
+    taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in getPurchaseItemsList(purchase.purchase_items):
         subtotal.append(item['priceWithoutTax'] * Decimal(item['product']['stock']))
-        if item['product']['tax'] == 8:
-            eight.append(item['taxAmount'] * Decimal(item['product']['stock']))
-        if item['product']['tax'] == 18:
-            eighteen.append(item['taxAmount'] * Decimal(item['product']['stock']))
+        for tax in taxes:
+            if item['product']['tax'] == int(tax.settings_value):
+                key_v = tax.settings_name + "+" + tax.settings_alias
+                purchase_taxes.append({key_v: item['taxAmount'] * Decimal(item['product']['stock'])})
     
     purchase.subtotal_amount = sum(subtotal)
-    purchase.eight_tax_amount = sum(eight)
-    purchase.eighteen_tax_amount = sum(eighteen)
-    
+    purchase_taxes = sumListOfDicts(purchase_taxes)
+    for key, value in purchase_taxes.items():
+        split_key = key.split("+")
+        db.session.add(
+            PurchaseTax(
+                purchase=purchase, 
+                tax_name=str(split_key[0]), 
+                tax_alias=str(split_key[1]), 
+                tax_value=value
+            )
+        )
     db.session.commit()
     
     return jsonify("Success"), 200

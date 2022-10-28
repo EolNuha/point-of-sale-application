@@ -75,8 +75,13 @@
             required
             as="select"
           >
-            <option value="8">8%</option>
-            <option value="18">18%</option>
+            <option
+              v-for="item in taxes"
+              :key="item.settingsValue"
+              :value="item.settingsValue"
+            >
+              {{ item.settingsName }}%
+            </option>
           </Field>
           <span class="text-red-700">{{ errors.product_tax }}</span>
         </div>
@@ -163,6 +168,16 @@ export default {
       },
       isLoading: false,
     };
+  },
+  computed: {
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
+  },
+  async created() {
+    await this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
   },
   methods: {
     isRequired(value) {

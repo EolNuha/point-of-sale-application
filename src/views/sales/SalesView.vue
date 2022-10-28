@@ -90,8 +90,6 @@
           >
             <tr>
               <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
-              <th scope="col" class="py-3 px-6">8%</th>
-              <th scope="col" class="py-3 px-6">18%</th>
               <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
               <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
               <th scope="col" class="py-3 px-6"></th>
@@ -105,8 +103,6 @@
                 <td class="py-2 px-6">
                   {{ sale.dateCreated.substring(0, 10) }}
                 </td>
-                <td class="py-2 px-6">{{ sale.eightTaxAmount }} €</td>
-                <td class="py-2 px-6">{{ sale.eighteenTaxAmount }} €</td>
                 <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                 <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
                 <td class="py-2 px-6">

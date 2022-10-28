@@ -85,13 +85,13 @@
                 <td class="py-2 uppercase">{{ $t("subTotal") }}</td>
                 <td class="text-right py-2">{{ sale.subTotalAmount }} €</td>
               </tr>
-              <tr>
-                <td class="py-2 uppercase">{{ $t("tax") }} (8%)</td>
-                <td class="text-right py-2">{{ sale.eightTaxAmount }} €</td>
-              </tr>
-              <tr>
-                <td class="py-2 uppercase">{{ $t("tax") }} (18%)</td>
-                <td class="text-right py-2">{{ sale.eighteenTaxAmount }} €</td>
+              <tr v-for="item in taxes" :key="item.settingsValue">
+                <td class="py-2 uppercase">
+                  {{ $t("tax") }} ({{ item.settingsValue }}%)
+                </td>
+                <td class="text-right py-2">
+                  {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+                </td>
               </tr>
               <tr class="font-bold text-xl">
                 <td class="py-2 uppercase">{{ $t("total") }}</td>
@@ -117,13 +117,24 @@ export default {
     sale() {
       return this.$store.state.saleModule.sale;
     },
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
   },
   async created() {
+    this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
     await this.$store
       .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)
       .then(() => {
         this.isLoading = false;
       });
+  },
+  methods: {
+    getTaxValue(arr, alias) {
+      return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
+    },
   },
 };
 </script>

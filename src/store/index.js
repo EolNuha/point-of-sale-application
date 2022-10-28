@@ -6,6 +6,7 @@ import saleModule from "./sale/saleModule";
 import purchaseModule from "./purchase/purchaseModule";
 import userModule from "./user/userModule";
 import analyticsModule from "./analytics/analyticsModule";
+import settingsModule from "./settings/settingsModule";
 
 export default createStore({
   state: {},
@@ -18,5 +19,6 @@ export default createStore({
     purchaseModule,
     userModule,
     analyticsModule,
+    settingsModule,
   },
 });

@@ -86,12 +86,72 @@
             routeName="new-sale"
           />
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
           >
             <tr>
-              <th scope="col" class="py-3 px-6">{{ $t("date") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('date_created')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("date") }}
+                  <template v-if="sortColumn === 'date_created'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('subtotal_amount')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("subtotalAmount") }}
+                  <template v-if="sortColumn === 'subtotal_amount'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('total_amount')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("totalAmount") }}
+                  <template v-if="sortColumn === 'total_amount'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
               <th scope="col" class="py-3 px-6"></th>
             </tr>
           </thead>
@@ -143,9 +203,10 @@ export default {
       isExcelLoading: false,
       currentPage: 1,
       searchQuery: "",
-      excelSales: [],
       startDate: "",
       endDate: "",
+      sortColumn: null,
+      sortDir: "desc",
     };
   },
   watch: {
@@ -159,6 +220,8 @@ export default {
             search: value,
             startDate: this.startDate,
             endDate: this.endDate,
+            sort_column: this.sortColumn,
+            sort_dir: this.sortDir,
           });
           this.isTableLoading = false;
         } catch {
@@ -180,27 +243,9 @@ export default {
     this.currentMonth = new Date().getMonth() + 1;
     this.startDate = currentMonth.startDate;
     this.endDate = currentMonth.endDate;
-    this.reload();
+    this.getSales(this.currentPage);
   },
   methods: {
-    reload() {
-      this.isTableLoading = true;
-      this.$store
-        .dispatch("saleModule/getSales", {
-          startDate: this.startDate,
-          endDate: this.endDate,
-          page: this.currentPage,
-          search: this.searchQuery,
-        })
-        .then((res) => {
-          this.isTableLoading = false;
-          this.excelSales = res.data.data;
-        })
-        .catch(() => {
-          this.isTableLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
-        });
-    },
     getMonth(v) {
       const month = String(v).padStart(2, "0");
       const year = new Date().getFullYear();
@@ -219,6 +264,8 @@ export default {
           startDate: this.startDate,
           endDate: this.endDate,
           search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -257,6 +304,11 @@ export default {
           this.isExcelLoading = false;
           this.$toast.error(this.$t("somethingWrong"));
         });
+    },
+    sort(col) {
+      this.sortColumn = col;
+      this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
+      this.getSales(this.currentPage);
     },
   },
 };

@@ -3,7 +3,7 @@ from website.models import Purchase, PurchaseItem, Product, Settings, PurchaseTa
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.json import getPurchasesList, getPurchaseItemsList, getSellersList
 from website import db
-from sqlalchemy import or_
+from sqlalchemy import or_, asc, desc
 from decimal import *
 from datetime import datetime, date, time
 import xlsxwriter
@@ -126,9 +126,12 @@ def createPurchase():
 def getPurchases():
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
-    desc = request.args.get('desc', True, type=bool)
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
     date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
     date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
@@ -150,13 +153,10 @@ def getPurchases():
         Purchase.seller_fiscal_number.ilike(looking_for),
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
+        .order_by(sort)\
         .filter(Purchase.date_created <= date_end)\
-        .filter(Purchase.date_created > date_start)
-
-    if (desc):
-        paginated_items = paginated_items.order_by(Purchase.id.desc())
-
-    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
+        .filter(Purchase.date_created > date_start)\
+        .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
 

@@ -4,7 +4,7 @@ from website.models import Sale, SaleItem, SaleTax, Product, User, Settings
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.json import getSalesList, getSaleItemsList, getDailySalesList, getTaxesList
 from website import db
-from sqlalchemy import or_
+from sqlalchemy import or_, asc, desc, func
 import sqlalchemy as sa
 from decimal import *
 import xlsxwriter
@@ -94,7 +94,10 @@ def createSale():
 def getSales():
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
-    desc = request.args.get('desc', True, type=bool)
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
     
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
@@ -120,6 +123,7 @@ def getSales():
         ))\
         .filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created > date_start)\
+        .order_by(sort)\
         .with_entities(
             Sale.id.label("id"), 
             Sale.date_created.label("date_created"), 
@@ -129,12 +133,8 @@ def getSales():
             sa.func.sum(Sale.change_amount).label("change_amount"),
             sa.func.sum(Sale.customer_amount).label("customer_amount"),
         )\
-        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))
-
-    if (desc):
-        paginated_items = paginated_items.order_by(Sale.id.desc())
-
-    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
+        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
+        .paginate(page=page, per_page=per_page)
 
 
     return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
@@ -143,7 +143,15 @@ def getSales():
 def getDailySales():
     sale_date = request.args.get('date', type=str)
     sale_date = sale_date.split(".")
-    desc = request.args.get('desc', True, type=bool)
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    if sort_column == "user":
+        sort_column = func.lower(User.first_name)
+    elif sort_column == "tax":
+        sort_column = func.lower(SaleTax.tax_value)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
     sale_date_start = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.min)
     sale_date_end = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.max)
@@ -159,18 +167,16 @@ def getDailySales():
     else:
         looking_for = '%{0}%'.format(search)
         
-    paginated_items = Sale.query.filter(or_(
+    paginated_items = Sale.query.join(Sale.user).join(Sale.sale_taxes)\
+        .filter(or_(
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),
         ))\
+        .order_by(sort)\
         .filter(Sale.date_created <= sale_date_end)\
-        .filter(Sale.date_created >= sale_date_start)
-
-    if (desc):
-        paginated_items = paginated_items.order_by(Sale.id.desc())
-
-    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
+        .filter(Sale.date_created >= sale_date_start)\
+        .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getDailySalesList(paginated_items.items), paginated_items))
 
@@ -194,9 +200,9 @@ def downloadSalesExcel():
     daily_date = request.args.get('dailyDate', type=str)
     
     if daily:
-        URL = f'{BASE_URL}/api/sales/daily?page={page}&per_page={per_page}&date={daily_date}&desc='
+        URL = f'{BASE_URL}/api/sales/daily?page={page}&per_page={per_page}&date={daily_date}&sort_dir=asc'
     else:
-        URL = f'{BASE_URL}/api/sales?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&desc='
+        URL = f'{BASE_URL}/api/sales?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&sort_dir=asc'
 
     api_response = requests.get(URL)
     sales = list(api_response.json()["data"])

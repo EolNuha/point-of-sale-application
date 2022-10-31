@@ -219,6 +219,8 @@ export default {
               page: 1,
               per_page: 10,
               search: value,
+              sort_column: "name",
+              sort_dir: "asc",
             })
             .then((res) => {
               this.searchedProducts = res.data.data;

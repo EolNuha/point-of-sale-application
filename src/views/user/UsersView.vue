@@ -63,12 +63,132 @@
                 v-if="currentUser.userType !== 'staff'"
               ></th>
               <th scope="col" class="py-3 px-6">{{ $t("image") }}</th>
-              <th scope="col" class="py-3 px-6">ID</th>
-              <th scope="col" class="py-3 px-6">{{ $t("firstName") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("lastName") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("username") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("email") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("type") }}</th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('id')"
+              >
+                <div class="flex justify-between items-center">
+                  ID
+                  <template v-if="sortColumn === 'id'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('first_name')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("firstName") }}
+                  <template v-if="sortColumn === 'first_name'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('last_name')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("lastName") }}
+                  <template v-if="sortColumn === 'last_name'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('username')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("username") }}
+                  <template v-if="sortColumn === 'username'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('email')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("email") }}
+                  <template v-if="sortColumn === 'email'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('user_type')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("type") }}
+                  <template v-if="sortColumn === 'user_type'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
               <th scope="col" class="py-3 px-6"></th>
               <th
                 scope="col"
@@ -174,7 +294,7 @@
       getAction="userModule/getUsers"
       title="User"
       deleteRef="delete-modal"
-      @reload="reload"
+      @reload="getUsers(currentPage)"
     >
     </delete-modal>
   </div>
@@ -193,6 +313,8 @@ export default {
       selectedUserToDelete: {},
       currentPage: 1,
       searchQuery: "",
+      sortColumn: null,
+      sortDir: "desc",
     };
   },
   watch: {
@@ -204,6 +326,8 @@ export default {
           await this.$store.dispatch("userModule/getUsers", {
             page: this.currentPage,
             search: value,
+            sort_column: this.sortColumn,
+            sort_dir: this.sortDir,
           });
           this.isTableLoading = false;
         } catch {
@@ -232,24 +356,9 @@ export default {
         }
       }
     });
-    this.reload();
+    this.getUsers(this.currentPage);
   },
   methods: {
-    reload() {
-      this.isTableLoading = true;
-      this.selectedUser = {};
-      this.$store
-        .dispatch("userModule/getUsers", {
-          page: this.currentPage,
-          search: this.searchQuery,
-        })
-        .then(() => {
-          this.isTableLoading = false;
-        })
-        .catch(() => {
-          this.$toast.error(this.$t("somethingWrong"));
-        });
-    },
     updateSelectedUser(user) {
       if (this.selectedUser.id === user.id) {
         this.selectedUser = {};
@@ -268,6 +377,8 @@ export default {
         .dispatch("userModule/getUsers", {
           page: page,
           search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -277,6 +388,11 @@ export default {
           this.isTableLoading = false;
           this.$toast.error(this.$t("somethingWrong"));
         });
+    },
+    sort(col) {
+      this.sortColumn = col;
+      this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
+      this.getUsers(this.currentPage);
     },
   },
 };

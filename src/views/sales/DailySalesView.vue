@@ -81,20 +81,101 @@
             routeName="new-sale"
           />
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
           >
             <tr>
-              <th scope="col" class="py-3 px-6">ID</th>
               <th
                 scope="col"
-                class="py-3 px-6"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('id')"
+              >
+                <div class="flex justify-between items-center">
+                  ID
+                  <template v-if="sortColumn === 'id'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600 cursor-not-allowed"
                 v-for="item in taxes"
                 :key="item.settingsValue"
               >
                 {{ item.settingsName }}%
               </th>
-              <th scope="col" class="py-3 px-6">{{ $t("subtotalAmount") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("totalAmount") }}</th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('subtotal_amount')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("subtotalAmount") }}
+                  <template v-if="sortColumn === 'subtotal_amount'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('total_amount')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("totalAmount") }}
+                  <template v-if="sortColumn === 'total_amount'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('user')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("user") }}
+                  <template v-if="sortColumn === 'user'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
               <th scope="col" class="py-3 px-6"></th>
             </tr>
           </thead>
@@ -113,6 +194,9 @@
                 </td>
                 <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                 <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
+                <td class="py-2 px-6">
+                  {{ sale.user.firstName }} {{ sale.user.lastName }}
+                </td>
                 <td class="py-2 px-6">
                   <button
                     @click="
@@ -152,7 +236,8 @@ export default {
       isExcelLoading: false,
       currentPage: 1,
       searchQuery: "",
-      excelSales: [],
+      sortColumn: null,
+      sortDir: "desc",
     };
   },
   computed: {
@@ -179,6 +264,8 @@ export default {
             page: this.currentPage,
             search: value,
             date: this.saleDate,
+            sort_column: this.sortColumn,
+            sort_dir: this.sortDir,
           });
           this.isTableLoading = false;
         } catch {
@@ -191,27 +278,11 @@ export default {
     this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",
     });
-    this.reload();
+    this.getSales(this.currentPage);
   },
   methods: {
     getTaxValue(arr, alias) {
       return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
-    },
-    reload() {
-      this.isTableLoading = true;
-      this.$store
-        .dispatch("saleModule/getDailySales", {
-          page: this.currentPage,
-          date: this.saleDate,
-          search: this.searchQuery,
-        })
-        .then(() => {
-          this.isTableLoading = false;
-        })
-        .catch(() => {
-          this.isTableLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
-        });
     },
     getSales(page) {
       this.isTableLoading = true;
@@ -220,6 +291,8 @@ export default {
           page: page,
           date: this.saleDate,
           search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -249,6 +322,11 @@ export default {
           this.isExcelLoading = false;
           this.$toast.error(this.$t("somethingWrong"));
         });
+    },
+    sort(col) {
+      this.sortColumn = col;
+      this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
+      this.getSales(this.currentPage);
     },
   },
 };

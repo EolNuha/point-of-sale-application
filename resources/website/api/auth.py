@@ -8,7 +8,7 @@ from website import db
 from website.helpers import getPaginatedDict
 from website.json import getUsersList, getUserDict
 from website.token import token_required
-from sqlalchemy import or_
+from sqlalchemy import or_, asc, desc, func
 
 auth = Blueprint('auth', __name__)
 
@@ -91,6 +91,10 @@ def users():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
     if '*' in search or '_' in search: 
         looking_for = search.replace('_', '__')\
@@ -106,6 +110,7 @@ def users():
         User.username.ilike(looking_for),
         User.email.ilike(looking_for),
         ))\
+        .order_by(sort)\
         .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getUsersList(paginated_items.items), paginated_items))

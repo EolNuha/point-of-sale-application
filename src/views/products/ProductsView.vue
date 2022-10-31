@@ -53,19 +53,157 @@
             routeName="new-product"
           />
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
           >
             <tr>
               <th scope="col" class="py-3 px-6"></th>
-              <th scope="col" class="py-3 px-6">ID</th>
-              <th scope="col" class="py-3 px-6">
-                {{ $t("productName") }}
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('id')"
+              >
+                <div class="flex justify-between items-center">
+                  ID
+                  <template v-if="sortColumn === 'id'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
               </th>
-              <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("purchasedPrice") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("stock") }}</th>
-              <th scope="col" class="py-3 px-6">{{ $t("tax") }}</th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('name')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("productName") }}
+                  <template v-if="sortColumn === 'name'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('barcode')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("barcode") }}
+                  <template v-if="sortColumn === 'barcode'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('purchased_price')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("purchasedPrice") }}
+                  <template v-if="sortColumn === 'purchased_price'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('selling_price')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("sellingPrice") }}
+                  <template v-if="sortColumn === 'selling_price'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('stock')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("stock") }}
+                  <template v-if="sortColumn === 'stock'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                @click="sort('tax')"
+              >
+                <div class="flex justify-between items-center">
+                  {{ $t("tax") }}
+                  <template v-if="sortColumn === 'tax'">
+                    <IconC
+                      iconName="ArrowLongDownIcon"
+                      iconClass="w-4 h-4"
+                      v-if="sortDir === 'desc'"
+                    />
+                    <IconC
+                      iconName="ArrowLongUpIcon"
+                      iconClass="w-4 h-4"
+                      v-else
+                    />
+                  </template>
+                </div>
+              </th>
               <th scope="col" class="py-3 px-6"></th>
               <th scope="col" class="py-3 px-6"></th>
             </tr>
@@ -175,7 +313,7 @@
       getAction="productModule/getProducts"
       :title="$t('product')"
       deleteRef="delete-modal"
-      @reload="reload"
+      @reload="getProducts(currentPage)"
     >
     </delete-modal>
   </div>
@@ -194,6 +332,8 @@ export default {
       selectedProductToDelete: {},
       currentPage: 1,
       searchQuery: "",
+      sortColumn: null,
+      sortDir: "desc",
     };
   },
   watch: {
@@ -205,6 +345,8 @@ export default {
           await this.$store.dispatch("productModule/getProducts", {
             page: this.currentPage,
             search: value,
+            sort_column: this.sortColumn,
+            sort_dir: this.sortDir,
           });
           this.isTableLoading = false;
         } catch {
@@ -230,24 +372,9 @@ export default {
         }
       }
     });
-    this.reload();
+    this.getProducts(this.currentPage);
   },
   methods: {
-    reload() {
-      this.isTableLoading = true;
-      this.selectedProduct = {};
-      this.$store
-        .dispatch("productModule/getProducts", {
-          page: this.currentPage,
-          search: this.searchQuery,
-        })
-        .then(() => {
-          this.isTableLoading = false;
-        })
-        .catch(() => {
-          this.$toast.error(this.$t("somethingWrong"));
-        });
-    },
     updateSelectedProduct(product) {
       if (this.selectedProduct.id === product.id) {
         this.selectedProduct = {};
@@ -266,6 +393,8 @@ export default {
         .dispatch("productModule/getProducts", {
           page: page,
           search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -290,6 +419,11 @@ export default {
         text = this.$t("outStock");
       }
       return { color, text };
+    },
+    sort(col) {
+      this.sortColumn = col;
+      this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
+      this.getProducts(this.currentPage);
     },
   },
 };

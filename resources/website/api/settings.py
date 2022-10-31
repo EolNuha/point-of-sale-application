@@ -34,6 +34,13 @@ def getSettings(settings_type):
     items = Settings.query.filter_by(settings_type=settings_type).all()
     return jsonify(getSettingsList(items))
 
+@settings.route('/settings/delete/<int:id>', methods=["GET"])
+def deleteSettings(id):
+    Settings.query.filter_by(id=id).delete()
+    db.session.commit()
+    
+    return "success",200
+
 @settings.route('/settings/demo', methods=["GET"])
 def createDemoSettings():
     demo = [

@@ -40,7 +40,7 @@ def createPurchase():
         price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
         tax_amount = (decimal_tax / 100) * decimal_price
 
-        product_query = Product.query.filter_by(barcode=product["barcode"]).first()
+        product_query = Product.query.filter_by(name=product["productName"].lower()).first()
 				
         if product_query:
             purchase_item = PurchaseItem(
@@ -218,7 +218,7 @@ def downloadPurchasesExcel():
     custom_end_date = request.args.get('endDate', type=str)
     file_name = request.args.get('fileName', 'excelFile', type=str)
 
-    api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&desc=')
+    api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&sort_dir=asc')
     purchases = api_response.json()["data"]
 
     FILENAME = file_name.upper() + ".xlsx"
@@ -232,15 +232,19 @@ def downloadPurchasesExcel():
 
     euro = workbook.add_format({'num_format': '€#,##0.00'})
 
-    worksheet.write('A1', 'Date', header_format)
-    worksheet.write('B1', 'Seller Name', header_format)
-    worksheet.write('C1', 'Invoice Number', header_format)
-    worksheet.write('D1', 'Fiscal Number', header_format)
-    worksheet.write('E1', 'Tax Number', header_format)
-    worksheet.write('F1', '8%', header_format)
-    worksheet.write('G1', '18%', header_format)
-    worksheet.write('H1', 'Subtotal', header_format)
-    worksheet.write('I1', 'Total', header_format)
+    col_idx = 0
+    taxes = Settings.query.filter_by(settings_type="tax").all()
+
+    worksheet.write(0, 0, 'Date', header_format)
+    worksheet.write(0, 1, 'Seller Name', header_format)
+    worksheet.write(0, 2, 'Invoice Number', header_format)
+    worksheet.write(0, 3, 'Fiscal Number', header_format)
+    worksheet.write(0, 4, 'Tax Number', header_format)
+    for index, i in enumerate(taxes):
+        worksheet.write(0, 5 + index, f'{i.settings_name}%', header_format)
+        col_idx = index + 5
+    worksheet.write(0, col_idx + 1, 'Subtotal', header_format)
+    worksheet.write(0, col_idx + 2, 'Total', header_format)
 
     row = 1
     col = 0
@@ -251,10 +255,14 @@ def downloadPurchasesExcel():
         worksheet.write(row, col + 2, item["sellerInvoiceNumber"])
         worksheet.write(row, col + 3, item["sellerFiscalNumber"])
         worksheet.write(row, col + 4, item["sellerTaxNumber"])
-        worksheet.write(row, col + 5, item["eightTaxAmount"], euro)
-        worksheet.write(row, col + 6, item["eighteenTaxAmount"], euro)
-        worksheet.write(row, col + 7, item["subTotalAmount"], euro)
-        worksheet.write(row, col + 8, item["totalAmount"], euro)
+        for index, tax in enumerate(taxes):
+            try:
+                worksheet.write(row, col + index + 5, Decimal(item["taxes"][index]["taxValue"]), euro)
+            except IndexError:
+                worksheet.write(row, col + index + 5, 0, euro)
+            idx = index + 5
+        worksheet.write(row, col + idx + 1, Decimal(item["subTotalAmount"]), euro)
+        worksheet.write(row, col + idx + 2, Decimal(item["totalAmount"]), euro)
 
         row += 1
         

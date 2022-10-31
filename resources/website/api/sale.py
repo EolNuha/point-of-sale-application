@@ -83,7 +83,9 @@ def createSale():
                 sale=sale, 
                 tax_name=str(split_key[0]), 
                 tax_alias=str(split_key[1]), 
-                tax_value=value
+                tax_value=value,
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
             )
         )
     db.session.commit()
@@ -136,8 +138,22 @@ def getSales():
         .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
         .paginate(page=page, per_page=per_page)
 
+    json_sale_items = getSalesList(paginated_items.items)
 
-    return jsonify(getPaginatedDict(getSalesList(paginated_items.items), paginated_items))
+    for item in json_sale_items:
+        taxes = SaleTax.query.filter(SaleTax.date_created <= date_end)\
+            .filter(SaleTax.date_created > date_start)\
+            .order_by(SaleTax.tax_name.desc())\
+            .with_entities(
+            SaleTax.id.label("id"), 
+            SaleTax.tax_name.label("tax_name"), 
+            SaleTax.tax_alias.label("tax_alias"),
+            sa.func.sum(SaleTax.tax_value).label("tax_value"),
+        )\
+        .group_by(SaleTax.tax_name).all()
+        item["taxes"] = getTaxesList(taxes)
+
+    return jsonify(getPaginatedDict(json_sale_items, paginated_items))
 
 @sale.route('/sales/daily', methods=["GET"])
 def getDailySales():
@@ -218,23 +234,32 @@ def downloadSalesExcel():
 
     euro = workbook.add_format({'num_format': '€#,##0.00'})
 
-    worksheet.write('A1', 'Date', header_format)
-    worksheet.write('B1', 'Buyer', header_format)
-    worksheet.write('C1', '8%', header_format)
-    worksheet.write('D1', '18%', header_format)
-    worksheet.write('E1', 'Subtotal', header_format)
-    worksheet.write('F1', 'Total', header_format)
+    col_idx = 0
+    taxes = Settings.query.filter_by(settings_type="tax").all()
+
+    worksheet.write(0, 0, 'Date', header_format)
+    worksheet.write(0, 1, 'Buyer', header_format)
+    for index, i in enumerate(taxes):
+        worksheet.write(0, 2 + index, f'{i.settings_name}%', header_format)
+        col_idx = index + 2
+    worksheet.write(0, col_idx + 1, 'Subtotal', header_format)
+    worksheet.write(0, col_idx + 2, 'Total', header_format)
 
     row = 1
     col = 0
+    idx = 0
 
     for item in sales:
         worksheet.write(row, col, item["dateCreated"][0:10])
         worksheet.write(row, col + 1, "Qytetar")
-        worksheet.write(row, col + 2, Decimal(item["eightTaxAmount"]), euro)
-        worksheet.write(row, col + 3, Decimal(item["eighteenTaxAmount"]), euro)
-        worksheet.write(row, col + 4, Decimal(item["subTotalAmount"]), euro)
-        worksheet.write(row, col + 5, Decimal(item["totalAmount"]), euro)
+        for index, tax in enumerate(taxes):
+            try:
+                worksheet.write(row, col + index + 2, Decimal(item["taxes"][index]["taxValue"]), euro)
+            except IndexError:
+                worksheet.write(row, col + index + 2, 0, euro)
+            idx = index + 2
+        worksheet.write(row, col + idx + 1, Decimal(item["subTotalAmount"]), euro)
+        worksheet.write(row, col + idx + 2, Decimal(item["totalAmount"]), euro)
 
         row += 1
         

@@ -91,12 +91,12 @@
                 <IconC
                   v-if="selectedProduct === product"
                   iconName="CheckCircleIcon"
-                  iconClass="h-6 w-6 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                  iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
                 />
                 <IconC
                   v-else
                   iconName="MinusCircleIcon"
-                  iconClass="h-6 w-6 text-gray-900 dark:text-gray-300"
+                  iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
                 />
               </td>
               <td class="py-2 px-6">

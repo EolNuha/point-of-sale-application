@@ -282,7 +282,9 @@ export default {
   },
   methods: {
     getTaxValue(arr, alias) {
-      return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
+      return (
+        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
+      );
     },
     getSales(page) {
       this.isTableLoading = true;

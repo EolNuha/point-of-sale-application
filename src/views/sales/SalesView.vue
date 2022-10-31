@@ -112,6 +112,14 @@
               </th>
               <th
                 scope="col"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600 cursor-not-allowed"
+                v-for="item in taxes"
+                :key="item.settingsValue"
+              >
+                {{ $t("tax") }} {{ item.settingsName }}%
+              </th>
+              <th
+                scope="col"
                 class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
                 @click="sort('subtotal_amount')"
               >
@@ -162,6 +170,13 @@
               >
                 <td class="py-2 px-6">
                   {{ sale.dateCreated.substring(0, 10) }}
+                </td>
+                <td
+                  class="py-2 px-6"
+                  v-for="item in taxes"
+                  :key="item.settingsValue"
+                >
+                  {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
                 </td>
                 <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                 <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
@@ -237,8 +252,14 @@ export default {
     pagination() {
       return this.$store.getters["saleModule/getSalesPagination"];
     },
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
   },
   created() {
+    this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.currentMonth = new Date().getMonth() + 1;
     this.startDate = currentMonth.startDate;
@@ -246,6 +267,11 @@ export default {
     this.getSales(this.currentPage);
   },
   methods: {
+    getTaxValue(arr, alias) {
+      return (
+        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
+      );
+    },
     getMonth(v) {
       const month = String(v).padStart(2, "0");
       const year = new Date().getFullYear();

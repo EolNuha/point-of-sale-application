@@ -149,5 +149,6 @@
 	"dashboardPage": "Faqja Kryesore",
 	"missingChartData": "Mungojnë të dhëna për këtë statistikë.",
 	"userWithThisEmailDoesNotExist": "Përdoruesi me këtë email/username nuk ekziston!",
-	"passwordIncorrect": "Fjalëkalimi është i pasaktë!"
+	"passwordIncorrect": "Fjalëkalimi është i pasaktë!",
+	"expirationDate": "Data e skadimit"
 }

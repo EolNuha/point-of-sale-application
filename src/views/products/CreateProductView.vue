@@ -20,26 +20,26 @@
         />
         <span class="text-red-700">{{ errors.product_name }}</span>
       </div>
-      <div class="mb-6">
-        <label
-          for="product_barcode"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >{{ $t("barcode") }}</label
-        >
-        <Field
-          name="product_barcode"
-          :rules="isRequired"
-          v-model="product.barcode"
-          type="number"
-          id="product_barcode"
-          :class="errors.product_barcode ? 'ring-2 ring-red-500' : ''"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Enter product barcode"
-          required
-        />
-        <span class="text-red-700">{{ errors.product_barcode }}</span>
-      </div>
       <div class="mb-6 flex gap-4">
+        <div class="basis-1/2">
+          <label
+            for="product_barcode"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("barcode") }}</label
+          >
+          <Field
+            name="product_barcode"
+            :rules="isRequired"
+            v-model="product.barcode"
+            type="number"
+            id="product_barcode"
+            :class="errors.product_barcode ? 'ring-2 ring-red-500' : ''"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter product barcode"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_barcode }}</span>
+        </div>
         <div class="basis-1/2">
           <label
             for="product_stock"
@@ -58,32 +58,6 @@
             required
           />
           <span class="text-red-700">{{ errors.product_stock }}</span>
-        </div>
-        <div class="basis-1/2">
-          <label
-            for="product_stock"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("tax") }}</label
-          >
-          <Field
-            name="product_tax"
-            :rules="isRequired"
-            v-model="product.tax"
-            id="product_tax"
-            :class="errors.product_tax ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            required
-            as="select"
-          >
-            <option
-              v-for="item in taxes"
-              :key="item.settingsValue"
-              :value="item.settingsValue"
-            >
-              {{ item.settingsName }}%
-            </option>
-          </Field>
-          <span class="text-red-700">{{ errors.product_tax }}</span>
         </div>
       </div>
       <div class="mb-6 flex gap-4">
@@ -128,6 +102,54 @@
           <span class="text-red-700">{{ errors.product_sellingprice }}</span>
         </div>
       </div>
+      <div class="mb-6 flex gap-4">
+        <div class="basis-1/2">
+          <label
+            for="product_tax"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("tax") }}</label
+          >
+          <Field
+            name="product_tax"
+            :rules="isRequired"
+            v-model="product.tax"
+            id="product_tax"
+            :class="errors.product_tax ? 'ring-2 ring-red-500' : ''"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            as="select"
+          >
+            <option
+              v-for="item in taxes"
+              :key="item.settingsValue"
+              :value="item.settingsValue"
+            >
+              {{ item.settingsName }}%
+            </option>
+          </Field>
+          <span class="text-red-700">{{ errors.product_tax }}</span>
+        </div>
+        <div class="basis-1/2">
+          <label
+            for="product_expire"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("expirationDate") }}</label
+          >
+          <Field
+            name="product_expire"
+            :rules="isRequired"
+            v-model="product.expirationDate"
+            :min="minDate"
+            type="date"
+            id="product_expire"
+            :class="errors.product_expire ? 'ring-2 ring-red-500' : ''"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter product stock"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_expire }}</span>
+        </div>
+      </div>
 
       <button
         type="submit"
@@ -162,6 +184,7 @@ export default {
         name: "",
         barcode: "",
         stock: "",
+        expirationDate: "",
         tax: 8,
         purchasedPrice: "",
         sellingPrice: "",
@@ -173,6 +196,9 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
+    minDate() {
+      return this.formatDate(new Date());
+    },
   },
   async created() {
     await this.$store.dispatch("settingsModule/getSettingsType", {
@@ -182,6 +208,15 @@ export default {
   methods: {
     isRequired(value) {
       return value ? true : this.$t("isRequired");
+    },
+    formatDate(date) {
+      return (
+        String(date.getFullYear()).padStart(2, "0") +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(date.getDate()).padStart(2, "0")
+      );
     },
     createProduct() {
       this.isLoading = true;

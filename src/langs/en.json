@@ -149,5 +149,6 @@
 	"dashboardPage": "Dashboard Page",
 	"missingChartData": "There is missing data for this chart.",
 	"userWithThisEmailDoesNotExist": "User with this email/username does not exist!",
-	"passwordIncorrect": "Password is incorrect!"
+	"passwordIncorrect": "Password is incorrect!",
+	"expirationDate": "Expiration date"
 }

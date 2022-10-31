@@ -2,9 +2,9 @@ from flask import Blueprint, request, jsonify, request
 from website.models import Product
 from website.helpers import getPaginatedDict
 from website.json import getProductsList
-from datetime import datetime
+from datetime import datetime, date, time
 from website import db
-from sqlalchemy import or_
+from sqlalchemy import or_, asc, desc
 
 product = Blueprint('product', __name__)
 
@@ -16,6 +16,10 @@ def createProduct():
     tax = request.json["tax"]
     purchased_price = request.json["purchasedPrice"]
     selling_price = request.json["sellingPrice"]
+    expiration_date = request.json["expirationDate"]
+
+    expiration_date = expiration_date.split("-")
+    expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
 
     product = Product(
         name=name.lower(), 
@@ -24,6 +28,7 @@ def createProduct():
         tax=tax, 
         purchased_price=purchased_price, 
         selling_price=selling_price,
+        expiration_date=expiration_date,
         date_created=datetime.now(),
         date_modified=datetime.now(),
         )
@@ -40,6 +45,10 @@ def getProducts():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
     if '*' in search or '_' in search: 
         looking_for = search.replace('_', '__')\
@@ -53,7 +62,7 @@ def getProducts():
         Product.id.ilike(looking_for),
         Product.barcode.ilike(looking_for),
         ))\
-        .order_by(Product.id.desc()).paginate(page=page, per_page=per_page)
+        .order_by(sort).paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getProductsList(paginated_items.items), paginated_items))
 
@@ -75,6 +84,10 @@ def updateProductDetails(productId):
     tax = request.json["tax"]
     purchased_price = request.json["purchasedPrice"]
     selling_price = request.json["sellingPrice"]
+    expiration_date = request.json["expirationDate"]
+
+    expiration_date = expiration_date.split("-")
+    expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
     
     product = Product.query.filter_by(id=productId).first_or_404()
 
@@ -84,6 +97,7 @@ def updateProductDetails(productId):
     product.tax = tax
     product.purchased_price = purchased_price
     product.selling_price = selling_price
+    product.expiration_date = expiration_date
     product.modified = datetime.now()
 
     db.session.commit()

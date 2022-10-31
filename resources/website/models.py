@@ -32,6 +32,7 @@ class Product(db.Model):
     tax=db.Column(db.Integer, default=18)
     purchased_price = db.Column(db.Numeric(precision=10, scale=2), default=0)
     selling_price = db.Column(db.Numeric(precision=10, scale=2), default=0)
+    expiration_date = db.Column(db.DateTime, default=datetime.now())
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
 

@@ -37,6 +37,7 @@ def getProductsList(products):
             "tax": i.tax,
             "purchasedPrice": i.purchased_price,
             "sellingPrice": i.selling_price,
+            "expirationDate": i.expiration_date.strftime('%Y-%m-%d'),
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }

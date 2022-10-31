@@ -181,6 +181,7 @@ def getSellers():
         Purchase.seller_fiscal_number.ilike(looking_for),
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
+        .order_by(Purchase.seller_name)\
         .with_entities(
             Purchase.id.label("id"), 
             Purchase.seller_name.label("seller_name"), 

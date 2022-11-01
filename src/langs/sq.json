@@ -150,5 +150,10 @@
 	"missingChartData": "Mungojnë të dhëna për këtë statistikë.",
 	"userWithThisEmailDoesNotExist": "Përdoruesi me këtë email/username nuk ekziston!",
 	"passwordIncorrect": "Fjalëkalimi është i pasaktë!",
-	"expirationDate": "Data e skadimit"
+	"notifications": "Njoftimet",
+	"expirationDate": "Data e skadimit",
+	"expiresIn": "skadon në",
+	"hasExpired": "ka skaduar",
+	"days": "ditë",
+	"viewAll": "Shiko të gjitha"
 }

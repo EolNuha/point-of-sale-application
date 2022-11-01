@@ -150,5 +150,10 @@
 	"missingChartData": "There is missing data for this chart.",
 	"userWithThisEmailDoesNotExist": "User with this email/username does not exist!",
 	"passwordIncorrect": "Password is incorrect!",
-	"expirationDate": "Expiration date"
+	"notifications": "Notifications",
+	"expirationDate": "Expiration date",
+	"expiresIn": "expires in",
+	"hasExpired": "has expired",
+	"days": "days",
+	"viewAll": "View All"
 }

@@ -75,6 +75,7 @@
           </div>
         </li>
       </ol>
+      <NotificationComponent />
       <button
         id="dropdownUserAvatarButton"
         @click="
@@ -246,8 +247,12 @@
 
 <script>
 import { logoutUser } from "@/router/auth/index";
+import NotificationComponent from "@/components/notifications/NotificationComponent.vue";
 export default {
   name: "NavBar",
+  components: {
+    NotificationComponent,
+  },
   data() {
     return {
       sideBar: true,

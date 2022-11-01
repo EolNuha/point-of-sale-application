@@ -1,0 +1,103 @@
+<template>
+  <button
+    id="dropdownNotificationButton"
+    class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400"
+    type="button"
+    @click="
+      $toggleDropdown({
+        targetEl: `dropdownNotification`,
+        triggerEl: `dropdownNotificationButton`,
+      })
+    "
+  >
+    <IconC iconName="BellIcon" iconType="solid" iconClass="w-6 h-6" />
+    <div class="flex relative" v-if="hasUnread">
+      <div
+        class="inline-flex relative -top-2 right-3 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"
+      ></div>
+    </div>
+  </button>
+  <!-- Dropdown menu -->
+  <div
+    id="dropdownNotification"
+    class="hidden z-20 w-full max-w-xs bg-white divide-y divide-gray-100 shadow-md dark:bg-gray-800 dark:divide-gray-700 rounded-md"
+    aria-labelledby="dropdownNotificationButton"
+    data-popper-reference-hidden=""
+    data-popper-escaped=""
+    data-popper-placement="bottom"
+    style="
+      position: absolute;
+      inset: 0px auto auto 0px;
+      margin: 0px;
+      transform: translate3d(0px, 2104px, 0px);
+    "
+  >
+    <div
+      class="block py-2 px-4 font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white rounded-t-md"
+    >
+      {{ $t("notifications") }}
+    </div>
+    <div class="divide-y divide-gray-200 dark:divide-gray-700">
+      <router-link
+        class="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700"
+        :class="
+          !item.read ? 'bg-blue-500/[.1] border-l-[3px] !border-l-blue-500' : ''
+        "
+        v-for="item in notifications"
+        :key="item.id"
+        :to="{
+          name: 'product-view',
+          params: { productId: item.toId },
+          query: { notificationId: item.id },
+        }"
+      >
+        <div class="pl-3 w-full">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            {{ localizedMessage(item.message) }}
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">
+            {{ dateSince(item.dateCreated) }}
+          </div>
+        </div>
+      </router-link>
+    </div>
+    <a
+      href="#"
+      class="rounded-b-md block py-2 text-sm font-medium text-center text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
+    >
+      <div class="inline-flex items-center">
+        <IconC
+          iconName="EyeIcon"
+          iconType="solid"
+          iconClass="mr-2 w-4 h-4 text-gray-500 dark:text-gray-400"
+        />
+        {{ $t("viewAll") }}
+      </div>
+    </a>
+  </div>
+</template>
+<script>
+import moment from "moment";
+export default {
+  computed: {
+    notifications() {
+      return this.$store.state.notificationsModule.notifications.data || [];
+    },
+    hasUnread() {
+      return !!this.notifications.find((x) => x.read === false);
+    },
+    dateSince() {
+      return (date) => moment(date).fromNow();
+    },
+  },
+  methods: {
+    localizedMessage(message) {
+      return message
+        .replace("expires in", this.$t("expiresIn"))
+        .replace("days", this.$t("days"))
+        .replace("Product", this.$t("product"))
+        .replace("has expired", this.$t("hasExpired"));
+    },
+  },
+};
+</script>

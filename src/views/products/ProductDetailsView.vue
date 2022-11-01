@@ -215,6 +215,22 @@ export default {
       isUpdateLoading: false,
     };
   },
+  watch: {
+    "$route.params.productId": {
+      handler: function () {
+        this.reload();
+      },
+      deep: true,
+      immediate: true,
+    },
+    "$route.query.notificationId": {
+      handler: function (value) {
+        this.$store.dispatch("notificationsModule/updateNotification", value);
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   computed: {
     product() {
       return this.$store.state.productModule.product;
@@ -222,21 +238,38 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
+    minDate() {
+      return this.formatDate(new Date());
+    },
   },
   async created() {
-    await this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
-    });
-  },
-  async mounted() {
-    await this.$store
-      .dispatch("productModule/getProductDetails", this.$route.params.productId)
-      .then(async (response) => {
-        this.$route.meta.title = response.data.name;
-        this.isDataLoading = false;
-      });
+    this.reload();
   },
   methods: {
+    reload() {
+      this.isDataLoading = true;
+      this.$store.dispatch("settingsModule/getSettingsType", {
+        settingsType: "tax",
+      });
+      this.$store
+        .dispatch(
+          "productModule/getProductDetails",
+          this.$route.params.productId
+        )
+        .then(async (response) => {
+          this.$route.meta.title = response.data.name;
+          this.isDataLoading = false;
+        });
+    },
+    formatDate(date) {
+      return (
+        String(date.getFullYear()).padStart(2, "0") +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(date.getDate()).padStart(2, "0")
+      );
+    },
     isRequired(value) {
       return value ? true : this.$t("isRequired");
     },

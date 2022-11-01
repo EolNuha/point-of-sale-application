@@ -1,7 +1,9 @@
 import decode from "jwt-decode";
 import router from "@/router";
+import store from "@/store";
 export function authRoutesGuard(router) {
   router.beforeEach(async (to, from, next) => {
+    store.dispatch("notificationsModule/getNotifications");
     if (to.meta.isPublic) {
       next();
       return;

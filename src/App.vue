@@ -18,6 +18,8 @@
 import NavBar from "@/components/NavBar.vue";
 import SideBar from "@/components/SideBar.vue";
 import { logoutUser } from "@/router/auth/index";
+import moment from "moment";
+import "moment/locale/es";
 
 export default {
   components: {
@@ -42,6 +44,7 @@ export default {
       logoutUser();
       this.$router.push({ name: "signin" });
     });
+    this.$store.dispatch("notificationsModule/checkProductExpiration");
   },
   mounted() {
     const initUserTheme = this.getTheme() || this.getMediaPreference();
@@ -84,6 +87,7 @@ export default {
       localStorage.setItem("lang", lang);
       this.$i18n.locale = lang;
       this.userLang = lang;
+      moment.locale(lang);
     },
   },
 };

@@ -132,6 +132,7 @@ def createDemoProducts():
             tax=i[3], 
             purchased_price=i[4], 
             selling_price=i[5],
+            expiration_date=datetime.now(),
             date_created=datetime.now(),
             date_modified=datetime.now(),
             ))

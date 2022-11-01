@@ -1,3 +1,4 @@
+from datetime import datetime
 def getUserDict(user):
     return {
         "id": user.id,
@@ -181,6 +182,21 @@ def getTaxesList(items):
             "taxName": i.tax_name,
             "taxAlias": i.tax_alias,
             "taxValue": i.tax_value,
+        }
+        items_list.append(item_dict)
+    return items_list
+    
+def getNotificationList(items):
+    items_list = []
+    for i in items:
+        item_dict = {
+            "id": i.id,
+            "toId": i.notification_to_id,
+            "message": i.notification_message,
+            "type": i.notification_type,
+            "read": i.notification_read,
+            "dateCreated": datetime.strptime(i.date_created.strftime('%d.%m.%Y %H:%M:%S,%f'),'%d.%m.%Y %H:%M:%S,%f').timestamp() * 1000,
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         items_list.append(item_dict)
     return items_list

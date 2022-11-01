@@ -275,6 +275,7 @@ export default {
         this.searchedProductsIndex++;
       }
       if (e.key === "ArrowUp" && this.searchedProductsIndex > 0) {
+        e.preventDefault();
         this.searchedProductsIndex--;
       }
       if (e.key === "Enter" && !this.searchQuery) {

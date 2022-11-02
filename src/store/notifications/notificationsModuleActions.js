@@ -16,6 +16,34 @@ export default {
         });
     });
   },
+  updateNotifications({ commit, dispatch }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/notifications`,
+        method: "POST",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getNotificationsList({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/notifications`, { params: data })
+        .then(async (response) => {
+          commit("SET_NOTIFICATIONS_LIST", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   checkProductExpiration({ commit, dispatch }, data) {
     return new Promise((resolve, reject) => {
       axios

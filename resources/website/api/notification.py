@@ -22,6 +22,15 @@ def getNotifications():
         ).order_by(sort).paginate(page=page, per_page=per_page)
     return jsonify(getPaginatedDict(getNotificationList(paginated_items.items), paginated_items))
 
+@notification.route('/notifications', methods=["POST"])
+def updateNotifications():
+    notifications = request.json["notifications"]
+    for item in notifications:
+        notification_record = Notification.query.filter_by(id=item["id"]).first()
+        notification_record.notification_read = item["read"]
+        db.session.commit()
+    return "success", 200
+
 @notification.route('/notifications/<int:id>', methods=["POST"])
 def updateNotification(id):
     read = request.json["read"]

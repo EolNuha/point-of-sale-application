@@ -12,7 +12,7 @@ notification = Blueprint('notification', __name__)
 def getNotifications():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
-    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)

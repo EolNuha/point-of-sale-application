@@ -2,9 +2,11 @@
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="overflow-hidden rounded-xl mb-5 min-h-[80vh] relative">
       <!-- {{ areAllSelected }} -->
-      <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
+      <div
+        class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
+      >
         <div
-          class="border-l-[3px] border-l-white bg-white rounded-t dark:bg-gray-900 py-0 px-3 border-b flex flex-row"
+          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-gray-900 py-0 px-3 border-b flex flex-row"
         >
           <button
             @click.stop
@@ -42,14 +44,12 @@
             </button>
           </template>
         </div>
-        <table
-          class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
-        >
+        <table class="w-full text-sm text-left">
           <OverlayC v-if="isTableLoading" :minHeight="`min-h-[80vh]`" />
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr
-                class="border-l-[3px] border-l-white bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.15)] cursor-pointer"
+                class="border-l-[3px] border-l-white bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-blue-500': !item.read,
                   'bg-gray-100 dark:bg-gray-700  border-l-gray-100':
@@ -105,14 +105,14 @@
                 <td class="py-2 px-3">
                   <div class="pl-3 w-full">
                     <div
-                      class="text-gray-500 text-lg dark:text-gray-400"
+                      class="text-gray-700 text-lg dark:text-gray-300"
                       :class="{ 'font-bold': !item.read }"
                     >
                       {{ localizedMessage(item.message) }}
                     </div>
                   </div>
                 </td>
-                <td class="py-2 px-6 w-40">
+                <td class="py-2 px-6 w-48">
                   <div
                     class="text-sm text-right"
                     :class="{ 'font-bold': !item.read }"
@@ -167,8 +167,8 @@ export default {
       return !!this.selectedItems.find((x) => x.read === false);
     },
     areAllSelected() {
-      const notificationsCopy = this.notifications;
-      const selectedItemsCopy = this.selectedItems;
+      const notificationsCopy = JSON.parse(JSON.stringify(this.notifications));
+      const selectedItemsCopy = JSON.parse(JSON.stringify(this.selectedItems));
       return (
         JSON.stringify(
           notificationsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))

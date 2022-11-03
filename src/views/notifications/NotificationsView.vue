@@ -15,7 +15,9 @@
                 () =>
                   areAllSelected
                     ? (selectedItems = [])
-                    : (selectedItems = notifications)
+                    : (selectedItems = JSON.parse(
+                        JSON.stringify(notifications)
+                      ))
               "
               @mouseover="
                 $showTooltip({
@@ -108,12 +110,80 @@
             </div>
           </template>
         </div>
-        <table class="w-full text-sm text-left">
-          <OverlayC v-if="isTableLoading" :minHeight="`min-h-[80vh]`" />
+        <div
+          class="border-l-[3px] border-l-white bg-white dark:bg-gray-900 py-0 border-b dark:border-gray-700 px-2"
+        >
+          <ul
+            class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
+          >
+            <li
+              class="mr-2"
+              @click="() => ((activeTab = 'all'), (colName = null))"
+            >
+              <p
+                :class="
+                  activeTab === 'all'
+                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-600 rounded-t-lg border-b-4 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group'
+                    : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
+                "
+              >
+                <IconC iconName="InboxIcon" iconClass="w-6 h-6 mr-2" />All
+                Notifications
+              </p>
+            </li>
+            <li
+              class="mr-2"
+              @click="() => ((activeTab = 'star'), (colName = 'star'))"
+            >
+              <p
+                :class="
+                  activeTab === 'star'
+                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-600 rounded-t-lg border-b-4 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group'
+                    : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
+                "
+              >
+                <IconC
+                  iconType="outline"
+                  iconName="StarIcon"
+                  iconClass="w-6 h-6 mr-2"
+                />Starred
+              </p>
+            </li>
+            <li
+              class="mr-2"
+              @click="() => ((activeTab = 'unread'), (colName = 'read'))"
+            >
+              <p
+                :class="
+                  activeTab === 'unread'
+                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-600 rounded-t-lg border-b-4 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group'
+                    : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
+                "
+              >
+                <IconC
+                  iconType="outline"
+                  iconName="EnvelopeIcon"
+                  iconClass="w-6 h-6 mr-2"
+                />Unread
+              </p>
+            </li>
+          </ul>
+        </div>
+        <table class="w-full text-sm text-left relative">
+          <OverlayC v-if="isTableLoading" :minHeight="`min-h-65`" />
+          <div
+            class="w-full z-50 overflow-hidden flex flex-col items-center justify-center min-h-65"
+            v-if="notifications.length === 0 && !isTableLoading"
+          >
+            <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" />
+            <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
+              {{ `No notifications have been added yet...` }}
+            </h2>
+          </div>
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr
-                class="border-l-[3px] border-l-white bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
+                class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-blue-500': !item.read,
                   'bg-gray-100 dark:bg-gray-700  border-l-gray-100':
@@ -268,6 +338,8 @@ export default {
       selectedItems: [],
       isTableLoading: true,
       currentPage: 1,
+      activeTab: "all",
+      colName: null,
     };
   },
   computed: {
@@ -304,6 +376,14 @@ export default {
       );
     },
   },
+  watch: {
+    colName: {
+      handler() {
+        this.isTableLoading = true;
+        this.getNotifications(1);
+      },
+    },
+  },
   async created() {
     this.getNotifications(this.currentPage);
   },
@@ -319,6 +399,7 @@ export default {
         .dispatch("notificationsModule/getNotificationsList", {
           per_page: 10,
           page: page,
+          col_name: this.colName,
         })
         .then(() => {
           this.notifications =

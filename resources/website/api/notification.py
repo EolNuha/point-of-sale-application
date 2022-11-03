@@ -12,14 +12,20 @@ notification = Blueprint('notification', __name__)
 def getNotifications():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
+    col_name = request.args.get('col_name', None, type=str)
     sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
-    paginated_items = Notification.query.order_by(
-            Notification.date_created.desc()
-        ).order_by(sort).paginate(page=page, per_page=per_page)
+    query = Notification.query.order_by(sort)
+
+    if col_name == 'read':
+        query = query.filter_by(notification_read=False)
+    elif col_name == 'star':
+        query = query.filter_by(notification_star=True)
+    
+    paginated_items = query.paginate(page=page, per_page=per_page)
     return jsonify(getPaginatedDict(getNotificationList(paginated_items.items), paginated_items))
 
 @notification.route('/notifications', methods=["POST"])

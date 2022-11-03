@@ -1,47 +1,70 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
     <div class="overflow-hidden rounded-xl mb-5 min-h-[80vh] relative">
-      <!-- {{ areAllSelected }} -->
+      <!-- {{ hasStarredMessages }} -->
       <div
         class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
       >
         <div
-          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-gray-900 py-0 px-3 border-b flex flex-row"
+          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-gray-900 py-0 border-b flex flex-row"
         >
-          <button
-            @click.stop
-            @click="
-              () =>
-                areAllSelected
-                  ? (selectedItems = [])
-                  : (selectedItems = notifications)
-            "
-            class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
-          >
-            <input
-              type="checkbox"
-              class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-              :checked="areAllSelected"
-            />
-          </button>
-          <template v-if="selectedItems.length !== 0">
+          <div class="px-3">
             <button
-              @click="toggleReadStatus()"
+              @click.stop
+              @click="
+                () =>
+                  areAllSelected
+                    ? (selectedItems = [])
+                    : (selectedItems = notifications)
+              "
               class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
             >
-              <IconC
-                v-if="hasUnreadMessages"
-                iconName="EnvelopeOpenIcon"
-                iconType="outline"
-                iconClass="w-5 h-5"
-              />
-              <IconC
-                v-else
-                iconName="EnvelopeIcon"
-                iconType="outline"
-                iconClass="w-5 h-5"
+              <input
+                type="checkbox"
+                class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                :checked="areAllSelected"
               />
             </button>
+          </div>
+          <template v-if="selectedItems.length !== 0">
+            <div class="px-1">
+              <button
+                @click="toggleStarStatus()"
+                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+              >
+                <IconC
+                  v-if="!hasStarredMessages"
+                  iconName="StarIcon"
+                  iconType="outline"
+                  iconClass="w-5 h-5"
+                />
+                <IconC
+                  v-else
+                  iconName="StarIcon"
+                  iconType="solid"
+                  iconClass="w-5 h-5 text-yellow-300"
+                />
+              </button>
+            </div>
+            <div class="px-3">
+              <button
+                @click="toggleReadStatus()"
+                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+              >
+                <IconC
+                  v-if="hasUnreadMessages"
+                  iconName="EnvelopeOpenIcon"
+                  iconType="outline"
+                  iconClass="w-5 h-5"
+                />
+                <IconC
+                  v-else
+                  iconName="EnvelopeIcon"
+                  iconType="outline"
+                  iconClass="w-5 h-5"
+                />
+              </button>
+            </div>
           </template>
         </div>
         <table class="w-full text-sm text-left">
@@ -65,9 +88,16 @@
               >
                 <td class="py-2 px-3 w-1.5">
                   <button
+                    :id="`select-${item.id}-tooltip-btn`"
                     @click.stop
                     @click="toggleSelectNotification(item)"
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `select-${item.id}-tooltip`,
+                        triggerEl: `select-${item.id}-tooltip-btn`,
+                      })
+                    "
                   >
                     <input
                       type="checkbox"
@@ -76,30 +106,81 @@
                         selectedItems.some((obj) => obj?.id === item.id)
                       "
                     />
+                    <div
+                      :id="`select-${item.id}-tooltip`"
+                      role="tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    >
+                      Select
+                    </div>
                   </button>
                 </td>
                 <td class="py-2 px-1 w-1.5">
                   <button
+                    :id="`star-${item.id}-tooltip-btn`"
                     @click.stop
+                    @click="toggle(item.id, item.read, !item.star)"
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `star-${item.id}-tooltip`,
+                        triggerEl: `star-${item.id}-tooltip-btn`,
+                      })
+                    "
                   >
                     <IconC
+                      v-if="!item.star"
                       iconName="StarIcon"
                       iconType="outline"
                       iconClass="w-5 h-5"
                     />
+                    <IconC
+                      v-else
+                      iconName="StarIcon"
+                      iconType="solid"
+                      iconClass="w-5 h-5 text-yellow-300"
+                    />
+                    <div
+                      :id="`star-${item.id}-tooltip`"
+                      role="tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    >
+                      {{ !item.star ? "Not Starred" : "Starred" }}
+                    </div>
                   </button>
                 </td>
                 <td class="py-2 px-3 w-1.5">
                   <button
+                    :id="`read-${item.id}-tooltip-btn`"
                     @click.stop
+                    @click="toggle(item.id, !item.read, item.star)"
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `read-${item.id}-tooltip`,
+                        triggerEl: `read-${item.id}-tooltip-btn`,
+                      })
+                    "
                   >
                     <IconC
-                      iconName="BookmarkIcon"
+                      v-if="!item.read"
+                      iconName="EnvelopeOpenIcon"
                       iconType="outline"
-                      iconClass="w-5 h-5 transform rotate-90"
+                      iconClass="w-5 h-5"
                     />
+                    <IconC
+                      v-else
+                      iconName="EnvelopeIcon"
+                      iconType="outline"
+                      iconClass="w-5 h-5"
+                    />
+                    <div
+                      :id="`read-${item.id}-tooltip`"
+                      role="tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    >
+                      {{ !item.read ? "Mark as read" : "Mark as unread" }}
+                    </div>
                   </button>
                 </td>
                 <td class="py-2 px-3">
@@ -166,6 +247,9 @@ export default {
     hasUnreadMessages() {
       return !!this.selectedItems.find((x) => x.read === false);
     },
+    hasStarredMessages() {
+      return !!this.selectedItems.find((x) => x.star === true);
+    },
     areAllSelected() {
       const notificationsCopy = JSON.parse(JSON.stringify(this.notifications));
       const selectedItemsCopy = JSON.parse(JSON.stringify(this.selectedItems));
@@ -198,11 +282,33 @@ export default {
     toggleReadStatus() {
       this.selectedItems = this.selectedItems.map((el) => ({
         ...el,
-        read: !!this.selectedItems.find((x) => x.read === false),
+        read: this.hasUnreadMessages,
       }));
+      this.updateNotifications(this.selectedItems);
+    },
+    toggleStarStatus() {
+      this.selectedItems = this.selectedItems.map((el) => ({
+        ...el,
+        star: !this.hasStarredMessages,
+      }));
+      this.updateNotifications(this.selectedItems);
+    },
+    updateNotifications(items) {
       this.$store
         .dispatch("notificationsModule/updateNotifications", {
-          notifications: this.selectedItems,
+          notifications: items,
+        })
+        .then(() => {
+          this.getNotifications(this.currentPage);
+          this.$store.dispatch("notificationsModule/getNotifications");
+        });
+    },
+    toggle(notificationId, read, star) {
+      this.$store
+        .dispatch("notificationsModule/updateNotification", {
+          id: notificationId,
+          read: read,
+          star: star,
         })
         .then(() => {
           this.getNotifications(this.currentPage);
@@ -219,7 +325,7 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .shadow-inner-hover:hover {
   box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.5) !important;
 }

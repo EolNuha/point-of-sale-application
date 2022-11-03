@@ -57,12 +57,12 @@ export default {
         });
     });
   },
-  updateNotification({ commit, dispatch }, id) {
+  updateNotification({ commit, dispatch }, data) {
     return new Promise((resolve, reject) => {
       axios({
-        url: `/api/notifications/${id}`,
+        url: `/api/notifications/${data.id}`,
         method: "POST",
-        data: { read: true },
+        data,
       })
         .then(async (response) => {
           dispatch("getNotifications");

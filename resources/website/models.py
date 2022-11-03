@@ -118,5 +118,6 @@ class Notification(db.Model):
     notification_message = db.Column(db.String(200))
     notification_type = db.Column(db.String(200))
     notification_read = db.Column(db.Boolean, default=False)
+    notification_star = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())

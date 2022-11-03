@@ -28,14 +28,17 @@ def updateNotifications():
     for item in notifications:
         notification_record = Notification.query.filter_by(id=item["id"]).first()
         notification_record.notification_read = item["read"]
+        notification_record.notification_star = item["star"]
         db.session.commit()
     return "success", 200
 
 @notification.route('/notifications/<int:id>', methods=["POST"])
 def updateNotification(id):
     read = request.json["read"]
+    star = request.json["star"]
     notification_info = Notification.query.filter_by(id=id).first()
     notification_info.notification_read = read
+    notification_info.notification_star = star
     db.session.commit()
     return "Success", 200
 
@@ -66,7 +69,7 @@ def checkProductExpireNotification():
                 Notification(
                     notification_to_id=product.id,
                     notification_message=message,
-                    notification_type="product_expire",
+                    notification_type="Product Expiration",
                     date_created=datetime.now(),
                     date_modified=datetime.now(),
                 )
@@ -86,7 +89,7 @@ def checkProductExpireNotification():
                 Notification(
                     notification_to_id=product.id,
                     notification_message=message,
-                    notification_type="product_expire",
+                    notification_type="Product Expiration",
                     date_created=datetime.now(),
                     date_modified=datetime.now(),
                 )

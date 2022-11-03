@@ -195,6 +195,7 @@ def getNotificationList(items):
             "message": i.notification_message,
             "type": i.notification_type,
             "read": i.notification_read,
+            "star": i.notification_star,
             "dateCreated": datetime.strptime(i.date_created.strftime('%d.%m.%Y %H:%M:%S,%f'),'%d.%m.%Y %H:%M:%S,%f').timestamp() * 1000,
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }

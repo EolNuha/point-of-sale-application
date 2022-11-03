@@ -155,5 +155,11 @@
 	"expiresIn": "expires in",
 	"hasExpired": "has expired",
 	"days": "days",
-	"viewAll": "View All"
+	"viewAll": "View All",
+	"select": "Select",
+	"selectAll": "Select All",
+	"addStar": "Add star",
+	"removeStar": "Remove Star",
+	"markRead": "Mark as read",
+	"markUnread": "Mark as unread"
 }

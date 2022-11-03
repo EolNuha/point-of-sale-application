@@ -10,12 +10,18 @@
         >
           <div class="px-3">
             <button
-              @click.stop
+              id="select-all-tooltip-btn"
               @click="
                 () =>
                   areAllSelected
                     ? (selectedItems = [])
                     : (selectedItems = notifications)
+              "
+              @mouseover="
+                $showTooltip({
+                  targetEl: `select-all-tooltip`,
+                  triggerEl: `select-all-tooltip-btn`,
+                })
               "
               class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
             >
@@ -24,32 +30,60 @@
                 class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
                 :checked="areAllSelected"
               />
+              <div
+                :id="`select-all-tooltip`"
+                role="tooltip"
+                class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+              >
+                {{ $t("selectAll") }}
+              </div>
             </button>
           </div>
           <template v-if="selectedItems.length !== 0">
             <div class="px-1">
               <button
+                id="star-all-tooltip-btn"
                 @click="toggleStarStatus()"
                 class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                @mouseover="
+                  $showTooltip({
+                    targetEl: `star-all-tooltip`,
+                    triggerEl: `star-all-tooltip-btn`,
+                  })
+                "
               >
                 <IconC
-                  v-if="!hasStarredMessages"
-                  iconName="StarIcon"
-                  iconType="outline"
-                  iconClass="w-5 h-5"
-                />
-                <IconC
-                  v-else
+                  v-if="hasStarredMessages"
                   iconName="StarIcon"
                   iconType="solid"
                   iconClass="w-5 h-5 text-yellow-300"
                 />
+                <IconC
+                  v-else
+                  iconName="StarIcon"
+                  iconType="outline"
+                  iconClass="w-5 h-5"
+                />
+                <div
+                  :id="`star-all-tooltip`"
+                  role="tooltip"
+                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                >
+                  {{ hasStarredMessages ? $t("removeStar") : $t("addStar") }}
+                </div>
               </button>
             </div>
             <div class="px-3">
               <button
+                id="read-all-tooltip-btn"
                 @click="toggleReadStatus()"
                 class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                @mouseover="
+                  $showTooltip({
+                    targetEl: `read-all-tooltip`,
+                    triggerEl: `read-all-tooltip-btn`,
+                  })
+                "
               >
                 <IconC
                   v-if="hasUnreadMessages"
@@ -63,6 +97,13 @@
                   iconType="outline"
                   iconClass="w-5 h-5"
                 />
+                <div
+                  :id="`read-all-tooltip`"
+                  role="tooltip"
+                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                >
+                  {{ hasUnreadMessages ? $t("markRead") : $t("markUnread") }}
+                </div>
               </button>
             </div>
           </template>
@@ -111,7 +152,7 @@
                       role="tooltip"
                       class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
-                      Select
+                      {{ $t("select") }}
                     </div>
                   </button>
                 </td>
@@ -145,7 +186,7 @@
                       role="tooltip"
                       class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
-                      {{ !item.star ? "Not Starred" : "Starred" }}
+                      {{ !item.star ? $t("addStar") : $t("removeStar") }}
                     </div>
                   </button>
                 </td>
@@ -179,7 +220,7 @@
                       role="tooltip"
                       class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
-                      {{ !item.read ? "Mark as read" : "Mark as unread" }}
+                      {{ !item.read ? $t("markRead") : $t("markUnread") }}
                     </div>
                   </button>
                 </td>
@@ -304,6 +345,10 @@ export default {
         });
     },
     toggle(notificationId, read, star) {
+      const notification =
+        this.selectedItems[
+          this.selectedItems.findIndex((x) => x.id === notificationId)
+        ];
       this.$store
         .dispatch("notificationsModule/updateNotification", {
           id: notificationId,
@@ -312,6 +357,8 @@ export default {
         })
         .then(() => {
           this.getNotifications(this.currentPage);
+          notification.read = read;
+          notification.star = star;
           this.$store.dispatch("notificationsModule/getNotifications");
         });
     },

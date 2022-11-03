@@ -155,5 +155,11 @@
 	"expiresIn": "skadon në",
 	"hasExpired": "ka skaduar",
 	"days": "ditë",
-	"viewAll": "Shiko të gjitha"
+	"viewAll": "Shiko të gjitha",
+	"select": "Zgjidhni",
+	"selectAll": "Zgjidhni të gjitha",
+	"addStar": "Shto yllin",
+	"removeStar": "Hiq yllin",
+	"markRead": "Shëno si të lexuar",
+	"markUnread": "Shëno si të palexuar"
 }

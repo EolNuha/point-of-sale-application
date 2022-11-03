@@ -160,7 +160,9 @@
                   <button
                     :id="`star-${item.id}-tooltip-btn`"
                     @click.stop
-                    @click="toggle(item.id, item.read, !item.star)"
+                    @click="
+                      toggleSingleNotification(item.id, item.read, !item.star)
+                    "
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     @mouseover="
                       $showTooltip({
@@ -194,7 +196,9 @@
                   <button
                     :id="`read-${item.id}-tooltip-btn`"
                     @click.stop
-                    @click="toggle(item.id, !item.read, item.star)"
+                    @click="
+                      toggleSingleNotification(item.id, !item.read, item.star)
+                    "
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     @mouseover="
                       $showTooltip({
@@ -260,15 +264,13 @@ import moment from "moment";
 export default {
   data() {
     return {
+      notifications: [],
       selectedItems: [],
       isTableLoading: true,
       currentPage: 1,
     };
   },
   computed: {
-    notifications() {
-      return this.$store.state.notificationsModule.notificationsList.data || [];
-    },
     pagination() {
       return (
         this.$store.state.notificationsModule.notificationsList.pagination || []
@@ -306,6 +308,12 @@ export default {
     this.getNotifications(this.currentPage);
   },
   methods: {
+    syncData() {
+      this.selectedItems.forEach((item) => {
+        this.notifications.find((x) => x.id === item.id).read = item.read;
+        this.notifications.find((x) => x.id === item.id).star = item.star;
+      });
+    },
     getNotifications(page) {
       this.$store
         .dispatch("notificationsModule/getNotificationsList", {
@@ -313,6 +321,8 @@ export default {
           page: page,
         })
         .then(() => {
+          this.notifications =
+            this.$store.state.notificationsModule.notificationsList.data;
           this.currentPage = page;
           this.isTableLoading = false;
         })
@@ -335,6 +345,7 @@ export default {
       this.updateNotifications(this.selectedItems);
     },
     updateNotifications(items) {
+      this.syncData();
       this.$store
         .dispatch("notificationsModule/updateNotifications", {
           notifications: items,
@@ -344,11 +355,15 @@ export default {
           this.$store.dispatch("notificationsModule/getNotifications");
         });
     },
-    toggle(notificationId, read, star) {
+    toggleSingleNotification(notificationId, read, star) {
       const notification =
-        this.selectedItems[
-          this.selectedItems.findIndex((x) => x.id === notificationId)
-        ];
+        this.notifications.find((x) => x.id === notificationId) || [];
+      const selectedNotification =
+        this.selectedItems.find((x) => x.id === notificationId) || [];
+
+      notification.read = selectedNotification.read = read;
+      notification.star = selectedNotification.star = star;
+
       this.$store
         .dispatch("notificationsModule/updateNotification", {
           id: notificationId,
@@ -357,8 +372,6 @@ export default {
         })
         .then(() => {
           this.getNotifications(this.currentPage);
-          notification.read = read;
-          notification.star = star;
           this.$store.dispatch("notificationsModule/getNotifications");
         });
     },

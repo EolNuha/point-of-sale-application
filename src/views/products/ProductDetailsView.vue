@@ -228,6 +228,7 @@ export default {
         this.$store.dispatch("notificationsModule/updateNotification", {
           id: value,
           read: true,
+          star: null,
         });
       },
       deep: true,

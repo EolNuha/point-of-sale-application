@@ -37,8 +37,10 @@ def updateNotification(id):
     read = request.json["read"]
     star = request.json["star"]
     notification_info = Notification.query.filter_by(id=id).first()
-    notification_info.notification_read = read
-    notification_info.notification_star = star
+    if read != None:
+        notification_info.notification_read = read
+    if star != None:
+        notification_info.notification_star = star
     db.session.commit()
     return "Success", 200
 

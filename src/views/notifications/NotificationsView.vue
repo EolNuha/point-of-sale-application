@@ -127,8 +127,8 @@
                     : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
                 "
               >
-                <IconC iconName="InboxIcon" iconClass="w-6 h-6 mr-2" />All
-                Notifications
+                <IconC iconName="InboxIcon" iconClass="w-6 h-6 mr-2" />
+                {{ $t("allNotifications") }}
               </p>
             </li>
             <li
@@ -146,7 +146,7 @@
                   iconType="outline"
                   iconName="StarIcon"
                   iconClass="w-6 h-6 mr-2"
-                />Starred
+                />{{ $t("starred") }}
               </p>
             </li>
             <li
@@ -164,7 +164,7 @@
                   iconType="outline"
                   iconName="EnvelopeIcon"
                   iconClass="w-6 h-6 mr-2"
-                />Unread
+                />{{ $t("unread") }}
               </p>
             </li>
           </ul>
@@ -183,7 +183,7 @@
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr
-                class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
+                class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-blue-500': !item.read,
                   'bg-gray-100 dark:bg-gray-700  border-l-gray-100':

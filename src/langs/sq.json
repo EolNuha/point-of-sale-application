@@ -161,5 +161,8 @@
 	"addStar": "Shto yllin",
 	"removeStar": "Hiq yllin",
 	"markRead": "Shëno si të lexuar",
-	"markUnread": "Shëno si të palexuar"
+	"markUnread": "Shëno si të palexuar",
+	"allNotifications": "Të gjitha njoftimet",
+	"starred": "Të vequarat",
+	"unread": "Të palexuarat"
 }

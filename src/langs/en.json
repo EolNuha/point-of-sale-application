@@ -161,5 +161,8 @@
 	"addStar": "Add star",
 	"removeStar": "Remove Star",
 	"markRead": "Mark as read",
-	"markUnread": "Mark as unread"
+	"markUnread": "Mark as unread",
+	"allNotifications": "All Notifications",
+	"starred": "Starred",
+	"unread": "Unread"
 }

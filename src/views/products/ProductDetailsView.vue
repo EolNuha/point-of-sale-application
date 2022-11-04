@@ -225,11 +225,13 @@ export default {
     },
     "$route.query.notificationId": {
       handler: function (value) {
-        this.$store.dispatch("notificationsModule/updateNotification", {
-          id: value,
-          read: true,
-          star: null,
-        });
+        if (value) {
+          this.$store.dispatch("notificationsModule/updateNotification", {
+            id: value,
+            read: true,
+            star: null,
+          });
+        }
       },
       deep: true,
       immediate: true,

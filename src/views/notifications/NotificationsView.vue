@@ -118,12 +118,16 @@
           >
             <li
               class="mr-2"
-              @click="() => ((activeTab = 'all'), (colName = null))"
+              @click="
+                () => (
+                  (activeTab = 'all'), (colName = null), (selectedItems = [])
+                )
+              "
             >
               <p
                 :class="
                   activeTab === 'all'
-                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-600 rounded-t-lg border-b-4 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group'
+                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-500 rounded-t-lg border-b-4 border-blue-500 active dark:text-blue-500 dark:border-blue-500 group'
                     : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
                 "
               >
@@ -133,12 +137,16 @@
             </li>
             <li
               class="mr-2"
-              @click="() => ((activeTab = 'star'), (colName = 'star'))"
+              @click="
+                () => (
+                  (activeTab = 'star'), (colName = 'star'), (selectedItems = [])
+                )
+              "
             >
               <p
                 :class="
                   activeTab === 'star'
-                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-600 rounded-t-lg border-b-4 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group'
+                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-500 rounded-t-lg border-b-4 border-blue-500 active dark:text-blue-500 dark:border-blue-500 group'
                     : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
                 "
               >
@@ -151,12 +159,18 @@
             </li>
             <li
               class="mr-2"
-              @click="() => ((activeTab = 'unread'), (colName = 'read'))"
+              @click="
+                () => (
+                  (activeTab = 'unread'),
+                  (colName = 'read'),
+                  (selectedItems = [])
+                )
+              "
             >
               <p
                 :class="
                   activeTab === 'unread'
-                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-600 rounded-t-lg border-b-4 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group'
+                    ? 'inline-flex items-center cursor-pointer p-4 text-blue-500 rounded-t-lg border-b-4 border-blue-500 active dark:text-blue-500 dark:border-blue-500 group'
                     : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
                 "
               >
@@ -186,7 +200,7 @@
                 class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-blue-500': !item.read,
-                  'bg-gray-100 dark:bg-gray-700  border-l-gray-100':
+                  'bg-gray-100 dark:bg-gray-900/50  border-l-gray-100':
                     selectedItems.some((obj) => obj?.id === item.id),
                 }"
                 @click="
@@ -301,7 +315,7 @@
                 <td class="py-2 px-3">
                   <div class="pl-3 w-full">
                     <div
-                      class="text-gray-700 text-lg dark:text-gray-300"
+                      class="text-gray-700 text-lg dark:text-gray-400"
                       :class="{ 'font-bold': !item.read }"
                     >
                       {{ localizedMessage(item.message) }}
@@ -372,7 +386,9 @@ export default {
         JSON.stringify(
           notificationsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))
         ) ===
-        JSON.stringify(selectedItemsCopy.sort((a, b) => (a.id > b.id ? 1 : -1)))
+          JSON.stringify(
+            selectedItemsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))
+          ) && this.notifications.length !== 0
       );
     },
   },

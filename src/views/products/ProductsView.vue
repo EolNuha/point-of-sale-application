@@ -39,8 +39,8 @@
       </button>
     </div>
 
-    <div class="overflow-hidden rounded-xl my-5 min-h-65 relative">
-      <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
+    <div class="rounded-xl my-5 min-h-65 relative">
+      <div class="overflow-x-auto scrollbar-style">
         <table
           class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
         >
@@ -205,7 +205,6 @@
                 </div>
               </th>
               <th scope="col" class="py-3 px-6"></th>
-              <th scope="col" class="py-3 px-6"></th>
             </tr>
           </thead>
           <tbody>
@@ -218,17 +217,22 @@
                     : ''
                 "
               >
-                <td class="py-2 px-6" @click="updateSelectedProduct(product)">
-                  <IconC
-                    v-if="selectedProduct === product"
-                    iconName="CheckCircleIcon"
-                    iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
-                  />
-                  <IconC
-                    v-else
-                    iconName="MinusCircleIcon"
-                    iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                  />
+                <td class="py-2 px-6">
+                  <button
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    @click="updateSelectedProduct(product)"
+                  >
+                    <IconC
+                      v-if="selectedProduct === product"
+                      iconName="CheckCircleIcon"
+                      iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                    />
+                    <IconC
+                      v-else
+                      iconName="MinusCircleIcon"
+                      iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                    />
+                  </button>
                 </td>
                 <th
                   scope="row"
@@ -265,35 +269,60 @@
                   </div>
                 </td>
                 <td class="py-2 px-6 max-w-xs">{{ product.tax }}%</td>
-                <td
-                  class="py-2 px-6"
-                  @click="
-                    $router.push({
-                      name: 'product-view',
-                      params: { productId: product.id },
-                    })
-                  "
-                >
+                <td class="py-2 px-6 w-1.5">
                   <button
-                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    :id="`product-${product.id}-btn`"
+                    @click="
+                      $toggleDropdown({
+                        targetEl: `product-${product.id}-menu`,
+                        triggerEl: `product-${product.id}-btn`,
+                        placementEl: 'left',
+                      })
+                    "
                   >
                     <IconC
-                      iconType="solid"
-                      iconName="PencilIcon"
-                      iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                      iconName="EllipsisVerticalIcon"
+                      iconClass="w-5 h-5 cursor-pointer"
                     />
                   </button>
-                </td>
-                <td class="py-2 px-6">
-                  <button
-                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                    @click="deleteProduct(product)"
+                  <div
+                    :id="`product-${product.id}-menu`"
+                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 product-menu-dropdown"
+                    style="inset: 0px auto auto -300px !important"
                   >
-                    <IconC
-                      iconName="TrashIcon"
-                      iconClass="w-5 h-5 text-red-700 cursor-pointer"
-                    />
-                  </button>
+                    <ul
+                      class="py-1 text-sm text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
+                      aria-labelledby="dropdownDefault"
+                    >
+                      <li
+                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        @click="
+                          $router.push({
+                            name: 'product-view',
+                            params: { productId: product.id },
+                          })
+                        "
+                      >
+                        <IconC
+                          iconType="solid"
+                          iconName="PencilIcon"
+                          iconClass="w-5 h-5 cursor-pointer"
+                        />
+                        {{ $t("edit") }}
+                      </li>
+                      <li
+                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        @click="deleteProduct(product)"
+                      >
+                        <IconC
+                          iconName="TrashIcon"
+                          iconClass="w-5 h-5 cursor-pointer"
+                        />
+                        {{ $t("delete") }}
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             </template>
@@ -427,3 +456,8 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.product-menu-dropdown {
+  inset: 20px -5px auto auto !important;
+}
+</style>

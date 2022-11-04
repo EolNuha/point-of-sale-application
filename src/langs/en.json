@@ -164,5 +164,6 @@
 	"markUnread": "Mark as unread",
 	"allNotifications": "All Notifications",
 	"starred": "Starred",
-	"unread": "Unread"
+	"unread": "Unread",
+	"edit": "Edit"
 }

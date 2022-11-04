@@ -100,7 +100,7 @@
       </button>
       <div
         id="dropdownUserAvatarMenu"
-        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md dark:shadow-gray-600 dark:bg-gray-900 dark:divide-gray-600"
+        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 dark:divide-gray-600"
         style="inset: 0px auto auto -10px !important"
       >
         <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
@@ -116,7 +116,7 @@
           <li>
             <router-link
               :to="{ name: 'user-details', params: { userId: user.id || '1' } }"
-              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="UserIcon" iconClass="w-5 h-5" />
               {{ $t("profile") }}</router-link
@@ -127,7 +127,7 @@
               @click="toggleTheme"
               id="theme-toggle"
               type="button"
-              class="inline-flex items-center w-full gap-1 py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center w-full gap-1 py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <template v-if="!isDarkMode">
                 <IconC iconName="MoonIcon" iconClass="w-5 h-5" />
@@ -173,7 +173,7 @@
               </button>
               <!-- Dropdown -->
               <div
-                class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-md dark:shadow-gray-600 dark:bg-gray-900 border dark:border-gray-600 dark:divide-gray-600"
+                class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 border dark:border-gray-600 dark:divide-gray-600"
                 id="dropdownLangMenu"
                 style="inset: 0px auto auto -50px !important"
               >
@@ -189,7 +189,7 @@
                             });
                         }
                       "
-                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                       role="menuitem"
                     >
                       <div class="inline-flex items-center">
@@ -213,7 +213,7 @@
                             });
                         }
                       "
-                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                       role="menuitem"
                     >
                       <div class="inline-flex items-center">
@@ -234,7 +234,7 @@
         <div class="py-1">
           <button
             @click="logout"
-            class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 dark:hover:text-white"
           >
             <IconC iconName="ArrowRightOnRectangleIcon" iconClass="h-5 w-5" />
             {{ $t("signout") }}

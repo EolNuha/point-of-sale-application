@@ -74,7 +74,7 @@
             <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
-            <th scope="col" class="py-3 px-6"></th>
+            <!-- <th scope="col" class="py-3 px-6"></th> -->
           </tr>
         </thead>
         <tbody>
@@ -82,22 +82,25 @@
             <tr
               class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
               :class="
-                selectedProduct === product
+                selectedProducts.some((obj) => obj?.id === product.id)
                   ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
                   : ''
               "
             >
-              <td class="py-2 px-6" @click="updateSelectedProduct(product)">
-                <IconC
-                  v-if="selectedProduct === product"
-                  iconName="CheckCircleIcon"
-                  iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
-                />
-                <IconC
-                  v-else
-                  iconName="MinusCircleIcon"
-                  iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                />
+              <td class="py-2 px-6">
+                <button
+                  @click.stop
+                  @click="toggleSelectProduct(product)"
+                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                >
+                  <input
+                    type="checkbox"
+                    class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                    :checked="
+                      selectedProducts.some((obj) => obj?.id === product.id)
+                    "
+                  />
+                </button>
               </td>
               <td class="py-2 px-6">
                 {{ product.id }}
@@ -124,7 +127,7 @@
                 />
               </td>
               <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
-              <td class="py-2 px-6">
+              <!-- <td class="py-2 px-6">
                 <button
                   class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
                   @click="openRemoveModal(product)"
@@ -134,7 +137,7 @@
                     iconClass="w-5 h-5 text-red-700 cursor-pointer"
                   />
                 </button>
-              </td>
+              </td> -->
             </tr>
           </template>
         </tbody>
@@ -143,21 +146,28 @@
     <div
       class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-gray-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
     >
-      <button
-        :disabled="products.length === 0"
-        @click="finishSaleModal()"
-        type="button"
-        id="finishSale"
-        class="flex justify-center items-center flex-col text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-      >
-        <IconC
-          iconType="solid"
-          iconSize="20"
-          iconName="CheckIcon"
-          iconClass="w-6 h-6"
-        />
-        {{ $t("finish") }} (F8)
-      </button>
+      <div class="flex flex-row items-center">
+        <button
+          :disabled="products.length === 0"
+          @click="finishSaleModal()"
+          type="button"
+          id="finishSale"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        >
+          <IconC iconType="solid" iconName="CheckIcon" iconClass="w-5 h-5" />
+          {{ $t("finish") }} (F8)
+        </button>
+        <button
+          :disabled="products.length === 0"
+          @click="openRemoveModal(JSON.parse(JSON.stringify(products)))"
+          type="button"
+          id="clearAll"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        >
+          <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+          {{ $t("clearAll") }} (F10)
+        </button>
+      </div>
       <div
         class="flex flex-row items-center text-3xl md:text-7xl text-gray-700 dark:text-gray-300"
       >
@@ -171,10 +181,10 @@
       </div>
     </div>
     <remove-modal
-      :productId="selectedProductToRemove.id"
+      :value="selectedProductsToRemove"
       title="Product"
       :removeRef="removeModalRef"
-      @remove="removeProduct"
+      @remove="removeProducts($event)"
     />
     <finish-sale-modal
       :isLoading="isFinishSaleLoading"
@@ -199,11 +209,11 @@ export default {
       isFinishSaleLoading: false,
       removeModalRef: "remove-modal",
       finishSaleModalRef: "finish-sale-modal",
-      selectedProduct: {},
+      selectedProducts: [],
+      selectedProductsToRemove: [],
       searchQuery: "",
       searchedProducts: [],
       searchedProductsIndex: 0,
-      selectedProductToRemove: {},
       lastSearchedProduct: {},
       products: [],
       total: "0.00",
@@ -234,15 +244,21 @@ export default {
   created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct).length === 0;
+        const isEmpty = this.selectedProducts.length === 0;
         if (!isEmpty) {
-          this.openRemoveModal(this.selectedProduct);
+          this.openRemoveModal(this.selectedProducts);
         }
       }
       if (e.key == "F8") {
         const isProductsEmpty = this.products.length === 0;
         if (!isProductsEmpty) {
           this.finishSaleModal();
+        }
+      }
+      if (e.key == "F10") {
+        const isProductsEmpty = this.products.length === 0;
+        if (!isProductsEmpty) {
+          this.openRemoveModal(JSON.parse(JSON.stringify(this.products)));
         }
       }
     });
@@ -309,25 +325,21 @@ export default {
       }, 0);
       return sum.toFixed(2);
     },
-    updateSelectedProduct(product) {
-      if (this.selectedProduct.id === product.id) {
-        this.selectedProduct = {};
-      } else {
-        this.selectedProduct = product;
-      }
-    },
-    openRemoveModal(product) {
-      this.selectedProductToRemove = product;
+    openRemoveModal(products) {
+      this.selectedProductsToRemove = products;
       this.$openModal(this.removeModalRef);
       this.$putOnFocus("remove-modal-btn");
     },
-    removeProduct(productId) {
-      const objectIdx = this.products.findIndex(
-        (item) => item.id === productId
-      );
-      this.products.splice(objectIdx, 1);
+    removeProducts(products) {
+      console.log("eoll", products);
+      products.forEach((item) => {
+        this.products.splice(
+          this.products.findIndex((x) => x.id === item.id),
+          1
+        );
+      });
       this.total = this.getProductsTotal();
-      this.selectedProduct = {};
+      this.selectedProducts = [];
       this.$hideModal(this.removeModalRef);
     },
     finishSaleModal() {
@@ -347,7 +359,7 @@ export default {
         .then(() => {
           this.isFinishSaleLoading = false;
           this.products = [];
-          this.selectedProduct = {};
+          this.selectedProducts = {};
           this.total = (0).toFixed(2);
           this.$hideModal(this.finishSaleModalRef);
           this.$toast.success(this.$t("saleSuccess"));
@@ -356,6 +368,13 @@ export default {
           this.isFinishSaleLoading = false;
           this.$toast.error(this.$t("somethingWrong"));
         });
+    },
+    toggleSelectProduct(notification) {
+      const idx = this.selectedProducts.findIndex(
+        (x) => x?.id === notification.id
+      );
+      if (idx !== -1) this.selectedProducts.splice(idx, 1);
+      if (idx === -1) this.selectedProducts.push(notification);
     },
   },
 };

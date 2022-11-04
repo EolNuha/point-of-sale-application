@@ -1,7 +1,7 @@
 <template>
   <button
     id="dropdownNotificationButton"
-    class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400"
+    class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 w-9 ml-auto"
     type="button"
     @click="
       $toggleDropdown({

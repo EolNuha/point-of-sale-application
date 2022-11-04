@@ -85,7 +85,7 @@
             placement: `top`,
           })
         "
-        class="inline-flex items-center mx-3 text-sm font-medium text-gray-900 dark:text-white gap-1 mr-2 capitalize"
+        class="inline-flex items-center justify-end mx-3 text-sm font-medium text-gray-900 dark:text-white gap-1 mr-2 capitalize md:min-w-[100px]"
         type="button"
       >
         <span class="hidden sm:inline"

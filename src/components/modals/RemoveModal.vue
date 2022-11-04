@@ -9,7 +9,7 @@
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="flex items-center p-2.5">
           <p class="text-gray-700 dark:text-gray-200 text-xl">
-            {{ $t("remove") }} {{ title }}
+            {{ $t("remove") }} {{ $t("products") }}
           </p>
           <button
             type="button"
@@ -36,7 +36,7 @@
               {{ $t("cancel") }}
             </button>
             <button
-              @click="$emit('remove', productId)"
+              @click="$emit('remove', value)"
               id="remove-modal-btn"
               type="button"
               class="red-gradient-btn h-10 w-20 inline-flex justify-center items-center"
@@ -59,7 +59,7 @@
 <script>
 export default {
   props: {
-    productId: { type: null, required: true, default: null },
+    value: { type: Array, required: true },
     removeRef: { type: String, required: true, default: "remove-modal" },
     title: { type: String, required: true, default: "Object" },
     icon: {

@@ -219,18 +219,13 @@
               >
                 <td class="py-2 px-6">
                   <button
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     @click="updateSelectedProduct(product)"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                   >
-                    <IconC
-                      v-if="selectedProduct === product"
-                      iconName="CheckCircleIcon"
-                      iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
-                    />
-                    <IconC
-                      v-else
-                      iconName="MinusCircleIcon"
-                      iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                    <input
+                      type="checkbox"
+                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                      :checked="selectedProduct === product"
                     />
                   </button>
                 </td>

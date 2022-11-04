@@ -165,5 +165,6 @@
 	"allNotifications": "All Notifications",
 	"starred": "Starred",
 	"unread": "Unread",
-	"edit": "Edit"
+	"edit": "Edit",
+	"clearAll": "Clear All"
 }

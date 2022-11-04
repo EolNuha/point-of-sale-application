@@ -190,11 +190,6 @@
                 </div>
               </th>
               <th scope="col" class="py-3 px-6"></th>
-              <th
-                scope="col"
-                class="py-3 px-6"
-                v-if="currentUser.userType !== 'staff'"
-              ></th>
             </tr>
           </thead>
           <tbody>
@@ -207,23 +202,18 @@
                     : ''
                 "
               >
-                <td
-                  class="py-2 px-6"
-                  @click="updateSelectedUser(user)"
-                  v-if="currentUser.userType !== 'staff'"
-                >
-                  <template v-if="currentUser.id !== user.id">
-                    <IconC
-                      v-if="selectedUser === user"
-                      iconName="CheckCircleIcon"
-                      iconClass="h-5 w-5 fill-blue-500 text-gray-900 dark:text-gray-300 dark:fill-blue-700"
+                <td class="py-2 px-6" v-if="currentUser.userType !== 'staff'">
+                  <button
+                    @click="updateSelectedUser(user)"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    v-if="currentUser.id !== user.id"
+                  >
+                    <input
+                      type="checkbox"
+                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                      :checked="selectedUser === user"
                     />
-                    <IconC
-                      v-else
-                      iconName="MinusCircleIcon"
-                      iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                    />
-                  </template>
+                  </button>
                 </td>
                 <th
                   scope="row"
@@ -246,36 +236,64 @@
                 <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
                 <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
                 <td class="py-2 px-6 max-w-xs">{{ user.userType }}</td>
-                <td
-                  class="py-2 px-6"
-                  @click="
-                    $router.push({
-                      name: 'user-details',
-                      params: { userId: user.id },
-                    })
-                  "
-                >
+                <td class="py-2 px-6 w-1.5">
                   <button
-                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    :id="`user-${user.id}-btn`"
+                    @click="
+                      $toggleDropdown({
+                        targetEl: `user-${user.id}-menu`,
+                        triggerEl: `user-${user.id}-btn`,
+                        placementEl: 'left',
+                      })
+                    "
                   >
                     <IconC
-                      iconType="solid"
-                      iconName="PencilIcon"
-                      iconClass="w-5 h-5 text-blue-700 cursor-pointer"
+                      iconName="EllipsisVerticalIcon"
+                      iconClass="w-5 h-5 cursor-pointer"
                     />
                   </button>
-                </td>
-                <td class="py-2 px-6" v-if="currentUser.userType !== 'staff'">
-                  <button
-                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-                    @click="deleteUser(user)"
-                    v-if="currentUser.id !== user.id"
+                  <div
+                    :id="`user-${user.id}-menu`"
+                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800"
+                    style="inset: 0px auto auto -300px !important"
                   >
-                    <IconC
-                      iconName="TrashIcon"
-                      iconClass="w-5 h-5 text-red-700 cursor-pointer"
-                    />
-                  </button>
+                    <ul
+                      class="py-1 text-sm text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
+                      aria-labelledby="dropdownDefault"
+                    >
+                      <li
+                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        @click="
+                          $router.push({
+                            name: 'user-details',
+                            params: { userId: user.id },
+                          })
+                        "
+                      >
+                        <IconC
+                          iconType="solid"
+                          iconName="PencilIcon"
+                          iconClass="w-5 h-5 cursor-pointer"
+                        />
+                        {{ $t("edit") }}
+                      </li>
+                      <li
+                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        @click="deleteUser(user)"
+                        v-if="
+                          currentUser.id !== user.id &&
+                          currentUser.userType !== 'staff'
+                        "
+                      >
+                        <IconC
+                          iconName="TrashIcon"
+                          iconClass="w-5 h-5 cursor-pointer"
+                        />
+                        {{ $t("delete") }}
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             </template>

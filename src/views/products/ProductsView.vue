@@ -283,7 +283,7 @@
                   </button>
                   <div
                     :id="`product-${product.id}-menu`"
-                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 product-menu-dropdown"
+                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800"
                     style="inset: 0px auto auto -300px !important"
                   >
                     <ul
@@ -451,8 +451,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.product-menu-dropdown {
-  inset: 20px -5px auto auto !important;
-}
-</style>

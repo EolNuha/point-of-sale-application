@@ -206,7 +206,7 @@
                         query: { saleDate: saleDate },
                       })
                     "
-                    class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                   >
                     <IconC
                       iconName="DocumentMagnifyingGlassIcon"

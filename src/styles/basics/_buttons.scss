@@ -1,7 +1,7 @@
 .red-gradient-btn {
 	@apply text-white;
 	@apply bg-gradient-to-r #{!important};
-	@apply from-red-400 #{!important};
+	@apply from-red-500 #{!important};
 	@apply via-red-600 #{!important};
 	@apply to-red-700 #{!important};
 	@apply hover:bg-gradient-to-br #{!important};
@@ -20,7 +20,7 @@
 .blue-gradient-btn {
 	@apply text-white;
 	@apply bg-gradient-to-r #{!important};
-	@apply from-blue-400 #{!important};
+	@apply from-blue-500 #{!important};
 	@apply via-blue-600 #{!important};
 	@apply to-blue-700 #{!important};
 	@apply hover:bg-gradient-to-br #{!important};
@@ -39,7 +39,7 @@
 .green-gradient-btn {
 	@apply text-white;
 	@apply bg-gradient-to-r #{!important};
-	@apply from-green-400 #{!important};
+	@apply from-green-500 #{!important};
 	@apply via-green-600 #{!important};
 	@apply to-green-700 #{!important};
 	@apply hover:bg-gradient-to-br #{!important};

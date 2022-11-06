@@ -134,6 +134,7 @@
 	"userUpdateSuccess": "User details updated successfully!",
 	"userDetails": "User Details",
 	"signin": "Sign In",
+	"signup": "Sign Up",
 	"signout": "Sign Out",
 	"signinToAccount": "Sign in to your account",
 	"signinSuccess": "You have successfully signed in!",

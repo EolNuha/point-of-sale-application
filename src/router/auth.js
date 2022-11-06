@@ -6,7 +6,7 @@ export default [
     path: "/signin",
     name: "signin",
     meta: {
-      title: "Sign In Page",
+      title: "signin",
       isPublic: true,
       hideNavbar: true,
     },
@@ -16,7 +16,7 @@ export default [
     path: "/signup",
     name: "signup",
     meta: {
-      title: "Sign Up",
+      title: "signup",
       isPublic: true,
       hideNavbar: true,
     },

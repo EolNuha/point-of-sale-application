@@ -98,7 +98,7 @@ def updateProductDetails(productId):
     product.purchased_price = purchased_price
     product.selling_price = selling_price
     product.expiration_date = expiration_date
-    product.modified = datetime.now()
+    product.date_modified = datetime.now()
 
     db.session.commit()
     return "Success", 200

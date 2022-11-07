@@ -40,13 +40,16 @@ def createPurchase():
         price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
         tax_amount = (decimal_tax / 100) * decimal_price
 
+        expiration_date = product["expirationDate"].split("-")
+        expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+
         product_query = Product.query.filter_by(name=product["productName"].lower()).first()
 				
         if product_query:
             purchase_item = PurchaseItem(
                 purchase=purchase,
                 product_id=product_query.id,
-                product_barcode=product_query.barcode,
+                product_barcode=product["barcode"],
                 product_name=product["productName"],
                 product_tax=product["tax"],
                 product_purchased_price=product["purchasedPrice"],
@@ -64,6 +67,7 @@ def createPurchase():
             product_query.purchased_price = product["purchasedPrice"]
             product_query.selling_price = product["sellingPrice"]
             product_query.stock += Decimal(product["stock"])
+            product_query.expiration_date = expiration_date
         else:
             created_product = Product(
                 name=product["productName"].lower(), 
@@ -72,6 +76,7 @@ def createPurchase():
                 tax=product["tax"], 
                 purchased_price=product["purchasedPrice"], 
                 selling_price= product["sellingPrice"],
+                expiration_date=expiration_date,
                 date_created=datetime.now(),
                 date_modified=datetime.now(),
             )

@@ -39,8 +39,8 @@ def getProductsList(products):
             "purchasedPrice": i.purchased_price,
             "sellingPrice": i.selling_price,
             "expirationDate": i.expiration_date.strftime('%Y-%m-%d'),
-            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
-            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateCreated": i.date_created.strftime('%Y-%m-%d, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%Y-%m-%d, %H:%M:%S'),
         }
         products_list.append(product_dict)
     return products_list

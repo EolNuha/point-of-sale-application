@@ -14,7 +14,7 @@
           type="text"
           id="product_name"
           :class="errors.product_name ? 'ring-2 ring-red-500' : ''"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="default-input w-full"
           placeholder="Enter product name"
           required
         />
@@ -34,7 +34,7 @@
             type="number"
             id="product_barcode"
             :class="errors.product_barcode ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product barcode"
             required
           />
@@ -53,7 +53,7 @@
             type="number"
             id="product_stock"
             :class="errors.product_stock ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product stock"
             required
           />
@@ -75,7 +75,7 @@
             step="0.01"
             id="product_purchasedprice"
             :class="errors.product_purchasedprice ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product price"
             required
           />
@@ -95,7 +95,7 @@
             step="0.01"
             id="product_sellingprice"
             :class="errors.product_sellingprice ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product price"
             required
           />
@@ -115,7 +115,7 @@
             v-model="product.tax"
             id="product_tax"
             :class="errors.product_tax ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             required
             as="select"
           >
@@ -143,7 +143,7 @@
             type="date"
             id="product_expire"
             :class="errors.product_expire ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product stock"
             required
           />

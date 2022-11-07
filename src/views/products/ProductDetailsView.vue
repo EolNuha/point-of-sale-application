@@ -14,7 +14,7 @@
           v-model="product.name"
           type="text"
           id="product_name"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="default-input w-full"
           placeholder="Enter product name"
           required
         />
@@ -34,7 +34,7 @@
             type="number"
             id="product_barcode"
             :class="errors.product_barcode ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product barcode"
             required
           />
@@ -53,7 +53,7 @@
             type="number"
             id="product_stock"
             :class="errors.product_stock ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product stock"
             required
           />
@@ -74,7 +74,7 @@
             type="number"
             step="0.01"
             id="product_purchasedprice"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product price"
             required
           />
@@ -93,7 +93,7 @@
             type="number"
             step="0.01"
             id="product_sellingprice"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             placeholder="Enter product price"
             required
           />
@@ -112,7 +112,7 @@
             :rules="isRequired"
             v-model="product.tax"
             id="product_tax"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="default-input w-full"
             required
             as="select"
           >
@@ -140,8 +140,8 @@
             type="date"
             id="product_expire"
             :class="errors.product_expire ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Enter product stock"
+            class="default-input w-full"
+            :placeholder="$t('expirationDate')"
             required
           />
           <span class="text-red-700">{{ errors.product_expire }}</span>
@@ -150,34 +150,32 @@
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
-            for="product_price"
+            for="dateCreated"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("dateCreated") }}</label
           >
           <input
             name="product_price"
             v-model="product.dateCreated"
-            type="any"
-            step="any"
-            id="product_price"
-            class="disabled bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            type="text"
+            id="dateCreated"
+            class="default-input w-full"
             placeholder="Enter product price"
             disabled
           />
         </div>
         <div class="basis-1/2">
           <label
-            for="product_price"
+            for="dateModified"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("dateModified") }}</label
           >
           <input
-            name="product_price"
+            name="dateModified"
             v-model="product.dateModified"
-            type="any"
-            step="any"
-            id="product_price"
-            class="disabled bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            type="text"
+            id="dateModified"
+            class="default-input w-full"
             disabled
           />
         </div>

@@ -100,166 +100,195 @@
       >
         {{ $t("purchasedProducts") }}:
       </h2>
-      <div
-        v-for="(product, index) in products"
-        :key="index"
-        class="flex gap-2 mb-6 flex-wrap md:flex-nowrap"
-      >
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("productName") }}</label
+      <div v-for="(product, index) in products" :key="index">
+        <div class="flex flex-row gap-2">
+          <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full"
           >
-          <Field
-            required
-            :rules="isRequired"
-            type="text"
-            v-model="product.productName"
-            :placeholder="$t('productName')"
-            class="hidden"
-            :name="`${index}name`"
-            :id="`${index}name`"
-          />
-          <v-select
-            class="block w-full default-input !p-[1px]"
-            :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
-            v-model="product.productName"
-            :clearable="true"
-            :options="productsList"
-            :reduce="(productsList) => productsList.name"
-            label="name"
-            type="text"
-            :placeholder="$t('productName')"
-            :taggable="true"
-            @option:selected="getProductDetails($event, index)"
-          />
-          <span class="text-red-700">{{ errors[`${index}name`] }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("barcode") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="number"
-            step="1"
-            v-model="product.barcode"
-            :placeholder="$t('barcode')"
-            class="default-input w-full"
-            :class="errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''"
-            :name="`${index}barcode`"
-            :id="`${index}barcode`"
-          />
-          <span class="text-red-700">{{ errors[`${index}barcode`] }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("tax") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="number"
-            step="1"
-            v-model="product.tax"
-            :placeholder="$t('tax')"
-            class="default-input w-full"
-            :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
-            :name="`${index}tax`"
-            :id="`${index}tax`"
-            as="select"
-          >
-            <option value="8">8%</option>
-            <option value="18">18%</option></Field
-          >
-          <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchasedPrice") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="number"
-            step="0.01"
-            v-model="product.purchasedPrice"
-            :placeholder="$t('purchasedPrice')"
-            class="default-input w-full"
-            :class="
-              errors[`${index}purchasedPrice`] ? 'ring-2 ring-red-500' : ''
-            "
-            :name="`${index}purchasedPrice`"
-            :id="`${index}purchasedPrice`"
-          />
-          <span class="text-red-700">{{
-            errors[`${index}purchasedPrice`]
-          }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("sellingPrice") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="number"
-            step="0.01"
-            v-model="product.sellingPrice"
-            :placeholder="$t('sellingPrice')"
-            class="default-input w-full"
-            :class="errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''"
-            :name="`${index}sellingPrice`"
-            :id="`${index}sellingPrice`"
-          />
-          <span class="text-red-700">{{ errors[`${index}sellingPrice`] }}</span>
-        </div>
-        <div class="basis-1/4 md:basis-1/6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("stock") }}</label
-          >
-          <div class="flex items-center gap-2">
-            <Field
-              required
-              :rules="isRequired"
-              type="number"
-              step="1"
-              v-model="product.stock"
-              :placeholder="$t('stock')"
-              class="default-input w-full"
-              :class="errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''"
-              :name="`${index}stock`"
-              :id="`${index}stock`"
-            />
-            <button
-              v-show="products.length != 1"
-              type="button"
-              class="p-1.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-900 items-end mt-auto mb-auto"
-              @click="removeProduct(index)"
-            >
-              <IconC
-                iconName="TrashIcon"
-                iconClass="w-5 h-5 text-red-700 cursor-pointer"
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("productName") }}</label
+              >
+              <Field
+                required
+                :rules="isRequired"
+                type="text"
+                v-model="product.productName"
+                :placeholder="$t('productName')"
+                class="hidden"
+                :name="`${index}name`"
+                :id="`${index}name`"
               />
-            </button>
+              <v-select
+                class="block w-full default-input !p-[1px]"
+                :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
+                v-model="product.productName"
+                :clearable="true"
+                :options="productsList"
+                :reduce="(productsList) => productsList.name"
+                label="name"
+                type="text"
+                :placeholder="$t('productName')"
+                :taggable="true"
+                @option:selected="getProductDetails($event, index)"
+              />
+              <span class="text-red-700">{{ errors[`${index}name`] }}</span>
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("barcode") }}</label
+              >
+              <Field
+                required
+                :rules="isRequired"
+                type="number"
+                step="1"
+                v-model="product.barcode"
+                :placeholder="$t('barcode')"
+                class="default-input w-full"
+                :class="errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''"
+                :name="`${index}barcode`"
+                :id="`${index}barcode`"
+              />
+              <span class="text-red-700">{{ errors[`${index}barcode`] }}</span>
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("tax") }}</label
+              >
+              <Field
+                required
+                :rules="isRequired"
+                type="number"
+                step="1"
+                v-model="product.tax"
+                :placeholder="$t('tax')"
+                class="default-input w-full"
+                :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
+                :name="`${index}tax`"
+                :id="`${index}tax`"
+                as="select"
+              >
+                <option value="8">8%</option>
+                <option value="18">18%</option></Field
+              >
+              <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("purchasedPrice") }}</label
+              >
+              <Field
+                required
+                :rules="isRequired"
+                type="number"
+                step="0.01"
+                v-model="product.purchasedPrice"
+                :placeholder="$t('purchasedPrice')"
+                class="default-input w-full"
+                :class="
+                  errors[`${index}purchasedPrice`] ? 'ring-2 ring-red-500' : ''
+                "
+                :name="`${index}purchasedPrice`"
+                :id="`${index}purchasedPrice`"
+              />
+              <span class="text-red-700">{{
+                errors[`${index}purchasedPrice`]
+              }}</span>
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("sellingPrice") }}</label
+              >
+              <Field
+                required
+                :rules="isRequired"
+                type="number"
+                step="0.01"
+                v-model="product.sellingPrice"
+                :placeholder="$t('sellingPrice')"
+                class="default-input w-full"
+                :class="
+                  errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''
+                "
+                :name="`${index}sellingPrice`"
+                :id="`${index}sellingPrice`"
+              />
+              <span class="text-red-700">{{
+                errors[`${index}sellingPrice`]
+              }}</span>
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("expirationDate") }}</label
+              >
+              <Field
+                :name="`${index}product_expire`"
+                :id="`${index}product_expire`"
+                :rules="isRequired"
+                v-model="product.expirationDate"
+                :min="minDate"
+                type="date"
+                :class="
+                  errors[`${index}product_expire`] ? 'ring-2 ring-red-500' : ''
+                "
+                class="default-input w-full"
+                :placeholder="$t('expirationDate')"
+                required
+              />
+              <span class="text-red-700">{{
+                errors[`${index}product_expire`]
+              }}</span>
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("stock") }}</label
+              >
+              <div class="flex items-center gap-2">
+                <Field
+                  required
+                  :rules="isRequired"
+                  type="number"
+                  step="1"
+                  v-model="product.stock"
+                  :placeholder="$t('stock')"
+                  class="default-input w-full"
+                  :class="errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''"
+                  :name="`${index}stock`"
+                  :id="`${index}stock`"
+                />
+              </div>
+              <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
+            </div>
           </div>
-          <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
+          <button
+            v-show="products.length != 1"
+            type="button"
+            class="p-1.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-900"
+            @click="removeProduct(index)"
+          >
+            <IconC
+              iconName="TrashIcon"
+              iconClass="w-5 h-5 text-red-700 cursor-pointer"
+            />
+          </button>
         </div>
-      </div>
-      <div class="flex justify-end my-3 gap-2">
-        <button
-          type="button"
-          class="blue-gradient-btn flex items-center justify-center"
-          @click="addProduct"
-        >
-          <IconC iconName="PlusIcon" iconClass="w-5 h-5" />
-        </button>
+        <div class="flex justify-end my-3 gap-2">
+          <button
+            type="button"
+            class="blue-gradient-btn flex items-center justify-center"
+            @click="addProduct"
+          >
+            <IconC iconName="PlusIcon" iconClass="w-5 h-5" />
+          </button>
+        </div>
       </div>
       <div>
         <button
@@ -305,6 +334,7 @@ export default {
           tax: 8,
           purchasedPrice: "",
           sellingPrice: "",
+          expirationDate: "",
         },
       ],
     };
@@ -315,6 +345,9 @@ export default {
     },
     sellers() {
       return this.$store.getters["purchaseModule/getSellersList"];
+    },
+    minDate() {
+      return this.formatDate(new Date());
     },
   },
   async created() {
@@ -334,6 +367,15 @@ export default {
   methods: {
     isRequired(value) {
       return value ? true : this.$t("isRequired");
+    },
+    formatDate(date) {
+      return (
+        String(date.getFullYear()).padStart(2, "0") +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(date.getDate()).padStart(2, "0")
+      );
     },
     addProduct() {
       const product = {
@@ -377,6 +419,7 @@ export default {
         this.products[idx].tax = productInfo.tax;
         this.products[idx].sellingPrice = productInfo.sellingPrice;
         this.products[idx].purchasedPrice = productInfo.purchasedPrice;
+        this.products[idx].expirationDate = productInfo.expirationDate;
       }
     },
     submit() {

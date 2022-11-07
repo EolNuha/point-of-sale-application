@@ -162,10 +162,13 @@ def getPurchases():
 
 @purchase.route('/sellers', methods=["GET"])
 def getSellers():
-    desc = request.args.get('desc', True, type=bool)
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '*', type=str)
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
     if '*' in search or '_' in search: 
         looking_for = search.replace('_', '__')\
@@ -181,7 +184,7 @@ def getSellers():
         Purchase.seller_fiscal_number.ilike(looking_for),
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
-        .order_by(Purchase.seller_name)\
+        .order_by(sort)\
         .with_entities(
             Purchase.id.label("id"), 
             Purchase.seller_name.label("seller_name"), 
@@ -191,12 +194,7 @@ def getSellers():
             Purchase.date_created.label("date_created"), 
             Purchase.date_modified.label("date_modified"), 
         )\
-        .group_by(Purchase.seller_name)\
-
-    if (desc):
-        paginated_items = paginated_items.order_by(Purchase.id.desc())
-
-    paginated_items = paginated_items.paginate(page=page, per_page=per_page)
+        .group_by(Purchase.seller_name).paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getSellersList(paginated_items.items), paginated_items))
 

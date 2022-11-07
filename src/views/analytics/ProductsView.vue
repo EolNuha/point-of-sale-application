@@ -55,6 +55,8 @@ export default {
       .dispatch("productModule/getProducts", {
         page: 1,
         per_page: 1000000000,
+        sort_column: "name",
+        sort_dir: "asc",
       })
       .then((res) => {
         this.selectedProduct = res.data.data[0];

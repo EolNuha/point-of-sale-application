@@ -321,10 +321,14 @@ export default {
     await this.$store.dispatch("purchaseModule/getSellers", {
       page: 1,
       per_page: 1000000000,
+      sort_column: "seller_name",
+      sort_dir: "asc",
     });
     await this.$store.dispatch("productModule/getProducts", {
       page: 1,
       per_page: 1000000000,
+      sort_column: "name",
+      sort_dir: "asc",
     });
   },
   methods: {

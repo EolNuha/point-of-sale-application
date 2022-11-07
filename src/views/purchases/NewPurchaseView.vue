@@ -248,9 +248,30 @@
             </div>
             <div>
               <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("stock") }}</label
-              >
+                class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >{{ $t("stock") }}
+                <button
+                  :id="`product-${index}-tooltip-btn`"
+                  class="cursor-default"
+                  type="button"
+                  @mouseover="
+                    $showTooltip({
+                      targetEl: `product-${index}-tooltip`,
+                      triggerEl: `product-${index}-tooltip-btn`,
+                      placement: `right`,
+                    })
+                  "
+                >
+                  <IconC iconName="InformationCircleIcon" iconClass="w-4 h-4" />
+                </button>
+                <div
+                  :id="`product-${index}-tooltip`"
+                  role="tooltip"
+                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 dark:bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip max-w-[250px]"
+                >
+                  {{ $t("stockInfoMsg") }}
+                </div>
+              </label>
               <div class="flex items-center gap-2">
                 <Field
                   required
@@ -271,7 +292,7 @@
           <button
             v-show="products.length != 1"
             type="button"
-            class="p-1.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-900"
+            class="p-1.5 rounded-lg hover:bg-gray-300/50 dark:hover:bg-gray-900/50"
             @click="removeProduct(index)"
           >
             <IconC
@@ -385,6 +406,7 @@ export default {
         tax: 8,
         purchasedPrice: "",
         sellingPrice: "",
+        expirationDate: "",
       };
       this.products.push(product);
     },
@@ -434,22 +456,6 @@ export default {
         .then(() => {
           this.$router.push({ name: "purchases" });
           this.isLoading = false;
-          this.seller = {
-            sellerName: "",
-            invoiceNumber: "",
-            fiscalNumber: "",
-            taxNumber: "",
-          };
-          this.products = [
-            {
-              barcode: "",
-              productName: "",
-              stock: "",
-              tax: 8,
-              purchasedPrice: "",
-              sellingPrice: "",
-            },
-          ];
           this.$toast.success(this.$t("purchaseSaved"));
         })
         .catch(() => {

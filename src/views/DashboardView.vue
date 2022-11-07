@@ -11,7 +11,7 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'products' }"
-          >{{ $t("manageProducts") }}</router-link
+          >{{ $t("productList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
@@ -35,7 +35,7 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'sales' }"
-          >{{ $t("manageSales") }}</router-link
+          >{{ $t("salesList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
@@ -62,7 +62,7 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchases' }"
-          >{{ $t("managePurchases") }}</router-link
+          >{{ $t("purchasesList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
@@ -86,7 +86,7 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'users' }"
-          >{{ $t("manageUsers") }}</router-link
+          >{{ $t("usersList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"

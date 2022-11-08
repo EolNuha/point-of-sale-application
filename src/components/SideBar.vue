@@ -7,7 +7,7 @@
     <div class="overflow-y-auto overflow-x-hidden py-4 px-3">
       <ul class="space-y-2">
         <template v-for="item in items" :key="item.title">
-          <SidebarButton :item="item" />
+          <SidebarButton :item="item" v-if="$can(item.action, item.subject)" />
         </template>
       </ul>
     </div>

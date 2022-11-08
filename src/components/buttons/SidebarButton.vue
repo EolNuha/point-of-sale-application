@@ -27,13 +27,15 @@
       />
     </button>
     <ul :id="item.title" class="hidden py-2 space-y-2">
-      <li v-for="child in item.children" :key="child.route">
-        <router-link
-          :to="{ name: child.route }"
-          class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-          >{{ $t(child.title) }}</router-link
-        >
-      </li>
+      <template v-for="child in item.children" :key="child.route">
+        <li v-if="$can(child.action, child.subject)">
+          <router-link
+            :to="{ name: child.route }"
+            class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+            >{{ $t(child.title) }}</router-link
+          >
+        </li>
+      </template>
     </ul>
   </li>
   <li v-else>

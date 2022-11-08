@@ -10,16 +10,19 @@
         </h3>
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
+          v-if="$can('read', 'product')"
           :to="{ name: 'products' }"
           >{{ $t("productList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
+          v-if="$can('write', 'product')"
           :to="{ name: 'new-product' }"
           >{{ $t("createProduct") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
+          v-if="$can('read', 'analytics')"
           :to="{ name: 'product-analytics' }"
           >{{ $t("productAnalytics") }}</router-link
         >
@@ -35,16 +38,19 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'sales' }"
+          v-if="$can('read', 'sale')"
           >{{ $t("salesList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-sale' }"
+          v-if="$can('write', 'sale')"
           >{{ $t("createSale") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'sale-analytics' }"
+          v-if="$can('read', 'analytics')"
           >{{ $t("saleAnalytics") }}</router-link
         >
         <IconC
@@ -62,16 +68,19 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchases' }"
+          v-if="$can('read', 'purchase')"
           >{{ $t("purchasesList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-purchase' }"
+          v-if="$can('write', 'purchase')"
           >{{ $t("createPurchase") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchase-analytics' }"
+          v-if="$can('read', 'analytics')"
           >{{ $t("purchaseAnalytics") }}</router-link
         >
         <IconC
@@ -86,16 +95,19 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'users' }"
+          v-if="$can('read', 'user')"
           >{{ $t("usersList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-user' }"
+          v-if="$can('write', 'user')"
           >{{ $t("createUser") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'user-analytics' }"
+          v-if="$can('read', 'analytics')"
           >{{ $t("userAnalytics") }}</router-link
         >
         <IconC
@@ -265,7 +277,6 @@ export default {
       this.isFetchingPurchases = false;
     });
   },
-  mounted() {},
   computed: {
     sales() {
       return this.$store.state.analyticsModule.sales;

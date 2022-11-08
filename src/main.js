@@ -17,6 +17,8 @@ import registerPlugins from "./global-plugins";
 import en from "./langs/en.json";
 import sq from "./langs/sq.json";
 import Vue3Tour from "vue3-tour";
+import { abilitiesPlugin } from "@casl/vue";
+import ability from "./services/ability";
 // import "vue3-tour/dist/vue3-tour.css";
 
 const messages = {
@@ -53,7 +55,10 @@ app
   .use(i18n)
   .use(VueSweetalert2)
   .use(Vue3Tour)
-  .use(VueApexCharts);
+  .use(VueApexCharts)
+  .use(abilitiesPlugin, ability, {
+    useGlobalProperties: true,
+  });
 
 registerComponents(app);
 registerPlugins(app);

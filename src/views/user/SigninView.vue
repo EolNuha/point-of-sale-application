@@ -114,11 +114,13 @@
 </template>
 <script>
 import { Field, Form } from "vee-validate";
+import UserData from "@/services/mixins/UserData";
 export default {
   components: {
     Field,
     Form,
   },
+  mixins: [UserData],
   data() {
     return {
       email: "",
@@ -144,10 +146,11 @@ export default {
       };
       this.$store
         .dispatch("userModule/signinUser", data)
-        .then((res) => {
+        .then(async (res) => {
           localStorage.removeItem("token");
           localStorage.setItem("token", res.data.token);
-          this.$store.dispatch("userModule/getCurrentUser");
+          await this.$store.dispatch("userModule/getCurrentUser");
+          this.setUserData();
           this.$router.push({
             name: "dashboard",
           });

@@ -113,7 +113,11 @@
             class="block w-full default-input !p-1"
             v-model="user.userType"
             :clearable="false"
-            :options="['staff', 'admin']"
+            :options="
+              currentUser.userType === 'superadmin'
+                ? ['staff', 'manager', 'owner', 'superadmin']
+                : ['staff', 'manager', 'owner']
+            "
             type="text"
             name="userType"
             id="userType"

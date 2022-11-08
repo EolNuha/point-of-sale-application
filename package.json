@@ -13,6 +13,8 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@casl/ability": "^6.3.2",
+    "@casl/vue": "^2.2.0",
     "@heroicons/vue": "^2.0.11",
     "@popperjs/core": "^2.11.6",
     "apexcharts": "^3.35.5",

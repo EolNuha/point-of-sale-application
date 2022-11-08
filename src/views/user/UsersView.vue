@@ -202,7 +202,7 @@
                     : ''
                 "
               >
-                <td class="py-2 px-6" v-if="currentUser.userType !== 'staff'">
+                <td class="py-2 px-6" v-if="$can('execute', 'user')">
                   <button
                     @click="updateSelectedUser(user)"
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
@@ -282,8 +282,7 @@
                         class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
                         @click="deleteUser(user)"
                         v-if="
-                          currentUser.id !== user.id &&
-                          currentUser.userType !== 'staff'
+                          currentUser.id !== user.id && $can('execute', 'user')
                         "
                       >
                         <IconC

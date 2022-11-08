@@ -20,12 +20,14 @@ import SideBar from "@/components/SideBar.vue";
 import { logoutUser } from "@/router/auth/index";
 import moment from "moment";
 import "moment/locale/es";
+import UserData from "@/services/mixins/UserData";
 
 export default {
   components: {
     NavBar,
     SideBar,
   },
+  mixins: [UserData],
   watch: {
     $route: {
       handler(to) {
@@ -51,6 +53,7 @@ export default {
     this.setTheme(initUserTheme);
     const initUserLang = this.getLang();
     this.setLang(initUserLang || "en");
+    this.setUserData();
     // this.$tours["dashboardTour"].start();
   },
   methods: {

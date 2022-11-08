@@ -8,6 +8,7 @@ import userModule from "./user/userModule";
 import analyticsModule from "./analytics/analyticsModule";
 import settingsModule from "./settings/settingsModule";
 import notificationsModule from "./notifications/notificationsModule";
+import permissionsModule from "./permissions/permissionsModule";
 
 export default createStore({
   state: {},
@@ -22,5 +23,6 @@ export default createStore({
     analyticsModule,
     settingsModule,
     notificationsModule,
+    permissionsModule,
   },
 });

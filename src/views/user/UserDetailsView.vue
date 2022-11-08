@@ -197,7 +197,7 @@ export default {
     },
     isDisabled() {
       if (
-        this.currentUser.userType === "admin" ||
+        this.$can("execute", "user") ||
         this.currentUser.id === this.user.id
       ) {
         return false;

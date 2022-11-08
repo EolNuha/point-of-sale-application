@@ -14,16 +14,7 @@ def getUserDict(user):
 def getUsersList(users):
     users_list = []
     for i in users:
-        user_dict = {
-            "id": i.id,
-            "firstName": i.first_name,
-            "lastName": i.last_name,
-            "username": i.username,
-            "userType": i.user_type,
-            "email": i.email,
-            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
-            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
-        }
+        user_dict = getUserDict(i)
         users_list.append(user_dict)
     return users_list
 
@@ -198,6 +189,18 @@ def getNotificationList(items):
             "star": i.notification_star,
             "dateCreated": datetime.strptime(i.date_created.strftime('%d.%m.%Y %H:%M:%S,%f'),'%d.%m.%Y %H:%M:%S,%f').timestamp() * 1000,
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+        }
+        items_list.append(item_dict)
+    return items_list
+
+def getPermissionsList(items):
+    items_list = []
+    for i in items:
+        item_dict = {
+            "id": i.id,
+            "subject": i.subject,
+            "action": i.action,
+            "key": i.key,
         }
         items_list.append(item_dict)
     return items_list

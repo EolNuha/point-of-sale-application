@@ -18,7 +18,7 @@ class User(db.Model):
     username = db.Column(db.String(200), unique=True)
     email = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(200))
-    user_type = db.Column(db.Enum("staff", "admin"), default="staff")
+    user_type = db.Column(db.Enum("staff", "manager", "owner", "superadmin"), default="staff")
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
     sales = db.relationship('Sale', backref='user', lazy=True)
@@ -119,5 +119,14 @@ class Notification(db.Model):
     notification_type = db.Column(db.String(200))
     notification_read = db.Column(db.Boolean, default=False)
     notification_star = db.Column(db.Boolean, default=False)
+    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_modified = db.Column(db.DateTime, default=datetime.now())
+
+class Permissions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_type = db.Column(db.Enum("staff", "manager", "owner", "superadmin"), default="staff")
+    subject = db.Column(db.String(200))
+    action = db.Column(db.String(200))
+    key = db.Column(db.String(200))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())

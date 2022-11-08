@@ -23,6 +23,7 @@ def create_app():
     from website.api.analytics import analytics
     from website.api.settings import settings
     from website.api.notification import notification
+    from website.api.permissions import permissions
 
     app.register_blueprint(product, url_prefix='/api/')
     app.register_blueprint(sale, url_prefix='/api/')
@@ -30,6 +31,7 @@ def create_app():
     app.register_blueprint(analytics, url_prefix='/api/')
     app.register_blueprint(settings, url_prefix='/api/')
     app.register_blueprint(notification, url_prefix='/api/')
+    app.register_blueprint(permissions, url_prefix='/api/')
     app.register_blueprint(auth, url_prefix='/')
 
     create_database(app)

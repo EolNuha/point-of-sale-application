@@ -6,6 +6,7 @@
         class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
       >
         <div
+          v-if="$can('execute', 'notification')"
           class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-gray-900 py-0 border-b flex flex-row"
         >
           <div class="px-3">
@@ -204,14 +205,19 @@
                     selectedItems.some((obj) => obj?.id === item.id),
                 }"
                 @click="
-                  $router.push({
-                    name: 'product-view',
-                    params: { productId: item.toId },
-                    query: { notificationId: item.id },
-                  })
+                  $can('read', 'product')
+                    ? $router.push({
+                        name: 'product-view',
+                        params: { productId: item.toId },
+                        query: { notificationId: item.id },
+                      })
+                    : ''
                 "
               >
-                <td class="py-2 px-3 w-1.5">
+                <td
+                  class="py-2 px-3 w-1.5"
+                  v-if="$can('execute', 'notification')"
+                >
                   <button
                     :id="`select-${item.id}-tooltip-btn`"
                     @click.stop
@@ -240,20 +246,28 @@
                     </div>
                   </button>
                 </td>
-                <td class="py-2 px-1 w-1.5">
+                <td
+                  class="py-2 w-1.5"
+                  :class="!$can('execute', 'notification') ? 'px-3' : 'px-1'"
+                >
                   <button
                     :id="`star-${item.id}-tooltip-btn`"
-                    @click.stop
                     @click="
                       toggleSingleNotification(item.id, item.read, !item.star)
                     "
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    :class="
+                      !$can('execute', 'notification')
+                        ? 'cursor-not-allowed'
+                        : ''
+                    "
                     @mouseover="
                       $showTooltip({
                         targetEl: `star-${item.id}-tooltip`,
                         triggerEl: `star-${item.id}-tooltip-btn`,
                       })
                     "
+                    :disabled="!$can('execute', 'notification')"
                   >
                     <IconC
                       v-if="!item.star"
@@ -284,12 +298,18 @@
                       toggleSingleNotification(item.id, !item.read, item.star)
                     "
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    :class="
+                      !$can('execute', 'notification')
+                        ? 'cursor-not-allowed'
+                        : ''
+                    "
                     @mouseover="
                       $showTooltip({
                         targetEl: `read-${item.id}-tooltip`,
                         triggerEl: `read-${item.id}-tooltip-btn`,
                       })
                     "
+                    :disabled="!$can('execute', 'notification')"
                   >
                     <IconC
                       v-if="!item.read"

@@ -32,6 +32,7 @@
             name: 'new-product',
           })
         "
+        v-if="$can('write', 'product')"
         class="blue-gradient-btn flex items-center text-center"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
@@ -56,7 +57,11 @@
             class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
           >
             <tr>
-              <th scope="col" class="py-3 px-6"></th>
+              <th
+                scope="col"
+                class="py-3 px-6"
+                v-if="$can('execute', 'product')"
+              ></th>
               <th
                 scope="col"
                 class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
@@ -204,7 +209,11 @@
                   </template>
                 </div>
               </th>
-              <th scope="col" class="py-3 px-6"></th>
+              <th
+                scope="col"
+                class="py-3 px-6"
+                v-if="$can('execute', 'product')"
+              ></th>
             </tr>
           </thead>
           <tbody>
@@ -217,10 +226,10 @@
                     : ''
                 "
               >
-                <td class="py-2 px-6">
+                <td class="py-2 px-6" v-if="$can('execute', 'product')">
                   <button
                     @click="updateSelectedProduct(product)"
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                   >
                     <input
                       type="checkbox"
@@ -263,10 +272,12 @@
                     {{ product.stock }}
                   </div>
                 </td>
-                <td class="py-2 px-6 max-w-xs">{{ product.tax }}%</td>
-                <td class="py-2 px-6 w-1.5">
+                <td class="py-2 px-6 max-w-xs">
+                  <div class="py-2.5">{{ product.tax }}%</div>
+                </td>
+                <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'product')">
                   <button
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     :id="`product-${product.id}-btn`"
                     @click="
                       $toggleDropdown({

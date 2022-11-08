@@ -33,6 +33,7 @@
               name: 'new-sale',
             })
           "
+          v-if="$can('write', 'sale')"
           class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
@@ -188,7 +189,7 @@
                         query: { saleDate: sale.dateCreated.substring(0, 10) },
                       })
                     "
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                   >
                     <IconC
                       iconName="DocumentMagnifyingGlassIcon"

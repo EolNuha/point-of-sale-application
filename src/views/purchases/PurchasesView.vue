@@ -33,6 +33,7 @@
               name: 'new-purchase',
             })
           "
+          v-if="$can('write', 'purchase')"
           class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
@@ -219,7 +220,7 @@
                         params: { purchaseId: purchase.id },
                       })
                     "
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                   >
                     <IconC
                       iconName="DocumentMagnifyingGlassIcon"

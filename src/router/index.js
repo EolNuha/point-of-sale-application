@@ -14,6 +14,7 @@ import purchases from "./purchases";
 import users from "./users";
 import analytics from "./analytics";
 import notifications from "./notifications";
+import settings from "./settings";
 import development from "./development";
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
   ...users,
   ...analytics,
   ...notifications,
+  ...settings,
   ...(process.env.NODE_ENV === "development" ? [...development] : []),
   { path: "/:catchAll(.*)", redirect: "/404" },
 ];

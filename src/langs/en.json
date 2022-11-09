@@ -168,5 +168,9 @@
 	"unread": "Unread",
 	"edit": "Edit",
 	"clearAll": "Clear All",
-	"stockInfoMsg": "The value given is added to the current product stock"
+	"stockInfoMsg": "The value given is added to the current product stock",
+	"settings": "Settings",
+	"languages": "Languages",
+	"changeLanguage": "Change displayed language",
+	"changeToLanguage": "Change to this language"
 }

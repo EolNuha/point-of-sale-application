@@ -168,5 +168,9 @@
 	"unread": "Të palexuarat",
 	"edit": "Edito",
 	"clearAll": "Fshij të gjitha",
-	"stockInfoMsg": "Vlera e dhënë i shtohet sasisë aktuale të produktit"
+	"stockInfoMsg": "Vlera e dhënë i shtohet sasisë aktuale të produktit",
+	"settings": "Settings",
+	"languages": "Gjuhët",
+	"changeLanguage": "Ndrysho gjuhën e shfaqur në aplikacion",
+	"changeToLanguage": "Ndrysho në këtë gjuhë"
 }

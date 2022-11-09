@@ -123,6 +123,15 @@
             >
           </li>
           <li>
+            <router-link
+              :to="{ name: 'settings' }"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
+            >
+              <IconC iconName="Cog8ToothIcon" iconClass="w-5 h-5" />
+              {{ $t("settings") }}</router-link
+            >
+          </li>
+          <li>
             <button
               @click="toggleTheme"
               id="theme-toggle"
@@ -138,97 +147,6 @@
                 {{ $t("lightMode") }}
               </template>
             </button>
-          </li>
-          <li>
-            <div class="flex items-center md:order-2">
-              <button
-                type="button"
-                id="dropdownLangButton"
-                @click="
-                  $toggleDropdown({
-                    targetEl: `dropdownLangMenu`,
-                    triggerEl: `dropdownLangButton`,
-                    placement: 'left',
-                  })
-                "
-                data-dropdown-placement="left"
-                class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                <template v-if="$i18n.locale === 'en'">
-                  <IconC
-                    iconType="custom"
-                    iconName="EnglishFlagIcon"
-                    iconClass="w-5 h-5 rounded-full"
-                  />
-                  English
-                </template>
-                <template v-if="$i18n.locale === 'sq'">
-                  <IconC
-                    iconType="custom"
-                    iconName="AlbanianFlagIcon"
-                    iconClass="w-5 h-5 rounded-full"
-                  />
-                  Shqip
-                </template>
-              </button>
-              <!-- Dropdown -->
-              <div
-                class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 border dark:border-gray-600 dark:divide-gray-600"
-                id="dropdownLangMenu"
-                style="inset: 0px auto auto -50px !important"
-              >
-                <ul class="py-1 divide-y" role="none">
-                  <li v-if="$i18n.locale !== 'en'">
-                    <button
-                      @click="
-                        () => {
-                          $parent.setLang('en'),
-                            $toggleDropdown({
-                              targetEl: `dropdownLangMenu`,
-                              triggerEl: `dropdownLangButton`,
-                            });
-                        }
-                      "
-                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      <div class="inline-flex items-center">
-                        <IconC
-                          iconType="custom"
-                          iconName="EnglishFlagIcon"
-                          iconClass="mr-2 w-5 h-5 rounded-full"
-                        />
-                        English
-                      </div>
-                    </button>
-                  </li>
-                  <li v-if="$i18n.locale !== 'sq'">
-                    <button
-                      @click="
-                        () => {
-                          $parent.setLang('sq'),
-                            $toggleDropdown({
-                              targetEl: `dropdownLangMenu`,
-                              triggerEl: `dropdownLangButton`,
-                            });
-                        }
-                      "
-                      class="w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      <div class="inline-flex items-center">
-                        <IconC
-                          iconType="custom"
-                          iconName="AlbanianFlagIcon"
-                          iconClass="mr-2 w-5 h-5 rounded-full"
-                        />
-                        Shqip
-                      </div>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </li>
         </ul>
         <div class="py-1">

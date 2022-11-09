@@ -172,5 +172,10 @@
 	"settings": "Settings",
 	"languages": "Gjuhët",
 	"changeLanguage": "Ndrysho gjuhën e shfaqur në aplikacion",
-	"changeToLanguage": "Ndrysho në këtë gjuhë"
+	"changeToLanguage": "Ndrysho në këtë gjuhë",
+	"theme": "Tema",
+	"changeThemeColors": "Ndryshoni ngjyrat që shfaqen në aplikacion",
+	"changeToTheme": "Ndrysho në këtë temë",
+	"darkTheme": "Tema e errët",
+	"lightTheme": "Tema e qelët"
 }

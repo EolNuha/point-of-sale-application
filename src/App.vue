@@ -62,14 +62,6 @@ export default {
       this.userTheme = theme;
       document.documentElement.className = theme;
     },
-    toggleTheme() {
-      const activeTheme = localStorage.getItem("theme-preference");
-      if (activeTheme === "light") {
-        this.setTheme("dark");
-      } else {
-        this.setTheme("light");
-      }
-    },
     getMediaPreference() {
       const hasDarkPreference = window.matchMedia(
         "(prefers-color-scheme: dark)"

@@ -172,5 +172,10 @@
 	"settings": "Settings",
 	"languages": "Languages",
 	"changeLanguage": "Change displayed language",
-	"changeToLanguage": "Change to this language"
+	"changeToLanguage": "Change to this language",
+	"theme": "Theme",
+	"changeThemeColors": "Change the colors that appear in the application",
+	"changeToTheme": "Change to this theme",
+	"darkTheme": "Dark Theme",
+	"lightTheme": "Light Theme"
 }

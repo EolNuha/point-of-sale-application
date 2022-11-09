@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const SettingsView = () => import("../views/settings/SettingsView.vue");
 const LanguagesView = () => import("../views/settings/LanguagesView.vue");
+const ThemeView = () => import("../views/settings/ThemeView.vue");
 export default [
   {
     path: "/settings",
@@ -32,6 +33,26 @@ export default [
         {
           text: (route) => "languages",
           to: "languages",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/settings/theme",
+    name: "theme",
+    component: ThemeView,
+    meta: {
+      title: "theme",
+      breadcrumb: [
+        {
+          text: (route) => "settings",
+          to: "settings",
+          active: false,
+        },
+        {
+          text: (route) => "theme",
+          to: "theme",
           active: true,
         },
       ],

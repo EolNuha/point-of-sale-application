@@ -131,23 +131,6 @@
               {{ $t("settings") }}</router-link
             >
           </li>
-          <li>
-            <button
-              @click="toggleTheme"
-              id="theme-toggle"
-              type="button"
-              class="inline-flex items-center w-full gap-1 py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
-            >
-              <template v-if="!isDarkMode">
-                <IconC iconName="MoonIcon" iconClass="w-5 h-5" />
-                {{ $t("darkMode") }}
-              </template>
-              <template v-if="isDarkMode">
-                <IconC iconName="SunIcon" iconClass="w-5 h-5" />
-                {{ $t("lightMode") }}
-              </template>
-            </button>
-          </li>
         </ul>
         <div class="py-1">
           <button
@@ -174,8 +157,6 @@ export default {
   data() {
     return {
       sideBar: true,
-      isDarkMode:
-        localStorage.getItem("theme-preference") === "dark" ? true : false,
     };
   },
   created() {
@@ -188,10 +169,6 @@ export default {
     },
   },
   methods: {
-    toggleTheme() {
-      this.isDarkMode = !this.isDarkMode;
-      this.$parent.toggleTheme();
-    },
     closeSide() {
       document.getElementById("app").classList.remove("sidebar-opened");
       this.sideBar = false;

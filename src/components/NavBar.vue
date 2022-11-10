@@ -30,7 +30,7 @@
           class="flex items-center w-auto sm:w-[14rem]"
         >
           <img
-            src="https://flowbite.com/docs/images/logo.svg"
+            src="@/assets/images/logo.svg"
             class="mr-3 h-6 sm:h-9"
             alt="Logo"
           />

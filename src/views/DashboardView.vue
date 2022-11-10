@@ -89,6 +89,16 @@
         />
       </div>
       <div class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative">
+        <div
+          v-if="
+            !$can('read', 'users') &&
+            !$can('write', 'users') &&
+            !$can('read', 'analytics')
+          "
+          class="min-h-[50px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        >
+          <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
+        </div>
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
           {{ $t("users") }}
         </h3>
@@ -120,6 +130,13 @@
       class="bg-white dark:bg-neutral-900 rounded-xl my-5 py-8 relative px-5"
       id="dashboard-step-2"
     >
+      <div
+        v-if="!$can('read', 'analytics')"
+        class="min-h-[400px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+      >
+        <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
+        {{ $t("noPermissionText") }}
+      </div>
       <div
         class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
       >
@@ -169,6 +186,13 @@
       /></router-link>
     </div>
     <div class="bg-white dark:bg-neutral-900 rounded-xl py-8 relative px-5">
+      <div
+        v-if="!$can('read', 'analytics')"
+        class="min-h-[400px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+      >
+        <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
+        {{ $t("noPermissionText") }}
+      </div>
       <div
         class="flex items-center justify-between px-3 flex-wrap sm:flex-nowrap gap-2"
       >

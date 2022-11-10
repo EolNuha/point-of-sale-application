@@ -200,5 +200,6 @@
 	"permissionsNoteText": "Shënim: Nëse asnjë nga veprimet për një subjekt nuk është aktiv, do të thotë që përdoruesi nuk mund ta shikojë atë subjekt",
 	"noResultsFound": "Asnjë {result} nuk është gjetur...",
 	"noResultsAdded": "Asnjë {result} nuk është shtuar ende...",
-	"addNewResult": "Krijo {result}"
+	"addNewResult": "Krijo {result}",
+	"noPermissionText": "Ju nuk jeni të autorizuar për ta parë këtë, ju lutemi kontaktoni pronarin për t'ju dhënë leje!"
 }

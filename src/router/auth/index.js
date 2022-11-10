@@ -1,9 +1,9 @@
 import decode from "jwt-decode";
 import router from "@/router";
-import store from "@/store";
+// import store from "@/store";
 export function authRoutesGuard(router) {
   router.beforeEach(async (to, from, next) => {
-    store.dispatch("notificationsModule/getNotifications");
+    // store.dispatch("notificationsModule/getNotifications");
     if (to.meta.isPublic) {
       next();
       return;
@@ -36,8 +36,6 @@ export function authRoutesGuard(router) {
 }
 
 export async function logoutUser(redirectPath) {
-  // Remove userData from localStorage
-  // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
   localStorage.removeItem("token");
   router.push({ name: redirectPath });
 }

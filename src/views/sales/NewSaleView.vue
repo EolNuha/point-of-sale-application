@@ -23,16 +23,16 @@
         </div>
         <div class="search-results" v-if="searchQuery">
           <table
-            class="w-full bg-white dark:bg-neutral-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
+            class="w-full bg-white dark:bg-neutral-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-neutral-700 relative"
           >
             <tbody>
               <template v-for="product in searchedProducts" :key="product.id">
                 <tr
                   @click="onSearchedProductClick(product)"
-                  class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 hover:dark:bg-neutral-800/50"
+                  class="bg-white border-b dark:bg-neutral-900 dark:border-neutral-700 hover:bg-gray-100/75 hover:dark:bg-neutral-700/50 cursor-default"
                   :class="
                     searchedProducts[searchedProductsIndex] === product
-                      ? 'bg-blue-100 dark:bg-neutral-700/75 hover:bg-blue-200/75 hover:dark:bg-blue-800/50'
+                      ? 'bg-blue-100 dark:bg-blue-500/[.2] hover:bg-blue-200/75 hover:dark:bg-blue-500/[.2]'
                       : ''
                   "
                 >
@@ -42,8 +42,8 @@
                   >
                     {{ product.id }}
                   </th>
-                  <td class="py-2 px-6">{{ product.barcode }}</td>
                   <td class="py-2 px-6">{{ product.name }}</td>
+                  <td class="py-2 px-6">{{ product.barcode }}</td>
                   <td class="py-2 px-6">{{ product.sellingPrice }} €</td>
                 </tr>
               </template>

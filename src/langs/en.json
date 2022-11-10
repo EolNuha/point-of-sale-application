@@ -197,5 +197,8 @@
 	"subjectInfoText": "Are the pages or specific parts of the application",
 	"action": "Action",
 	"actions": "Actions",
-	"permissionsNoteText": "Note: If none of the actions for a subject is active, it means that the user cannot access that subject"
+	"permissionsNoteText": "Note: If none of the actions for a subject is active, it means that the user cannot access that subject",
+	"noResultsFound": "No {result} has been found...",
+	"noResultsAdded": "No {result} has been added yet...",
+	"addNewResult": "Add new {result}"
 }

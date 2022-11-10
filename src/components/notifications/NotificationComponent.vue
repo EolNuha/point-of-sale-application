@@ -39,7 +39,7 @@
     </div>
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
       <router-link
-        class="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700"
+        class="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700/50"
         :class="
           !item.read ? 'bg-blue-500/[.1] border-l-[3px] !border-l-blue-500' : ''
         "

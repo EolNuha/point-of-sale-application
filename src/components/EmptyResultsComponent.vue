@@ -7,8 +7,12 @@
     <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
       {{
         search
-          ? `No ${pluralText.toLowerCase()} have been found...`
-          : `No ${pluralText.toLowerCase()} have been added yet...`
+          ? $t("noResultsFound", {
+              result: $t(singularText.toLowerCase()).toLowerCase(),
+            })
+          : $t("noResultsAdded", {
+              result: $t(singularText.toLowerCase()).toLowerCase(),
+            })
       }}
     </h2>
     <button
@@ -21,7 +25,11 @@
       :class="btnClass"
     >
       <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-      Add New {{ singularText }}
+      {{
+        $t("addNewResult", {
+          result: $t(singularText.toLowerCase()).toLowerCase(),
+        })
+      }}
     </button>
   </div>
 </template>

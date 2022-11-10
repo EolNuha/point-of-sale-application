@@ -14,7 +14,7 @@
 	"topProductsMostRevenue": "Top produktet me më së shumti shitje",
 	"productDetails": "Detajet e Produktit",
 	"sales": "Shitjet",
-	"sale": "Shitja",
+	"sale": "Shitje",
 	"newSale": "Shitje e re",
 	"salesList": "Lista e shitjeve",
 	"manageSales": "Menaxho Shitjet",
@@ -197,5 +197,8 @@
 	"subjectInfoText": "Janë faqet ose pjesët specifike të aplikacionit",
 	"action": "Veprimi",
 	"actions": "Veprimet",
-	"permissionsNoteText": "Shënim: Nëse asnjë nga veprimet për një subjekt nuk është aktiv, do të thotë që përdoruesi nuk mund ta shikojë atë subjekt"
+	"permissionsNoteText": "Shënim: Nëse asnjë nga veprimet për një subjekt nuk është aktiv, do të thotë që përdoruesi nuk mund ta shikojë atë subjekt",
+	"noResultsFound": "Asnjë {result} nuk është gjetur...",
+	"noResultsAdded": "Asnjë {result} nuk është shtuar ende...",
+	"addNewResult": "Krijo {result}"
 }

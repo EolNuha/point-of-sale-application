@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center gap-2"></div>
       <div class="flex flex-row items-center gap-2">
@@ -24,7 +24,9 @@
         </button>
       </div>
     </div>
-    <div class="bg-white dark:bg-gray-900 rounded-3xl my-5 py-8 relative px-10">
+    <div
+      class="bg-white dark:bg-neutral-900 rounded-3xl my-5 py-8 relative px-10"
+    >
       <OverlayC v-if="isLoading" />
       <div class="flex items-center flex-row justify-between">
         <h2 class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold">
@@ -39,7 +41,7 @@
           class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative my-5"
         >
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
           >
             <tr>
               <th scope="col" class="py-3 px-6">ID</th>
@@ -54,7 +56,7 @@
           </thead>
           <tbody>
             <template v-for="item in sale.saleItems" :key="item.id">
-              <tr class="bg-white dark:bg-gray-900">
+              <tr class="bg-white dark:bg-neutral-900">
                 <td class="py-3 px-6">{{ item.product.id }}</td>
                 <td class="py-3 px-6">
                   {{ item.product.name }}

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="overflow-hidden rounded-xl mb-5 min-h-[80vh] relative">
       <!-- {{ hasStarredMessages }} -->
       <div
@@ -7,7 +7,7 @@
       >
         <div
           v-if="$can('execute', 'notifications')"
-          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-gray-900 py-0 border-b flex flex-row"
+          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-neutral-900 py-0 border-b flex flex-row"
         >
           <div class="px-3">
             <button
@@ -26,11 +26,11 @@
                   triggerEl: `select-all-tooltip-btn`,
                 })
               "
-              class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+              class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
             >
               <input
                 type="checkbox"
-                class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                 :checked="areAllSelected"
               />
               <div
@@ -47,7 +47,7 @@
               <button
                 id="star-all-tooltip-btn"
                 @click="toggleStarStatus()"
-                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                 @mouseover="
                   $showTooltip({
                     targetEl: `star-all-tooltip`,
@@ -80,7 +80,7 @@
               <button
                 id="read-all-tooltip-btn"
                 @click="toggleReadStatus()"
-                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                 @mouseover="
                   $showTooltip({
                     targetEl: `read-all-tooltip`,
@@ -112,7 +112,7 @@
           </template>
         </div>
         <div
-          class="border-l-[3px] border-l-white bg-white dark:bg-gray-900 py-0 border-b dark:border-gray-700 px-2"
+          class="border-l-[3px] border-l-white bg-white dark:bg-neutral-900 py-0 border-b dark:border-gray-700 px-2"
         >
           <ul
             class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
@@ -198,10 +198,10 @@
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr
-                class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-gray-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
+                class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-blue-500': !item.read,
-                  'bg-gray-100 dark:bg-gray-900/50  border-l-gray-100':
+                  'bg-gray-100 dark:bg-neutral-900/50  border-l-gray-100':
                     selectedItems.some((obj) => obj?.id === item.id),
                 }"
                 @click="
@@ -222,7 +222,7 @@
                     :id="`select-${item.id}-tooltip-btn`"
                     @click.stop
                     @click="toggleSelectNotification(item)"
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     @mouseover="
                       $showTooltip({
                         targetEl: `select-${item.id}-tooltip`,
@@ -232,7 +232,7 @@
                   >
                     <input
                       type="checkbox"
-                      class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                      class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                       :checked="
                         selectedItems.some((obj) => obj?.id === item.id)
                       "
@@ -255,7 +255,7 @@
                     @click="
                       toggleSingleNotification(item.id, item.read, !item.star)
                     "
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     :class="
                       !$can('execute', 'notifications')
                         ? 'cursor-not-allowed'
@@ -297,7 +297,7 @@
                     @click="
                       toggleSingleNotification(item.id, !item.read, item.star)
                     "
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     :class="
                       !$can('execute', 'notifications')
                         ? 'cursor-not-allowed'

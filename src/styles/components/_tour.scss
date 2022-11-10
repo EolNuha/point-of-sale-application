@@ -16,7 +16,7 @@ body.v-tour--active{
 	@apply backdrop-blur-sm;
 	@apply rounded-md;
 	@apply bg-white;
-	@apply dark:bg-gray-900;
+	@apply dark:bg-neutral-900;
 	@apply text-gray-700;
 	@apply dark:text-gray-300;
 	@apply border-gray-300;
@@ -46,7 +46,7 @@ body.v-tour--active{
 }
 .v-step__arrow--dark[data-v-61f60785]:before{
 	@apply bg-gray-300;
-	@apply dark:bg-gray-800;
+	@apply dark:bg-neutral-800;
 }
 .v-step__arrow[data-v-61f60785]:before{
 	visibility:visible;
@@ -73,7 +73,7 @@ body.v-tour--active{
 	margin:-20px -20px 5px;
 	padding:5px;
 	@apply bg-gray-200;
-	@apply dark:bg-gray-800;
+	@apply dark:bg-neutral-800;
 	@apply rounded-t-md;
 }
 .v-step__content[data-v-61f60785]{
@@ -89,11 +89,11 @@ body.v-tour--active{
 	@apply p-2;
 	@apply hover:text-gray-900;
 	@apply dark:border-gray-200;
-	@apply dark:bg-gray-700;
+	@apply dark:bg-neutral-700;
 	@apply dark:text-gray-300;
 	@apply dark:border-gray-500;
 	@apply dark:hover:text-white;
-	@apply dark:hover:bg-gray-600;
+	@apply dark:hover:bg-neutral-600;
 	font-size:.8rem;
 	height:1.8rem;
 	line-height:10px;

@@ -2,7 +2,7 @@
   <li v-if="item.children">
     <button
       type="button"
-      class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+      class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-600"
       :aria-controls="item.title"
       :data-collapse-toggle="item.title"
       @click="() => (isOpened = !isOpened)"
@@ -31,7 +31,7 @@
         <li v-if="$can(child.action, child.subject)">
           <router-link
             :to="{ name: child.route }"
-            class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+            class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-600"
             >{{ $t(child.title) }}</router-link
           >
         </li>
@@ -41,7 +41,7 @@
   <li v-else>
     <router-link
       :to="{ name: item.route }"
-      class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+      class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-600"
     >
       <IconC
         iconType="outline"

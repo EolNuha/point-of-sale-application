@@ -23,7 +23,7 @@
 
 body {
   @apply bg-gray-200;
-  @apply dark:bg-gray-800;
+  @apply dark:bg-neutral-800;
 }
 
 div[modal-backdrop] {
@@ -36,7 +36,7 @@ div[modal-backdrop] {
 .swal2-popup.swal2-toast {
   background: currentColor;
   @apply bg-gray-300;
-  @apply dark:bg-gray-700;
+  @apply dark:bg-neutral-700;
 }
 
 .fade-leave-active {

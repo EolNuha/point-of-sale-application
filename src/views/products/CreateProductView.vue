@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 dark:bg-gray-800 min-h-screen">
+  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen">
     <Form v-slot="{ errors }" class="p-5" @submit="createProduct">
       <div class="mb-6">
         <label

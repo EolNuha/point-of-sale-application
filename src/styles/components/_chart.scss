@@ -9,7 +9,7 @@
   @apply text-gray-700 #{!important};
   @apply dark:text-gray-200 #{!important};
   @apply bg-gray-200 #{!important};
-  @apply dark:bg-gray-700 #{!important};
+  @apply dark:bg-neutral-700 #{!important};
   border: 0 !important;
   min-width: 100px !important;
 }
@@ -17,7 +17,7 @@
   @apply text-gray-700 #{!important};
   @apply dark:text-gray-200 #{!important};
   @apply bg-gray-200 #{!important};
-  @apply dark:bg-gray-700 #{!important};
+  @apply dark:bg-neutral-700 #{!important};
 }
 
 .dark .apexcharts-text tspan {

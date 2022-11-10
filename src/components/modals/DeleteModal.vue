@@ -6,14 +6,14 @@
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full"
   >
     <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <div class="relative bg-white rounded-lg shadow dark:bg-neutral-700">
         <div class="flex items-center p-2.5">
           <p class="text-gray-700 dark:text-gray-200 text-xl">
             {{ $t("delete") }} {{ title }}
           </p>
           <button
             type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
             @click="$hideModal(deleteRef)"
             :disabled="isLoading"
           >

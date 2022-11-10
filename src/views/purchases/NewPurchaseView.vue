@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <Form v-slot="{ errors }" @submit="submit()">
       <h2
         class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
@@ -267,7 +267,7 @@
                 <div
                   :id="`product-${index}-tooltip`"
                   role="tooltip"
-                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 dark:bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip max-w-[250px]"
+                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 dark:bg-neutral-900 rounded-lg shadow-sm opacity-0 tooltip max-w-[250px]"
                 >
                   {{ $t("stockInfoMsg") }}
                 </div>
@@ -292,7 +292,7 @@
           <button
             v-show="products.length != 1"
             type="button"
-            class="p-1.5 rounded-lg hover:bg-gray-300/50 dark:hover:bg-gray-900/50"
+            class="p-1.5 rounded-lg hover:bg-gray-300/50 dark:hover:bg-neutral-900/50"
             @click="removeProduct(index)"
           >
             <IconC

@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white dark:bg-gray-900 rounded-xl my-5 relative">
+  <div class="bg-white dark:bg-neutral-900 rounded-xl my-5 relative">
     <div
-      class="flex items-center rounded-t-xl flex-row flex-wrap lg:flex-nowrap justify-between p-3 px-8 gap-2 bg-gray-100 dark:bg-gray-700/75"
+      class="flex items-center rounded-t-xl flex-row flex-wrap lg:flex-nowrap justify-between p-3 px-8 gap-2 bg-gray-100 dark:bg-neutral-700/75"
     >
       <div
         class="w-full flex flex-column items-center gap-2 text-gray-700 dark:text-gray-200"

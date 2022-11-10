@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center search-input-width">
         <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
@@ -54,7 +54,7 @@
             routeName="new-product"
           />
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
           >
             <tr>
               <th
@@ -64,7 +64,7 @@
               ></th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('id')"
               >
                 <div class="flex justify-between items-center">
@@ -85,7 +85,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('name')"
               >
                 <div class="flex justify-between items-center">
@@ -106,7 +106,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('barcode')"
               >
                 <div class="flex justify-between items-center">
@@ -127,7 +127,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('purchased_price')"
               >
                 <div class="flex justify-between items-center">
@@ -148,7 +148,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('selling_price')"
               >
                 <div class="flex justify-between items-center">
@@ -169,7 +169,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('stock')"
               >
                 <div class="flex justify-between items-center">
@@ -190,7 +190,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('tax')"
               >
                 <div class="flex justify-between items-center">
@@ -219,7 +219,7 @@
           <tbody>
             <template v-for="product in products" :key="product.id">
               <tr
-                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+                class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
                 :class="
                   selectedProduct === product
                     ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
@@ -229,11 +229,11 @@
                 <td class="py-2 px-6" v-if="$can('execute', 'products')">
                   <button
                     @click="updateSelectedProduct(product)"
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                   >
                     <input
                       type="checkbox"
-                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                       :checked="selectedProduct === product"
                     />
                   </button>
@@ -277,7 +277,7 @@
                 </td>
                 <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'products')">
                   <button
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     :id="`product-${product.id}-btn`"
                     @click="
                       $toggleDropdown({
@@ -294,7 +294,7 @@
                   </button>
                   <div
                     :id="`product-${product.id}-menu`"
-                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800"
+                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
                     style="inset: 0px auto auto -300px !important"
                   >
                     <ul
@@ -302,7 +302,7 @@
                       aria-labelledby="dropdownDefault"
                     >
                       <li
-                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
                         @click="
                           $router.push({
                             name: 'product-view',
@@ -318,7 +318,7 @@
                         {{ $t("edit") }}
                       </li>
                       <li
-                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
                         @click="deleteProduct(product)"
                       >
                         <IconC

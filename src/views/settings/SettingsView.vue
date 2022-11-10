@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <h5
       class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5"
     >
@@ -13,7 +13,7 @@
             v-if="$can('read', 'permissions')"
           >
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"
+              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
             >
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -39,7 +39,7 @@
           </router-link>
           <router-link :to="{ name: 'languages' }">
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"
+              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
             >
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -65,7 +65,7 @@
           </router-link>
           <router-link :to="{ name: 'theme' }">
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"
+              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
             >
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -90,7 +90,7 @@
             </li>
           </router-link>
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"
+            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
           >
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-0">

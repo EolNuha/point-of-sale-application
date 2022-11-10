@@ -28,6 +28,6 @@
 }
 .scrollbar-style:hover::-webkit-scrollbar-thumb {
   @apply bg-gray-400;
-  @apply dark:bg-gray-700;
+  @apply dark:bg-neutral-700;
   transition: all 1s ease-in-out;
 }

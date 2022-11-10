@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <h5
       class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5"
     >
@@ -9,7 +9,7 @@
       <div>
         <ul role="list" class="flex flex-col gap-2">
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white cursor-pointer"
+            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setLang('en');
@@ -40,13 +40,13 @@
                 <input
                   type="radio"
                   :checked="$i18n.locale === 'en'"
-                  class="dark:bg-gray-700"
+                  class="dark:bg-neutral-700"
                 />
               </div>
             </div>
           </li>
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white cursor-pointer"
+            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setLang('sq');
@@ -77,7 +77,7 @@
                 <input
                   type="radio"
                   :checked="$i18n.locale === 'sq'"
-                  class="dark:bg-gray-700"
+                  class="dark:bg-neutral-700"
                 />
               </div>
             </div>

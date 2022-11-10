@@ -20,7 +20,7 @@
   <!-- Dropdown menu -->
   <div
     id="dropdownNotification"
-    class="hidden z-20 w-full max-w-xs bg-white divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 dark:divide-gray-700 rounded-md"
+    class="hidden z-20 w-full max-w-xs bg-white divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800 dark:divide-gray-700 rounded-md"
     aria-labelledby="dropdownNotificationButton"
     data-popper-reference-hidden=""
     data-popper-escaped=""
@@ -33,13 +33,13 @@
     "
   >
     <div
-      class="block py-2 px-4 font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white rounded-t-md"
+      class="block py-2 px-4 font-medium text-center text-gray-700 bg-gray-50 dark:bg-neutral-800 dark:text-white rounded-t-md"
     >
       {{ $t("notifications") }}
     </div>
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
       <router-link
-        class="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700"
         :class="
           !item.read ? 'bg-blue-500/[.1] border-l-[3px] !border-l-blue-500' : ''
         "
@@ -63,7 +63,7 @@
     </div>
     <router-link
       :to="{ name: 'notifications' }"
-      class="rounded-b-md block py-2 text-sm font-medium text-center text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
+      class="rounded-b-md block py-2 text-sm font-medium text-center text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white"
     >
       <div class="inline-flex items-center">
         <IconC

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 dark:bg-gray-800 min-h-screen p-4 relative">
+  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen p-4 relative">
     <div class="flex justify-between gap-2">
       <div class="flex items-center search-input-width relative">
         <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
@@ -23,16 +23,16 @@
         </div>
         <div class="search-results" v-if="searchQuery">
           <table
-            class="w-full bg-white dark:bg-gray-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
+            class="w-full bg-white dark:bg-neutral-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-gray-700 relative"
           >
             <tbody>
               <template v-for="product in searchedProducts" :key="product.id">
                 <tr
                   @click="onSearchedProductClick(product)"
-                  class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-100/75 hover:dark:bg-gray-800/50"
+                  class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 hover:dark:bg-neutral-800/50"
                   :class="
                     searchedProducts[searchedProductsIndex] === product
-                      ? 'bg-blue-100 dark:bg-blue-900 hover:bg-blue-200/75 hover:dark:bg-blue-800/50'
+                      ? 'bg-blue-100 dark:bg-neutral-700/75 hover:bg-blue-200/75 hover:dark:bg-blue-800/50'
                       : ''
                   "
                 >
@@ -65,7 +65,7 @@
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
       >
         <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
         >
           <tr>
             <th scope="col" class="py-3 px-6"></th>
@@ -80,7 +80,7 @@
         <tbody>
           <template v-for="product in products" :key="product.id">
             <tr
-              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+              class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
               :class="
                 selectedProducts.some((obj) => obj?.id === product.id)
                   ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
@@ -91,11 +91,11 @@
                 <button
                   @click.stop
                   @click="toggleSelectProduct(product)"
-                  class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                  class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                 >
                   <input
                     type="checkbox"
-                    class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                    class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                     :checked="
                       selectedProducts.some((obj) => obj?.id === product.id)
                     "
@@ -114,7 +114,7 @@
                   min="0.01"
                   :id="`product-${product.id}-quantity`"
                   v-model="product.quantity"
-                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   @change="
                     () => (
                       product.quantity
@@ -129,7 +129,7 @@
               <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
               <!-- <td class="py-2 px-6">
                 <button
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-neutral-800"
                   @click="openRemoveModal(product)"
                 >
                   <IconC
@@ -144,7 +144,7 @@
       </table>
     </div>
     <div
-      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-gray-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
+      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-neutral-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
     >
       <div class="flex flex-row items-center">
         <button
@@ -152,7 +152,7 @@
           @click="finishSaleModal()"
           type="button"
           id="finishSale"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           <IconC iconType="solid" iconName="CheckIcon" iconClass="w-5 h-5" />
           {{ $t("finish") }} (F8)
@@ -162,7 +162,7 @@
           @click="openRemoveModal(JSON.parse(JSON.stringify(products)))"
           type="button"
           id="clearAll"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
           {{ $t("clearAll") }} (F10)
@@ -173,7 +173,7 @@
       >
         {{ $t("total") }}:
         <div
-          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg"
+          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-neutral-800 rounded-lg"
         >
           <span id="total">{{ total }}</span
           >€

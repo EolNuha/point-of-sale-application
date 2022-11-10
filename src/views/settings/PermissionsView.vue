@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <h5
       class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5 flex items-center gap-2"
     >
@@ -12,7 +12,7 @@
       </button>
     </h5>
     <div
-      class="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-gray-700 transition duration-500"
+      class="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-neutral-700 transition duration-500"
       v-show="isInfoShowing"
     >
       <div class="flex items-center gap-2 text-gray-800 dark:text-gray-100">
@@ -116,7 +116,7 @@
       <table class="w-full text-sm text-left relative">
         <OverlayC v-if="isTableLoading" />
         <thead
-          class="text-md text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
+          class="text-md text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
         >
           <tr>
             <th scope="col" class="py-3 px-6">{{ $t("subject") }}</th>
@@ -131,7 +131,7 @@
         <tbody class="px-5">
           <template v-for="item in allPermissions" :key="item.id">
             <tr
-              class="bg-white dark:text-gray-300 hover:text-black hover:dark:text-white border-b dark:bg-gray-900 dark:border-gray-700"
+              class="bg-white dark:text-gray-300 hover:text-black hover:dark:text-white border-b dark:bg-neutral-900 dark:border-gray-700"
             >
               <td class="py-2 px-6">
                 {{ $t(item.subject) }}
@@ -155,7 +155,7 @@
                     @click.stop
                   />
                   <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
                   ></div>
                 </label>
               </td>

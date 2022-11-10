@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center search-input-width">
         <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
@@ -54,7 +54,7 @@
             routeName="new-user"
           />
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
           >
             <tr>
               <th
@@ -65,7 +65,7 @@
               <th scope="col" class="py-3 px-6">{{ $t("image") }}</th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('id')"
               >
                 <div class="flex justify-between items-center">
@@ -86,7 +86,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('first_name')"
               >
                 <div class="flex justify-between items-center">
@@ -107,7 +107,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('last_name')"
               >
                 <div class="flex justify-between items-center">
@@ -128,7 +128,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('username')"
               >
                 <div class="flex justify-between items-center">
@@ -149,7 +149,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('email')"
               >
                 <div class="flex justify-between items-center">
@@ -170,7 +170,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('user_type')"
               >
                 <div class="flex justify-between items-center">
@@ -199,7 +199,7 @@
           <tbody>
             <template v-for="user in users" :key="user.id">
               <tr
-                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+                class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
                 :class="
                   selectedUser === user
                     ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
@@ -209,12 +209,12 @@
                 <td class="py-2 px-6" v-if="$can('execute', 'users')">
                   <button
                     @click="updateSelectedUser(user)"
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     v-if="currentUser.id !== user.id"
                   >
                     <input
                       type="checkbox"
-                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                       :checked="selectedUser === user"
                     />
                   </button>
@@ -242,7 +242,7 @@
                 <td class="py-2 px-6 max-w-xs">{{ user.userType }}</td>
                 <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'users')">
                   <button
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     :id="`user-${user.id}-btn`"
                     @click="
                       $toggleDropdown({
@@ -259,7 +259,7 @@
                   </button>
                   <div
                     :id="`user-${user.id}-menu`"
-                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800"
+                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
                     style="inset: 0px auto auto -300px !important"
                   >
                     <ul
@@ -267,7 +267,7 @@
                       aria-labelledby="dropdownDefault"
                     >
                       <li
-                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
                         @click="
                           $router.push({
                             name: 'user-details',
@@ -283,7 +283,7 @@
                         {{ $t("edit") }}
                       </li>
                       <li
-                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
                         @click="deleteUser(user)"
                         v-if="currentUser.id !== user.id"
                       >

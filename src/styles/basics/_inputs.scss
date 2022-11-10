@@ -24,7 +24,7 @@ input[type="date"] {
   @apply focus:ring-blue-500;
   @apply focus:border-blue-500;
   @apply block;
-  @apply dark:bg-gray-700 #{!important};
+  @apply dark:bg-neutral-700 #{!important};
   @apply dark:border-gray-600 #{!important};
   @apply dark:placeholder-gray-400;
   @apply dark:text-white #{!important};
@@ -42,8 +42,8 @@ input[type="date"] {
   color: white !important;
 }
 .dark .vs__open-indicator {
-  @apply fill-gray-400 #{!important};
+  @apply fill-neutral-400 #{!important};
 }
 .dark .vs__dropdown-menu {
-  @apply bg-gray-700 #{!important};
+  @apply bg-neutral-700 #{!important};
 }

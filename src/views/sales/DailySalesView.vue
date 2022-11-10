@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4">
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center gap-2">
         <div class="flex items-center search-input-width">
@@ -81,12 +81,12 @@
             routeName="new-sale"
           />
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-default"
+            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
           >
             <tr>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('id')"
               >
                 <div class="flex justify-between items-center">
@@ -107,7 +107,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600 cursor-not-allowed"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
                 v-for="item in taxes"
                 :key="item.settingsValue"
               >
@@ -115,7 +115,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('subtotal_amount')"
               >
                 <div class="flex justify-between items-center">
@@ -136,7 +136,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('total_amount')"
               >
                 <div class="flex justify-between items-center">
@@ -157,7 +157,7 @@
               </th>
               <th
                 scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-gray-600"
+                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                 @click="sort('user')"
               >
                 <div class="flex justify-between items-center">
@@ -182,7 +182,7 @@
           <tbody>
             <template v-for="sale in sales" :key="sale.id">
               <tr
-                class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:dark:bg-gray-900/75"
+                class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
               >
                 <td class="py-2 px-6">{{ sale.id }}</td>
                 <td
@@ -206,7 +206,7 @@
                         query: { saleDate: saleDate },
                       })
                     "
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                   >
                     <IconC
                       iconName="DocumentMagnifyingGlassIcon"

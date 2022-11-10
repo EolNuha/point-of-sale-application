@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex-col flex bg-gray-200 dark:bg-gray-800 min-h-screen p-4 relative"
+    class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4 relative"
   >
     <div
-      class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded-xl bg-white dark:bg-gray-900 px-5 py-10 sm:px-20 relative"
+      class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded-xl bg-white dark:bg-neutral-900 px-5 py-10 sm:px-20 relative"
     >
       <OverlayC v-if="isDataLoading" />
       <div class="flex items-center justify-center gap-4">
@@ -36,7 +36,7 @@
             name="email"
             id="email"
             :class="errors.email ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="name@company.com"
             required
             :disabled="isDisabled()"
@@ -56,7 +56,7 @@
             name="firstName"
             id="firstName"
             :class="errors.firstName ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="John"
             required=""
             :disabled="isDisabled()"
@@ -76,7 +76,7 @@
             name="lastName"
             id="lastName"
             :class="errors.lastName ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Doe"
             required=""
             :disabled="isDisabled()"
@@ -96,7 +96,7 @@
             name="username"
             id="username"
             :class="errors.username ? 'ring-2 ring-red-500' : ''"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="johndoe"
             required
             :disabled="isDisabled()"

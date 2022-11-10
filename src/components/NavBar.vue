@@ -1,12 +1,12 @@
 <template>
   <nav
-    class="bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-700 border-gray-200 px-2 sm:px-4 py-3 sticky top-0 left-0 right-0"
+    class="bg-white dark:bg-neutral-900 shadow-md dark:shadow-neutral-700 border-gray-200 px-2 sm:px-4 py-3 sticky top-0 left-0 right-0"
     id="navbar"
   >
     <div class="flex flex-wrap items-center justify-between">
       <div class="inline-flex items-center">
         <button
-          class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50 mr-3"
+          class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 mr-3"
           @click="closeSide"
           v-show="sideBar"
         >
@@ -16,7 +16,7 @@
           />
         </button>
         <button
-          class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50 mr-3"
+          class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 mr-3"
           @click="openSide"
           v-show="!sideBar"
         >
@@ -100,7 +100,7 @@
       </button>
       <div
         id="dropdownUserAvatarMenu"
-        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-gray-700/75 dark:bg-gray-800 dark:divide-gray-600"
+        class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800 dark:divide-gray-600"
         style="inset: 0px auto auto -10px !important"
       >
         <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
@@ -116,7 +116,7 @@
           <li>
             <router-link
               :to="{ name: 'user-details', params: { userId: user.id || '1' } }"
-              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="UserIcon" iconClass="w-5 h-5" />
               {{ $t("profile") }}</router-link
@@ -125,7 +125,7 @@
           <li>
             <router-link
               :to="{ name: 'settings' }"
-              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="Cog8ToothIcon" iconClass="w-5 h-5" />
               {{ $t("settings") }}</router-link
@@ -135,7 +135,7 @@
         <div class="py-1">
           <button
             @click="logout"
-            class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 dark:hover:text-white"
+            class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-gray-200 dark:hover:text-white"
           >
             <IconC iconName="ArrowRightOnRectangleIcon" iconClass="h-5 w-5" />
             {{ $t("signout") }}

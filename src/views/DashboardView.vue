@@ -10,13 +10,13 @@
         </h3>
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
-          v-if="$can('read', 'product')"
+          v-if="$can('read', 'products')"
           :to="{ name: 'products' }"
           >{{ $t("productList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
-          v-if="$can('write', 'product')"
+          v-if="$can('write', 'products')"
           :to="{ name: 'new-product' }"
           >{{ $t("createProduct") }}</router-link
         >
@@ -38,13 +38,13 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'sales' }"
-          v-if="$can('read', 'sale')"
+          v-if="$can('read', 'sales')"
           >{{ $t("salesList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-sale' }"
-          v-if="$can('write', 'sale')"
+          v-if="$can('write', 'sales')"
           >{{ $t("createSale") }}</router-link
         >
         <router-link
@@ -68,13 +68,13 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'purchases' }"
-          v-if="$can('read', 'purchase')"
+          v-if="$can('read', 'purchases')"
           >{{ $t("purchasesList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-purchase' }"
-          v-if="$can('write', 'purchase')"
+          v-if="$can('write', 'purchases')"
           >{{ $t("createPurchase") }}</router-link
         >
         <router-link
@@ -95,13 +95,13 @@
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'users' }"
-          v-if="$can('read', 'user')"
+          v-if="$can('read', 'users')"
           >{{ $t("usersList") }}</router-link
         >
         <router-link
           class="text-blue-500 hover:text-blue-400 block mb-2"
           :to="{ name: 'new-user' }"
-          v-if="$can('write', 'user')"
+          v-if="$can('write', 'users')"
           >{{ $t("createUser") }}</router-link
         >
         <router-link

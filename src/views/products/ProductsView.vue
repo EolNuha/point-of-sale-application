@@ -32,7 +32,7 @@
             name: 'new-product',
           })
         "
-        v-if="$can('write', 'product')"
+        v-if="$can('write', 'products')"
         class="blue-gradient-btn flex items-center text-center"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
@@ -60,7 +60,7 @@
               <th
                 scope="col"
                 class="py-3 px-6"
-                v-if="$can('execute', 'product')"
+                v-if="$can('execute', 'products')"
               ></th>
               <th
                 scope="col"
@@ -212,7 +212,7 @@
               <th
                 scope="col"
                 class="py-3 px-6"
-                v-if="$can('execute', 'product')"
+                v-if="$can('execute', 'products')"
               ></th>
             </tr>
           </thead>
@@ -226,7 +226,7 @@
                     : ''
                 "
               >
-                <td class="py-2 px-6" v-if="$can('execute', 'product')">
+                <td class="py-2 px-6" v-if="$can('execute', 'products')">
                   <button
                     @click="updateSelectedProduct(product)"
                     class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
@@ -275,7 +275,7 @@
                 <td class="py-2 px-6 max-w-xs">
                   <div class="py-2.5">{{ product.tax }}%</div>
                 </td>
-                <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'product')">
+                <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'products')">
                   <button
                     class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     :id="`product-${product.id}-btn`"

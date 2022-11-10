@@ -75,7 +75,7 @@
           </div>
         </li>
       </ol>
-      <NotificationComponent v-if="$can('read', 'notification')" />
+      <NotificationComponent v-if="$can('read', 'notifications')" />
       <button
         id="dropdownUserAvatarButton"
         @click="

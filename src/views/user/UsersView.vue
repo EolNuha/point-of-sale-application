@@ -27,7 +27,7 @@
         </div>
       </div>
       <button
-        v-if="currentUser.userType === 'admin'"
+        v-if="$can('write', 'users')"
         @click="
           $router.push({
             name: 'new-user',
@@ -60,7 +60,7 @@
               <th
                 scope="col"
                 class="py-3 px-6"
-                v-if="$can('execute', 'user')"
+                v-if="$can('execute', 'users')"
               ></th>
               <th scope="col" class="py-3 px-6">{{ $t("image") }}</th>
               <th
@@ -192,7 +192,7 @@
               <th
                 scope="col"
                 class="py-3 px-6"
-                v-if="$can('execute', 'user')"
+                v-if="$can('execute', 'users')"
               ></th>
             </tr>
           </thead>
@@ -206,7 +206,7 @@
                     : ''
                 "
               >
-                <td class="py-2 px-6" v-if="$can('execute', 'user')">
+                <td class="py-2 px-6" v-if="$can('execute', 'users')">
                   <button
                     @click="updateSelectedUser(user)"
                     class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
@@ -240,7 +240,7 @@
                 <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
                 <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
                 <td class="py-2 px-6 max-w-xs">{{ user.userType }}</td>
-                <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'user')">
+                <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'users')">
                   <button
                     class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     :id="`user-${user.id}-btn`"

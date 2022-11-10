@@ -197,7 +197,7 @@ export default {
     },
     isDisabled() {
       if (
-        this.$can("execute", "user") ||
+        this.$can("execute", "users") ||
         this.currentUser.id === this.user.id
       ) {
         return false;

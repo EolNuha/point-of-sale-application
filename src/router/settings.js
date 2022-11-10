@@ -2,6 +2,7 @@
 const SettingsView = () => import("../views/settings/SettingsView.vue");
 const LanguagesView = () => import("../views/settings/LanguagesView.vue");
 const ThemeView = () => import("../views/settings/ThemeView.vue");
+const PermissionsView = () => import("../views/settings/PermissionsView.vue");
 export default [
   {
     path: "/settings",
@@ -53,6 +54,26 @@ export default [
         {
           text: (route) => "theme",
           to: "theme",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/settings/permissions",
+    name: "permissions",
+    component: PermissionsView,
+    meta: {
+      title: "permissions",
+      breadcrumb: [
+        {
+          text: (route) => "settings",
+          to: "settings",
+          active: false,
+        },
+        {
+          text: (route) => "permissions",
+          to: "permissions",
           active: true,
         },
       ],

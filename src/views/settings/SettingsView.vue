@@ -8,30 +8,35 @@
     <div class="w-full bg-transparent rounded-lg">
       <div>
         <ul role="list" class="flex flex-col gap-2">
-          <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"
+          <router-link
+            :to="{ name: 'permissions' }"
+            v-if="$can('read', 'permissions')"
           >
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0">
-                <IconC iconName="LockClosedIcon" iconClass="w-6 h-6" />
-              </div>
-              <div class="flex-1 min-w-0">
-                <p
-                  class="text-lg font-medium text-gray-900 truncate dark:text-white"
+            <li
+              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"
+            >
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <IconC iconName="LockClosedIcon" iconClass="w-6 h-6" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="text-lg font-medium text-gray-900 truncate dark:text-white"
+                  >
+                    {{ $t("permissions") }}
+                  </p>
+                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                    {{ $t("changeUserPermissions") }}
+                  </p>
+                </div>
+                <div
+                  class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
                 >
-                  Permissions
-                </p>
-                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  Change user permissions
-                </p>
+                  <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4" />
+                </div>
               </div>
-              <div
-                class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
-              >
-                <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4" />
-              </div>
-            </div>
-          </li>
+            </li>
+          </router-link>
           <router-link :to="{ name: 'languages' }">
             <li
               class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 hover:bg-gray-100 hover:dark:bg-gray-900/75 dark:text-white"

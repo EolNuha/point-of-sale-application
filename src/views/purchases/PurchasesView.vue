@@ -33,7 +33,7 @@
               name: 'new-purchase',
             })
           "
-          v-if="$can('write', 'purchase')"
+          v-if="$can('write', 'purchases')"
           class="blue-gradient-btn inline-flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />

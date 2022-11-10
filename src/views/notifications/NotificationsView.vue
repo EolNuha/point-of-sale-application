@@ -6,7 +6,7 @@
         class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
       >
         <div
-          v-if="$can('execute', 'notification')"
+          v-if="$can('execute', 'notifications')"
           class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-gray-900 py-0 border-b flex flex-row"
         >
           <div class="px-3">
@@ -205,7 +205,7 @@
                     selectedItems.some((obj) => obj?.id === item.id),
                 }"
                 @click="
-                  $can('read', 'product')
+                  $can('read', 'products')
                     ? $router.push({
                         name: 'product-view',
                         params: { productId: item.toId },
@@ -216,7 +216,7 @@
               >
                 <td
                   class="py-2 px-3 w-1.5"
-                  v-if="$can('execute', 'notification')"
+                  v-if="$can('execute', 'notifications')"
                 >
                   <button
                     :id="`select-${item.id}-tooltip-btn`"
@@ -248,7 +248,7 @@
                 </td>
                 <td
                   class="py-2 w-1.5"
-                  :class="!$can('execute', 'notification') ? 'px-3' : 'px-1'"
+                  :class="!$can('execute', 'notifications') ? 'px-3' : 'px-1'"
                 >
                   <button
                     :id="`star-${item.id}-tooltip-btn`"
@@ -257,7 +257,7 @@
                     "
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     :class="
-                      !$can('execute', 'notification')
+                      !$can('execute', 'notifications')
                         ? 'cursor-not-allowed'
                         : ''
                     "
@@ -267,7 +267,7 @@
                         triggerEl: `star-${item.id}-tooltip-btn`,
                       })
                     "
-                    :disabled="!$can('execute', 'notification')"
+                    :disabled="!$can('execute', 'notifications')"
                   >
                     <IconC
                       v-if="!item.star"
@@ -299,7 +299,7 @@
                     "
                     class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     :class="
-                      !$can('execute', 'notification')
+                      !$can('execute', 'notifications')
                         ? 'cursor-not-allowed'
                         : ''
                     "
@@ -309,7 +309,7 @@
                         triggerEl: `read-${item.id}-tooltip-btn`,
                       })
                     "
-                    :disabled="!$can('execute', 'notification')"
+                    :disabled="!$can('execute', 'notifications')"
                   >
                     <IconC
                       v-if="!item.read"

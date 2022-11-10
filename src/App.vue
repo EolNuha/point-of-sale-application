@@ -39,6 +39,7 @@ export default {
     return {
       userTheme: "light",
       userLang: "en",
+      sidebar: true,
     };
   },
   created() {
@@ -83,6 +84,14 @@ export default {
       this.$i18n.locale = lang;
       this.userLang = lang;
       moment.locale(lang);
+    },
+    closeSide() {
+      document.getElementById("app").classList.remove("sidebar-opened");
+      this.sidebar = false;
+    },
+    openSide() {
+      document.getElementById("app").classList.add("sidebar-opened");
+      this.sidebar = true;
     },
   },
 };

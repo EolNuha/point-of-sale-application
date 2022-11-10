@@ -3,8 +3,6 @@
     <button
       type="button"
       class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-600"
-      :aria-controls="item.title"
-      :data-collapse-toggle="item.title"
       @click="() => (isOpened = !isOpened)"
     >
       <IconC
@@ -26,7 +24,7 @@
         "
       />
     </button>
-    <ul :id="item.title" class="hidden py-2 space-y-2">
+    <ul :id="item.title" class="py-2 space-y-2" :class="{ hidden: !isOpened }">
       <template v-for="child in item.children" :key="child.route">
         <li v-if="$can(child.action, child.subject)">
           <router-link

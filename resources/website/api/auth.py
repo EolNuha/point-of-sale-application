@@ -168,7 +168,7 @@ def currentUser():
 @auth.route('/users/demo', methods=["GET"])
 def createDemoUsers():
     demo = [
-        ["eol", "nuha", "eolnuha", "eol@gmail.com", "admin"],
+        ["eol", "nuha", "eolnuha", "eol@gmail.com", "superadmin"],
         ["ledri", "nuha", "ledrinuha", "ledri@gmail.com", "staff"],
         ["lela", "nuha", "lelanuha", "lela@gmail.com", "staff"],
         ["edona", "saliu", "edonasaliu", "edona@gmail.com", "staff"],

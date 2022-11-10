@@ -47,3 +47,24 @@ input[type="date"] {
 .dark .vs__dropdown-menu {
   @apply bg-neutral-700 #{!important};
 }
+
+//To override on build
+.vs__search, .vs__search:focus {
+  color: var(--vs-search-input-color) !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  line-height: var(--vs-line-height) !important;
+  font-size: var(--vs-font-size !important);
+  border: 1px solid transparent !important;
+  border-left: none !important;
+  outline: none !important;
+  margin: 4px 0 0 !important;
+  padding: 0 7px !important;
+  background: none !important;
+  box-shadow: none !important;
+  width: 0 !important;
+  max-width: 100% !important;
+  flex-grow: 1 !important;
+  z-index: 1 !important;
+}

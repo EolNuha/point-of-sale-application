@@ -7,8 +7,8 @@
       <div class="inline-flex items-center">
         <button
           class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 mr-3"
-          @click="closeSide"
-          v-show="sideBar"
+          @click="$root.closeSide"
+          v-show="$root.sidebar"
         >
           <IconC
             iconName="XMarkIcon"
@@ -17,8 +17,8 @@
         </button>
         <button
           class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 mr-3"
-          @click="openSide"
-          v-show="!sideBar"
+          @click="$root.openSide"
+          v-show="!$root.sidebar"
         >
           <IconC
             iconName="Bars3CenterLeftIcon"
@@ -85,18 +85,14 @@
             placement: `top`,
           })
         "
-        class="inline-flex items-center justify-end mx-3 text-sm font-medium text-gray-900 dark:text-white gap-1 mr-2 capitalize md:min-w-[100px]"
+        class="inline-flex items-center justify-end mx-3 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-white dark:text-gray-400 gap-1 mr-2 capitalize md:min-w-[100px]"
         type="button"
       >
         <span class="hidden sm:inline"
           >{{ user.firstName }} {{ user.lastName }}</span
         >
         <span class="sr-only">Open user menu</span>
-        <img
-          class="w-7 h-7 rounded-full border-2 border-gray-500"
-          src="http://localhost:5000/static/profile-2.png"
-          alt="user photo"
-        />
+        <IconC iconType="solid" iconName="UserCircleIcon" iconClass="w-7 h-7" />
       </button>
       <div
         id="dropdownUserAvatarMenu"
@@ -160,8 +156,8 @@ export default {
     };
   },
   created() {
-    this.closeSide();
-    this.openSide();
+    this.$root.closeSide();
+    this.$root.openSide();
   },
   computed: {
     user() {
@@ -169,14 +165,6 @@ export default {
     },
   },
   methods: {
-    closeSide() {
-      document.getElementById("app").classList.remove("sidebar-opened");
-      this.sideBar = false;
-    },
-    openSide() {
-      document.getElementById("app").classList.add("sidebar-opened");
-      this.sideBar = true;
-    },
     logout() {
       logoutUser("signin");
       this.$toast.success(this.$t("signoutSuccess"));

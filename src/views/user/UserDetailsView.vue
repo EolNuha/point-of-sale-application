@@ -6,12 +6,7 @@
       class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded-xl bg-white dark:bg-neutral-900 px-5 py-10 sm:px-20 relative"
     >
       <OverlayC v-if="isDataLoading" />
-      <div class="flex items-center justify-center gap-4">
-        <img
-          class="w-24 h-24 rounded-full border-4 border-gray-500"
-          src="http://localhost:5000/static/profile-2.png"
-          alt="user photo"
-        />
+      <div class="flex items-center justify-center">
         <h2
           class="capitalize font-extrabold text-2xl md:text-4xl text-gray-700 dark:text-gray-300"
         >

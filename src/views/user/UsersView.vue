@@ -62,7 +62,6 @@
                 class="py-3 px-6"
                 v-if="$can('execute', 'users')"
               ></th>
-              <th scope="col" class="py-3 px-6">{{ $t("image") }}</th>
               <th
                 scope="col"
                 class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
@@ -219,16 +218,6 @@
                     />
                   </button>
                 </td>
-                <th
-                  scope="row"
-                  class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  <img
-                    class="w-7 h-7 rounded-full border-2 border-gray-500"
-                    src="http://localhost:5000/static/profile-2.png"
-                    alt="user photo"
-                  />
-                </th>
                 <th
                   scope="row"
                   class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"

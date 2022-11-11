@@ -121,11 +121,7 @@
           <tr>
             <th scope="col" class="py-3 px-6">{{ $t("subject") }}</th>
             <th scope="col" class="py-3 px-3">{{ $t("action") }}</th>
-            <th
-              scope="col"
-              class="py-3 px-3"
-              v-if="$can('execute', 'permissions')"
-            ></th>
+            <th scope="col" class="py-3 px-3"></th>
           </tr>
         </thead>
         <tbody class="px-5">
@@ -137,14 +133,16 @@
                 {{ $t(item.subject) }}
               </td>
               <td class="py-2 px-3">{{ $t(item.action) }}</td>
-              <td
-                class="py-2 px-3 w-2 text-center"
-                v-if="$can('execute', 'permissions')"
-              >
+              <td class="py-2 px-3 w-2 text-center">
                 <label
                   :for="`toggle-${item.id}`"
                   class="inline-flex relative items-center cursor-pointer"
-                  @click="togglePermission(item)"
+                  :class="{
+                    'cursor-not-allowed': !$can('execute', 'permissions'),
+                  }"
+                  @click="
+                    $can('execute', 'permissions') ? togglePermission(item) : ''
+                  "
                 >
                   <input
                     type="checkbox"

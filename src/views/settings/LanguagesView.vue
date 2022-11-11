@@ -21,7 +21,7 @@
                 <IconC
                   iconType="custom"
                   iconName="EnglishFlagIcon"
-                  iconClass="w-8 h-8 rounded-full"
+                  iconClass="w-8 h-8 rounded-lg"
                 />
               </div>
               <div class="flex-1 min-w-0">
@@ -58,7 +58,7 @@
                 <IconC
                   iconType="custom"
                   iconName="AlbanianFlagIcon"
-                  iconClass="w-8 h-8 rounded-full"
+                  iconClass="w-8 h-8 rounded-lg"
                 />
               </div>
               <div class="flex-1 min-w-0">

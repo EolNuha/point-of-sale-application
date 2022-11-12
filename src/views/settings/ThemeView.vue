@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div
-      class="text-blue-500 text-green-500 text-red-500 text-purple-500 text-orange-500"
+      class="text-blue-500 text-green-500 text-red-500 text-purple-500 text-orange-500 text-yellow-500"
     ></div>
     <h5
       class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5"
@@ -83,7 +83,14 @@
             {{ $t("colors") }}
           </h5>
           <template
-            v-for="item in ['blue', 'red', 'purple', 'green', 'orange']"
+            v-for="item in [
+              'blue',
+              'red',
+              'purple',
+              'green',
+              'orange',
+              'yellow',
+            ]"
             :key="item"
           >
             <li

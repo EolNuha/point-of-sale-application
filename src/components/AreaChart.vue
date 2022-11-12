@@ -20,7 +20,7 @@ export default {
   },
   created() {
     const theme = getComputedStyle(document.body)
-      .getPropertyValue("--color-theme-600")
+      .getPropertyValue("--color-theme-500")
       .replaceAll(" ", "");
     this.options = {
       colors: [theme, "#fdba8c"],

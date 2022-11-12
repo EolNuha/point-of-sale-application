@@ -60,4 +60,16 @@
 	--color-theme-800:#9a3412;
 	--color-theme-900:#7c2d12;
 }
+.theme-yellow {
+	--color-theme-50:#fefce8;
+	--color-theme-100:#fef9c3;
+	--color-theme-200:#fef08a;
+	--color-theme-300:#fde047;
+	--color-theme-400:#facc15;
+	--color-theme-500:#eab308;
+	--color-theme-600:#ca8a04;
+	--color-theme-700:#a16207;
+	--color-theme-800:#854d0e;
+	--color-theme-900:#713f12;
+}
 @tailwind utilities;

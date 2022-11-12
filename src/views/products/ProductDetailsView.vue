@@ -182,13 +182,13 @@
       </div>
       <button
         type="submit"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-32 px-5 py-1.5 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="blue-gradient-btn w-32 flex justify-center items-center"
       >
         <div role="status" v-if="isUpdateLoading">
           <IconC
             iconType="custom"
             iconName="SpinnerIcon"
-            iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-blue-600"
+            iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-theme-600"
           />
           <span class="sr-only">Loading...</span>
         </div>

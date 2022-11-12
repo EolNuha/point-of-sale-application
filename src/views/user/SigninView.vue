@@ -47,7 +47,7 @@
                 name="email"
                 id="email"
                 :class="errors.email ? 'ring-2 ring-red-500' : ''"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                 :placeholder="$t('enterEmailOrUsername')"
                 required
               />
@@ -67,7 +67,7 @@
                 id="password"
                 :placeholder="$t('enterPassword')"
                 :class="errors.password ? 'ring-2 ring-red-500' : ''"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                 required
               />
               <span class="text-red-700">{{ errors.password }}</span>
@@ -75,7 +75,7 @@
             <!-- <div class="flex justify-end items-center">
               <router-link
                 :to="{ name: 'signup' }"
-                class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+                class="text-sm font-medium text-theme-600 hover:underline dark:text-theme-500"
                 >Forgot password?</router-link
               >
             </div> -->
@@ -88,7 +88,7 @@
                 <IconC
                   iconType="custom"
                   iconName="SpinnerIcon"
-                  iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-blue-600"
+                  iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-theme-600"
                 />
                 <span class="sr-only">Loading...</span>
               </div>
@@ -98,7 +98,7 @@
               Don’t have an account yet?
               <router-link
                 :to="{ name: 'signup' }"
-                class="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                class="font-medium text-theme-600 hover:underline dark:text-theme-500"
                 >Sign up</router-link
               >
             </p> -->

@@ -3,7 +3,7 @@ export default {
     app.config.globalProperties.$swalConfirmObject = () => {
       return {
         position: "center",
-        iconColor: "#1c64f2",
+        iconColor: "var(--color-theme-600)",
         confirmButtonText: "Confirm",
         showCancelButton: true,
         showCloseButton: true,

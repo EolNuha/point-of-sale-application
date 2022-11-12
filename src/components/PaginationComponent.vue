@@ -50,7 +50,7 @@
             aria-current="page"
             :class="
               page === currentPage
-                ? 'py-2 px-3 rounded-md text-blue-600 bg-transparent border border-blue-500 hover:text-blue-700'
+                ? 'py-2 px-3 rounded-md text-theme-600 bg-transparent border border-theme-500 hover:text-theme-700'
                 : 'py-2 px-3 text-gray-500 bg-transparent border border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-white'
             "
             >{{ page }}</a

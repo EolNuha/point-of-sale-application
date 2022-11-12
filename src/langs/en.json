@@ -201,5 +201,12 @@
 	"noResultsFound": "No {result} has been found...",
 	"noResultsAdded": "No {result} has been added yet...",
 	"addNewResult": "Add new {result}",
-	"noPermissionText": "You don't have access to view this, please contact the owner to give you permission!"
+	"noPermissionText": "You don't have access to view this, please contact the owner to give you permission!",
+	"colors": "Colors",
+	"blue": "Blue",
+	"red": "Red",
+	"purple": "Purple",
+	"green": "Green",
+	"orange": "Orange",
+	"changeToColor": "Change text and buttons to this color"
 }

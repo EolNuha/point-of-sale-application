@@ -19,7 +19,7 @@ export default {
       type: String,
       required: false,
       default:
-        "rounded-full border-t-blue-700 dark:border-t-blue-700 border-gray-400 dark:border-gray-400 border-4 w-12 h-12 ",
+        "rounded-full border-t-theme-700 dark:border-t-theme-700 border-gray-400 dark:border-gray-400 border-4 w-12 h-12 ",
     },
     minHeight: {
       type: String,

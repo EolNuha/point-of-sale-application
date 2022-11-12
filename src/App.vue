@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       userTheme: "light",
+      textTheme: "theme-blue",
       userLang: "en",
       sidebar: true,
     };
@@ -50,8 +51,11 @@ export default {
     this.$store.dispatch("notificationsModule/checkProductExpiration");
   },
   mounted() {
-    const initUserTheme = this.getTheme() || this.getMediaPreference();
+    const initUserTheme =
+      this.getTheme("theme-preference") || this.getMediaPreference();
+    const initTextTheme = this.getTheme("text-theme") || this.textTheme;
     this.setTheme(initUserTheme);
+    this.setTextTheme(initTextTheme);
     const initUserLang = this.getLang();
     this.setLang(initUserLang || "en");
     this.setUserData();
@@ -63,6 +67,11 @@ export default {
       this.userTheme = theme;
       document.documentElement.className = theme;
     },
+    setTextTheme(theme) {
+      localStorage.setItem("text-theme", theme);
+      this.textTheme = theme;
+      document.body.className = theme;
+    },
     getMediaPreference() {
       const hasDarkPreference = window.matchMedia(
         "(prefers-color-scheme: dark)"
@@ -73,8 +82,8 @@ export default {
         return "light";
       }
     },
-    getTheme() {
-      return localStorage.getItem("theme-preference");
+    getTheme(theme) {
+      return localStorage.getItem(theme);
     },
     getLang() {
       return localStorage.getItem("lang");

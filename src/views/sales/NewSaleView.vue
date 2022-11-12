@@ -23,22 +23,22 @@
         </div>
         <div class="search-results" v-if="searchQuery">
           <table
-            class="w-full bg-white dark:bg-neutral-900 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-neutral-700 relative"
+            class="w-full bg-white dark:bg-neutral-700 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-neutral-700 relative"
           >
             <tbody>
               <template v-for="product in searchedProducts" :key="product.id">
                 <tr
                   @click="onSearchedProductClick(product)"
-                  class="bg-white border-b dark:bg-neutral-900 dark:border-neutral-700 hover:bg-gray-100/75 hover:dark:bg-neutral-700/50 cursor-default"
+                  class="border-b dark:border-neutral-700 cursor-default"
                   :class="
                     searchedProducts[searchedProductsIndex] === product
-                      ? 'bg-blue-100 dark:bg-blue-500/[.2] hover:bg-blue-200/75 hover:dark:bg-blue-500/[.2]'
-                      : ''
+                      ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
+                      : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 hover:dark:bg-neutral-900/[.5]'
                   "
                 >
                   <th
                     scope="row"
-                    class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    class="py-2 px-6 font-medium whitespace-nowrap"
                   >
                     {{ product.id }}
                   </th>
@@ -80,11 +80,11 @@
         <tbody>
           <template v-for="product in products" :key="product.id">
             <tr
-              class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
+              class="border-b dark:border-neutral-700 cursor-default"
               :class="
                 selectedProducts.some((obj) => obj?.id === product.id)
-                  ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
-                  : ''
+                  ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
+                  : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
               "
             >
               <td class="py-2 px-6">
@@ -95,7 +95,7 @@
                 >
                   <input
                     type="checkbox"
-                    class="rounded cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+                    class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                     :checked="
                       selectedProducts.some((obj) => obj?.id === product.id)
                     "
@@ -114,7 +114,7 @@
                   min="0.01"
                   :id="`product-${product.id}-quantity`"
                   v-model="product.quantity"
-                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                   @change="
                     () => (
                       product.quantity
@@ -127,17 +127,6 @@
                 />
               </td>
               <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
-              <!-- <td class="py-2 px-6">
-                <button
-                  class="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-neutral-800"
-                  @click="openRemoveModal(product)"
-                >
-                  <IconC
-                    iconName="TrashIcon"
-                    iconClass="w-5 h-5 text-red-700 cursor-pointer"
-                  />
-                </button>
-              </td> -->
             </tr>
           </template>
         </tbody>

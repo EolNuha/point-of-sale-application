@@ -15,11 +15,15 @@ export default {
     return {
       options: {},
       series: [],
+      chartColor: "",
     };
   },
-  async created() {
+  created() {
+    const theme = getComputedStyle(document.body)
+      .getPropertyValue("--color-theme-600")
+      .replaceAll(" ", "");
     this.options = {
-      colors: ["#008ffb", "#fdba8c"],
+      colors: [theme, "#fdba8c"],
       chart: {
         id: this.chartData.info.chartName,
       },

@@ -39,9 +39,11 @@
     </div>
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
       <router-link
-        class="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700/50"
+        class="flex py-3 px-4"
         :class="
-          !item.read ? 'bg-blue-500/[.1] border-l-[3px] !border-l-blue-500' : ''
+          !item.read
+            ? 'bg-gray-200/50 hover:bg-gray-200/75 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/75 border-l-[3px] !border-l-theme-500'
+            : 'hover:bg-gray-100 dark:hover:bg-neutral-700/50'
         "
         v-for="item in notifications"
         :key="item.id"
@@ -55,7 +57,7 @@
           <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
             {{ localizedMessage(item.message) }}
           </div>
-          <div class="text-xs text-blue-600 dark:text-blue-500">
+          <div class="text-xs text-theme-600 dark:text-theme-500">
             {{ dateSince(item.dateCreated) }}
           </div>
         </div>

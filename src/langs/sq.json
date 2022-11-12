@@ -201,5 +201,12 @@
 	"noResultsFound": "Asnjë {result} nuk është gjetur...",
 	"noResultsAdded": "Asnjë {result} nuk është shtuar ende...",
 	"addNewResult": "Krijo {result}",
-	"noPermissionText": "Ju nuk jeni të autorizuar për ta parë këtë, ju lutemi kontaktoni pronarin për t'ju dhënë leje!"
+	"noPermissionText": "Ju nuk jeni të autorizuar për ta parë këtë, ju lutemi kontaktoni pronarin për t'ju dhënë leje!",
+	"colors": "Ngjyrat",
+	"blue": "Kaltërt",
+	"red": "Kuqe",
+	"purple": "Vjollcë",
+	"green": "Gjelbër",
+	"orange": "Portokalli",
+	"changeToColor": "Ndrysho tekstin dhe butonat në këtë ngjyrë"
 }

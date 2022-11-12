@@ -1,5 +1,8 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+    <div
+      class="text-blue-500 text-green-500 text-red-500 text-purple-500 text-orange-500"
+    ></div>
     <h5
       class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5"
     >
@@ -36,7 +39,7 @@
                 <input
                   type="radio"
                   :checked="$root.userTheme === 'light'"
-                  class="dark:bg-neutral-700"
+                  class="dark:bg-neutral-700 text-theme-500"
                 />
               </div>
             </div>
@@ -69,11 +72,59 @@
                 <input
                   type="radio"
                   :checked="$root.userTheme === 'dark'"
-                  class="dark:bg-neutral-700"
+                  class="dark:bg-neutral-700 text-theme-500"
                 />
               </div>
             </div>
           </li>
+          <h5
+            class="text-3xl font-bold leading-none text-gray-900 dark:text-white my-4"
+          >
+            {{ $t("colors") }}
+          </h5>
+          <template
+            v-for="item in ['blue', 'red', 'purple', 'green', 'orange']"
+            :key="item"
+          >
+            <li
+              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+              @click="
+                () => {
+                  $root.setTextTheme(`theme-${item}`);
+                }
+              "
+            >
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <IconC
+                    :key="item"
+                    iconType="custom"
+                    iconName="DropletIcon"
+                    :iconClass="`w-8 h-8 text-${item}-500`"
+                  />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="text-lg font-medium text-gray-900 truncate dark:text-white"
+                  >
+                    {{ $t(item) }}
+                  </p>
+                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                    {{ $t("changeToColor") }}
+                  </p>
+                </div>
+                <div
+                  class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
+                >
+                  <input
+                    type="radio"
+                    :checked="$root.textTheme === `theme-${item}`"
+                    :class="`dark:bg-neutral-700 text-theme-500`"
+                  />
+                </div>
+              </div>
+            </li>
+          </template>
         </ul>
       </div>
     </div>

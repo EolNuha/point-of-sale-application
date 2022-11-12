@@ -62,7 +62,7 @@
           <p
             :class="
               activeTab === 'staff'
-                ? 'inline-flex items-center cursor-pointer p-4 text-blue-500 rounded-t-lg border-b-4 border-blue-500 active dark:text-blue-500 dark:border-blue-500 group'
+                ? 'inline-flex items-center cursor-pointer p-4 text-theme-500 rounded-t-lg border-b-4 border-theme-500 active dark:text-theme-500 dark:border-theme-500 group'
                 : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
             "
           >
@@ -81,7 +81,7 @@
           <p
             :class="
               activeTab === 'manager'
-                ? 'inline-flex items-center cursor-pointer p-4 text-blue-500 rounded-t-lg border-b-4 border-blue-500 active dark:text-blue-500 dark:border-blue-500 group'
+                ? 'inline-flex items-center cursor-pointer p-4 text-theme-500 rounded-t-lg border-b-4 border-theme-500 active dark:text-theme-500 dark:border-theme-500 group'
                 : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
             "
           >
@@ -101,7 +101,7 @@
           <p
             :class="
               activeTab === 'owner'
-                ? 'inline-flex items-center cursor-pointer p-4 text-blue-500 rounded-t-lg border-b-4 border-blue-500 active dark:text-blue-500 dark:border-blue-500 group'
+                ? 'inline-flex items-center cursor-pointer p-4 text-theme-500 rounded-t-lg border-b-4 border-theme-500 active dark:text-theme-500 dark:border-theme-500 group'
                 : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
             "
           >
@@ -153,7 +153,7 @@
                     @click.stop
                   />
                   <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-theme-300 dark:peer-focus:ring-theme-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-theme-600"
                   ></div>
                 </label>
               </td>

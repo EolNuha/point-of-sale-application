@@ -43,7 +43,7 @@
     <div class="rounded-xl my-5 min-h-65 relative">
       <div class="overflow-x-auto scrollbar-style">
         <table
-          class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
+          class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
         >
           <OverlayC v-if="isTableLoading" />
           <EmptyResultsC
@@ -219,11 +219,11 @@
           <tbody>
             <template v-for="product in products" :key="product.id">
               <tr
-                class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
+                class="border-b dark:border-gray-700"
                 :class="
                   selectedProduct === product
-                    ? 'bg-blue-100 dark:bg-blue-800/25 hover:dark:bg-blue-800/25'
-                    : ''
+                    ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
+                    : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
                 "
               >
                 <td class="py-2 px-6" v-if="$can('execute', 'products')">
@@ -233,7 +233,7 @@
                   >
                     <input
                       type="checkbox"
-                      class="rounded-full cursor-pointer text-blue-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+                      class="rounded-full cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                       :checked="selectedProduct === product"
                     />
                   </button>
@@ -302,7 +302,7 @@
                       aria-labelledby="dropdownDefault"
                     >
                       <li
-                        class="inline-flex text-blue-700 dark:text-blue-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                        class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
                         @click="
                           $router.push({
                             name: 'product-view',

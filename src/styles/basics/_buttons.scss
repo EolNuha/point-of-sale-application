@@ -20,14 +20,14 @@
 .blue-gradient-btn {
 	@apply text-white;
 	@apply bg-gradient-to-r #{!important};
-	@apply from-blue-500 #{!important};
-	@apply via-blue-600 #{!important};
-	@apply to-blue-700 #{!important};
+	@apply from-theme-500 #{!important};
+	@apply via-theme-600 #{!important};
+	@apply to-theme-700 #{!important};
 	@apply hover:bg-gradient-to-br #{!important};
 	@apply focus:ring-4;
 	@apply focus:outline-none;
-	@apply focus:ring-blue-300;
-	@apply dark:focus:ring-blue-800;
+	@apply focus:ring-theme-400;
+	@apply dark:focus:ring-theme-700;
 	@apply font-medium;
 	@apply rounded-xl;
 	@apply text-sm;

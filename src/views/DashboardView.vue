@@ -9,26 +9,26 @@
           {{ $t("products") }}
         </h3>
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           v-if="$can('read', 'products')"
           :to="{ name: 'products' }"
           >{{ $t("productList") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           v-if="$can('write', 'products')"
           :to="{ name: 'new-product' }"
           >{{ $t("createProduct") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           v-if="$can('read', 'analytics')"
           :to="{ name: 'product-analytics' }"
           >{{ $t("productAnalytics") }}</router-link
         >
         <IconC
           iconName="TagIcon"
-          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-blue-500/50"
+          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px] text-theme-400"
         />
       </div>
       <div class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative">
@@ -36,26 +36,26 @@
           {{ $t("sales") }}
         </h3>
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'sales' }"
           v-if="$can('read', 'sales')"
           >{{ $t("salesList") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'new-sale' }"
           v-if="$can('write', 'sales')"
           >{{ $t("createSale") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'sale-analytics' }"
           v-if="$can('read', 'analytics')"
           >{{ $t("saleAnalytics") }}</router-link
         >
         <IconC
           iconName="ShoppingCartIcon"
-          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-blue-500/50"
+          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-theme-400"
         />
       </div>
       <div
@@ -66,26 +66,26 @@
           {{ $t("purchases") }}
         </h3>
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'purchases' }"
           v-if="$can('read', 'purchases')"
           >{{ $t("purchasesList") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'new-purchase' }"
           v-if="$can('write', 'purchases')"
           >{{ $t("createPurchase") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'purchase-analytics' }"
           v-if="$can('read', 'analytics')"
           >{{ $t("purchaseAnalytics") }}</router-link
         >
         <IconC
           iconName="BuildingStorefrontIcon"
-          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-blue-500/50"
+          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-theme-400"
         />
       </div>
       <div class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative">
@@ -103,26 +103,26 @@
           {{ $t("users") }}
         </h3>
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'users' }"
           v-if="$can('read', 'users')"
           >{{ $t("usersList") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'new-user' }"
           v-if="$can('write', 'users')"
           >{{ $t("createUser") }}</router-link
         >
         <router-link
-          class="text-blue-500 hover:text-blue-400 block mb-2"
+          class="text-theme-500 hover:text-theme-400 block mb-2"
           :to="{ name: 'user-analytics' }"
           v-if="$can('read', 'analytics')"
           >{{ $t("userAnalytics") }}</router-link
         >
         <IconC
           iconName="UserGroupIcon"
-          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-blue-500/50"
+          iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-theme-400"
         />
       </div>
     </div>
@@ -179,7 +179,7 @@
         <AreaChart v-if="!isFetchingSales" :chartData="sales" />
       </div>
       <router-link
-        class="flex flex-row items-center justify-end text-blue-500 hover:text-blue-600 uppercase text-sm"
+        class="flex flex-row items-center justify-end text-theme-500 hover:text-theme-600 uppercase text-sm"
         :to="{ name: 'sale-analytics' }"
         >{{ $t("salesReport") }}
         <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
@@ -245,7 +245,7 @@
         <AreaChart v-if="!isFetchingPurchases" :chartData="purchases" />
       </div>
       <router-link
-        class="flex flex-row items-center justify-end text-blue-500 hover:text-blue-600 uppercase text-sm"
+        class="flex flex-row items-center justify-end text-theme-500 hover:text-theme-600 uppercase text-sm"
         :to="{ name: 'purchase-analytics' }"
         >{{ $t("purchasesReport") }}
         <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"

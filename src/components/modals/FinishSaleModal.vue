@@ -37,7 +37,7 @@
                 type="number"
                 name="sale_total"
                 id="sale_total"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Sale total"
                 disabled
               />
@@ -59,7 +59,7 @@
                 id="customer_amount"
                 ref="customer_amount"
                 step="0.01"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 :placeholder="$t('customerAmount')"
                 required
                 :disabled="isLoading"
@@ -94,7 +94,7 @@
                 <IconC
                   iconType="custom"
                   iconName="SpinnerIcon"
-                  iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-blue-600"
+                  iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-theme-600"
                 />
                 <span class="sr-only">Loading...</span>
               </div>

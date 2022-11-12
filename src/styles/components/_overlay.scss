@@ -1,7 +1,7 @@
 .loader {
   -webkit-animation: spinner 1.5s linear infinite;
   animation: spinner 1.5s linear infinite;
-  // @apply border-t-blue-700 #{!important};
+  // @apply border-t-theme-700 #{!important};
 }
 
 @-webkit-keyframes spinner {

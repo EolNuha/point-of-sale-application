@@ -21,15 +21,15 @@ input[type="date"] {
   @apply text-gray-900 #{!important};
   @apply text-sm #{!important};
   @apply rounded-xl #{!important};
-  @apply focus:ring-theme-500;
-  @apply focus:border-theme-500;
+  @apply focus:ring-theme-500 #{!important};
+  @apply focus:border-theme-500 #{!important};
   @apply block;
   @apply dark:bg-neutral-700 #{!important};
   @apply dark:border-gray-600 #{!important};
   @apply dark:placeholder-gray-400;
   @apply dark:text-white #{!important};
-  @apply dark:focus:ring-theme-500;
-  @apply dark:focus:border-theme-500;
+  @apply dark:focus:ring-theme-500 #{!important};
+  @apply dark:focus:border-theme-500 #{!important};
 }
 
 .search-input-width {

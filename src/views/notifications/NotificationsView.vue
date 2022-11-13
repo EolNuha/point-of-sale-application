@@ -261,6 +261,7 @@
                         ? 'cursor-not-allowed'
                         : ''
                     "
+                    @click.stop
                     @mouseover="
                       $showTooltip({
                         targetEl: `star-${item.id}-tooltip`,

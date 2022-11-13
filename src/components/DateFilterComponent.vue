@@ -14,7 +14,12 @@
 
     <div class="flex items-center gap-2 w-full" v-if="currentMonth === 0">
       <input
-        v-model="dateStart"
+        @input="
+          $debounce(() => {
+            dateStart = $event.target.value;
+          })
+        "
+        :value="dateStart"
         ref="startDate"
         name="start"
         type="date"
@@ -24,7 +29,12 @@
       />
       <span class="text-gray-500">to</span>
       <input
-        v-model="dateEnd"
+        @input="
+          $debounce(() => {
+            dateEnd = $event.target.value;
+          })
+        "
+        :value="dateEnd"
         ref="endDate"
         name="start"
         type="date"

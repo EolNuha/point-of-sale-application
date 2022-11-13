@@ -33,13 +33,8 @@
             v-if="!isThemeChanged"
             iconType="custom"
             iconName="FlowbiteIcon"
-            iconClass="w-9 h-9 mr-2 text-theme-700"
+            iconClass="w-9 h-9 mr-2"
           />
-          <!-- <img
-            src="@/assets/images/logo.svg"
-            class="mr-3 h-6 sm:h-9 text-red-500"
-            alt="Logo"
-          /> -->
           <div>
             <span
               class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"

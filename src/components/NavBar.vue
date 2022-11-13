@@ -29,11 +29,17 @@
           :to="{ name: 'dashboard' }"
           class="flex items-center w-auto sm:w-[14rem]"
         >
-          <img
-            src="@/assets/images/logo.svg"
-            class="mr-3 h-6 sm:h-9"
-            alt="Logo"
+          <IconC
+            v-if="!isThemeChanged"
+            iconType="custom"
+            iconName="FlowbiteIcon"
+            iconClass="w-9 h-9 mr-2 text-theme-700"
           />
+          <!-- <img
+            src="@/assets/images/logo.svg"
+            class="mr-3 h-6 sm:h-9 text-red-500"
+            alt="Logo"
+          /> -->
           <div>
             <span
               class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
@@ -153,7 +159,17 @@ export default {
   data() {
     return {
       sideBar: true,
+      isThemeChanged: false,
     };
+  },
+  watch: {
+    "$root.textTheme": {
+      async handler() {
+        this.isThemeChanged = true;
+        await setTimeout(() => {}, 200);
+        this.isThemeChanged = false;
+      },
+    },
   },
   created() {
     this.$root.closeSide();

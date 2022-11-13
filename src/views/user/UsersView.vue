@@ -252,7 +252,7 @@
                     style="inset: 0px auto auto -300px !important"
                   >
                     <ul
-                      class="py-1 text-sm text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
+                      class="py-1 text-sm font-normal text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
                       aria-labelledby="dropdownDefault"
                     >
                       <li

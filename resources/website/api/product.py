@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, request
+from flask import Blueprint, request, jsonify, request, Response
 from website.models import Product
 from website.helpers import getPaginatedDict
 from website.json import getProductsList
@@ -20,6 +20,15 @@ def createProduct():
 
     expiration_date = expiration_date.split("-")
     expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+
+    found_with_name = Product.query.filter_by(name=name).first()
+    found_with_barcode = Product.query.filter_by(barcode=barcode).first()
+
+    if found_with_name:
+        return Response(response="productWithNameExists", status=500)
+    if found_with_barcode:
+        return Response(response="productWithBarcodeExists", status=500)
+
 
     product = Product(
         name=name.lower(), 
@@ -90,6 +99,14 @@ def updateProductDetails(productId):
     expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
     
     product = Product.query.filter_by(id=productId).first_or_404()
+
+    found_with_name = Product.query.filter_by(name=name).first()
+    found_with_barcode = Product.query.filter_by(barcode=barcode).first()
+
+    if found_with_name and name != product.name:
+        return Response(response="productWithNameExists", status=500)
+    if found_with_barcode and barcode != product.barcode:
+        return Response(response="productWithBarcodeExists", status=500)
 
     product.name = name
     product.barcode = barcode

@@ -458,9 +458,15 @@ export default {
           this.isLoading = false;
           this.$toast.success(this.$t("purchaseSaved"));
         })
-        .catch(() => {
+        .catch((err) => {
+          const error = err.response.data;
           this.isLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
+          this.$toast.error(
+            this.$t(error.message, {
+              barcode: error.barcode,
+              product: error.product,
+            }) || this.$t("somethingWrong")
+          );
         });
     },
   },

@@ -285,9 +285,11 @@ export default {
           this.isUpdateLoading = false;
           this.$toast.success(this.$t("productUpdatedSuccessfully"));
         })
-        .catch(() => {
+        .catch((error) => {
           this.isUpdateLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
+          this.$toast.error(
+            this.$t(error.response.data) || this.$t("somethingWrong")
+          );
         });
     },
   },

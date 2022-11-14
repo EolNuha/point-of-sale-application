@@ -209,5 +209,8 @@
 	"green": "Green",
 	"orange": "Orange",
 	"yellow": "Yellow",
-	"changeToColor": "Change text and buttons to this color"
+	"changeToColor": "Change text and buttons to this color",
+	"productWithNameExists": "A product with this name already exists!",
+	"productWithBarcodeExists": "A product with this barcode already exists!",
+	"barcodeExistsDetailed": "The barcode: {barcode} is already linked with the product: {product} and it cannot be assigned to a new product!"
 }

@@ -229,9 +229,11 @@ export default {
           });
           this.$toast.success(this.$t("productCreatedSuccessfully"));
         })
-        .catch(() => {
+        .catch((error) => {
           this.isLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
+          this.$toast.error(
+            this.$t(error.response.data) || this.$t("somethingWrong")
+          );
         });
     },
   },

@@ -209,5 +209,8 @@
 	"green": "Gjelbër",
 	"orange": "Portokalli",
 	"yellow": "Verdhë",
-	"changeToColor": "Ndrysho tekstin dhe butonat në këtë ngjyrë"
+	"changeToColor": "Ndrysho tekstin dhe butonat në këtë ngjyrë",
+	"productWithNameExists": "Një produkt me këtë emër ekziston tashmë!",
+	"productWithBarcodeExists": "Një produkt me këtë barkod ekziston tashmë!",
+	"barcodeExistsDetailed": "Barkodi: {barcode} tashmë është i lidhur me produktin: {product} dhe nuk mund t'i caktohet një produkti të ri!"
 }

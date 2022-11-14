@@ -44,6 +44,16 @@ def createPurchase():
         expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
 
         product_query = Product.query.filter_by(name=product["productName"].lower()).first()
+
+        found_with_barcode = Product.query.filter_by(barcode=product["barcode"]).first()
+        if found_with_barcode and found_with_barcode.name != product["productName"]:
+            return jsonify(
+                {
+                    "message": "barcodeExistsDetailed", 
+                    "barcode": found_with_barcode.barcode, 
+                    "product": found_with_barcode.name
+                }
+                ), 406
 				
         if product_query:
             purchase_item = PurchaseItem(
@@ -63,6 +73,7 @@ def createPurchase():
             )
 
             product_query.name = product["productName"].lower()
+            product_query.barcode = product["barcode"]
             product_query.tax = product["tax"]
             product_query.purchased_price = product["purchasedPrice"]
             product_query.selling_price = product["sellingPrice"]
@@ -82,7 +93,6 @@ def createPurchase():
             )
 
             db.session.add(created_product)
-            db.session.commit()
 
             purchase_item = PurchaseItem(
                 purchase=purchase,
@@ -95,11 +105,12 @@ def createPurchase():
                 product_stock=created_product.stock,
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
-                total_amount=Decimal(created_product.purchased_price * Decimal(created_product.stock)),
+                total_amount=Decimal(Decimal(created_product.purchased_price) * Decimal(created_product.stock)),
                 date_created=datetime.now(),
                 date_modified=datetime.now(),
             )
         db.session.add(purchase_item)
+    db.session.commit()
 
     subtotal, purchase_taxes = [], []
     taxes = Settings.query.filter_by(settings_type="tax").all()

@@ -506,10 +506,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.vs__search::placeholder {
-  @apply text-sm;
-  @apply text-gray-600;
-  @apply dark:text-gray-400;
-}
-</style>

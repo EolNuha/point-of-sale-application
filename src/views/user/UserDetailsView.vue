@@ -117,7 +117,7 @@
             name="userType"
             id="userType"
             placeholder="User Type"
-            :disabled="isDisabled()"
+            :disabled="isDisabled() || !$can('execute', 'users')"
             required
           />
         </div>

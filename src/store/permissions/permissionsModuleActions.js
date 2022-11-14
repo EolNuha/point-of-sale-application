@@ -3,6 +3,21 @@
 import axios from "../axiosAuth";
 
 export default {
+  createPermission({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/permissions`,
+        method: "POST",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getUserPermissions({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

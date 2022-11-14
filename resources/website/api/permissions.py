@@ -7,6 +7,28 @@ from website.token import currentUser
 
 permissions = Blueprint('permissions', __name__)
 
+@permissions.route('/permissions', methods=["POST"])
+def createPermission():
+    user_type = request.json["user_type"]
+    subject = request.json["subject"]
+    action = request.json["action"]
+
+    permission = Permissions(
+        subject=subject.lower(), 
+        action=action.lower(), 
+        key=f"{subject}.{action}", 
+        user_type=user_type,
+        date_created=datetime.now(),
+        date_modified=datetime.now(),
+    )
+
+    db.session.add(permission)
+    db.session.commit()
+    data = {
+        "permissionId": permission.id 
+    }
+    return jsonify(data), 200
+
 @permissions.route('/permissions', methods=["GET"])
 def getUserPermissions():
     current_user = currentUser(request)

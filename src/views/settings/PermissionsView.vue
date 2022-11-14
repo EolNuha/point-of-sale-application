@@ -1,16 +1,27 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
-    <h5
-      class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5 flex items-center gap-2"
-    >
-      {{ $t("permissions") }}
-      <button
-        @mouseenter="() => (isInfoShowing = true)"
-        @mouseleave="() => (isInfoShowing = false)"
+    <div class="flex items-center justify-between mb-5">
+      <h5
+        class="text-3xl font-bold leading-none text-gray-900 dark:text-white flex items-center gap-2"
       >
-        <IconC iconName="InformationCircleIcon" iconClass="w-6 h-6" />
+        {{ $t("permissions") }}
+        <button
+          @mouseenter="() => (isInfoShowing = true)"
+          @mouseleave="() => (isInfoShowing = false)"
+        >
+          <IconC iconName="InformationCircleIcon" iconClass="w-6 h-6" />
+        </button>
+      </h5>
+      <button
+        class="blue-gradient-btn flex items-center text-center"
+        type="button"
+        v-if="$store.state.userModule.currentUser.userType === 'superadmin'"
+        @click="$openModal(createRef)"
+      >
+        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+        New Permission
       </button>
-    </h5>
+    </div>
     <div
       class="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-neutral-700 transition duration-500"
       v-show="isInfoShowing"
@@ -51,14 +62,7 @@
       <ul
         class="flex flex-wrap justify-center -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
       >
-        <li
-          class="mr-2"
-          @click="
-            () => (
-              (activeTab = 'staff'), (colName = null), (selectedItems = [])
-            )
-          "
-        >
+        <li class="mr-2" @click="() => (activeTab = 'staff')">
           <p
             :class="
               activeTab === 'staff'
@@ -70,14 +74,7 @@
             {{ $t("staff") }}
           </p>
         </li>
-        <li
-          class="mr-2"
-          @click="
-            () => (
-              (activeTab = 'manager'), (colName = 'star'), (selectedItems = [])
-            )
-          "
-        >
+        <li class="mr-2" @click="() => (activeTab = 'manager')">
           <p
             :class="
               activeTab === 'manager'
@@ -90,14 +87,7 @@
             }}
           </p>
         </li>
-        <li
-          class="mr-2"
-          @click="
-            () => (
-              (activeTab = 'owner'), (colName = 'read'), (selectedItems = [])
-            )
-          "
-        >
+        <li class="mr-2" @click="() => (activeTab = 'owner')">
           <p
             :class="
               activeTab === 'owner'
@@ -110,17 +100,40 @@
             }}
           </p>
         </li>
+        <li
+          class="mr-2"
+          @click="() => (activeTab = 'superadmin')"
+          v-if="$store.state.userModule.currentUser.userType === 'superadmin'"
+        >
+          <p
+            :class="
+              activeTab === 'superadmin'
+                ? 'inline-flex items-center cursor-pointer p-4 text-theme-500 rounded-t-lg border-b-4 border-theme-500 active dark:text-theme-500 dark:border-theme-500 group'
+                : 'inline-flex items-center cursor-pointer p-4 rounded-t-lg border-b-4 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group'
+            "
+          >
+            <IconC iconName="UserGroupIcon" iconClass="w-6 h-6 mr-2" />{{
+              $t("superadmin")
+            }}
+          </p>
+        </li>
       </ul>
     </div>
     <div>
-      <table class="w-full text-sm text-left relative">
+      <table
+        class="w-full text-sm text-left rounded-lg overflow-hidden relative"
+      >
         <OverlayC v-if="isTableLoading" />
         <thead
           class="text-md text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
         >
           <tr>
-            <th scope="col" class="py-3 px-6">{{ $t("subject") }}</th>
-            <th scope="col" class="py-3 px-3">{{ $t("action") }}</th>
+            <th scope="col" class="py-3 px-6">
+              {{ $t("subject") }}
+            </th>
+            <th scope="col" class="py-3 px-3">
+              {{ $t("action") }}
+            </th>
             <th scope="col" class="py-3 px-3"></th>
           </tr>
         </thead>
@@ -162,19 +175,135 @@
         </tbody>
       </table>
     </div>
+    <div
+      :id="createRef"
+      :ref="createRef"
+      class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
+    >
+      <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-neutral-700">
+          <button
+            type="button"
+            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
+            @click="$hideModal(createRef)"
+            :disabled="isLoading"
+          >
+            <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
+            <span class="sr-only">Close modal</span>
+          </button>
+          <div class="py-6 px-6 lg:px-8">
+            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+              {{
+                $t("addNewResult", {
+                  result: $t("permission").toLowerCase(),
+                })
+              }}
+            </h3>
+            <Form v-slot="{ errors }" @submit="createFunc" class="space-y-6">
+              <div>
+                <label
+                  for="subject"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  {{ $t("subject") }}</label
+                >
+                <Field
+                  :rules="isRequired"
+                  v-model="permission.subject"
+                  type="text"
+                  name="subject"
+                  id="subject"
+                  ref="subject"
+                  class="default-input w-full"
+                  :placeholder="$t('subject')"
+                  required
+                  :disabled="isLoading"
+                />
+                <span class="text-red-700">{{ errors.subject }}</span>
+              </div>
+              <div>
+                <label
+                  for="password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  {{ $t("action") }}</label
+                >
+                <Field
+                  :rules="isRequired"
+                  v-model="permission.action"
+                  type="text"
+                  name="action"
+                  id="action"
+                  class="default-input w-full hidden"
+                  disabled
+                />
+                <v-select
+                  class="block w-full default-input !p-1"
+                  v-model="permission.action"
+                  :clearable="false"
+                  :options="['read', 'write', 'execute']"
+                  type="text"
+                  name="action"
+                  id="action"
+                  label="option"
+                  :placeholder="$t('action')"
+                  required
+                >
+                  <template #selected-option="{ option }">
+                    {{ $t(option) }}
+                  </template>
+                  <template #option="{ option }">
+                    {{ $t(option) }}
+                  </template>
+                </v-select>
+                <span class="text-red-700">{{ errors.action }}</span>
+              </div>
+              <button
+                id="finish-sale-modal-btn"
+                type="submit"
+                class="inline-flex items-center justify-center w-full blue-gradient-btn"
+              >
+                <div role="status" v-if="isLoading">
+                  <IconC
+                    iconType="custom"
+                    iconName="SpinnerIcon"
+                    iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-theme-600"
+                  />
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <template v-else>Submit</template>
+              </button>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import { Field, Form } from "vee-validate";
 export default {
+  components: {
+    Field,
+    Form,
+  },
   data() {
     return {
       activeTab: "staff",
+      createRef: "createPermission",
       staffPermissions: [],
       managerPermissions: [],
       ownerPermissions: [],
+      superadminPermissions: [],
+      permission: {
+        subject: "",
+        action: "",
+      },
       currentArr: [],
       isTableLoading: true,
       isInfoShowing: false,
+      isLoading: false,
     };
   },
   async created() {
@@ -198,6 +327,11 @@ export default {
       .dispatch("permissionsModule/getUserTypePermissions", "owner")
       .then((res) => {
         this.ownerPermissions = res.data;
+      });
+    await this.$store
+      .dispatch("permissionsModule/getUserTypePermissions", "superadmin")
+      .then((res) => {
+        this.superadminPermissions = res.data;
       });
   },
   watch: {
@@ -237,6 +371,22 @@ export default {
           } else {
             this.currentArr.push(item);
           }
+        });
+    },
+    createFunc() {
+      const data = {
+        user_type: this.$store.state.userModule.currentUser.userType,
+        ...this.permission,
+      };
+      this.isLoading = true;
+      this.$store
+        .dispatch("permissionsModule/createPermission", data)
+        .then(async () => {
+          this.$toast.success(this.$t("permissionCreatedSuccessfully"));
+          await this.$store.dispatch("permissionsModule/getAllPermissions");
+          this.isLoading = false;
+          this.$hideModal(this.createRef);
+          this.permission = { action: "", subject: "" };
         });
     },
   },

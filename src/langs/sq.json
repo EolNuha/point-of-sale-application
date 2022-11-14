@@ -180,6 +180,7 @@
 	"darkTheme": "Tema e errët",
 	"lightTheme": "Tema e qelët",
 	"permissions": "Autorizimet",
+	"permission": "Autorizim",
 	"changeUserPermissions": "Ndrysho autorizimet e përdoruesit",
 	"read": "Lexo",
 	"readPermissionText": "Ka autorizim për të lexuar përmbajtjen e atij subjekti",
@@ -190,6 +191,7 @@
 	"staff": "Stafi",
 	"manager": "Menaxheri",
 	"owner": "Pronari",
+	"superadmin": "Super Admin",
 	"permissionsInfo": "Info rreth autorizimeve",
 	"permissionsInfoText": "Ekzistojnë tre lloje përdoruesish: Stafi, Menaxheri dhe Pronari. Ata kanë leje të caktuara se çfarë veprimi mund të kryejnë në faqe (subjekte) specifike.",
 	"subject": "Subjekti",
@@ -212,5 +214,6 @@
 	"changeToColor": "Ndrysho tekstin dhe butonat në këtë ngjyrë",
 	"productWithNameExists": "Një produkt me këtë emër ekziston tashmë!",
 	"productWithBarcodeExists": "Një produkt me këtë barkod ekziston tashmë!",
-	"barcodeExistsDetailed": "Barkodi: {barcode} tashmë është i lidhur me produktin: {product} dhe nuk mund t'i caktohet një produkti të ri!"
+	"barcodeExistsDetailed": "Barkodi: {barcode} tashmë është i lidhur me produktin: {product} dhe nuk mund t'i caktohet një produkti të ri!",
+	"permissionCreatedSuccessfully": "Autorizimi është krijuar me sukses!"
 }

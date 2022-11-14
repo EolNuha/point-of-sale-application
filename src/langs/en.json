@@ -180,6 +180,7 @@
 	"darkTheme": "Dark Theme",
 	"lightTheme": "Light Theme",
 	"permissions": "Permissions",
+	"permission": "Permission",
 	"changeUserPermissions": "Change user permissions",
 	"read": "Read",
 	"readPermissionText": "Has permission to read the content of that subject",
@@ -190,6 +191,7 @@
 	"staff": "Staff",
 	"manager": "Manager",
 	"owner": "Owner",
+	"superadmin": "Super Admin",
 	"permissionsInfo": "Permissions Info",
 	"permissionsInfoText": "There are three user types: Staff, Manager and Owner. They have certain permissions as to what action can they perform on specific pages(subjects).",
 	"subject": "Subject",
@@ -212,5 +214,6 @@
 	"changeToColor": "Change text and buttons to this color",
 	"productWithNameExists": "A product with this name already exists!",
 	"productWithBarcodeExists": "A product with this barcode already exists!",
-	"barcodeExistsDetailed": "The barcode: {barcode} is already linked with the product: {product} and it cannot be assigned to a new product!"
+	"barcodeExistsDetailed": "The barcode: {barcode} is already linked with the product: {product} and it cannot be assigned to a new product!",
+	"permissionCreatedSuccessfully": "Permission created successfully!"
 }

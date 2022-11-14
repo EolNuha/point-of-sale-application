@@ -48,6 +48,12 @@ input[type="date"] {
   @apply bg-neutral-700 #{!important};
 }
 
+.vs__search::placeholder {
+  @apply text-sm #{!important};
+  @apply text-gray-500 #{!important};
+  @apply dark:text-gray-400 #{!important};
+}
+
 //To override on build
 .vs__search, .vs__search:focus {
   color: var(--vs-search-input-color) !important;

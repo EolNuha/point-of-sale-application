@@ -1,355 +1,362 @@
 <!-- eslint-disable no-undef -->
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
-    <div class="flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center search-input-width">
-        <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
-        <div class="relative w-full">
-          <div
-            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-          >
-            <IconC
-              iconType="solid"
-              iconName="MagnifyingGlassIcon"
-              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+    <div class="full-layout">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center search-input-width">
+          <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
+          <div class="relative w-full">
+            <div
+              class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+            >
+              <IconC
+                iconType="solid"
+                iconName="MagnifyingGlassIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+            </div>
+            <input
+              @input="
+                $debounce(() => {
+                  searchQuery = $event.target.value;
+                })
+              "
+              type="text"
+              class="default-input w-full pl-10"
+              :placeholder="$t('search')"
             />
           </div>
-          <input
-            @input="
-              $debounce(() => {
-                searchQuery = $event.target.value;
-              })
-            "
-            type="text"
-            class="default-input w-full pl-10"
-            :placeholder="$t('search')"
-          />
+        </div>
+        <button
+          @click="
+            $router.push({
+              name: 'new-product',
+            })
+          "
+          v-if="$can('write', 'products')"
+          class="blue-gradient-btn flex items-center text-center"
+        >
+          <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+          {{ $t("createProduct") }}
+        </button>
+      </div>
+
+      <div class="rounded-xl my-5 min-h-65 relative">
+        <div class="overflow-x-auto scrollbar-style">
+          <table
+            class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400 overflow-hidden rounded-lg"
+          >
+            <OverlayC v-if="isTableLoading" />
+            <EmptyResultsC
+              v-if="products.length === 0 && !isTableLoading"
+              pluralText="Products"
+              singularText="Product"
+              :search="searchQuery"
+              routeName="new-product"
+            />
+            <thead
+              class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
+            >
+              <tr>
+                <th
+                  scope="col"
+                  class="py-3 px-6"
+                  v-if="$can('execute', 'products')"
+                ></th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('id')"
+                >
+                  <div class="flex justify-between items-center">
+                    ID
+                    <template v-if="sortColumn === 'id'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('name')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("productName") }}
+                    <template v-if="sortColumn === 'name'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('barcode')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("barcode") }}
+                    <template v-if="sortColumn === 'barcode'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('purchased_price')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("purchasedPrice") }}
+                    <template v-if="sortColumn === 'purchased_price'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('selling_price')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("sellingPrice") }}
+                    <template v-if="sortColumn === 'selling_price'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('stock')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("stock") }}
+                    <template v-if="sortColumn === 'stock'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('tax')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("tax") }}
+                    <template v-if="sortColumn === 'tax'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6"
+                  v-if="$can('execute', 'products')"
+                ></th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="product in products" :key="product.id">
+                <tr
+                  class="border-b dark:border-gray-700"
+                  :class="
+                    selectedProduct === product
+                      ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
+                      : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
+                  "
+                >
+                  <td class="py-2 px-6" v-if="$can('execute', 'products')">
+                    <button
+                      @click="updateSelectedProduct(product)"
+                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                    >
+                      <input
+                        type="checkbox"
+                        class="rounded-full cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+                        :checked="selectedProduct === product"
+                      />
+                    </button>
+                  </td>
+                  <th
+                    scope="row"
+                    class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {{ product.id }}
+                  </th>
+                  <td class="py-2 px-6">{{ product.name }}</td>
+                  <td class="py-2 px-6">{{ product.barcode }}</td>
+                  <td class="py-2 px-6 max-w-xs">
+                    {{ product.purchasedPrice }} €
+                  </td>
+                  <td class="py-2 px-6 max-w-xs">
+                    {{ product.sellingPrice }} €
+                  </td>
+                  <td class="py-2 px-6">
+                    <div
+                      class="flex items-center"
+                      :id="`product-${product.id}-tooltip-btn`"
+                      @mouseover="
+                        $showTooltip({
+                          targetEl: `product-${product.id}-tooltip`,
+                          triggerEl: `product-${product.id}-tooltip-btn`,
+                        })
+                      "
+                      :class="stockStatus(product.stock).color"
+                    >
+                      &#9679; {{ stockStatus(product.stock).text }}
+                    </div>
+                    <div
+                      :id="`product-${product.id}-tooltip`"
+                      role="tooltip"
+                      class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip"
+                    >
+                      {{ product.stock }}
+                    </div>
+                  </td>
+                  <td class="py-2 px-6 max-w-xs">
+                    <div class="py-2.5">{{ product.tax }}%</div>
+                  </td>
+                  <td
+                    class="py-2 px-6 w-1.5"
+                    v-if="$can('execute', 'products')"
+                  >
+                    <button
+                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      :id="`product-${product.id}-btn`"
+                      @click="
+                        $toggleDropdown({
+                          targetEl: `product-${product.id}-menu`,
+                          triggerEl: `product-${product.id}-btn`,
+                          placementEl: 'left',
+                        })
+                      "
+                    >
+                      <IconC
+                        iconName="EllipsisVerticalIcon"
+                        iconClass="w-5 h-5 cursor-pointer"
+                      />
+                    </button>
+                    <div
+                      :id="`product-${product.id}-menu`"
+                      class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
+                      style="inset: 0px auto auto -300px !important"
+                    >
+                      <ul
+                        class="py-1 text-sm font-normal text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
+                        aria-labelledby="dropdownDefault"
+                      >
+                        <li
+                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="
+                            $router.push({
+                              name: 'product-view',
+                              params: { productId: product.id },
+                            })
+                          "
+                        >
+                          <IconC
+                            iconType="solid"
+                            iconName="PencilIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("edit") }}
+                        </li>
+                        <li
+                          class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="deleteProduct(product)"
+                        >
+                          <IconC
+                            iconName="TrashIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("delete") }}
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
         </div>
       </div>
-      <button
-        @click="
-          $router.push({
-            name: 'new-product',
-          })
-        "
-        v-if="$can('write', 'products')"
-        class="blue-gradient-btn flex items-center text-center"
+      <delete-modal
+        :productId="selectedProductToDelete.id"
+        deleteAction="productModule/deleteProduct"
+        getAction="productModule/getProducts"
+        :title="$t('product')"
+        deleteRef="delete-modal"
+        @reload="getProducts(currentPage)"
       >
-        <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-        {{ $t("createProduct") }}
-      </button>
-    </div>
-
-    <div class="rounded-xl my-5 min-h-65 relative">
-      <div class="overflow-x-auto scrollbar-style">
-        <table
-          class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
-        >
-          <OverlayC v-if="isTableLoading" />
-          <EmptyResultsC
-            v-if="products.length === 0 && !isTableLoading"
-            pluralText="Products"
-            singularText="Product"
-            :search="searchQuery"
-            routeName="new-product"
-          />
-          <thead
-            class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
-          >
-            <tr>
-              <th
-                scope="col"
-                class="py-3 px-6"
-                v-if="$can('execute', 'products')"
-              ></th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('id')"
-              >
-                <div class="flex justify-between items-center">
-                  ID
-                  <template v-if="sortColumn === 'id'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('name')"
-              >
-                <div class="flex justify-between items-center">
-                  {{ $t("productName") }}
-                  <template v-if="sortColumn === 'name'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('barcode')"
-              >
-                <div class="flex justify-between items-center">
-                  {{ $t("barcode") }}
-                  <template v-if="sortColumn === 'barcode'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('purchased_price')"
-              >
-                <div class="flex justify-between items-center">
-                  {{ $t("purchasedPrice") }}
-                  <template v-if="sortColumn === 'purchased_price'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('selling_price')"
-              >
-                <div class="flex justify-between items-center">
-                  {{ $t("sellingPrice") }}
-                  <template v-if="sortColumn === 'selling_price'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('stock')"
-              >
-                <div class="flex justify-between items-center">
-                  {{ $t("stock") }}
-                  <template v-if="sortColumn === 'stock'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                @click="sort('tax')"
-              >
-                <div class="flex justify-between items-center">
-                  {{ $t("tax") }}
-                  <template v-if="sortColumn === 'tax'">
-                    <IconC
-                      iconName="ArrowLongDownIcon"
-                      iconClass="w-4 h-4"
-                      v-if="sortDir === 'desc'"
-                    />
-                    <IconC
-                      iconName="ArrowLongUpIcon"
-                      iconClass="w-4 h-4"
-                      v-else
-                    />
-                  </template>
-                </div>
-              </th>
-              <th
-                scope="col"
-                class="py-3 px-6"
-                v-if="$can('execute', 'products')"
-              ></th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-for="product in products" :key="product.id">
-              <tr
-                class="border-b dark:border-gray-700"
-                :class="
-                  selectedProduct === product
-                    ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
-                    : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
-                "
-              >
-                <td class="py-2 px-6" v-if="$can('execute', 'products')">
-                  <button
-                    @click="updateSelectedProduct(product)"
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
-                  >
-                    <input
-                      type="checkbox"
-                      class="rounded-full cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-                      :checked="selectedProduct === product"
-                    />
-                  </button>
-                </td>
-                <th
-                  scope="row"
-                  class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {{ product.id }}
-                </th>
-                <td class="py-2 px-6">{{ product.name }}</td>
-                <td class="py-2 px-6">{{ product.barcode }}</td>
-                <td class="py-2 px-6 max-w-xs">
-                  {{ product.purchasedPrice }} €
-                </td>
-                <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
-                <td class="py-2 px-6">
-                  <div
-                    class="flex items-center"
-                    :id="`product-${product.id}-tooltip-btn`"
-                    @mouseover="
-                      $showTooltip({
-                        targetEl: `product-${product.id}-tooltip`,
-                        triggerEl: `product-${product.id}-tooltip-btn`,
-                      })
-                    "
-                    :class="stockStatus(product.stock).color"
-                  >
-                    &#9679; {{ stockStatus(product.stock).text }}
-                  </div>
-                  <div
-                    :id="`product-${product.id}-tooltip`"
-                    role="tooltip"
-                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip"
-                  >
-                    {{ product.stock }}
-                  </div>
-                </td>
-                <td class="py-2 px-6 max-w-xs">
-                  <div class="py-2.5">{{ product.tax }}%</div>
-                </td>
-                <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'products')">
-                  <button
-                    class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
-                    :id="`product-${product.id}-btn`"
-                    @click="
-                      $toggleDropdown({
-                        targetEl: `product-${product.id}-menu`,
-                        triggerEl: `product-${product.id}-btn`,
-                        placementEl: 'left',
-                      })
-                    "
-                  >
-                    <IconC
-                      iconName="EllipsisVerticalIcon"
-                      iconClass="w-5 h-5 cursor-pointer"
-                    />
-                  </button>
-                  <div
-                    :id="`product-${product.id}-menu`"
-                    class="hidden z-10 w-32 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
-                    style="inset: 0px auto auto -300px !important"
-                  >
-                    <ul
-                      class="py-1 text-sm font-normal text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
-                      aria-labelledby="dropdownDefault"
-                    >
-                      <li
-                        class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
-                        @click="
-                          $router.push({
-                            name: 'product-view',
-                            params: { productId: product.id },
-                          })
-                        "
-                      >
-                        <IconC
-                          iconType="solid"
-                          iconName="PencilIcon"
-                          iconClass="w-5 h-5 cursor-pointer"
-                        />
-                        {{ $t("edit") }}
-                      </li>
-                      <li
-                        class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
-                        @click="deleteProduct(product)"
-                      >
-                        <IconC
-                          iconName="TrashIcon"
-                          iconClass="w-5 h-5 cursor-pointer"
-                        />
-                        {{ $t("delete") }}
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
+      </delete-modal>
     </div>
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
       @pageChange="getProducts($event)"
     />
-    <delete-modal
-      :productId="selectedProductToDelete.id"
-      deleteAction="productModule/deleteProduct"
-      getAction="productModule/getProducts"
-      :title="$t('product')"
-      deleteRef="delete-modal"
-      @reload="getProducts(currentPage)"
-    >
-    </delete-modal>
   </div>
 </template>
 
@@ -372,20 +379,9 @@ export default {
   },
   watch: {
     searchQuery: {
-      async handler(value) {
-        this.isTableLoading = true;
+      async handler() {
         this.currentPage = 1;
-        try {
-          await this.$store.dispatch("productModule/getProducts", {
-            page: this.currentPage,
-            search: value,
-            sort_column: this.sortColumn,
-            sort_dir: this.sortDir,
-          });
-          this.isTableLoading = false;
-        } catch {
-          this.isTableLoading = false;
-        }
+        this.getProducts(1);
       },
     },
   },

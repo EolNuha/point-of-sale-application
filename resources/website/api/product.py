@@ -5,6 +5,7 @@ from website.json import getProductsList
 from datetime import datetime, date, time
 from website import db
 from sqlalchemy import or_, asc, desc
+import random
 
 product = Blueprint('product', __name__)
 
@@ -129,26 +130,16 @@ def deleteProductDetails(productId):
 
 @product.route('/products/demo', methods=["GET"])
 def createDemoProducts():
-    demo = [
-        ["test 1", "100100100", 100, 8, 1.5, 2],
-        ["test 2", "100200100", 100, 18, 15, 18],
-        ["test 3", "100300100", 100, 18, 5, 7.5],
-        ["test 4", "100400100", 100, 8, 1.2, 1.6],
-        ["test 5", "100500100", 100, 8, 1.5, 2],
-        ["test 6", "100600100", 100, 8, 3, 4],
-        ["test 7", "100700100", 100, 18, 20, 25],
-        ["test 8", "100800100", 100, 18, 3.4, 4],
-        ["test 9", "100900100", 100, 8, 4.5, 6],
-        ["test 10", "1001000100", 100, 8, 1.5, 2],
-    ]
-    for i in demo:
+    taxes = [8, 18]
+    for i in range(1, 2000):
+        rand_price = round(random.uniform(0.2, 5), 2)
         db.session.add( Product(
-            name=i[0], 
-            barcode=i[1], 
-            stock=i[2], 
-            tax=i[3], 
-            purchased_price=i[4], 
-            selling_price=i[5],
+            name=f"test product {i}", 
+            barcode=int(f"1{i:09}"), 
+            stock=100, 
+            tax=taxes[random.randint(0, 1)], 
+            purchased_price=rand_price, 
+            selling_price=(rand_price + 1/10 * rand_price),
             expiration_date=datetime.now(),
             date_created=datetime.now(),
             date_modified=datetime.now(),

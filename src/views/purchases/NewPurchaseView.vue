@@ -314,7 +314,7 @@
         <div class="flex justify-end my-3 gap-2">
           <button
             type="button"
-            class="blue-gradient-btn flex items-center justify-center"
+            class="theme-gradient-btn flex items-center justify-center"
             @click="addProduct"
           >
             <IconC iconName="PlusIcon" iconClass="w-5 h-5" />
@@ -324,7 +324,7 @@
       <div>
         <button
           type="submit"
-          class="blue-gradient-btn w-32 flex justify-center items-center"
+          class="theme-gradient-btn w-32 flex justify-center items-center"
         >
           <div role="status" v-if="isLoading">
             <IconC

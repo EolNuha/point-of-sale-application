@@ -52,7 +52,7 @@
         </div>
       </div>
       <router-link :to="{ name: 'new-sale' }" target="_blank">
-        <button class="blue-gradient-btn flex items-center gap-2">
+        <button class="theme-gradient-btn flex items-center gap-2">
           <IconC iconName="ArrowTopRightOnSquareIcon" iconClass="w-5 h-5" />
           <span class="hidden sm:inline">{{ $t("newSale") }}</span>
         </button>

@@ -182,7 +182,7 @@
       </div>
       <button
         type="submit"
-        class="blue-gradient-btn w-32 flex justify-center items-center"
+        class="theme-gradient-btn w-32 flex justify-center items-center"
       >
         <div role="status" v-if="isUpdateLoading">
           <IconC

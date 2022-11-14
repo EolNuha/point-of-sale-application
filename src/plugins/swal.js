@@ -12,7 +12,7 @@ export default {
         customClass: {
           popup: "bg-gray-300 dark:bg-neutral-700",
           header: "bg-gray-300 dark:bg-neutral-700",
-          confirmButton: "blue-gradient-btn",
+          confirmButton: "theme-gradient-btn",
           cancelButton: "gray-outline-btn mr-2",
           closeButton:
             "text-gray-400 bg-transparent hover:text-gray-900 text-sm dark:hover:text-white",

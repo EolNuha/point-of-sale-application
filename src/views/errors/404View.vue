@@ -11,7 +11,7 @@
       with us, please tell us.
     </p>
     <button
-      class="blue-gradient-btn flex items-center"
+      class="theme-gradient-btn flex items-center"
       @click="
         $router.push({
           name: 'dashboard',

@@ -47,7 +47,7 @@ export default {
     btnClass: {
       type: String,
       required: false,
-      default: "blue-gradient-btn",
+      default: "theme-gradient-btn",
     },
     routeName: {
       type: String,

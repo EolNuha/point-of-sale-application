@@ -34,7 +34,7 @@
             })
           "
           v-if="$can('write', 'products')"
-          class="blue-gradient-btn flex items-center text-center"
+          class="theme-gradient-btn flex items-center text-center"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
           {{ $t("createProduct") }}

@@ -88,7 +88,7 @@
             <button
               id="finish-sale-modal-btn"
               type="submit"
-              class="inline-flex items-center justify-center w-full blue-gradient-btn"
+              class="inline-flex items-center justify-center w-full theme-gradient-btn"
             >
               <div role="status" v-if="isLoading">
                 <IconC

@@ -145,7 +145,7 @@
             </p>
             <button
               type="submit"
-              class="w-full blue-gradient-btn flex justify-center items-center"
+              class="w-full theme-gradient-btn flex justify-center items-center"
               :disabled="isLoading"
             >
               <div role="status" v-if="isLoading">

@@ -38,7 +38,7 @@
                 name: 'new-sale',
               })
             "
-            class="blue-gradient-btn inline-flex items-center text-center"
+            class="theme-gradient-btn inline-flex items-center text-center"
           >
             <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
             New Sale

@@ -13,7 +13,7 @@
         </button>
       </h5>
       <button
-        class="blue-gradient-btn flex items-center text-center"
+        class="theme-gradient-btn flex items-center text-center"
         type="button"
         v-if="$store.state.userModule.currentUser.userType === 'superadmin'"
         @click="$openModal(createRef)"
@@ -262,7 +262,7 @@
               <button
                 id="finish-sale-modal-btn"
                 type="submit"
-                class="inline-flex items-center justify-center w-full blue-gradient-btn"
+                class="inline-flex items-center justify-center w-full theme-gradient-btn"
               >
                 <div role="status" v-if="isLoading">
                   <IconC

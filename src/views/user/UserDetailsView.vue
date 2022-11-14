@@ -131,7 +131,7 @@
         </div>
         <button
           type="submit"
-          class="w-full blue-gradient-btn flex justify-center items-center"
+          class="w-full theme-gradient-btn flex justify-center items-center"
           :disabled="isLoading || isDisabled()"
         >
           <div role="status" v-if="isLoading">

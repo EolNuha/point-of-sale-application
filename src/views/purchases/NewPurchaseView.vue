@@ -25,6 +25,8 @@
             class="block w-full default-input !p-[1px]"
             :class="errors.sellerName ? 'ring-2 ring-red-500' : ''"
             v-model="seller.sellerName"
+            @search="($event, loading) => searchSellers($event, loading)"
+            @close="seller.search ? getSellerDetails(seller.search) : ''"
             :clearable="true"
             :options="sellers"
             :reduce="(sellers) => sellers.sellerName"
@@ -124,6 +126,12 @@
                 class="block w-full default-input !p-[1px]"
                 :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
                 v-model="product.productName"
+                @search="
+                  ($event, loading) => searchProducts($event, loading, index)
+                "
+                @close="
+                  product.search ? getProductDetails(product.search, index) : ''
+                "
                 :clearable="true"
                 :options="productsList"
                 :reduce="(productsList) => productsList.name"
@@ -346,6 +354,7 @@ export default {
         invoiceNumber: "",
         fiscalNumber: "",
         taxNumber: "",
+        search: "",
       },
       products: [
         {
@@ -356,6 +365,7 @@ export default {
           purchasedPrice: "",
           sellingPrice: "",
           expirationDate: "",
+          search: "",
         },
       ],
     };
@@ -372,18 +382,8 @@ export default {
     },
   },
   async created() {
-    await this.$store.dispatch("purchaseModule/getSellers", {
-      page: 1,
-      per_page: 1000000000,
-      sort_column: "seller_name",
-      sort_dir: "asc",
-    });
-    await this.$store.dispatch("productModule/getProducts", {
-      page: 1,
-      per_page: 1000000000,
-      sort_column: "name",
-      sort_dir: "asc",
-    });
+    this.getSellers("");
+    this.getProducts("");
   },
   methods: {
     isRequired(value) {
@@ -407,6 +407,7 @@ export default {
         purchasedPrice: "",
         sellingPrice: "",
         expirationDate: "",
+        search: "",
       };
       this.products.push(product);
     },
@@ -420,23 +421,54 @@ export default {
       }, 0);
       return sum.toFixed(2);
     },
+    async searchSellers(search, loading) {
+      this.seller.search = search;
+      loading(true);
+      await this.getSellers(search);
+      loading(false);
+    },
+    async getSellers(search) {
+      await this.$store.dispatch("purchaseModule/getSellers", {
+        page: 1,
+        per_page: 20,
+        sort_column: "seller_name",
+        sort_dir: "asc",
+        search: search,
+      });
+    },
     getSellerDetails(e) {
-      this.seller.sellerName = e.sellerName ? e.sellerName : e;
+      const sellerName = e.sellerName ? e.sellerName : e;
+      this.seller.sellerName = sellerName;
       const sellerInfo = this.sellers.find(
-        (x) => x.sellerName.toLowerCase() === e.sellerName.toLowerCase()
+        (x) => x.sellerName.toLowerCase() === sellerName.toLowerCase()
       );
       if (sellerInfo) {
         this.seller.fiscalNumber = sellerInfo?.sellerFiscalNumber;
         this.seller.taxNumber = sellerInfo?.sellerTaxNumber;
       }
     },
+    async searchProducts(search, loading, idx) {
+      this.products[idx].search = search;
+      loading(true);
+      await this.getProducts(search);
+      loading(false);
+    },
+    async getProducts(search) {
+      await this.$store.dispatch("productModule/getProducts", {
+        page: 1,
+        per_page: 20,
+        sort_column: "name",
+        sort_dir: "asc",
+        search: search,
+      });
+    },
     getProductDetails(e, idx) {
-      this.products[idx].productName = e.name ? e.name : e;
+      const productName = e.name ? e.name : e;
+      this.products[idx].productName = productName;
       const productInfo = this.productsList.find(
-        (x) => x.name.toLowerCase() === e.name.toLowerCase()
+        (x) => x.name?.toLowerCase() === productName.toLowerCase()
       );
       if (productInfo) {
-        this.products[idx].productName = productInfo.name;
         this.products[idx].barcode = productInfo.barcode;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].sellingPrice = productInfo.sellingPrice;

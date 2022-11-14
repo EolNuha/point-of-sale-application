@@ -28,6 +28,7 @@
             @search="($event, loading) => searchSellers($event, loading)"
             @close="seller.search ? getSellerDetails(seller.search) : ''"
             :clearable="true"
+            :filterable="false"
             :options="sellers"
             :reduce="(sellers) => sellers.sellerName"
             label="sellerName"
@@ -133,6 +134,7 @@
                   product.search ? getProductDetails(product.search, index) : ''
                 "
                 :clearable="true"
+                :filterable="false"
                 :options="productsList"
                 :reduce="(productsList) => productsList.name"
                 label="name"

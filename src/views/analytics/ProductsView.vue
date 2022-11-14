@@ -21,9 +21,11 @@
         <v-select
           class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedProduct"
+          @search="($event, loading) => searchProducts($event, loading)"
           :value="products"
           :options="products"
           :clearable="false"
+          :filterable="false"
           :reduce="(products) => products"
           label="name"
         ></v-select>
@@ -43,6 +45,7 @@ export default {
       startDate: "",
       endDate: "",
       selectedProduct: {},
+      search: "",
     };
   },
   computed: {
@@ -51,16 +54,26 @@ export default {
     },
   },
   async created() {
-    await this.$store
-      .dispatch("productModule/getProducts", {
+    this.getProducts(this.search).then(() => {
+      this.selectedProduct = this.products[0];
+    });
+  },
+  methods: {
+    async searchProducts(search, loading) {
+      this.search = search;
+      loading(true);
+      await this.getProducts(search);
+      loading(false);
+    },
+    async getProducts(search) {
+      await this.$store.dispatch("productModule/getProducts", {
         page: 1,
-        per_page: 1000000000,
+        per_page: 20,
         sort_column: "name",
         sort_dir: "asc",
-      })
-      .then((res) => {
-        this.selectedProduct = res.data.data[0];
+        search: search,
       });
+    },
   },
 };
 </script>

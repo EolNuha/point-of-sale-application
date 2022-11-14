@@ -23,12 +23,21 @@
         <v-select
           class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedUser"
+          @search="($event, loading) => searchUsers($event, loading)"
           :value="users"
           :options="users"
           :clearable="false"
+          :filterable="false"
           :reduce="(users) => users"
           label="firstName"
-        ></v-select>
+        >
+          <template #selected-option="{ firstName, lastName }">
+            {{ firstName }} {{ lastName }}
+          </template>
+          <template #option="{ firstName, lastName }">
+            {{ firstName }} {{ lastName }}
+          </template>
+        </v-select>
       </div>
     </AreaChartMoney>
   </div>
@@ -45,6 +54,7 @@ export default {
       startDate: "",
       endDate: "",
       selectedUser: {},
+      search: "",
     };
   },
   watch: {
@@ -58,11 +68,26 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("userModule/getUsers", {
-      page: 1,
-      per_page: 1000000000,
+    this.getUsers(this.search).then(() => {
+      this.selectedUser = this.users[0];
     });
-    this.selectedUser = this.$store.state.userModule.currentUser;
+  },
+  methods: {
+    async searchUsers(search, loading) {
+      this.search = search;
+      loading(true);
+      await this.getUsers(search);
+      loading(false);
+    },
+    async getUsers(search) {
+      await this.$store.dispatch("userModule/getUsers", {
+        page: 1,
+        per_page: 20,
+        sort_column: "first_name",
+        sort_dir: "asc",
+        search: search,
+      });
+    },
   },
 };
 </script>

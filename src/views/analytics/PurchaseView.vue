@@ -28,9 +28,11 @@
         <v-select
           class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedSeller"
+          @search="($event, loading) => searchSellers($event, loading)"
           :value="sellers"
           :options="sellers"
           :clearable="false"
+          :filterable="false"
           :reduce="(sellers) => sellers"
           label="sellerName"
         ></v-select>
@@ -53,6 +55,7 @@ export default {
       startDate: "",
       endDate: "",
       selectedSeller: {},
+      search: "",
     };
   },
   computed: {
@@ -61,14 +64,26 @@ export default {
     },
   },
   async created() {
-    await this.$store
-      .dispatch("purchaseModule/getSellers", {
+    this.getSellers(this.search).then(() => {
+      this.selectedSeller = this.sellers[0];
+    });
+  },
+  methods: {
+    async searchSellers(search, loading) {
+      this.search = search;
+      loading(true);
+      await this.getSellers(search);
+      loading(false);
+    },
+    async getSellers(search) {
+      await this.$store.dispatch("purchaseModule/getSellers", {
         page: 1,
-        per_page: 1000000000,
-      })
-      .then((res) => {
-        this.selectedSeller = res.data.data[0];
+        per_page: 20,
+        sort_column: "seller_name",
+        sort_dir: "asc",
+        search: search,
       });
+    },
   },
 };
 </script>

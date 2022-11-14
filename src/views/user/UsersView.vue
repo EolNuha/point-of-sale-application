@@ -228,7 +228,7 @@
                 <td class="py-2 px-6">{{ user.lastName }}</td>
                 <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
                 <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
-                <td class="py-2 px-6 max-w-xs">{{ user.userType }}</td>
+                <td class="py-2 px-6 max-w-xs">{{ $t(user.userType) }}</td>
                 <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'users')">
                   <button
                     class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"

@@ -119,7 +119,15 @@
             placeholder="User Type"
             :disabled="isDisabled() || !$can('execute', 'users')"
             required
-          />
+            label="option"
+          >
+            <template #selected-option="{ option }">
+              {{ $t(option) }}
+            </template>
+            <template #option="{ option }">
+              {{ $t(option) }}
+            </template>
+          </v-select>
         </div>
         <button
           type="submit"

@@ -94,7 +94,15 @@
                 id="userType"
                 placeholder="User Type"
                 required
-              />
+                label="option"
+              >
+                <template #selected-option="{ option }">
+                  {{ $t(option) }}
+                </template>
+                <template #option="{ option }">
+                  {{ $t(option) }}
+                </template>
+              </v-select>
             </div>
             <div>
               <label

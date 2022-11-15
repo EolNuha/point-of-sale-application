@@ -1,6 +1,8 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div
+    class="overflow-x-hidden flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4"
+  >
     <div class="full-layout">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center search-input-width">
@@ -223,7 +225,7 @@
                   class="border-b dark:border-gray-700"
                   :class="
                     selectedProduct === product
-                      ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
+                      ? 'bg-theme-100 dark:bg-theme-400 dark:text-black font-bold'
                       : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
                   "
                 >

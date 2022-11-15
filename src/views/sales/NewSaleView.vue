@@ -137,7 +137,7 @@
     >
       <div class="flex flex-row items-center">
         <button
-          :disabled="products.length === 0"
+          :disabled="products?.length === 0"
           @click="finishSaleModal()"
           type="button"
           id="finishSale"
@@ -147,7 +147,7 @@
           {{ $t("finish") }} (F8)
         </button>
         <button
-          :disabled="products.length === 0"
+          :disabled="products?.length === 0"
           @click="openRemoveModal(JSON.parse(JSON.stringify(products)))"
           type="button"
           id="clearAll"
@@ -233,19 +233,19 @@ export default {
   created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
-        const isEmpty = this.selectedProducts.length === 0;
+        const isEmpty = this.selectedProducts?.length === 0;
         if (!isEmpty) {
           this.openRemoveModal(this.selectedProducts);
         }
       }
       if (e.key == "F8") {
-        const isProductsEmpty = this.products.length === 0;
+        const isProductsEmpty = this.products?.length === 0;
         if (!isProductsEmpty) {
           this.finishSaleModal();
         }
       }
       if (e.key == "F10") {
-        const isProductsEmpty = this.products.length === 0;
+        const isProductsEmpty = this.products?.length === 0;
         if (!isProductsEmpty) {
           this.openRemoveModal(JSON.parse(JSON.stringify(this.products)));
         }
@@ -253,7 +253,7 @@ export default {
     });
   },
   async beforeRouteLeave(to, from, next) {
-    if (!(this.products.length === 0)) {
+    if (!(this.products?.length === 0)) {
       const options = this.$swalConfirmObject();
       options.html = `<p class='text-gray-500 dark:text-gray-300'>${this.$t(
         "saleNotFinished"
@@ -275,7 +275,7 @@ export default {
     keyEvent(e) {
       if (
         e.key === "ArrowDown" &&
-        this.searchedProductsIndex < this.searchedProducts.length - 1
+        this.searchedProductsIndex < this.searchedProducts?.length - 1
       ) {
         this.searchedProductsIndex++;
       }

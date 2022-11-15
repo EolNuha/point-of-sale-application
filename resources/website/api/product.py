@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, request, Response
 from website.models import Product
 from website.helpers import getPaginatedDict
 from website.json import getProductsList
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from website import db
 from sqlalchemy import or_, asc, desc
 import random
@@ -53,7 +53,7 @@ def createProduct():
 @product.route('/products', methods=["GET"])
 def getProducts():
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
@@ -131,7 +131,7 @@ def deleteProductDetails(productId):
 @product.route('/products/demo', methods=["GET"])
 def createDemoProducts():
     taxes = [8, 18]
-    for i in range(1, 2000):
+    for i in range(2000, 5001):
         rand_price = round(random.uniform(0.2, 5), 2)
         db.session.add( Product(
             name=f"test product {i}", 
@@ -140,7 +140,7 @@ def createDemoProducts():
             tax=taxes[random.randint(0, 1)], 
             purchased_price=rand_price, 
             selling_price=(rand_price + 1/10 * rand_price),
-            expiration_date=datetime.now(),
+            expiration_date=datetime.now() + timedelta(days = random.randint(15, 100)),
             date_created=datetime.now(),
             date_modified=datetime.now(),
             ))

@@ -108,7 +108,7 @@ def getSales():
     date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
 
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
 
     if '*' in search or '_' in search: 
@@ -173,7 +173,7 @@ def getDailySales():
     sale_date_end = datetime.combine(date(year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])), time.max)
     
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
 
     if '*' in search or '_' in search: 

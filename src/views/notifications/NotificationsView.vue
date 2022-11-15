@@ -434,7 +434,7 @@ export default {
     getNotifications(page) {
       this.$store
         .dispatch("notificationsModule/getNotificationsList", {
-          per_page: 10,
+          per_page: 20,
           page: page,
           col_name: this.colName,
         })

@@ -152,7 +152,7 @@ def getPurchases():
     date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
     date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
 
     if '*' in search or '_' in search: 
@@ -179,7 +179,7 @@ def getPurchases():
 @purchase.route('/sellers', methods=["GET"])
 def getSellers():
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)

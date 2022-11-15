@@ -89,7 +89,7 @@ def signup():
 @auth.route('/users', methods=['GET'])
 def users():
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)

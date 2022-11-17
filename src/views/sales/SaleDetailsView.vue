@@ -13,7 +13,7 @@
               iconName="SpinnerIcon"
               iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
             />
-            Downloading...
+            {{ $t("downloading") }}...
             <span class="sr-only">Loading...</span>
           </div>
           <div v-else class="inline-flex flex-row">
@@ -22,14 +22,26 @@
               iconName="SolidPdfIcon"
               iconClass="w-5 h-5 fill-white mr-2"
             />
-            Download PDF
+            {{ $t("download") }} PDF
+          </div>
+        </button>
+        <button
+          class="theme-gradient-btn inline-flex items-center text-center"
+          @click="getPrintPdf"
+        >
+          <div class="inline-flex flex-row">
+            <IconC
+              iconType="solid"
+              iconName="PrinterIcon"
+              iconClass="w-5 h-5 fill-white mr-2"
+            />
+            {{ $t("print") }}
           </div>
         </button>
       </div>
     </div>
     <div
       class="bg-white dark:bg-neutral-900 rounded-3xl relative my-5 px-10 py-8"
-      v-show="!isPrint"
     >
       <div id="content">
         <OverlayC v-if="isLoading" />
@@ -109,7 +121,33 @@
         </div>
       </div>
     </div>
-    <iframe v-if="isPrint" id="iframe" width="100%" height="1000px"></iframe>
+    <div
+      id="printModal"
+      tabindex="-1"
+      aria-hidden="true"
+      class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full"
+    >
+      <div class="relative w-full max-w-7xl h-full md:h-auto">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <div
+            class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600"
+          >
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              {{ $t("printDoc", { value: $t("sale").toLowerCase() }) }}
+            </h3>
+            <button
+              type="button"
+              class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+              @click="$hideModal('printModal')"
+            >
+              <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <iframe id="iframe" width="100%" style="height: 80vh"></iframe>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -120,7 +158,6 @@ export default {
     return {
       isLoading: true,
       isPdfLoading: false,
-      isPrint: false,
     };
   },
   computed: {
@@ -145,6 +182,21 @@ export default {
     getTaxValue(arr, alias) {
       return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
     },
+    async getPrintPdf() {
+      let doc = new jsPDF();
+      let elementHTML = document.getElementById("content");
+      await doc.html(elementHTML, {
+        margin: [10, 10, 10, 10],
+        autoPaging: "text",
+        x: 0,
+        y: 0,
+        width: 190,
+        windowWidth: 800,
+      });
+      let iframe = document.getElementById("iframe");
+      iframe.src = doc.output("datauristring");
+      this.$openModal("printModal");
+    },
     async download() {
       this.isPdfLoading = true;
       const saleTxt = this.$t("sale").toLowerCase();
@@ -166,12 +218,6 @@ export default {
         windowWidth: 800,
       });
       this.isPdfLoading = false;
-      // this.isPrint = true;
-      //TODO: Create later
-      // let iframe = document.getElementById("iframe");
-      // document.body.appendChild(iframe);
-
-      // iframe.src = doc.output("datauristring");
     },
   },
 };

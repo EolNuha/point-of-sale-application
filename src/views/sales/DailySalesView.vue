@@ -57,7 +57,7 @@
                 iconName="SpinnerIcon"
                 iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
               />
-              Downloading...
+              {{ $t("downloading") }}...
               <span class="sr-only">Loading...</span>
             </div>
             <div v-else class="inline-flex flex-row">
@@ -66,7 +66,7 @@
                 iconName="ExcelFileIcon"
                 iconClass="w-5 h-5 fill-white mr-2"
               />
-              Download Excel
+              {{ $t("download") }} Excel
             </div>
           </button>
         </div>

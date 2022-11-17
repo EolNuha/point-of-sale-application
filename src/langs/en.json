@@ -215,5 +215,9 @@
 	"productWithNameExists": "A product with this name already exists!",
 	"productWithBarcodeExists": "A product with this barcode already exists!",
 	"barcodeExistsDetailed": "The barcode: {barcode} is already linked with the product: {product} and it cannot be assigned to a new product!",
-	"permissionCreatedSuccessfully": "Permission created successfully!"
+	"permissionCreatedSuccessfully": "Permission created successfully!",
+	"printDoc": "Print {value} document",
+	"print": "Print",
+	"download": "Download",
+	"downloading": "Downloading"
 }

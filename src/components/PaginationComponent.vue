@@ -39,6 +39,16 @@
             />
           </button>
         </li>
+        <div v-if="pagination.page_range[0] !== 1">
+          <button
+            @click="$emit('pageChange', 1)"
+            aria-current="page"
+            class="py-2 px-3 text-gray-500 bg-transparent border border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-white"
+          >
+            1
+          </button>
+          <span class="px-1">...</span>
+        </div>
         <li
           v-for="page in pagination.page_range"
           :key="page"
@@ -56,6 +66,21 @@
             >{{ page }}</a
           >
         </li>
+        <div
+          v-if="
+            pagination.page_range[pagination.page_range.length - 1] !==
+            pagination.pages
+          "
+        >
+          <span class="px-1">...</span>
+          <button
+            @click="$emit('pageChange', pagination.pages)"
+            aria-current="page"
+            class="py-2 px-3 text-gray-500 bg-transparent border border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-white"
+          >
+            {{ pagination.pages }}
+          </button>
+        </div>
         <li>
           <button
             :disabled="!pagination.has_next"

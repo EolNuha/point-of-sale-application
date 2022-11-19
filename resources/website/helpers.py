@@ -3,7 +3,9 @@ from decimal import *
 import pandas as pd
 from datetime import datetime, date, time, timedelta
 from collections import Counter
-def get_page_range(page, total, show=5):
+def get_page_range(page, total):
+    if page < 4 or page in range(total - 2, total + 1): show = 5
+    else: show = 3
     start = max((page - (show // 2)), 1)
     stop = min(start + show, total) + 1
     start = max(min(start, stop - show), 1)
@@ -22,7 +24,7 @@ def getPaginatedDict(data, paginated_items):
             "prev_num": paginated_items.prev_num,
             "items": len(paginated_items.items),
             "total": paginated_items.total,
-            "page_range": get_page_range(paginated_items.page, paginated_items.pages, 5)
+            "page_range": get_page_range(paginated_items.page, paginated_items.pages)
         },
         
     }

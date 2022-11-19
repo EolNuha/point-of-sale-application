@@ -82,7 +82,7 @@
             <tr
               class="border-b dark:border-neutral-700 cursor-default"
               :class="
-                selectedProducts.some((obj) => obj?.id === product.id)
+                isSelected(product.id)
                   ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
                   : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
               "
@@ -96,9 +96,7 @@
                   <input
                     type="checkbox"
                     class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-                    :checked="
-                      selectedProducts.some((obj) => obj?.id === product.id)
-                    "
+                    :checked="isSelected(product.id)"
                   />
                 </button>
               </td>
@@ -230,6 +228,11 @@ export default {
       },
     },
   },
+  computed: {
+    isSelected() {
+      return (id) => this.selectedProducts?.some((obj) => obj?.id === id);
+    },
+  },
   created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
@@ -306,6 +309,7 @@ export default {
       this.total = this.getProductsTotal();
       this.searchQuery = "";
       this.searchedProductsIndex = 0;
+      this.searchedProducts = [];
     },
     getProductsTotal() {
       const products = this.products;
@@ -348,7 +352,7 @@ export default {
         .then(() => {
           this.isFinishSaleLoading = false;
           this.products = [];
-          this.selectedProducts = {};
+          this.selectedProducts = [];
           this.total = (0).toFixed(2);
           this.$hideModal(this.finishSaleModalRef);
           this.$toast.success(this.$t("saleSuccess"));

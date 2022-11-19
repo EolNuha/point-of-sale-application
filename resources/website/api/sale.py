@@ -185,8 +185,7 @@ def getDailySales():
     else:
         looking_for = '%{0}%'.format(search)
         
-    paginated_items = Sale.query.join(Sale.user).join(Sale.sale_taxes)\
-        .filter(or_(
+    paginated_items = Sale.query.filter(or_(
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),

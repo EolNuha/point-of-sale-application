@@ -208,7 +208,7 @@ export default {
       await doc.html(elementHTML, {
         callback: function (doc) {
           // Save the PDF
-          doc.save(`${saleTxt}-${saleId}.pdf`);
+          doc.save(`${saleTxt}-${saleId}-pdf.pdf`);
         },
         margin: [10, 10, 10, 10],
         autoPaging: "text",

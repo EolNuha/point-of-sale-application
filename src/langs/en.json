@@ -219,5 +219,6 @@
 	"printDoc": "Print {value} document",
 	"print": "Print",
 	"download": "Download",
-	"downloading": "Downloading"
+	"downloading": "Downloading",
+	"employee": "Employee"
 }

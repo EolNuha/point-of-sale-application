@@ -46,21 +46,9 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
+            :disabled="!(allSales?.length > 0)"
           >
-            <div
-              class="inline-flex flex-row"
-              role="status"
-              v-if="isExcelLoading"
-            >
-              <IconC
-                iconType="custom"
-                iconName="SpinnerIcon"
-                iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
-              />
-              {{ $t("downloading") }}...
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div v-else class="inline-flex flex-row">
+            <div class="inline-flex flex-row">
               <IconC
                 iconType="custom"
                 iconName="ExcelFileIcon"
@@ -168,7 +156,7 @@
                   @click="sort('user')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("user") }}
+                    {{ $t("employee") }}
                     <template v-if="sortColumn === 'user'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -228,6 +216,34 @@
         </div>
       </div>
     </div>
+    <table id="table-data" class="hidden">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col" v-for="item in taxes" :key="item.settingsValue">
+            {{ $t("tax") }} {{ item.settingsName }}%
+          </th>
+          <th scope="col">{{ $t("subtotalAmount") }}</th>
+          <th scope="col">{{ $t("totalAmount") }}</th>
+          <th scope="col">{{ $t("employee") }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template v-for="sale in allSales" :key="sale.id">
+          <tr>
+            <td>
+              {{ sale.id }}
+            </td>
+            <td v-for="item in taxes" :key="item.settingsValue">
+              {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+            </td>
+            <td>{{ sale.subTotalAmount }} €</td>
+            <td>{{ sale.totalAmount }} €</td>
+            <td>{{ sale.user.firstName }} {{ sale.user.lastName }}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
@@ -237,17 +253,19 @@
 </template>
 
 <script>
+import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   data() {
     return {
       isTableLoading: false,
-      isExcelLoading: false,
       currentPage: 1,
       searchQuery: "",
       sortColumn: null,
       sortDir: "desc",
+      allSales: [],
     };
   },
+  mixins: [HtmlToExcel],
   computed: {
     sales() {
       return this.$store.getters["saleModule/getSalesList"];
@@ -270,11 +288,12 @@ export default {
       },
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",
     });
-    this.getSales(this.currentPage);
+    await this.getSales(this.currentPage);
+    this.getAllSales();
   },
   methods: {
     getTaxValue(arr, alias) {
@@ -282,9 +301,9 @@ export default {
         arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
       );
     },
-    getSales(page) {
+    async getSales(page) {
       this.isTableLoading = true;
-      this.$store
+      await this.$store
         .dispatch("saleModule/getDailySales", {
           page: page,
           date: this.saleDate,
@@ -292,7 +311,8 @@ export default {
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
-        .then(() => {
+        .then((response) => {
+          this.$store.commit("saleModule/SET_SALES", response.data);
           this.isTableLoading = false;
           this.currentPage = page;
         })
@@ -301,30 +321,30 @@ export default {
           this.$toast.error(this.$t("somethingWrong"));
         });
     },
-    async downloadExcel() {
-      this.isExcelLoading = true;
-      const data = {
-        fileName: this.saleDate.replaceAll(".", "-") + `-${this.$t("sales")}`,
-        dailySales: true,
-        dailyDate: this.saleDate,
-        page: 1,
-        per_page: this.pagination.total,
-      };
-      this.$store
-        .dispatch("saleModule/downloadExcelFile", data)
-        .then(() => {
-          this.isExcelLoading = false;
-          this.$toast.success(this.$t("excelFileDownloaded"));
+    async getAllSales() {
+      await this.$store
+        .dispatch("saleModule/getDailySales", {
+          page: 1,
+          per_page: this.pagination.total,
+          date: this.saleDate,
+          search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
         })
-        .catch(() => {
-          this.isExcelLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
+        .then((response) => {
+          this.allSales = response.data.data;
         });
+    },
+    async downloadExcel() {
+      let fileName =
+        this.saleDate.replaceAll(".", "-") + `-${this.$t("sales")}`;
+      this.tableToExcel("table-data", fileName);
     },
     sort(col) {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getSales(this.currentPage);
+      this.getAllSales();
     },
   },
 };

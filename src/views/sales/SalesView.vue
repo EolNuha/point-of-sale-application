@@ -43,21 +43,9 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
+            :disabled="!(allSales?.length > 0)"
           >
-            <div
-              class="inline-flex flex-row"
-              role="status"
-              v-if="isExcelLoading"
-            >
-              <IconC
-                iconType="custom"
-                iconName="SpinnerIcon"
-                iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
-              />
-              {{ $t("downloading") }}...
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div v-else class="inline-flex flex-row">
+            <div class="inline-flex flex-row">
               <IconC
                 iconType="custom"
                 iconName="ExcelFileIcon"
@@ -211,6 +199,32 @@
         </div>
       </div>
     </div>
+    <table id="table-data" class="hidden">
+      <thead>
+        <tr>
+          <th scope="col">{{ $t("date") }}</th>
+          <th scope="col" v-for="item in taxes" :key="item.settingsValue">
+            {{ $t("tax") }} {{ item.settingsName }}%
+          </th>
+          <th scope="col">{{ $t("subtotalAmount") }}</th>
+          <th scope="col">{{ $t("totalAmount") }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template v-for="sale in allSales" :key="sale.id">
+          <tr>
+            <td>
+              {{ sale.dateCreated.substring(0, 10) }}
+            </td>
+            <td v-for="item in taxes" :key="item.settingsValue">
+              {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+            </td>
+            <td>{{ sale.subTotalAmount }} €</td>
+            <td>{{ sale.totalAmount }} €</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
@@ -220,19 +234,21 @@
 </template>
 
 <script>
+import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   data() {
     return {
       isTableLoading: false,
-      isExcelLoading: false,
       currentPage: 1,
       searchQuery: "",
       startDate: "",
       endDate: "",
       sortColumn: null,
       sortDir: "desc",
+      allSales: [],
     };
   },
+  mixins: [HtmlToExcel],
   watch: {
     searchQuery: {
       async handler() {
@@ -252,7 +268,7 @@ export default {
       return this.$store.state.settingsModule.settingsType;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",
     });
@@ -260,7 +276,8 @@ export default {
     this.currentMonth = new Date().getMonth() + 1;
     this.startDate = currentMonth.startDate;
     this.endDate = currentMonth.endDate;
-    this.getSales(this.currentPage);
+    await this.getSales(this.currentPage);
+    this.getAllSales();
   },
   methods: {
     getTaxValue(arr, alias) {
@@ -278,9 +295,9 @@ export default {
         endDate: `${year}-${month}-${days}`,
       };
     },
-    getSales(page) {
+    async getSales(page) {
       this.isTableLoading = true;
-      this.$store
+      await this.$store
         .dispatch("saleModule/getSales", {
           page: page,
           startDate: this.startDate,
@@ -289,7 +306,8 @@ export default {
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
-        .then(() => {
+        .then((response) => {
+          this.$store.commit("saleModule/SET_SALES", response.data);
           this.isTableLoading = false;
           this.currentPage = page;
         })
@@ -298,8 +316,22 @@ export default {
           this.$toast.error(this.$t("somethingWrong"));
         });
     },
-    async downloadExcel() {
-      this.isExcelLoading = true;
+    async getAllSales() {
+      await this.$store
+        .dispatch("saleModule/getSales", {
+          page: 1,
+          per_page: this.pagination.total,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
+        })
+        .then((response) => {
+          this.allSales = response.data.data;
+        });
+    },
+    downloadExcel() {
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
@@ -309,28 +341,13 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      const data = {
-        fileName: fileName,
-        page: 1,
-        per_page: this.pagination.total,
-        startDate: this.startDate,
-        endDate: this.endDate,
-      };
-      this.$store
-        .dispatch("saleModule/downloadExcelFile", data)
-        .then(() => {
-          this.isExcelLoading = false;
-          this.$toast.success(this.$t("excelFileDownloaded"));
-        })
-        .catch(() => {
-          this.isExcelLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
-        });
+      this.tableToExcel("table-data", fileName);
     },
     sort(col) {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getSales(this.currentPage);
+      this.getAllSales();
     },
   },
 };

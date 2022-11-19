@@ -23,19 +23,6 @@ export default {
       axios
         .get(`/api/purchases`, { params: data })
         .then(async (response) => {
-          commit("SET_PURCHASES", response.data);
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  },
-  downloadExcelFile({ commit }, data) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`/api/purchases/download-exel`, { params: data })
-        .then(async (response) => {
           resolve(response);
         })
         .catch((error) => {

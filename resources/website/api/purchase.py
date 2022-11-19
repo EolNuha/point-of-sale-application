@@ -6,13 +6,9 @@ from website import db
 from sqlalchemy import or_, asc, desc
 from decimal import *
 from datetime import datetime, date, time
-import xlsxwriter
-from pathlib import Path
-import requests
 from website.token import currentUser
 
 purchase = Blueprint('purchase', __name__)
-BASE_URL = "http://localhost:5000"
 
 @purchase.route('/purchases', methods=["POST"])
 def createPurchase():
@@ -223,63 +219,3 @@ def getPurchaseDetails(purchaseId):
 def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
     return jsonify(getSellerDetails([purchase, purchase])[0])
-
-@purchase.route('/purchases/download-exel', methods=["GET"])
-def downloadPurchasesExcel():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    file_name = request.args.get('fileName', 'excelFile', type=str)
-
-    api_response = requests.get(f'{BASE_URL}/api/purchases?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&sort_dir=asc')
-    purchases = api_response.json()["data"]
-
-    FILENAME = file_name.upper() + ".xlsx"
-    downloads_path = str(Path.home() / "Downloads" / FILENAME)
-    workbook = xlsxwriter.Workbook(downloads_path)
- 
-    worksheet = workbook.add_worksheet()
-    worksheet.set_column(0, 9, 20)
-    
-    header_format = workbook.add_format({'bold': True, 'bg_color': 'gray', 'align': 'center'})
-
-    euro = workbook.add_format({'num_format': '€#,##0.00'})
-
-    col_idx = 0
-    taxes = Settings.query.filter_by(settings_type="tax").all()
-
-    worksheet.write(0, 0, 'Date', header_format)
-    worksheet.write(0, 1, 'Seller Name', header_format)
-    worksheet.write(0, 2, 'Invoice Number', header_format)
-    worksheet.write(0, 3, 'Fiscal Number', header_format)
-    worksheet.write(0, 4, 'Tax Number', header_format)
-    for index, i in enumerate(taxes):
-        worksheet.write(0, 5 + index, f'{i.settings_name}%', header_format)
-        col_idx = index + 5
-    worksheet.write(0, col_idx + 1, 'Subtotal', header_format)
-    worksheet.write(0, col_idx + 2, 'Total', header_format)
-
-    row = 1
-    col = 0
-
-    for item in purchases:
-        worksheet.write(row, col, item["dateCreated"][0:10])
-        worksheet.write(row, col + 1, item["sellerName"])
-        worksheet.write(row, col + 2, item["sellerInvoiceNumber"])
-        worksheet.write(row, col + 3, item["sellerFiscalNumber"])
-        worksheet.write(row, col + 4, item["sellerTaxNumber"])
-        for index, tax in enumerate(taxes):
-            try:
-                worksheet.write(row, col + index + 5, Decimal(item["taxes"][index]["taxValue"]), euro)
-            except IndexError:
-                worksheet.write(row, col + index + 5, 0, euro)
-            idx = index + 5
-        worksheet.write(row, col + idx + 1, Decimal(item["subTotalAmount"]), euro)
-        worksheet.write(row, col + idx + 2, Decimal(item["totalAmount"]), euro)
-
-        row += 1
-        
-    workbook.close()
-
-    return jsonify(downloads_path)

@@ -7,13 +7,9 @@ from website import db
 from sqlalchemy import or_, asc, desc, func
 import sqlalchemy as sa
 from decimal import *
-import xlsxwriter
-from pathlib import Path
-import requests
 from website.token import currentUser
 
 sale = Blueprint('sale', __name__)
-BASE_URL = "http://localhost:5000"
 
 @sale.route('/sales', methods=["POST"])
 def createSale():
@@ -23,13 +19,15 @@ def createSale():
     change_amount = request.json["changeAmount"]
     current_user = currentUser(request)
 
+    current_time = datetime.now()
+
     sale = Sale(
         total_amount=total_amount,
         customer_amount=customer_amount,
         change_amount=change_amount,
         user=current_user,
-        date_created=datetime.now(),
-        date_modified=datetime.now(),
+        date_created=current_time,
+        date_modified=current_time,
     )
 
     db.session.add(sale)
@@ -53,8 +51,8 @@ def createSale():
             price_without_tax=price_without_tax,
             tax_amount=tax_amount,
             total_amount=Decimal(product_query.selling_price * Decimal(product["quantity"])),
-            date_created=datetime.now(),
-            date_modified=datetime.now(),
+            date_created=current_time,
+            date_modified=current_time,
         )
         stock_diff = product_query.stock - Decimal(product["quantity"])
         if stock_diff >= 0:
@@ -84,8 +82,8 @@ def createSale():
                 tax_name=str(split_key[0]), 
                 tax_alias=str(split_key[1]), 
                 tax_value=value,
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
+                date_created=current_time,
+                date_modified=current_time,
             )
         )
     db.session.commit()
@@ -141,8 +139,11 @@ def getSales():
     json_sale_items = getSalesList(paginated_items.items)
 
     for item in json_sale_items:
-        taxes = SaleTax.query.filter(SaleTax.date_created <= date_end)\
-            .filter(SaleTax.date_created > date_start)\
+        date_split = item["dateCreated"].split(".")
+        item_date = date(year=int(date_split[2][:4]), month=int(date_split[1]), day=int(date_split[0]))
+
+        taxes = SaleTax.query.filter(SaleTax.date_created <= datetime.combine(item_date, time.max))\
+            .filter(SaleTax.date_created > datetime.combine(item_date, time.min))\
             .order_by(SaleTax.tax_name.desc())\
             .with_entities(
             SaleTax.id.label("id"), 
@@ -151,6 +152,7 @@ def getSales():
             sa.func.sum(SaleTax.tax_value).label("tax_value"),
         )\
         .group_by(SaleTax.tax_name).all()
+        
         item["taxes"] = getTaxesList(taxes)
 
     return jsonify(getPaginatedDict(json_sale_items, paginated_items))
@@ -204,125 +206,3 @@ def getSaleDetails(saleId):
     sales["saleItems"] = sale_items
     sales["taxes"] = sale_taxes
     return jsonify(sales)
-
-@sale.route('/sales/download-exel', methods=["GET"])
-def downloadSalesExcel():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    file_name = request.args.get('fileName', 'excelFile', type=str)
-    daily = request.args.get('dailySales', False, type=bool)
-    daily_date = request.args.get('dailyDate', type=str)
-    
-    if daily:
-        URL = f'{BASE_URL}/api/sales/daily?page={page}&per_page={per_page}&date={daily_date}&sort_dir=asc'
-    else:
-        URL = f'{BASE_URL}/api/sales?page={page}&per_page={per_page}&startDate={custom_start_date}&endDate={custom_end_date}&sort_dir=asc'
-
-    api_response = requests.get(URL)
-    sales = list(api_response.json()["data"])
-
-    FILENAME = file_name.upper() + ".xlsx"
-    downloads_path = str(Path.home() / "Downloads" / FILENAME)
-    workbook = xlsxwriter.Workbook(downloads_path)
- 
-    worksheet = workbook.add_worksheet()
-    worksheet.set_column(0, 6, 20)
-    
-    header_format = workbook.add_format({'bold': True, 'bg_color': 'gray', 'align': 'center'})
-
-    euro = workbook.add_format({'num_format': '€#,##0.00'})
-
-    col_idx = 0
-    taxes = Settings.query.filter_by(settings_type="tax").all()
-
-    worksheet.write(0, 0, 'Date', header_format)
-    worksheet.write(0, 1, 'Buyer', header_format)
-    for index, i in enumerate(taxes):
-        worksheet.write(0, 2 + index, f'{i.settings_name}%', header_format)
-        col_idx = index + 2
-    worksheet.write(0, col_idx + 1, 'Subtotal', header_format)
-    worksheet.write(0, col_idx + 2, 'Total', header_format)
-
-    row = 1
-    col = 0
-    idx = 0
-
-    for item in sales:
-        worksheet.write(row, col, item["dateCreated"][0:10])
-        worksheet.write(row, col + 1, "Qytetar")
-        for index, tax in enumerate(taxes):
-            try:
-                worksheet.write(row, col + index + 2, Decimal(item["taxes"][index]["taxValue"]), euro)
-            except IndexError:
-                worksheet.write(row, col + index + 2, 0, euro)
-            idx = index + 2
-        worksheet.write(row, col + idx + 1, Decimal(item["subTotalAmount"]), euro)
-        worksheet.write(row, col + idx + 2, Decimal(item["totalAmount"]), euro)
-
-        row += 1
-        
-    workbook.close()
-
-    return jsonify(downloads_path)
-
-@sale.route('/sales/demo', methods=["GET"])
-def createDemoSales():
-    current_user = User.query.first()
-    demo = [
-        [100, 100, 0, "2022-10-1"],
-        [95, 100, 5, "2022-10-2"],
-        [80, 100, 20, "2022-10-3"],
-        [55, 60, 5, "2022-10-4"],
-        [43.2, 45, 1.8, "2022-10-5"],
-        [30, 10, 0, "2022-10-6"],
-        [55, 20, 5, "2022-10-7"],
-        [40, 5, 1, "2022-10-8"],
-        [100, 100, 0, "2022-10-9"],
-        [93.2, 95, 0, "2022-10-10"],
-        [85.25, 90, 0, "2022-10-11"],
-        [150, 150, 0, "2022-10-12"],
-        [100, 100, 0, "2022-10-13"],
-    ]
-    for index, i in enumerate(demo):
-        sale_date = i[3].split("-")
-        s = Sale(
-            total_amount=i[0],
-            customer_amount=i[1],
-            change_amount=i[2],
-            eight_tax_amount=5,
-            eighteen_tax_amount=10,
-            subtotal_amount=5,
-            user=current_user,
-            date_created=datetime.combine(date(year=int(sale_date[0]), month=int(sale_date[1]), day=int(sale_date[2])), time.min),
-            date_modified=datetime.combine(date(year=int(sale_date[0]), month=int(sale_date[1]), day=int(sale_date[2])), time.min)
-        )
-        db.session.add(s)
-        db.session.commit()
-
-        products = Product.query.limit(10).all()
-        for productIdx, product in enumerate(products):
-            decimal_price = Decimal(product.selling_price)
-            decimal_tax = Decimal(product.tax)
-            price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
-            tax_amount = (decimal_tax / 100) * decimal_price
-            sale_item = SaleItem(
-                sale=s,
-                product_id=product.id,
-                product_barcode=product.barcode,
-                product_name=product.name,
-                product_tax=product.tax,
-                product_purchased_price=product.purchased_price,
-                product_selling_price=product.selling_price,
-                product_quantity=Decimal(productIdx + 1),
-                price_without_tax=price_without_tax,
-                tax_amount=tax_amount,
-                total_amount=Decimal(product.selling_price * (productIdx + 1)),
-                date_created=datetime.combine(date(year=int(sale_date[0]), month=int(sale_date[1]), day=int(sale_date[2])), time.min),
-                date_modified=datetime.combine(date(year=int(sale_date[0]), month=int(sale_date[1]), day=int(sale_date[2])), time.min)
-            )
-            
-            db.session.add(sale_item)
-            db.session.commit()
-    return "success", 200

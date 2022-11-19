@@ -43,21 +43,9 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
+            :disabled="!(allPurchases?.length > 0)"
           >
-            <div
-              class="inline-flex flex-row"
-              role="status"
-              v-if="isExcelLoading"
-            >
-              <IconC
-                iconType="custom"
-                iconName="SpinnerIcon"
-                iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
-              />
-              {{ $t("downloading") }}...
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div v-else class="inline-flex flex-row">
+            <div class="inline-flex flex-row">
               <IconC
                 iconType="custom"
                 iconName="ExcelFileIcon"
@@ -140,27 +128,6 @@
                 <th
                   scope="col"
                   class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('total_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("totalAmount") }}
-                    <template v-if="sortColumn === 'total_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('seller_name')"
                 >
                   <div class="flex justify-between items-center">
@@ -200,6 +167,48 @@
                     </template>
                   </div>
                 </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('subtotal_amount')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("subtotalAmount") }}
+                    <template v-if="sortColumn === 'subtotal_amount'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('total_amount')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("totalAmount") }}
+                    <template v-if="sortColumn === 'total_amount'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
                 <th scope="col" class="py-3 px-6"></th>
               </tr>
             </thead>
@@ -212,11 +221,12 @@
                     {{ purchase.dateCreated.substring(0, 10) }}
                   </td>
                   <td class="py-2 px-6">{{ purchase.id }}</td>
-                  <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
                   <td class="py-2 px-6">{{ purchase.sellerName }}</td>
                   <td class="py-2 px-6 max-w-xs">
                     {{ purchase.sellerInvoiceNumber }}
                   </td>
+                  <td class="py-2 px-6">{{ purchase.subTotalAmount }} €</td>
+                  <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
                   <td class="py-2 px-6">
                     <button
                       @click="
@@ -240,6 +250,44 @@
         </div>
       </div>
     </div>
+    <table id="table-data" class="hidden">
+      <thead>
+        <tr>
+          <th scope="col">
+            {{ $t("date") }}
+          </th>
+          <th scope="col">ID</th>
+          <th scope="col">
+            {{ $t("sellerName") }}
+          </th>
+          <th scope="col">
+            {{ $t("invoiceNumber") }}
+          </th>
+          <th scope="col">
+            {{ $t("subtotalAmount") }}
+          </th>
+          <th scope="col">
+            {{ $t("totalAmount") }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <template v-for="purchase in allPurchases" :key="purchase.id">
+          <tr>
+            <td>
+              {{ purchase.dateCreated.substring(0, 10) }}
+            </td>
+            <td>{{ purchase.id }}</td>
+            <td>{{ purchase.sellerName }}</td>
+            <td>
+              {{ purchase.sellerInvoiceNumber }}
+            </td>
+            <td>{{ purchase.subTotalAmount }} €</td>
+            <td>{{ purchase.totalAmount }} €</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
@@ -249,20 +297,22 @@
 </template>
 
 <script>
+import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   data() {
     return {
       isTableLoading: false,
       currentPage: 1,
       searchQuery: "",
-      isExcelLoading: false,
       monthDates: [],
       startDate: "",
       endDate: "",
       sortColumn: null,
       sortDir: "desc",
+      allPurchases: [],
     };
   },
+  mixins: [HtmlToExcel],
   watch: {
     searchQuery: {
       async handler() {
@@ -271,11 +321,12 @@ export default {
       },
     },
   },
-  created() {
+  async created() {
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.startDate = currentMonth.startDate;
     this.endDate = currentMonth.endDate;
-    this.getPurchases(this.currentPage);
+    await this.getPurchases(this.currentPage);
+    this.getAllPurchases();
   },
   computed: {
     purchases() {
@@ -296,9 +347,9 @@ export default {
         endDate: `${year}-${month}-${days}`,
       };
     },
-    getPurchases(page) {
+    async getPurchases(page) {
       this.isTableLoading = true;
-      this.$store
+      await this.$store
         .dispatch("purchaseModule/getPurchases", {
           page: page,
           startDate: this.startDate,
@@ -307,7 +358,8 @@ export default {
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
-        .then(() => {
+        .then((response) => {
+          this.$store.commit("purchaseModule/SET_PURCHASES", response.data);
           this.isTableLoading = false;
           this.currentPage = page;
         })
@@ -316,8 +368,22 @@ export default {
           this.$toast.error(this.$t("somethingWrong"));
         });
     },
+    async getAllPurchases() {
+      await this.$store
+        .dispatch("purchaseModule/getPurchases", {
+          page: 1,
+          per_page: this.pagination.total,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
+        })
+        .then((response) => {
+          this.allPurchases = response.data.data;
+        });
+    },
     async downloadExcel() {
-      this.isExcelLoading = true;
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
@@ -327,28 +393,13 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      const data = {
-        fileName: fileName,
-        page: 1,
-        per_page: this.pagination.total,
-        startDate: this.startDate,
-        endDate: this.endDate,
-      };
-      this.$store
-        .dispatch("purchaseModule/downloadExcelFile", data)
-        .then(() => {
-          this.isExcelLoading = false;
-          this.$toast.success(this.$t("excelFileDownloaded"));
-        })
-        .catch(() => {
-          this.isExcelLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
-        });
+      this.tableToExcel("table-data", fileName);
     },
     sort(col) {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getPurchases(this.currentPage);
+      this.getAllPurchases();
     },
   },
 };

@@ -219,5 +219,6 @@
 	"printDoc": "Printo dokumentin për {value}",
 	"print": "Printo",
 	"download": "Shkarko",
-	"downloading": "Duke e shkarkuar"
+	"downloading": "Duke e shkarkuar",
+	"employee": "Punëtori"
 }

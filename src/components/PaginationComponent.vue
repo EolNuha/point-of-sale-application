@@ -47,7 +47,7 @@
           >
             1
           </button>
-          <span class="px-1">...</span>
+          <span class="px-1 text-gray-500 dark:text-gray-400">...</span>
         </div>
         <li
           v-for="page in pagination.page_range"
@@ -72,7 +72,7 @@
             pagination.pages
           "
         >
-          <span class="px-1">...</span>
+          <span class="px-1 text-gray-500 dark:text-gray-400">...</span>
           <button
             @click="$emit('pageChange', pagination.pages)"
             aria-current="page"

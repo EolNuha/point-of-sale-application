@@ -43,6 +43,7 @@ const options = {
   draggable: true,
   draggablePercent: 0.6,
   showCloseButtonOnHover: false,
+  newestOnTop: true,
   hideProgressBar: true,
   maxToasts: 2,
   closeButton: "button",

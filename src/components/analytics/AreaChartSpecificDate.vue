@@ -55,6 +55,7 @@
   </div>
 </template>
 <script>
+import AreaChart from "@/components/AreaChart.vue";
 export default {
   props: {
     dispatchModule: {
@@ -79,6 +80,7 @@ export default {
       required: true,
     },
   },
+  components: { AreaChart },
   data() {
     return {
       isFetching: true,

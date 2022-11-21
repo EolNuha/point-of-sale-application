@@ -255,8 +255,9 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import AreaChart from "@/components/AreaChart.vue";
 export default {
+  components: { AreaChart },
   data() {
     return {
       isFetchingSales: true,

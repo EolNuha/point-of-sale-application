@@ -68,6 +68,8 @@
   </div>
 </template>
 <script>
+import AreaChart from "@/components/AreaChart.vue";
+import RangeDateFilter from "@/components/RangeDateFilterComponent.vue";
 export default {
   props: {
     dispatchModule: {
@@ -91,6 +93,10 @@ export default {
       type: String,
       required: true,
     },
+  },
+  components: {
+    RangeDateFilter,
+    AreaChart,
   },
   data() {
     return {

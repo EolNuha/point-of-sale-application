@@ -234,6 +234,7 @@
 </template>
 
 <script>
+import DateFilter from "@/components/DateFilterComponent.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   data() {
@@ -247,6 +248,9 @@ export default {
       sortDir: "desc",
       allSales: [],
     };
+  },
+  components: {
+    DateFilter,
   },
   mixins: [HtmlToExcel],
   watch: {

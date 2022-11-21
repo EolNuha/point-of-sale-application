@@ -38,6 +38,20 @@ def updateNotifications():
         db.session.commit()
     return "success", 200
 
+@notification.route('/notifications/<int:id>', methods=["DELETE"])
+def deleteNotification(id):
+    Notification.query.filter_by(id=id).delete()
+    db.session.commit()
+    return "success", 200
+
+@notification.route('/notifications', methods=["DELETE"])
+def deleteNotifications():
+    notifications = request.json["notifications"]
+    for item in notifications:
+        Notification.query.filter_by(id=item["id"]).delete()
+        db.session.commit()
+    return "success", 200
+
 @notification.route('/notifications/<int:id>', methods=["POST"])
 def updateNotification(id):
     read = request.json["read"]

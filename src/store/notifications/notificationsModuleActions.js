@@ -31,6 +31,35 @@ export default {
         });
     });
   },
+  deleteNotifications({ commit, dispatch }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/notifications`,
+        method: "DELETE",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  deleteNotification({ commit, dispatch }, id) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/notifications/${id}`,
+        method: "DELETE",
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getNotificationsList({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

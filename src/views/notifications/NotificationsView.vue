@@ -109,6 +109,28 @@
                 </div>
               </button>
             </div>
+            <div class="px-1">
+              <button
+                id="delete-all-tooltip-btn"
+                @click="deleteNotifications"
+                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                @mouseover="
+                  $showTooltip({
+                    targetEl: `delete-all-tooltip`,
+                    triggerEl: `delete-all-tooltip-btn`,
+                  })
+                "
+              >
+                <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+                <div
+                  :id="`delete-all-tooltip`"
+                  role="tooltip"
+                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                >
+                  {{ $t("delete") }}
+                </div>
+              </button>
+            </div>
           </template>
         </div>
         <div
@@ -198,7 +220,7 @@
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr
-                class="border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
+                class="group border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-theme-500': !item.read,
                   'bg-gray-100 dark:bg-neutral-900/50  border-l-gray-100':
@@ -345,10 +367,33 @@
                 </td>
                 <td class="py-2 px-6 w-48">
                   <div
-                    class="text-sm text-right"
+                    class="text-sm text-right flex items-center justify-end"
                     :class="{ 'font-bold': !item.read }"
                   >
-                    {{ dateSince(item.dateCreated) }}
+                    <button
+                      :id="`delete-${item.id}-tooltip-btn`"
+                      @click.stop
+                      @click="deleteNotification(item.id)"
+                      class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 hidden group-hover:block"
+                      @mouseover="
+                        $showTooltip({
+                          targetEl: `delete-${item.id}-tooltip`,
+                          triggerEl: `delete-${item.id}-tooltip-btn`,
+                        })
+                      "
+                    >
+                      <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+                      <div
+                        :id="`delete-${item.id}-tooltip`"
+                        role="tooltip"
+                        class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      >
+                        {{ $t("delete") }}
+                      </div>
+                    </button>
+                    <span class="group-hover:hidden">{{
+                      dateSince(item.dateCreated)
+                    }}</span>
                   </div>
                 </td>
               </tr>
@@ -431,8 +476,8 @@ export default {
         this.notifications.find((x) => x.id === item.id).star = item.star;
       });
     },
-    getNotifications(page) {
-      this.$store
+    async getNotifications(page) {
+      await this.$store
         .dispatch("notificationsModule/getNotificationsList", {
           per_page: 20,
           page: page,
@@ -491,6 +536,42 @@ export default {
         .then(() => {
           this.getNotifications(this.currentPage);
           this.$store.dispatch("notificationsModule/getNotifications");
+        });
+    },
+    deleteNotifications() {
+      this.$store
+        .dispatch("notificationsModule/deleteNotifications", {
+          notifications: this.selectedItems,
+        })
+        .then(async () => {
+          await this.getNotifications(this.currentPage);
+          await this.$store.dispatch("notificationsModule/getNotifications");
+          this.selectedItems = [];
+          this.$toast.success(
+            this.$t("deleteSuccess", { title: this.$t("notifications") })
+          );
+        })
+        .catch(async () => {
+          await this.getNotifications(this.currentPage);
+          this.$toast.warning(this.$t("somethingWrong"));
+        });
+    },
+    deleteNotification(id) {
+      const notificationIdx =
+        this.notifications.findIndex((x) => x.id === id) || null;
+      this.notifications.splice(notificationIdx, 1);
+      this.$store
+        .dispatch("notificationsModule/deleteNotification", id)
+        .then(async () => {
+          await this.getNotifications(this.currentPage);
+          await this.$store.dispatch("notificationsModule/getNotifications");
+          this.$toast.success(
+            this.$t("deleteSuccess", { title: this.$t("notification") })
+          );
+        })
+        .catch(async () => {
+          await this.getNotifications(this.currentPage);
+          this.$toast.warning(this.$t("somethingWrong"));
         });
     },
     toggleSelectNotification(notification) {

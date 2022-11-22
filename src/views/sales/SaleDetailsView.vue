@@ -50,7 +50,7 @@
             {{ $t("sale") }} #{{ $route.params.saleId }}
           </h2>
           <p class="text-gray-700 dark:text-gray-300 mr-3">
-            {{ $t("date") }}: {{ sale.dateCreated.substring(0, 10) }}
+            {{ $t("date") }}: {{ sale.dateCreated?.substring(0, 10) }}
           </p>
         </div>
         <div

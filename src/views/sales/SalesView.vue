@@ -73,7 +73,7 @@
           >
             <OverlayC v-if="isTableLoading" />
             <EmptyResultsC
-              v-if="sales.length === 0 && !isTableLoading"
+              v-if="sales?.length === 0 && !isTableLoading"
               pluralText="Sales"
               singularText="Sale"
               :search="searchQuery"
@@ -311,7 +311,11 @@ export default {
           sort_dir: this.sortDir,
         })
         .then((response) => {
-          this.$store.commit("saleModule/SET_SALES", response.data);
+          this.$store.commit("saleModule/SET_SALES", response.data.data);
+          this.$store.commit(
+            "saleModule/SET_PAGINATION",
+            response.data.pagination
+          );
           this.isTableLoading = false;
           this.currentPage = page;
         })

@@ -5,4 +5,7 @@ export default {
   SET_NOTIFICATIONS_LIST(state, payload) {
     state.notificationsList = payload;
   },
+  SET_PAGINATION(state, payload) {
+    state.pagination = payload;
+  },
 };

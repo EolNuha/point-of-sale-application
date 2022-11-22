@@ -73,7 +73,7 @@
           >
             <OverlayC v-if="isTableLoading" />
             <EmptyResultsC
-              v-if="purchases.length === 0 && !isTableLoading"
+              v-if="purchases?.length === 0 && !isTableLoading"
               pluralText="Purchases"
               singularText="Purchase"
               routeName="new-purchase"
@@ -363,7 +363,14 @@ export default {
           sort_dir: this.sortDir,
         })
         .then((response) => {
-          this.$store.commit("purchaseModule/SET_PURCHASES", response.data);
+          this.$store.commit(
+            "purchaseModule/SET_PURCHASES",
+            response.data.data
+          );
+          this.$store.commit(
+            "purchaseModule/SET_PAGINATION",
+            response.data.pagination
+          );
           this.isTableLoading = false;
           this.currentPage = page;
         })

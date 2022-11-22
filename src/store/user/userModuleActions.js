@@ -11,7 +11,8 @@ export default {
         })
         .then(async (response) => {
           resolve(response);
-          commit("SET_USERS", response.data);
+          commit("SET_USERS", response.data.data);
+          commit("SET_PAGINATION", response.data.pagination);
         })
         .catch((error) => {
           reject(error);

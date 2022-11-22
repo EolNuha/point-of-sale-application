@@ -50,7 +50,7 @@
           >
             <OverlayC v-if="isTableLoading" />
             <EmptyResultsC
-              v-if="products.length === 0 && !isTableLoading"
+              v-if="products?.length === 0 && !isTableLoading"
               pluralText="Products"
               singularText="Product"
               :search="searchQuery"
@@ -370,7 +370,7 @@ export default {
   },
   data() {
     return {
-      isTableLoading: false,
+      isTableLoading: true,
       selectedProduct: {},
       selectedProductToDelete: {},
       currentPage: 1,
@@ -395,16 +395,16 @@ export default {
       return this.$store.getters["productModule/getProductsPagination"];
     },
   },
-  created() {
+  async created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct).length === 0;
+        const isEmpty = Object.keys(this.selectedProduct)?.length === 0;
         if (!isEmpty) {
           this.deleteProduct(this.selectedProduct);
         }
       }
     });
-    this.getProducts(this.currentPage);
+    await this.getProducts(this.currentPage);
   },
   methods: {
     updateSelectedProduct(product) {
@@ -419,9 +419,9 @@ export default {
       this.$openModal("delete-modal");
       this.$putOnFocus("delete-product-modal-btn");
     },
-    getProducts(page) {
+    async getProducts(page) {
       this.isTableLoading = true;
-      this.$store
+      await this.$store
         .dispatch("productModule/getProducts", {
           page: page,
           search: this.searchQuery,

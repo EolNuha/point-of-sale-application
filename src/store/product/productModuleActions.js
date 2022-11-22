@@ -8,7 +8,8 @@ export default {
       axios
         .get(`/api/products`, { params: data })
         .then(async (response) => {
-          commit("SET_PRODUCTS", response.data);
+          commit("SET_PRODUCTS", response.data.data);
+          commit("SET_PAGINATION", response.data.pagination);
           resolve(response);
         })
         .catch((error) => {

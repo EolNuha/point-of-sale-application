@@ -1,4 +1,4 @@
 export default {
-  getProductsList: (state) => state.products.data,
-  getProductsPagination: (state) => state.products.pagination,
+  getProductsList: (state) => state.products,
+  getProductsPagination: (state) => state.pagination,
 };

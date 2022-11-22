@@ -42,7 +42,7 @@
               </div>
             </button>
           </div>
-          <template v-if="selectedItems.length !== 0">
+          <template v-if="selectedItems?.length !== 0">
             <div class="px-1">
               <button
                 id="star-all-tooltip-btn"
@@ -210,7 +210,7 @@
           <OverlayC v-if="isTableLoading" :minHeight="`min-h-65`" />
           <div
             class="w-full z-50 overflow-hidden flex flex-col items-center justify-center min-h-65"
-            v-if="notifications.length === 0 && !isTableLoading"
+            v-if="notifications?.length === 0 && !isTableLoading"
           >
             <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" />
             <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
@@ -424,9 +424,9 @@ export default {
   },
   computed: {
     pagination() {
-      return (
-        this.$store.state.notificationsModule.notificationsList.pagination || []
-      );
+      return this.$store.getters[
+        "notificationsModule/getNotificationsPagination"
+      ];
     },
     dateSince() {
       return (date) => moment(date).calendar();
@@ -454,7 +454,7 @@ export default {
         ) ===
           JSON.stringify(
             selectedItemsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))
-          ) && this.notifications.length !== 0
+          ) && this.notifications?.length !== 0
       );
     },
   },
@@ -485,7 +485,7 @@ export default {
         })
         .then(() => {
           this.notifications =
-            this.$store.state.notificationsModule.notificationsList.data;
+            this.$store.getters["notificationsModule/getNotificationsList"];
           this.currentPage = page;
           this.isTableLoading = false;
         })

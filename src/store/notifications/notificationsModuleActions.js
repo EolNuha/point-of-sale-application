@@ -65,7 +65,8 @@ export default {
       axios
         .get(`/api/notifications`, { params: data })
         .then(async (response) => {
-          commit("SET_NOTIFICATIONS_LIST", response.data);
+          commit("SET_NOTIFICATIONS_LIST", response.data.data);
+          commit("SET_PAGINATION", response.data.pagination);
           resolve(response);
         })
         .catch((error) => {

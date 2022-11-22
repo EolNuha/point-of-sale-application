@@ -324,7 +324,6 @@ export default {
       this.$putOnFocus("remove-modal-btn");
     },
     removeProducts(products) {
-      console.log("eoll", products);
       products.forEach((item) => {
         this.products.splice(
           this.products.findIndex((x) => x.id === item.id),

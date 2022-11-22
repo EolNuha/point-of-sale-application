@@ -48,7 +48,7 @@
           >
             <OverlayC v-if="isTableLoading" />
             <EmptyResultsC
-              v-if="users.length === 0 && !isTableLoading"
+              v-if="users?.length === 0 && !isTableLoading"
               pluralText="Users"
               singularText="User"
               :search="searchQuery"

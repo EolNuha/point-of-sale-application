@@ -1,11 +1,11 @@
 export default {
-  SET_SALES(state, payload) {
-    state.sales = payload;
+  SET_SALES(state, data) {
+    state.sales = data;
   },
-  SET_PAGINATION(state, payload) {
-    state.pagination = payload;
+  SET_PAGINATION(state, data) {
+    state.pagination = data;
   },
-  SET_SALE(state, payload) {
-    state.sale = payload;
+  SET_SALE(state, data) {
+    state.sale = data;
   },
 };

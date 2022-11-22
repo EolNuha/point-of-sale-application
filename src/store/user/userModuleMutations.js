@@ -1,14 +1,14 @@
 export default {
-  SET_USERS(state, payload) {
-    state.users = payload;
+  SET_USERS(state, data) {
+    state.users = data;
   },
-  SET_PAGINATION(state, payload) {
-    state.pagination = payload;
+  SET_PAGINATION(state, data) {
+    state.pagination = data;
   },
-  SET_CURRENT_USER(state, payload) {
-    state.currentUser = payload;
+  SET_CURRENT_USER(state, data) {
+    state.currentUser = data;
   },
-  SET_USER(state, payload) {
-    state.user = payload;
+  SET_USER(state, data) {
+    state.user = data;
   },
 };

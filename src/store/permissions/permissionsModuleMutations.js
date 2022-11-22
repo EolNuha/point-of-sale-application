@@ -1,8 +1,8 @@
 export default {
-  SET_PERMISSIONS(state, payload) {
-    state.permissions = payload;
+  SET_PERMISSIONS(state, data) {
+    state.permissions = data;
   },
-  SET_PERMISSIONS_ALL(state, payload) {
-    state.allPermissions = payload;
+  SET_PERMISSIONS_ALL(state, data) {
+    state.allPermissions = data;
   },
 };

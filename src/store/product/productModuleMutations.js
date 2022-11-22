@@ -1,11 +1,11 @@
 export default {
-  SET_PRODUCTS(state, payload) {
-    state.products = payload;
+  SET_PRODUCTS(state, data) {
+    state.products = data;
   },
-  SET_PAGINATION(state, payload) {
-    state.pagination = payload;
+  SET_PAGINATION(state, data) {
+    state.pagination = data;
   },
-  SET_PRODUCT(state, payload) {
-    state.product = payload;
+  SET_PRODUCT(state, data) {
+    state.product = data;
   },
 };

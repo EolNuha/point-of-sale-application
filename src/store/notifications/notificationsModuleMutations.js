@@ -1,11 +1,11 @@
 export default {
-  SET_NOTIFICATIONS(state, payload) {
-    state.notifications = payload;
+  SET_NOTIFICATIONS(state, data) {
+    state.notifications = data;
   },
-  SET_NOTIFICATIONS_LIST(state, payload) {
-    state.notificationsList = payload;
+  SET_NOTIFICATIONS_LIST(state, data) {
+    state.notificationsList = data;
   },
-  SET_PAGINATION(state, payload) {
-    state.pagination = payload;
+  SET_PAGINATION(state, data) {
+    state.pagination = data;
   },
 };

@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify, request
 from website.models import Purchase, PurchaseItem, Product, Settings, PurchaseTax
 from website.helpers import getPaginatedDict, sumListOfDicts
-from website.json import getPurchasesList, getPurchaseItemsList, getSellersList, getTaxesList, getDailyPurchasesList
+from website.jsonify.settings import getTaxesList
+from website.jsonify.purchase import getPurchasesList, getPurchaseItemsList, getDailyPurchasesList, getPurchaseDict, getSellersList, getSellerDict
 from website import db
 from sqlalchemy import or_, asc, desc, func
 from decimal import *
@@ -284,7 +285,7 @@ def getSellers():
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
-    purchases = getDailyPurchasesList(Purchase.query.filter_by(id=purchaseId).all())[0]
+    purchases = getPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404())
     purchase_items = getPurchaseItemsList(PurchaseItem.query.filter_by(purchase_id=purchaseId).all())
     purchase_taxes = getTaxesList(PurchaseTax.query.filter_by(purchase_id=purchaseId).all())
     purchases["purchaseItems"] = purchase_items
@@ -294,4 +295,4 @@ def getPurchaseDetails(purchaseId):
 @purchase.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
-    return jsonify(getSellerDetails([purchase, purchase])[0])
+    return jsonify(getSellerDict(purchase))

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, request
 from website.models import Settings
-from website.json import getSettingsList
+from website.jsonify.settings import getSettingsList
 from datetime import datetime
 from website import db
 

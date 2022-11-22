@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, request, Response
 from website.models import Product
 from website.helpers import getPaginatedDict
-from website.json import getProductsList
+from website.jsonify.product import getProductsList, getProductsDict
 from datetime import datetime, date, time, timedelta
 from website import db
 from sqlalchemy import or_, asc, desc
@@ -78,13 +78,11 @@ def getProducts():
 
 @product.route('/products/<int:productId>', methods=["GET"])
 def getProductDetails(productId):
-    products = Product.query.filter_by(id=productId).all()
-    return jsonify(getProductsList(products)[0])
+    return jsonify(getProductsDict(Product.query.filter_by(id=productId).first_or_404()))
 
 @product.route('/products/barcode/<int:barcode>', methods=["GET"])
 def getProductDetailsByBarcode(barcode):
-    product = Product.query.filter_by(barcode=barcode).first_or_404()
-    return jsonify(getProductsList([product, product])[0])
+    return jsonify(getProductsDict(Product.query.filter_by(barcode=barcode).first_or_404()))
 
 @product.route('/products/<int:productId>', methods=["POST"])
 def updateProductDetails(productId):

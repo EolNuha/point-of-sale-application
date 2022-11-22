@@ -1,14 +1,14 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from website.models import User
 import uuid
-from  werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from datetime import datetime, timedelta
 from website import db
 from website.helpers import getPaginatedDict
-from website.json import getUsersList, getUserDict
+from website.jsonify.user import getUsersList, getUserDict
 from website.token import token_required
-from sqlalchemy import or_, asc, desc, func
+from sqlalchemy import or_, asc, desc
 
 auth = Blueprint('auth', __name__)
 
@@ -160,10 +160,9 @@ def verify_token():
 def currentUser():
     token = request.headers['x-access-token']
     data = jwt.decode(token, current_app.config['SECRET_KEY'])
-    current_user = getUsersList(User.query\
+    return jsonify(getUserDict(User.query\
         .filter_by(public_id = data['public_id'])\
-        .all())[0]
-    return jsonify(current_user)
+        .first_or_404()))
 
 @auth.route('/users/demo', methods=["GET"])
 def createDemoUsers():

@@ -2,7 +2,8 @@ from datetime import datetime, date, time
 from flask import Blueprint, request, jsonify, request
 from website.models import Sale, SaleItem, SaleTax, Product, User, Settings
 from website.helpers import getPaginatedDict, sumListOfDicts
-from website.json import getSalesList, getSaleItemsList, getDailySalesList, getTaxesList
+from website.jsonify.settings import getTaxesList
+from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesList, getSaleDict
 from website import db
 from sqlalchemy import or_, asc, desc, func
 import sqlalchemy as sa
@@ -199,7 +200,7 @@ def getDailySales():
 
 @sale.route('/sales/<int:saleId>', methods=["GET"])
 def getSaleDetails(saleId):
-    sales = getSalesList(Sale.query.filter_by(id=saleId).all())[0]
+    sales = getSaleDict(Sale.query.filter_by(id=saleId).first_or_404())
     sale_items = getSaleItemsList(SaleItem.query.filter_by(sale_id=saleId).all())
     sale_taxes = getTaxesList(SaleTax.query.filter_by(sale_id=saleId).all())
     sales["saleItems"] = sale_items

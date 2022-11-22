@@ -190,7 +190,7 @@
                   <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                   <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
                   <td class="py-2 px-6">
-                    {{ sale.user.firstName }} {{ sale.user.lastName }}
+                    {{ sale.user?.firstName }} {{ sale.user?.lastName }}
                   </td>
                   <td class="py-2 px-6">
                     <button

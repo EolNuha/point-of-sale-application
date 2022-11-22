@@ -41,7 +41,7 @@
             class="theme-gradient-btn inline-flex items-center text-center"
           >
             <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-            New Sale
+            {{ $t("newSale") }}
           </button>
           <button
             @click="downloadExcel()"
@@ -60,7 +60,7 @@
         </div>
       </div>
       <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold my-3">
-        {{ $t("date") }}: {{ saleDate.substring(0, 10) }}
+        {{ $t("date") }}: {{ saleDate?.substring(0, 10) }}
       </h2>
       <div class="overflow-hidden rounded-xl mb-5 min-h-65 relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
@@ -311,12 +311,7 @@ export default {
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
-        .then((response) => {
-          this.$store.commit("saleModule/SET_SALES", response.data.data);
-          this.$store.commit(
-            "saleModule/SET_PAGINATION",
-            response.data.pagination
-          );
+        .then(() => {
           this.isTableLoading = false;
           this.currentPage = page;
         })
@@ -327,9 +322,9 @@ export default {
     },
     async getAllSales() {
       await this.$store
-        .dispatch("saleModule/getDailySales", {
+        .dispatch("saleModule/getAllDailySales", {
           page: 1,
-          per_page: this.pagination.total,
+          per_page: 1000,
           date: this.saleDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,

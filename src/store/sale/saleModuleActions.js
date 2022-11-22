@@ -23,6 +23,20 @@ export default {
       axios
         .get(`/api/sales`, { params: data })
         .then(async (response) => {
+          commit("SET_SALES", response.data.data);
+          commit("SET_PAGINATION", response.data.pagination);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getAllSales({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/sales`, { params: data })
+        .then(async (response) => {
           resolve(response);
         })
         .catch((error) => {
@@ -31,6 +45,20 @@ export default {
     });
   },
   getDailySales({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/sales/daily`, { params: data })
+        .then(async (response) => {
+          commit("SET_SALES", response.data.data);
+          commit("SET_PAGINATION", response.data.pagination);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getAllDailySales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/sales/daily`, { params: data })

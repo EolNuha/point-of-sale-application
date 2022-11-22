@@ -50,7 +50,7 @@
             {{ $t("purchase") }} #{{ $route.params.purchaseId }}
           </h2>
           <p class="text-gray-700 dark:text-gray-300 mr-2">
-            {{ $t("date") }}: {{ purchase.dateCreated.substring(0, 10) }}
+            {{ $t("date") }}: {{ purchase.dateCreated?.substring(0, 10) }}
           </p>
         </div>
         <div class="flex flex-row pt-5">

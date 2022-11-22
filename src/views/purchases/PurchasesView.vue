@@ -106,66 +106,11 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('id')"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+                  v-for="item in taxes"
+                  :key="item.settingsValue"
                 >
-                  <div class="flex justify-between items-center">
-                    ID
-                    <template v-if="sortColumn === 'id'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('seller_name')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("sellerName") }}
-                    <template v-if="sortColumn === 'seller_name'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('seller_invoice_number')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("invoiceNumber") }}
-                    <template v-if="sortColumn === 'seller_invoice_number'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
+                  {{ $t("tax") }} {{ item.settingsName }}%
                 </th>
                 <th
                   scope="col"
@@ -218,12 +163,14 @@
                   class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
                 >
                   <td class="py-2 px-6">
-                    {{ purchase.dateCreated.substring(0, 10) }}
+                    {{ purchase.dateCreated?.substring(0, 10) }}
                   </td>
-                  <td class="py-2 px-6">{{ purchase.id }}</td>
-                  <td class="py-2 px-6">{{ purchase.sellerName }}</td>
-                  <td class="py-2 px-6 max-w-xs">
-                    {{ purchase.sellerInvoiceNumber }}
+                  <td
+                    class="py-2 px-6"
+                    v-for="item in taxes"
+                    :key="item.settingsValue"
+                  >
+                    {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
                   </td>
                   <td class="py-2 px-6">{{ purchase.subTotalAmount }} €</td>
                   <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
@@ -231,8 +178,13 @@
                     <button
                       @click="
                         $router.push({
-                          name: 'purchase-view',
-                          params: { purchaseId: purchase.id },
+                          name: 'daily-purchases',
+                          query: {
+                            purchaseDate: purchase.dateCreated?.substring(
+                              0,
+                              10
+                            ),
+                          },
                         })
                       "
                       class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
@@ -253,34 +205,22 @@
     <table id="table-data" class="hidden">
       <thead>
         <tr>
-          <th scope="col">
-            {{ $t("date") }}
+          <th scope="col">{{ $t("date") }}</th>
+          <th scope="col" v-for="item in taxes" :key="item.settingsValue">
+            {{ $t("tax") }} {{ item.settingsName }}%
           </th>
-          <th scope="col">ID</th>
-          <th scope="col">
-            {{ $t("sellerName") }}
-          </th>
-          <th scope="col">
-            {{ $t("invoiceNumber") }}
-          </th>
-          <th scope="col">
-            {{ $t("subtotalAmount") }}
-          </th>
-          <th scope="col">
-            {{ $t("totalAmount") }}
-          </th>
+          <th scope="col">{{ $t("subtotalAmount") }}</th>
+          <th scope="col">{{ $t("totalAmount") }}</th>
         </tr>
       </thead>
       <tbody>
         <template v-for="purchase in allPurchases" :key="purchase.id">
           <tr>
             <td>
-              {{ purchase.dateCreated.substring(0, 10) }}
+              {{ purchase.dateCreated?.substring(0, 10) }}
             </td>
-            <td>{{ purchase.id }}</td>
-            <td>{{ purchase.sellerName }}</td>
-            <td>
-              {{ purchase.sellerInvoiceNumber }}
+            <td v-for="item in taxes" :key="item.settingsValue">
+              {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
             </td>
             <td>{{ purchase.subTotalAmount }} €</td>
             <td>{{ purchase.totalAmount }} €</td>
@@ -324,13 +264,20 @@ export default {
         this.getPurchases(1);
       },
     },
+    "$store.state.purchaseModule.purchases": {
+      handler() {
+        this.getAllPurchases();
+      },
+    },
   },
   async created() {
+    this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.startDate = currentMonth.startDate;
     this.endDate = currentMonth.endDate;
     await this.getPurchases(this.currentPage);
-    this.getAllPurchases();
   },
   computed: {
     purchases() {
@@ -339,8 +286,16 @@ export default {
     pagination() {
       return this.$store.getters["purchaseModule/getPurchasesPagination"];
     },
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
   },
   methods: {
+    getTaxValue(arr, alias) {
+      return (
+        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
+      );
+    },
     getMonth(v) {
       const month = String(v).padStart(2, "0");
       const year = new Date().getFullYear();
@@ -362,15 +317,7 @@ export default {
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
-        .then((response) => {
-          this.$store.commit(
-            "purchaseModule/SET_PURCHASES",
-            response.data.data
-          );
-          this.$store.commit(
-            "purchaseModule/SET_PAGINATION",
-            response.data.pagination
-          );
+        .then(() => {
           this.isTableLoading = false;
           this.currentPage = page;
         })
@@ -381,9 +328,9 @@ export default {
     },
     async getAllPurchases() {
       await this.$store
-        .dispatch("purchaseModule/getPurchases", {
+        .dispatch("purchaseModule/getAllPurchases", {
           page: 1,
-          per_page: this.pagination.total,
+          per_page: 1000,
           startDate: this.startDate,
           endDate: this.endDate,
           search: this.searchQuery,
@@ -410,7 +357,6 @@ export default {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getPurchases(this.currentPage);
-      this.getAllPurchases();
     },
   },
 };

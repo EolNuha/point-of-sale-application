@@ -1,12 +1,13 @@
 from flask import Blueprint, request, jsonify, request
 from website.models import Purchase, PurchaseItem, Product, Settings, PurchaseTax
 from website.helpers import getPaginatedDict, sumListOfDicts
-from website.json import getPurchasesList, getPurchaseItemsList, getSellersList
+from website.json import getPurchasesList, getPurchaseItemsList, getSellersList, getTaxesList, getDailyPurchasesList
 from website import db
-from sqlalchemy import or_, asc, desc
+from sqlalchemy import or_, asc, desc, func
 from decimal import *
 from datetime import datetime, date, time
 from website.token import currentUser
+import sqlalchemy as sa
 
 purchase = Blueprint('purchase', __name__)
 
@@ -17,6 +18,8 @@ def createPurchase():
     total_amount = request.json["totalAmount"]
     current_user = currentUser(request)
 
+    current_time = datetime.now()
+
     purchase = Purchase(
         total_amount=total_amount,
         seller_name=seller["sellerName"].lower(),
@@ -24,8 +27,8 @@ def createPurchase():
         seller_fiscal_number=seller["fiscalNumber"],
         seller_tax_number=seller["taxNumber"],
         user=current_user,
-        date_created=datetime.now(),
-        date_modified=datetime.now(),
+        date_created=current_time,
+        date_modified=current_time,
     )
 
     db.session.add(purchase)
@@ -64,8 +67,8 @@ def createPurchase():
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
                 total_amount=Decimal(Decimal(product["purchasedPrice"]) * Decimal(product["stock"])),
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
+                date_created=current_time,
+                date_modified=current_time,
             )
 
             product_query.name = product["productName"].lower()
@@ -84,8 +87,8 @@ def createPurchase():
                 purchased_price=product["purchasedPrice"], 
                 selling_price= product["sellingPrice"],
                 expiration_date=expiration_date,
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
+                date_created=current_time,
+                date_modified=current_time,
             )
 
             db.session.add(created_product)
@@ -102,8 +105,8 @@ def createPurchase():
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
                 total_amount=Decimal(Decimal(created_product.purchased_price) * Decimal(created_product.stock)),
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
+                date_created=current_time,
+                date_modified=current_time,
             )
         db.session.add(purchase_item)
     db.session.commit()
@@ -127,7 +130,9 @@ def createPurchase():
                 purchase=purchase, 
                 tax_name=str(split_key[0]), 
                 tax_alias=str(split_key[1]), 
-                tax_value=value
+                tax_value=value,
+                date_created=current_time,
+                date_modified=current_time,
             )
         )
     db.session.commit()
@@ -168,9 +173,76 @@ def getPurchases():
         .order_by(sort)\
         .filter(Purchase.date_created <= date_end)\
         .filter(Purchase.date_created > date_start)\
+        .with_entities(
+            Purchase.id.label("id"), 
+            Purchase.date_created.label("date_created"), 
+            Purchase.date_modified.label("date_modified"),
+            sa.func.sum(Purchase.subtotal_amount).label("subtotal_amount"),
+            sa.func.sum(Purchase.total_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Purchase.date_created))\
         .paginate(page=page, per_page=per_page)
 
-    return jsonify(getPaginatedDict(getPurchasesList(paginated_items.items), paginated_items))
+    join_purchase_items = getPurchasesList(paginated_items.items)
+
+    for item in join_purchase_items:
+        date_split = item["dateCreated"].split(".")
+        item_date = date(year=int(date_split[2][:4]), month=int(date_split[1]), day=int(date_split[0]))
+
+        taxes = PurchaseTax.query.filter(PurchaseTax.date_created <= datetime.combine(item_date, time.max))\
+            .filter(PurchaseTax.date_created > datetime.combine(item_date, time.min))\
+            .order_by(PurchaseTax.tax_name.desc())\
+            .with_entities(
+            PurchaseTax.id.label("id"), 
+            PurchaseTax.tax_name.label("tax_name"), 
+            PurchaseTax.tax_alias.label("tax_alias"),
+            sa.func.sum(PurchaseTax.tax_value).label("tax_value"),
+        )\
+        .group_by(PurchaseTax.tax_name).all()
+        
+        item["taxes"] = getTaxesList(taxes)
+
+    return jsonify(getPaginatedDict(join_purchase_items, paginated_items))
+
+@purchase.route('/purchases/daily', methods=["GET"])
+def getDailyPurchases():
+    purchase_date = request.args.get('date', type=str)
+    purchase_date = purchase_date.split(".")
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    if sort_column == "tax":
+        sort_column = func.lower(PurchaseTax.tax_value)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+
+    purchase_date_start = datetime.combine(date(year=int(purchase_date[2]), month=int(purchase_date[1]), day=int(purchase_date[0])), time.min)
+    purchase_date_end = datetime.combine(date(year=int(purchase_date[2]), month=int(purchase_date[1]), day=int(purchase_date[0])), time.max)
+    
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    search = request.args.get('search', '*', type=str)
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = Purchase.query.filter(or_(
+        Purchase.id.ilike(looking_for),
+        Purchase.seller_name.ilike(looking_for),
+        Purchase.seller_invoice_number.ilike(looking_for),
+        Purchase.total_amount.ilike(looking_for),
+        Purchase.subtotal_amount.ilike(looking_for),
+        ))\
+        .order_by(sort)\
+        .filter(Purchase.date_created <= purchase_date_end)\
+        .filter(Purchase.date_created >= purchase_date_start)\
+        .paginate(page=page, per_page=per_page)
+
+    return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))
 
 @purchase.route('/sellers', methods=["GET"])
 def getSellers():
@@ -212,8 +284,12 @@ def getSellers():
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
-    purchases = Purchase.query.filter_by(id=purchaseId).all()
-    return jsonify(getPurchasesList(purchases)[0])
+    purchases = getDailyPurchasesList(Purchase.query.filter_by(id=purchaseId).all())[0]
+    purchase_items = getPurchaseItemsList(PurchaseItem.query.filter_by(purchase_id=purchaseId).all())
+    purchase_taxes = getTaxesList(PurchaseTax.query.filter_by(purchase_id=purchaseId).all())
+    purchases["purchaseItems"] = purchase_items
+    purchases["taxes"] = purchase_taxes
+    return jsonify(purchases)
 
 @purchase.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):

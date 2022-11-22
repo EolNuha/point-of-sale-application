@@ -118,22 +118,31 @@ def getPurchasesList(purchases):
     for i in purchases:
         purchase_dict = {
             "id": i.id,
-            "sellerName": i.seller_name,
-            "sellerInvoiceNumber": i.seller_invoice_number,
-            "sellerFiscalNumber": i.seller_fiscal_number,
-            "sellerTaxNumber": i.seller_tax_number,
             "totalAmount": i.total_amount,
             "subTotalAmount": i.subtotal_amount,
-            "eightTaxAmount": i.eight_tax_amount,
-            "eighteenTaxAmount": i.eighteen_tax_amount,
-            "taxes": getTaxesList(i.purchase_taxes),
-            "purchaseItems": getPurchaseItemsList(i.purchase_items),
-            "user": getUserDict(i.user),
             "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
             "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
         }
         purchases_list.append(purchase_dict)
     return purchases_list
+
+def getDailyPurchasesList(items):
+    items_list = []
+    for i in items:
+        item_dict = {
+            "id": i.id,
+            "totalAmount": i.total_amount,
+            "subTotalAmount": i.subtotal_amount,
+            "sellerName": i.seller_name,
+            "sellerInvoiceNumber": i.seller_invoice_number,
+            "sellerFiscalNumber": i.seller_fiscal_number,
+            "sellerTaxNumber": i.seller_tax_number,
+            "taxes": getTaxesList(i.purchase_taxes),
+            "dateCreated": i.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
+            "dateModified": i.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
+        }
+        items_list.append(item_dict)
+    return items_list
 
 def getSellersList(sellers):
     sellers_list = []

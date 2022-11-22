@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 const PurchasesView = () => import("../views/purchases/PurchasesView.vue");
+const DailyPurchasesView = () =>
+  import("../views/purchases/DailyPurchasesView.vue");
 const NewPurchaseView = () => import("../views/purchases/NewPurchaseView.vue");
 const PurchaseDetailsView = () =>
   import("../views/purchases/PurchaseDetailsView.vue");
@@ -15,6 +17,26 @@ export default [
         {
           text: (route) => "purchases",
           to: "purchases",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/purchases/daily",
+    name: "daily-purchases",
+    component: DailyPurchasesView,
+    meta: {
+      title: "purchases",
+      breadcrumb: [
+        {
+          text: (route) => "purchases",
+          to: "purchases",
+          active: false,
+        },
+        {
+          text: (route) => "dailyPurchases",
+          to: "daily-purchases",
           active: true,
         },
       ],
@@ -41,7 +63,7 @@ export default [
     },
   },
   {
-    path: "/purchases/:purchaseId",
+    path: "/purchases/daily/:purchaseId",
     name: "purchase-view",
     component: PurchaseDetailsView,
     meta: {
@@ -51,6 +73,12 @@ export default [
           text: (route) => "purchases",
           to: "purchases",
           active: false,
+        },
+        {
+          text: (route) => "dailyPurchases",
+          to: "daily-purchases",
+          active: false,
+          query: true,
         },
         {
           text: (route) => "purchaseDetails",

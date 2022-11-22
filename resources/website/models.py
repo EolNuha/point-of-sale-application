@@ -82,8 +82,6 @@ class Purchase(db.Model):
     seller_tax_number = db.Column(db.Integer)
     total_amount = db.Column(db.Numeric(precision=10, scale=2))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=2))
-    eight_tax_amount = db.Column(db.Numeric(precision=10, scale=2))
-    eighteen_tax_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
     purchase_taxes = db.relationship('PurchaseTax', backref='purchase', lazy=True)
@@ -95,6 +93,8 @@ class PurchaseTax(db.Model):
     tax_name = db.Column(db.String(200))
     tax_alias = db.Column(db.String(200))
     tax_value = db.Column(db.Numeric(precision=10, scale=2))
+    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_modified = db.Column(db.DateTime, default=datetime.now())
 
 class PurchaseItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)

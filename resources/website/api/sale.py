@@ -6,7 +6,7 @@ from website.models.sale import Sale, SaleItem, SaleTax
 from website.models.user import User
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
-from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesList, getSaleDict
+from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesList, getDailySaleDict
 from website import db
 from sqlalchemy import or_, asc, desc, func
 import sqlalchemy as sa
@@ -203,9 +203,47 @@ def getDailySales():
 
 @sale.route('/sales/<int:saleId>', methods=["GET"])
 def getSaleDetails(saleId):
-    sales = getSaleDict(Sale.query.filter_by(id=saleId).first_or_404())
-    sale_items = getSaleItemsList(SaleItem.query.filter_by(sale_id=saleId).all())
-    sale_taxes = getTaxesList(SaleTax.query.filter_by(sale_id=saleId).all())
-    sales["saleItems"] = sale_items
-    sales["taxes"] = sale_taxes
-    return jsonify(sales)
+    return jsonify(getDailySaleDict(Sale.query.filter_by(id=saleId).first_or_404()))
+
+@sale.route('/sales/<int:saleId>', methods=["PUT"])
+def editSale(saleId):
+    deleted_items = request.json["deletedItems"]
+    saleItems = request.json["saleItems"]
+
+    sale_query = Sale.query.filter_by(id=saleId).first_or_404()
+    subtotal, sale_taxes = [], []
+    taxes = Settings.query.filter_by(settings_type="tax").all()
+
+    for item in deleted_items:
+        product = Product.query.filter_by(id=item["product"]["id"]).first()
+        product.stock += Decimal(item["quantity"])
+        SaleItem.query.filter_by(id=item["id"]).delete()
+        db.session.commit()
+
+    for item in saleItems:
+        subtotal.append(Decimal(item['priceWithoutTax']) * Decimal(item['quantity']))
+        for tax in taxes:
+            if item['product']['tax'] == int(tax.settings_value):
+                key_v = tax.settings_name + "+" + tax.settings_alias
+                sale_taxes.append({key_v: Decimal(item['taxAmount']) * Decimal(item['quantity'])})
+        sale_item = SaleItem.query.filter_by(id=item["id"]).first()
+        product = Product.query.filter_by(id=item["product"]["id"]).first()
+        product.stock -= (Decimal(item["quantity"]) - sale_item.product_quantity)
+        sale_item.product_quantity = item["quantity"]
+        sale_item.total_amount = Decimal(product.selling_price * Decimal(item["quantity"]))
+        db.session.commit()
+    
+    sale_query.subtotal_amount = sum(subtotal)
+    sale_taxes = sumListOfDicts(sale_taxes)
+
+    for key, value in sale_taxes.items():
+        split_key = key.split("+")
+        sale_tax = SaleTax.query.filter(SaleTax.sale_id.like(saleId), SaleTax.tax_name.ilike(split_key[0])).first()
+        sale_tax.tax_value = value
+        sale_tax.date_modified = datetime.now()
+        db.session.commit()
+
+    total_sum = SaleItem.query.filter_by(sale_id=saleId).with_entities(func.sum(SaleItem.total_amount).label('total')).first().total
+    sale_query.total_amount = total_sum
+    db.session.commit()
+    return "Success", 200

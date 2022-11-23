@@ -83,4 +83,19 @@ export default {
         });
     });
   },
+  updateSale({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/sales/${data.id}`,
+        method: "PUT",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

@@ -64,6 +64,7 @@ export default [
     path: "/sales/:saleId",
     name: "sale-view",
     component: SaleDetailsView,
+    props: { edit: false },
     meta: {
       title: "saleDetails",
       breadcrumb: [
@@ -81,6 +82,33 @@ export default [
         {
           text: (route) => `${route.meta.title}`,
           to: "sale-view",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/sales/edit/:saleId",
+    name: "sale-edit",
+    component: SaleDetailsView,
+    props: { edit: true },
+    meta: {
+      title: "editSale",
+      breadcrumb: [
+        {
+          text: (route) => "sales",
+          to: "sales",
+          active: false,
+        },
+        {
+          text: (route) => "dailySales",
+          to: "daily-sales",
+          active: false,
+          query: true,
+        },
+        {
+          text: (route) => `${route.meta.title}`,
+          to: "sale-edit",
           active: true,
         },
       ],

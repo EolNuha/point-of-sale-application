@@ -4,7 +4,7 @@ from website.models.purchase import Purchase, PurchaseItem, PurchaseTax
 from website.models.product import Product
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
-from website.jsonify.purchase import getPurchasesList, getPurchaseItemsList, getDailyPurchasesList, getPurchaseDict, getSellersList, getSellerDict
+from website.jsonify.purchase import getPurchasesList, getPurchaseItemsList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
 from website import db
 from sqlalchemy import or_, asc, desc, func
 from decimal import *
@@ -287,7 +287,7 @@ def getSellers():
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
-    purchases = getPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404())
+    purchases = getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404())
     purchase_items = getPurchaseItemsList(PurchaseItem.query.filter_by(purchase_id=purchaseId).all())
     purchase_taxes = getTaxesList(PurchaseTax.query.filter_by(purchase_id=purchaseId).all())
     purchases["purchaseItems"] = purchase_items

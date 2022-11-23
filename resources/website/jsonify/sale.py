@@ -20,6 +20,7 @@ def getDailySaleDict(item):
         "customerAmount": item.customer_amount,
         "changeAmount": item.change_amount,
         "taxes": getTaxesList(item.sale_taxes),
+        "saleItems": getSaleItemsList(item.sale_items),
         "user": getUserDict(item.user),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),

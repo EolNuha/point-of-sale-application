@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
-    <div class="flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center justify-between flex-wrap gap-2" v-if="!edit">
       <div class="flex items-center gap-2"></div>
       <div class="flex flex-row items-center gap-2">
         <button
@@ -41,7 +41,7 @@
       </div>
     </div>
     <div
-      class="bg-white dark:bg-neutral-900 rounded-3xl relative my-5 px-10 py-8"
+      class="bg-white dark:bg-neutral-900 rounded-xl relative my-5 px-10 py-8"
     >
       <div id="content">
         <OverlayC v-if="isLoading" />
@@ -71,16 +71,28 @@
                 <th scope="col" class="py-3 px-6 text-right">
                   {{ $t("total") }}
                 </th>
+                <th scope="col" class="py-3 px-6" v-if="edit"></th>
               </tr>
             </thead>
             <tbody>
-              <template v-for="item in sale.saleItems" :key="item.id">
+              <template v-for="(item, index) in sale.saleItems" :key="item.id">
                 <tr class="bg-white dark:bg-neutral-900">
                   <td class="py-3 px-6">
                     {{ item.product.name }}
                   </td>
                   <td class="py-3 px-6">{{ item.product.barcode }}</td>
-                  <td class="py-3 px-6">x {{ item.quantity }}</td>
+                  <td class="py-3 px-6">
+                    <div v-if="edit">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        class="default-input max-w-[100px]"
+                        v-model="item.quantity"
+                      />
+                    </div>
+                    <div v-else>x {{ item.quantity }}</div>
+                  </td>
                   <td class="py-3 px-6">{{ item.product.sellingPrice }} €</td>
                   <td class="py-3 px-6">
                     {{ item.taxAmount }} € ({{ item.product.tax }}%)
@@ -88,6 +100,14 @@
                   <td class="py-3 px-6 text-right">
                     {{ (item.product.sellingPrice * item.quantity).toFixed(2) }}
                     €
+                  </td>
+                  <td class="py-3 px-6 max-w-[60px]" v-if="edit">
+                    <button
+                      @click="deleteSaleItem(index)"
+                      class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                    >
+                      <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+                    </button>
                   </td>
                 </tr>
               </template>
@@ -100,20 +120,26 @@
             <table class="text-gray-700 dark:text-gray-300 w-full">
               <tbody>
                 <tr>
+                  <td class="py-2 uppercase">{{ $t("customerAmount") }}</td>
+                  <td class="text-right py-2">{{ sale.customerAmount }} €</td>
+                </tr>
+                <tr>
                   <td class="py-2 uppercase">{{ $t("subTotal") }}</td>
-                  <td class="text-right py-2">{{ sale.subTotalAmount }} €</td>
+                  <td class="text-right py-2">{{ getTotalWithoutTax }} €</td>
                 </tr>
                 <tr v-for="item in taxes" :key="item.settingsValue">
-                  <td class="py-2 uppercase">
-                    {{ $t("tax") }} ({{ item.settingsValue }}%)
-                  </td>
-                  <td class="text-right py-2">
-                    {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
-                  </td>
+                  <template v-if="!edit">
+                    <td class="py-2 uppercase">
+                      {{ $t("tax") }} ({{ item.settingsValue }}%)
+                    </td>
+                    <td class="text-right py-2">
+                      {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+                    </td>
+                  </template>
                 </tr>
                 <tr class="font-bold text-xl">
                   <td class="py-2 uppercase">{{ $t("total") }}</td>
-                  <td class="text-right py-2">{{ sale.totalAmount }} €</td>
+                  <td class="text-right py-2">{{ getProductsTotal }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -121,6 +147,21 @@
         </div>
       </div>
     </div>
+    <button
+      class="theme-gradient-btn w-32 flex justify-center items-center"
+      @click="updateSale"
+      v-if="edit"
+    >
+      <div role="status" v-if="isUpdateLoading">
+        <IconC
+          iconType="custom"
+          iconName="SpinnerIcon"
+          iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-theme-600"
+        />
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div v-else>{{ $t("update") }}</div>
+    </button>
     <div
       id="printModal"
       tabindex="-1"
@@ -158,7 +199,15 @@ export default {
     return {
       isLoading: true,
       isPdfLoading: false,
+      isUpdateLoading: false,
+      deletedItems: [],
     };
+  },
+  props: {
+    edit: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     sale() {
@@ -166,6 +215,26 @@ export default {
     },
     taxes() {
       return this.$store.state.settingsModule.settingsType;
+    },
+    getProductsTotal() {
+      const products = this.sale.saleItems;
+      const sum = products?.reduce((accumulator, object) => {
+        return (
+          Number(accumulator, 2) +
+          Number(object.product.sellingPrice, 2) * Number(object.quantity, 2)
+        );
+      }, 0);
+      return sum?.toFixed(2);
+    },
+    getTotalWithoutTax() {
+      const products = this.sale.saleItems;
+      const sum = products?.reduce((accumulator, object) => {
+        return (
+          Number(accumulator, 2) +
+          Number(object.priceWithoutTax, 2) * Number(object.quantity, 2)
+        );
+      }, 0);
+      return sum?.toFixed(2);
     },
   },
   async created() {
@@ -180,7 +249,9 @@ export default {
   },
   methods: {
     getTaxValue(arr, alias) {
-      return arr.find((x) => x.taxAlias === alias)?.taxValue || 0;
+      return (
+        arr?.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
+      );
     },
     async getPrintPdf() {
       let doc = new jsPDF();
@@ -218,6 +289,31 @@ export default {
         windowWidth: 800,
       });
       this.isPdfLoading = false;
+    },
+    deleteSaleItem(index) {
+      this.deletedItems.push(this.sale.saleItems[index]);
+      this.sale.saleItems.splice(index, 1);
+    },
+    updateSale() {
+      this.isUpdateLoading = true;
+      this.$store
+        .dispatch("saleModule/updateSale", {
+          id: this.$route.params.saleId,
+          deletedItems: this.deletedItems,
+          saleItems: this.sale.saleItems,
+        })
+        .then(() => {
+          this.$toast.success(
+            this.$t("updatedSuccessfully", {
+              value: this.$t("sale"),
+            })
+          );
+          this.isUpdateLoading = false;
+        })
+        .catch(() => {
+          this.$toast.error("somethingWrong");
+          this.isUpdateLoading = false;
+        });
     },
   },
 };

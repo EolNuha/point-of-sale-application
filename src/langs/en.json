@@ -221,5 +221,8 @@
 	"print": "Print",
 	"download": "Download",
 	"downloading": "Downloading",
-	"employee": "Employee"
+	"employee": "Employee",
+	"updatedSuccessfully": "{value} updated successfully!",
+	"viewDocument": "View Document",
+	"editSale": "Edit Sale"
 }

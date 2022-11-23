@@ -192,22 +192,77 @@
                   <td class="py-2 px-6">
                     {{ sale.user?.firstName }} {{ sale.user?.lastName }}
                   </td>
-                  <td class="py-2 px-6">
+                  <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'sales')">
                     <button
+                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      :id="`sale-${sale.id}-btn`"
                       @click="
-                        $router.push({
-                          name: 'sale-view',
-                          params: { saleId: sale.id },
-                          query: { saleDate: saleDate },
+                        $toggleDropdown({
+                          targetEl: `sale-${sale.id}-menu`,
+                          triggerEl: `sale-${sale.id}-btn`,
+                          placementEl: 'left',
                         })
                       "
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     >
                       <IconC
-                        iconName="DocumentMagnifyingGlassIcon"
-                        iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                        iconName="EllipsisVerticalIcon"
+                        iconClass="w-5 h-5 cursor-pointer"
                       />
                     </button>
+                    <div
+                      :id="`sale-${sale.id}-menu`"
+                      class="hidden z-10 min-w-[8rem] max-w-[12rem] bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
+                      style="inset: 0px auto auto -300px !important"
+                    >
+                      <ul
+                        class="py-1 text-sm font-normal text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
+                        aria-labelledby="dropdownDefault"
+                      >
+                        <li
+                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="
+                            $router.push({
+                              name: 'sale-view',
+                              params: { saleId: sale.id },
+                              query: { saleDate: saleDate },
+                            })
+                          "
+                        >
+                          <IconC
+                            iconName="DocumentMagnifyingGlassIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("viewDocument") }}
+                        </li>
+                        <li
+                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="
+                            $router.push({
+                              name: 'sale-edit',
+                              params: { saleId: sale.id },
+                              query: { saleDate: saleDate },
+                            })
+                          "
+                        >
+                          <IconC
+                            iconType="solid"
+                            iconName="PencilIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("edit") }}
+                        </li>
+                        <li
+                          class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="deleteSale(sale)"
+                        >
+                          <IconC
+                            iconName="TrashIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("delete") }}
+                        </li>
+                      </ul>
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -344,6 +399,10 @@ export default {
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getSales(this.currentPage);
       this.getAllSales();
+    },
+    deleteSale(sale) {
+      console.log(sale);
+      //TODO: implement delete sale
     },
   },
 };

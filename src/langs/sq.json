@@ -168,7 +168,7 @@
 	"notification": "Njoftimi",
 	"starred": "Të vequarat",
 	"unread": "Të palexuarat",
-	"edit": "Edito",
+	"edit": "Përditëso",
 	"clearAll": "Fshij të gjitha",
 	"stockInfoMsg": "Vlera e dhënë i shtohet sasisë aktuale të produktit",
 	"settings": "Settings",
@@ -221,5 +221,8 @@
 	"print": "Printo",
 	"download": "Shkarko",
 	"downloading": "Duke e shkarkuar",
-	"employee": "Punëtori"
+	"employee": "Punëtori",
+	"updatedSuccessfully": "{value} u përditësua me sukses!",
+	"viewDocument": "Shiko dokumentin",
+	"editSale": "Përditëso shitjen"
 }

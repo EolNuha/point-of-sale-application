@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, request
-from website.models import Permissions
+from website.models.permissions import Permissions
 from website.jsonify.permissions import getPermissionsList
 from datetime import datetime
 from website import db

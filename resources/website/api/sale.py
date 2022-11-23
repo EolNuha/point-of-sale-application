@@ -1,6 +1,9 @@
 from datetime import datetime, date, time
 from flask import Blueprint, request, jsonify, request
-from website.models import Sale, SaleItem, SaleTax, Product, User, Settings
+from website.models.settings import Settings
+from website.models.product import Product
+from website.models.sale import Sale, SaleItem, SaleTax
+from website.models.user import User
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
 from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesList, getSaleDict

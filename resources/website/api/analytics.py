@@ -1,6 +1,8 @@
 from datetime import datetime, date, time
 from flask import Blueprint, request, jsonify, request
-from website.models import Sale, Purchase, SaleItem, User
+from website.models.sale import Sale, SaleItem
+from website.models.purchase import Purchase
+from website.models.user import User
 import sqlalchemy as sa
 from decimal import *
 from website.helpers import get_percentage_change, get_curr_prev_chart, get_curr_prev_dates

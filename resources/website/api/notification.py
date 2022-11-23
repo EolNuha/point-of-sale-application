@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, request
-from website.models import Product, Notification
+from website.models.product import Product
+from website.models.notification import Notification
 from website.jsonify.notification import getNotificationList
 from website.helpers import getPaginatedDict
 from datetime import datetime, timedelta, date, time

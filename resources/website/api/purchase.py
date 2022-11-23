@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, request
-from website.models import Purchase, PurchaseItem, Product, Settings, PurchaseTax
+from website.models.settings import Settings
+from website.models.purchase import Purchase, PurchaseItem, PurchaseTax
+from website.models.product import Product
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
 from website.jsonify.purchase import getPurchasesList, getPurchaseItemsList, getDailyPurchasesList, getPurchaseDict, getSellersList, getSellerDict

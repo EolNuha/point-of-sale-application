@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
-from website.models import User
+from website.models.user import User
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt

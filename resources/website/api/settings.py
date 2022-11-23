@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, request
-from website.models import Settings
+from website.models.settings import Settings
 from website.jsonify.settings import getSettingsList
 from datetime import datetime
 from website import db

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, request, Response
-from website.models import Product
+from website.models.product import Product
 from website.helpers import getPaginatedDict
 from website.jsonify.product import getProductsList, getProductsDict
 from datetime import datetime, date, time, timedelta

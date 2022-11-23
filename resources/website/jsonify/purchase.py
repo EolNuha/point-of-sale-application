@@ -18,6 +18,7 @@ def getDailyPurchaseDict(item):
         "sellerInvoiceNumber": item.seller_invoice_number,
         "sellerFiscalNumber": item.seller_fiscal_number,
         "sellerTaxNumber": item.seller_tax_number,
+        "purchaseItems": getPurchaseItemsList(item.purchase_items),
         "taxes": getTaxesList(item.purchase_taxes),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),

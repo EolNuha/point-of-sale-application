@@ -287,12 +287,7 @@ def getSellers():
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
-    purchases = getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404())
-    purchase_items = getPurchaseItemsList(PurchaseItem.query.filter_by(purchase_id=purchaseId).all())
-    purchase_taxes = getTaxesList(PurchaseTax.query.filter_by(purchase_id=purchaseId).all())
-    purchases["purchaseItems"] = purchase_items
-    purchases["taxes"] = purchase_taxes
-    return jsonify(purchases)
+    return jsonify(getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404()))
 
 @purchase.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):

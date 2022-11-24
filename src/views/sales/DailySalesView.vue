@@ -192,7 +192,7 @@
                   <td class="py-2 px-6">
                     {{ sale.user?.firstName }} {{ sale.user?.lastName }}
                   </td>
-                  <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'sales')">
+                  <td class="py-2 px-6 w-1.5" v-if="$can('read', 'sales')">
                     <button
                       class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                       :id="`sale-${sale.id}-btn`"
@@ -243,6 +243,7 @@
                               query: { saleDate: saleDate },
                             })
                           "
+                          v-if="$can('execute', 'sales')"
                         >
                           <IconC
                             iconType="solid"
@@ -254,6 +255,7 @@
                         <li
                           class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
                           @click="deleteSale(sale)"
+                          v-if="$can('execute', 'sales')"
                         >
                           <IconC
                             iconName="TrashIcon"
@@ -304,10 +306,19 @@
       :currentPage="currentPage"
       @pageChange="getSales($event)"
     />
+    <delete-modal
+      :itemId="selectedSale.id"
+      deleteAction="saleModule/deleteSale"
+      :title="$t('sale')"
+      deleteRef="delete-modal"
+      @reload="getSales(currentPage)"
+    >
+    </delete-modal>
   </div>
 </template>
 
 <script>
+import DeleteModal from "@/components/modals/DeleteModal.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   data() {
@@ -318,7 +329,11 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       allSales: [],
+      selectedSale: [],
     };
+  },
+  components: {
+    DeleteModal,
   },
   mixins: [HtmlToExcel],
   computed: {
@@ -401,8 +416,9 @@ export default {
       this.getAllSales();
     },
     deleteSale(sale) {
-      console.log(sale);
-      //TODO: implement delete sale
+      this.selectedSale = sale;
+      this.$openModal("delete-modal");
+      this.$putOnFocus("delete-item-modal-btn");
     },
   },
 };

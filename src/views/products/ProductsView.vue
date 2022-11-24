@@ -345,9 +345,8 @@
         </div>
       </div>
       <delete-modal
-        :productId="selectedProductToDelete.id"
+        :itemId="selectedProductToDelete.id"
         deleteAction="productModule/deleteProduct"
-        getAction="productModule/getProducts"
         :title="$t('product')"
         deleteRef="delete-modal"
         @reload="getProducts(currentPage)"
@@ -417,7 +416,7 @@ export default {
     deleteProduct(product) {
       this.selectedProductToDelete = product;
       this.$openModal("delete-modal");
-      this.$putOnFocus("delete-product-modal-btn");
+      this.$putOnFocus("delete-item-modal-btn");
     },
     async getProducts(page) {
       this.isTableLoading = true;

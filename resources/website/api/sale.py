@@ -247,3 +247,18 @@ def editSale(saleId):
     sale_query.total_amount = total_sum
     db.session.commit()
     return "Success", 200
+
+@sale.route('/sales/<int:saleId>', methods=["DELETE"])
+def deleteSale(saleId):
+    sale_query = Sale.query.filter_by(id=saleId).first_or_404()
+
+    for item in sale_query.sale_items:
+        product = Product.query.filter_by(id=item.product_id).first()
+        product.stock += Decimal(item.product_quantity)
+        SaleItem.query.filter_by(id=item.id).delete()
+        db.session.commit()
+    
+    SaleTax.query.filter_by(sale_id=sale_query.id).delete()
+    Sale.query.filter_by(id=saleId).delete()
+    db.session.commit()
+    return "Success", 200

@@ -36,16 +36,18 @@
           </button>
           <button
             @click="deleteFunc"
-            id="delete-product-modal-btn"
+            id="delete-item-modal-btn"
             type="button"
             class="red-gradient-btn h-10 w-20 inline-flex justify-center items-center"
           >
-            <IconC
-              v-if="isLoading"
-              iconType="custom"
-              iconName="SpinnerIcon"
-              iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-red-600"
-            />
+            <div role="status" v-if="isLoading">
+              <IconC
+                iconType="custom"
+                iconName="SpinnerIcon"
+                iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-red-600"
+              />
+              <span class="sr-only">Loading...</span>
+            </div>
             <span v-else>{{ $t("delete") }}</span>
           </button>
         </div>
@@ -57,13 +59,8 @@
 <script>
 export default {
   props: {
-    productId: { type: null, required: true, default: null },
+    itemId: { type: null, required: true, default: null },
     deleteAction: {
-      type: [Number, String, Object, Array],
-      required: true,
-      default: null,
-    },
-    getAction: {
       type: [Number, String, Object, Array],
       required: true,
       default: null,
@@ -88,7 +85,7 @@ export default {
     deleteFunc() {
       this.isLoading = true;
       this.$store
-        .dispatch(this.deleteAction, this.productId)
+        .dispatch(this.deleteAction, this.itemId)
         .then(() => {
           this.$toast.success(this.$t("deleteSuccess", { title: this.title }));
           this.$emit("reload");

@@ -98,4 +98,18 @@ export default {
         });
     });
   },
+  deleteSale({ commit, state }, id) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/sales/${id}`,
+        method: "DELETE",
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

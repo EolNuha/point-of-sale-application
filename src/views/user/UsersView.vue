@@ -293,9 +293,8 @@
         </div>
       </div>
       <delete-modal
-        :productId="selectedUserToDelete.id"
+        :itemId="selectedUserToDelete.id"
         deleteAction="userModule/deleteUser"
-        getAction="userModule/getUsers"
         title="User"
         deleteRef="delete-modal"
         @reload="getUsers(currentPage)"
@@ -368,7 +367,7 @@ export default {
     deleteUser(user) {
       this.selectedUserToDelete = user;
       this.$openModal("delete-modal");
-      this.$putOnFocus("delete-product-modal-btn");
+      this.$putOnFocus("delete-item-modal-btn");
     },
     getUsers(page) {
       this.isTableLoading = true;

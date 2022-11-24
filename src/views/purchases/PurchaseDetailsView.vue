@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
-    <div class="flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center justify-between flex-wrap gap-2" v-if="!edit">
       <div class="flex items-center gap-2"></div>
       <div class="flex flex-row items-center gap-2">
         <button
@@ -100,28 +100,86 @@
                   {{ $t("purchasedPrice") }}
                 </th>
                 <!-- <th scope="col" class="py-3 px-3">{{ $t("priceWithoutTax") }}</th> -->
-                <th scope="col" class="py-3 px-3">{{ $t("tax") }}</th>
                 <th scope="col" class="py-3 px-3">{{ $t("sellingPrice") }}</th>
+                <th scope="col" class="py-3 px-3">{{ $t("tax") }}</th>
                 <th scope="col" class="py-3 px-3 text-right">
                   {{ $t("total") }}
                 </th>
+                <th scope="col" class="py-3 px-3" v-if="edit"></th>
               </tr>
             </thead>
             <tbody>
-              <template v-for="item in purchase.purchaseItems" :key="item.id">
+              <template
+                v-for="(item, index) in purchase.purchaseItems"
+                :key="item.id"
+              >
                 <tr class="bg-white dark:bg-neutral-900">
                   <td class="py-3 px-3">
                     {{ item.product.name }}
                   </td>
                   <td class="py-3 px-3">{{ item.product.barcode }}</td>
-                  <td class="py-3 px-3">x {{ item.product.stock }}</td>
-                  <td class="py-3 px-3">{{ item.product.purchasedPrice }} €</td>
+                  <td class="py-3 px-3">
+                    <div v-if="edit">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        class="default-input max-w-[100px]"
+                        v-model="item.product.stock"
+                      />
+                    </div>
+                    <div v-else>x {{ item.product.stock }}</div>
+                  </td>
+                  <td class="py-3 px-3">
+                    <div v-if="edit">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        class="default-input max-w-[100px]"
+                        v-model="item.product.purchasedPrice"
+                      />
+                    </div>
+                    <div v-else>{{ item.product.purchasedPrice }} €</div>
+                  </td>
                   <!-- <td class="py-3 px-3">{{ item.priceWithoutTax }} €</td> -->
                   <td class="py-3 px-3">
-                    {{ item.taxAmount }} € ({{ item.product.tax }}%)
+                    <div v-if="edit">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        class="default-input max-w-[100px]"
+                        v-model="item.product.sellingPrice"
+                      />
+                    </div>
+                    <div v-else>{{ item.product.sellingPrice }} €</div>
                   </td>
-                  <td class="py-3 px-3">{{ item.product.sellingPrice }} €</td>
-                  <td class="py-3 px-3 text-right">{{ item.totalAmount }} €</td>
+                  <td class="py-3 px-3">
+                    {{
+                      (
+                        (item.product.tax / 100) *
+                        item.product.purchasedPrice
+                      ).toPrecision(2)
+                    }}
+                    € ({{ item.product.tax }}%)
+                  </td>
+                  <td class="py-3 px-3 text-right">
+                    {{
+                      (
+                        item.product.purchasedPrice * item.product.stock
+                      ).toFixed(2)
+                    }}
+                    €
+                  </td>
+                  <td class="py-3 px-6 max-w-[60px]" v-if="edit">
+                    <button
+                      @click="deletePurchaseItem(index)"
+                      class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                    >
+                      <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+                    </button>
+                  </td>
                 </tr>
               </template>
             </tbody>
@@ -134,21 +192,21 @@
               <tbody>
                 <tr>
                   <td class="py-2">{{ $t("subTotal") }}</td>
-                  <td class="text-right py-2">
-                    {{ purchase.subTotalAmount }} €
-                  </td>
+                  <td class="text-right py-2">{{ getTotalWithoutTax }} €</td>
                 </tr>
                 <tr v-for="item in taxes" :key="item.settingsValue">
-                  <td class="py-2 uppercase">
-                    {{ $t("tax") }} ({{ item.settingsValue }}%)
-                  </td>
-                  <td class="text-right py-2">
-                    {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
-                  </td>
+                  <template v-if="!edit">
+                    <td class="py-2 uppercase">
+                      {{ $t("tax") }} ({{ item.settingsValue }}%)
+                    </td>
+                    <td class="text-right py-2">
+                      {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
+                    </td>
+                  </template>
                 </tr>
                 <tr class="font-bold text-xl">
                   <td class="py-2">{{ $t("total") }}</td>
-                  <td class="text-right py-2">{{ purchase.totalAmount }} €</td>
+                  <td class="text-right py-2">{{ getProductsTotal }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -156,6 +214,21 @@
         </div>
       </div>
     </div>
+    <button
+      class="theme-gradient-btn w-32 flex justify-center items-center"
+      @click="updatePurchase"
+      v-if="edit"
+    >
+      <div role="status" v-if="isUpdateLoading">
+        <IconC
+          iconType="custom"
+          iconName="SpinnerIcon"
+          iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-theme-600"
+        />
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div v-else>{{ $t("update") }}</div>
+    </button>
     <div
       id="printModal"
       tabindex="-1"
@@ -193,7 +266,15 @@ export default {
     return {
       isLoading: true,
       isPdfLoading: false,
+      isUpdateLoading: false,
+      deletedItems: [],
     };
+  },
+  props: {
+    edit: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     purchase() {
@@ -201,6 +282,27 @@ export default {
     },
     taxes() {
       return this.$store.state.settingsModule.settingsType;
+    },
+    getProductsTotal() {
+      const products = this.purchase.purchaseItems;
+      const sum = products?.reduce((accumulator, object) => {
+        return (
+          Number(accumulator, 2) +
+          Number(object.product.purchasedPrice, 2) *
+            Number(object.product.stock, 2)
+        );
+      }, 0);
+      return sum?.toFixed(2);
+    },
+    getTotalWithoutTax() {
+      const products = this.purchase.purchaseItems;
+      const sum = products?.reduce((accumulator, object) => {
+        const tax_amount =
+          (object.product.tax / 100) * object.product.purchasedPrice;
+        const price_wo_tax = object.product.purchasedPrice - tax_amount;
+        return Number(accumulator, 2) + price_wo_tax * object.product.stock;
+      }, 0);
+      return sum?.toFixed(2);
     },
   },
   async created() {
@@ -256,6 +358,31 @@ export default {
         windowWidth: 800,
       });
       this.isPdfLoading = false;
+    },
+    deletePurchaseItem(index) {
+      this.deletedItems.push(this.purchase.purchaseItems[index]);
+      this.purchase.purchaseItems.splice(index, 1);
+    },
+    updatePurchase() {
+      this.isUpdateLoading = true;
+      this.$store
+        .dispatch("purchaseModule/updatePurchase", {
+          id: this.$route.params.purchaseId,
+          deletedItems: this.deletedItems,
+          purchaseItems: this.purchase.purchaseItems,
+        })
+        .then(() => {
+          this.$toast.success(
+            this.$t("updatedSuccessfully", {
+              value: this.$t("purchase"),
+            })
+          );
+          this.isUpdateLoading = false;
+        })
+        .catch(() => {
+          this.$toast.error(this.$t("somethingWrong"));
+          this.isUpdateLoading = false;
+        });
     },
   },
 };

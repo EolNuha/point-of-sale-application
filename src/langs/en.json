@@ -223,6 +223,7 @@
 	"downloading": "Downloading",
 	"employee": "Employee",
 	"updatedSuccessfully": "{value} updated successfully!",
-	"viewDocument": "View Document",
-	"editSale": "Edit Sale"
+	"viewDocument": "View",
+	"editSale": "Edit Sale",
+	"editPurchase": "Edit Purchase"
 }

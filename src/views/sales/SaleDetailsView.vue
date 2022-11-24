@@ -311,7 +311,7 @@ export default {
           this.isUpdateLoading = false;
         })
         .catch(() => {
-          this.$toast.error("somethingWrong");
+          this.$toast.error(this.$t("somethingWrong"));
           this.isUpdateLoading = false;
         });
     },

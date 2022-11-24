@@ -108,4 +108,33 @@ export default {
         });
     });
   },
+  updatePurchase({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/purchases/${data.id}`,
+        method: "PUT",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  deletePurchase({ commit, state }, id) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/purchases/${id}`,
+        method: "DELETE",
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

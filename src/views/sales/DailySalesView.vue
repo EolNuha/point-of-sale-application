@@ -211,7 +211,7 @@
                     </button>
                     <div
                       :id="`sale-${sale.id}-menu`"
-                      class="hidden z-10 min-w-[8rem] max-w-[12rem] bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
+                      class="hidden z-10 w-[8rem] bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
                       style="inset: 0px auto auto -300px !important"
                     >
                       <ul

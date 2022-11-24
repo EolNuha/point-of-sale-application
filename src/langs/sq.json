@@ -223,6 +223,7 @@
 	"downloading": "Duke e shkarkuar",
 	"employee": "Punëtori",
 	"updatedSuccessfully": "{value} u përditësua me sukses!",
-	"viewDocument": "Shiko dokumentin",
-	"editSale": "Përditëso shitjen"
+	"viewDocument": "Shiko",
+	"editSale": "Përditëso shitjen",
+	"editPurchase": "Përditëso blerjen"
 }

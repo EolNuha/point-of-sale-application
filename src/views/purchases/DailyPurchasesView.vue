@@ -212,22 +212,79 @@
                   </td>
                   <td class="py-2 px-6">{{ purchase.subTotalAmount }} €</td>
                   <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
-                  <td class="py-2 px-6">
+                  <td class="py-2 px-6 w-1.5" v-if="$can('read', 'purchases')">
                     <button
+                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      :id="`purchase-${purchase.id}-btn`"
                       @click="
-                        $router.push({
-                          name: 'purchase-view',
-                          params: { purchaseId: purchase.id },
-                          query: { purchaseDate: purchaseDate },
+                        $toggleDropdown({
+                          targetEl: `purchase-${purchase.id}-menu`,
+                          triggerEl: `purchase-${purchase.id}-btn`,
+                          placementEl: 'left',
                         })
                       "
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                     >
                       <IconC
-                        iconName="DocumentMagnifyingGlassIcon"
-                        iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
+                        iconName="EllipsisVerticalIcon"
+                        iconClass="w-5 h-5 cursor-pointer"
                       />
                     </button>
+                    <div
+                      :id="`purchase-${purchase.id}-menu`"
+                      class="hidden z-10 w-[8rem] bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800"
+                      style="inset: 0px auto auto -300px !important"
+                    >
+                      <ul
+                        class="py-1 text-sm font-normal text-gray-700 cursor-pointer divide-y divide-gray-300 dark:divide-gray-700"
+                        aria-labelledby="dropdownDefault"
+                      >
+                        <li
+                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="
+                            $router.push({
+                              name: 'purchase-view',
+                              params: { purchaseId: purchase.id },
+                              query: { purchaseDate: purchaseDate },
+                            })
+                          "
+                        >
+                          <IconC
+                            iconName="DocumentMagnifyingGlassIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("viewDocument") }}
+                        </li>
+                        <li
+                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="
+                            $router.push({
+                              name: 'purchase-edit',
+                              params: { purchaseId: purchase.id },
+                              query: { purchaseDate: purchaseDate },
+                            })
+                          "
+                          v-if="$can('execute', 'purchases')"
+                        >
+                          <IconC
+                            iconType="solid"
+                            iconName="PencilIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("edit") }}
+                        </li>
+                        <li
+                          class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          @click="deletePurchase(purchase)"
+                          v-if="$can('execute', 'purchases')"
+                        >
+                          <IconC
+                            iconName="TrashIcon"
+                            iconClass="w-5 h-5 cursor-pointer"
+                          />
+                          {{ $t("delete") }}
+                        </li>
+                      </ul>
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -271,10 +328,19 @@
       :currentPage="currentPage"
       @pageChange="getPurchases($event)"
     />
+    <delete-modal
+      :itemId="selectedPurchase.id"
+      deleteAction="purchaseModule/deletePurchase"
+      :title="$t('purchase')"
+      deleteRef="delete-modal"
+      @reload="getPurchases(currentPage)"
+    >
+    </delete-modal>
   </div>
 </template>
 
 <script>
+import DeleteModal from "@/components/modals/DeleteModal.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   data() {
@@ -285,7 +351,11 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       allPurchases: [],
+      selectedPurchase: [],
     };
+  },
+  components: {
+    DeleteModal,
   },
   mixins: [HtmlToExcel],
   computed: {
@@ -369,6 +439,11 @@ export default {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getPurchases(this.currentPage);
+    },
+    deletePurchase(purchase) {
+      this.selectedPurchase = purchase;
+      this.$openModal("delete-modal");
+      this.$putOnFocus("delete-item-modal-btn");
     },
   },
 };

@@ -39,8 +39,8 @@ def createPurchase():
     for product in products:
         decimal_price = Decimal(product["purchasedPrice"])
         decimal_tax = Decimal(product["tax"])
-        price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
-        tax_amount = (decimal_tax / 100) * decimal_price
+        tax_amount = format((decimal_tax / 100) * decimal_price, ".2f")
+        price_without_tax = decimal_price - Decimal(tax_amount)
 
         expiration_date = product["expirationDate"].split("-")
         expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
@@ -293,3 +293,63 @@ def getPurchaseDetails(purchaseId):
 def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
     return jsonify(getSellerDict(purchase))
+
+@purchase.route('/purchases/<int:purchaseId>', methods=["PUT"])
+def editPurchase(purchaseId):
+    deleted_items = request.json["deletedItems"]
+    purchaseItems = request.json["purchaseItems"]
+
+    purchase_query = Purchase.query.filter_by(id=purchaseId).first_or_404()
+    subtotal, purchase_taxes = [], []
+    taxes = Settings.query.filter_by(settings_type="tax").all()
+
+    for item in deleted_items:
+        product = Product.query.filter_by(id=item["product"]["id"]).first()
+        product.stock -= Decimal(item["product"]["stock"])
+        PurchaseItem.query.filter_by(id=item["id"]).delete()
+        db.session.commit()
+
+    for item in purchaseItems:
+        subtotal.append(Decimal(item['priceWithoutTax']) * Decimal(item["product"]["stock"]))
+
+        for tax in taxes:
+            if item['product']['tax'] == int(tax.settings_value):
+                key_v = tax.settings_name + "+" + tax.settings_alias
+                purchase_taxes.append({key_v: Decimal(item['taxAmount']) * Decimal(item["product"]["stock"])})
+        
+        purchase_item = PurchaseItem.query.filter_by(id=item["id"]).first()
+        product = Product.query.filter_by(id=item["product"]["id"]).first()
+        product.stock += (Decimal(item["product"]["stock"]) - purchase_item.product_stock)
+        purchase_item.product_stock = item["product"]["stock"]
+        purchase_item.total_amount = Decimal(product.purchased_price * Decimal(item["product"]["stock"]))
+        db.session.commit()
+    
+    purchase_query.subtotal_amount = sum(subtotal)
+    purchase_taxes = sumListOfDicts(purchase_taxes)
+
+    for key, value in purchase_taxes.items():
+        split_key = key.split("+")
+        purchase_tax = PurchaseTax.query.filter(PurchaseTax.purchase_id.like(purchaseId), PurchaseTax.tax_name.ilike(split_key[0])).first()
+        purchase_tax.tax_value = value
+        purchase_tax.date_modified = datetime.now()
+        db.session.commit()
+
+    total_sum = PurchaseItem.query.filter_by(purchase_id=purchaseId).with_entities(func.sum(PurchaseItem.total_amount).label('total')).first().total
+    purchase_query.total_amount = total_sum
+    db.session.commit()
+    return "Success", 200
+
+@purchase.route('/purchases/<int:purchaseId>', methods=["DELETE"])
+def deletePurchase(purchaseId):
+    purchase_query = Purchase.query.filter_by(id=purchaseId).first_or_404()
+
+    for item in purchase_query.purchase_items:
+        product = Product.query.filter_by(id=item.product_id).first()
+        product.stock -= Decimal(item.product_stock)
+        PurchaseItem.query.filter_by(id=item.id).delete()
+        db.session.commit()
+    
+    PurchaseTax.query.filter_by(purchase_id=purchase_query.id).delete()
+    Purchase.query.filter_by(id=purchaseId).delete()
+    db.session.commit()
+    return "Success", 200

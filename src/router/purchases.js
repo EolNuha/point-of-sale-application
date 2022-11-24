@@ -66,6 +66,7 @@ export default [
     path: "/purchases/daily/:purchaseId",
     name: "purchase-view",
     component: PurchaseDetailsView,
+    props: { edit: false },
     meta: {
       title: "purchaseDetails",
       breadcrumb: [
@@ -83,6 +84,33 @@ export default [
         {
           text: (route) => "purchaseDetails",
           to: "purchase-view",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/purchases/daily/edit/:purchaseId",
+    name: "purchase-edit",
+    component: PurchaseDetailsView,
+    props: { edit: true },
+    meta: {
+      title: "editPurchase",
+      breadcrumb: [
+        {
+          text: (route) => "purchases",
+          to: "purchases",
+          active: false,
+        },
+        {
+          text: (route) => "dailyPurchases",
+          to: "daily-purchases",
+          active: false,
+          query: true,
+        },
+        {
+          text: (route) => "editPurchase",
+          to: "purchase-edit",
           active: true,
         },
       ],

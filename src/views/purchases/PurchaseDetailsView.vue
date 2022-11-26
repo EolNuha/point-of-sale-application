@@ -89,11 +89,9 @@
               </table>
             </div>
           </div>
-          <div
-            class="overflow-x-auto relative sm:rounded-lg my-5 scrollbar-style"
-          >
+          <div class="overflow-x-auto sm:rounded-lg my-5 scrollbar-style">
             <table
-              class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative my-5"
+              class="w-full text-sm text-left text-gray-700 dark:text-gray-400 my-5"
             >
               <thead
                 class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
@@ -206,10 +204,24 @@
                     </td>
                     <td class="py-3 px-6 max-w-[60px]" v-if="edit">
                       <button
+                        :id="`delete-${item.id}-tooltip-btn`"
                         @click="deletePurchaseItem(index)"
                         class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                        @mouseover="
+                          $showTooltip({
+                            targetEl: `delete-${item.id}-tooltip`,
+                            triggerEl: `delete-${item.id}-tooltip-btn`,
+                          })
+                        "
                       >
                         <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+                        <div
+                          :id="`delete-${item.id}-tooltip`"
+                          role="tooltip"
+                          class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                        >
+                          {{ $t("delete") }}
+                        </div>
                       </button>
                     </td>
                   </tr>

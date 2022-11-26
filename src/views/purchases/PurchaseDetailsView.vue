@@ -187,16 +187,15 @@
                     </td>
                     <td class="py-3 px-3">
                       {{
-                        (
-                          (item.product.tax / 100) *
-                          item.product.purchasedPrice
-                        ).toPrecision(2)
+                        roundTo2(
+                          (item.product.tax / 100) * item.product.purchasedPrice
+                        ).toFixed(2)
                       }}
                       € ({{ item.product.tax }}%)
                     </td>
                     <td class="py-3 px-3 text-right">
                       {{
-                        (
+                        roundTo2(
                           item.product.purchasedPrice * item.product.stock
                         ).toFixed(2)
                       }}
@@ -204,6 +203,7 @@
                     </td>
                     <td class="py-3 px-6 max-w-[60px]" v-if="edit">
                       <button
+                        type="button"
                         :id="`delete-${item.id}-tooltip-btn`"
                         @click="deletePurchaseItem(index)"
                         class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
@@ -333,26 +333,34 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
+    roundTo2() {
+      return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+    },
     getProductsTotal() {
       const products = this.purchase.purchaseItems;
       const sum = products?.reduce((accumulator, object) => {
         return (
-          Number(accumulator, 2) +
-          Number(object.product.purchasedPrice, 2) *
-            Number(object.product.stock, 2)
+          this.roundTo2(accumulator) +
+          this.roundTo2(object.product.purchasedPrice) *
+            this.roundTo2(object.product.stock)
         );
       }, 0);
-      return sum?.toFixed(2);
+      return this.roundTo2(sum).toFixed(2);
     },
     getTotalWithoutTax() {
       const products = this.purchase.purchaseItems;
       const sum = products?.reduce((accumulator, object) => {
         const tax_amount =
           (object.product.tax / 100) * object.product.purchasedPrice;
-        const price_wo_tax = object.product.purchasedPrice - tax_amount;
-        return Number(accumulator, 2) + price_wo_tax * object.product.stock;
+        const price_wo_tax = this.roundTo2(
+          object.product.purchasedPrice - this.roundTo2(tax_amount)
+        );
+        return (
+          this.roundTo2(accumulator) +
+          this.roundTo2(price_wo_tax * this.roundTo2(object.product.stock))
+        );
       }, 0);
-      return sum?.toFixed(2);
+      return this.roundTo2(sum).toFixed(2);
     },
   },
   async created() {

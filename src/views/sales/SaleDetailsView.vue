@@ -114,13 +114,16 @@
                     </td>
                     <td class="py-3 px-6 text-right">
                       {{
-                        (item.product.sellingPrice * item.quantity).toFixed(2)
+                        roundTo2(
+                          item.product.sellingPrice * item.quantity
+                        ).toFixed(2)
                       }}
                       €
                     </td>
                     <td class="py-3 px-6 max-w-[60px]" v-if="edit">
                       <button
                         :id="`delete-${item.id}-tooltip-btn`"
+                        type="button"
                         @click="deleteSaleItem(index)"
                         class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
                         @mouseover="
@@ -253,25 +256,29 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
+    roundTo2() {
+      return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+    },
     getProductsTotal() {
       const products = this.sale.saleItems;
       const sum = products?.reduce((accumulator, object) => {
         return (
-          Number(accumulator, 2) +
-          Number(object.product.sellingPrice, 2) * Number(object.quantity, 2)
+          this.roundTo2(accumulator) +
+          this.roundTo2(object.product.sellingPrice) *
+            this.roundTo2(object.quantity)
         );
       }, 0);
-      return sum?.toFixed(2);
+      return this.roundTo2(sum).toFixed(2);
     },
     getTotalWithoutTax() {
       const products = this.sale.saleItems;
       const sum = products?.reduce((accumulator, object) => {
         return (
-          Number(accumulator, 2) +
-          Number(object.priceWithoutTax, 2) * Number(object.quantity, 2)
+          this.roundTo2(accumulator) +
+          this.roundTo2(object.priceWithoutTax) * this.roundTo2(object.quantity)
         );
       }, 0);
-      return sum?.toFixed(2);
+      return this.roundTo2(sum).toFixed(2);
     },
   },
   async created() {

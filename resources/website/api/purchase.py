@@ -7,15 +7,20 @@ from website.jsonify.settings import getTaxesList
 from website.jsonify.purchase import getPurchasesList, getPurchaseItemsList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
 from website import db
 from sqlalchemy import or_, asc, desc, func
-from decimal import *
+import decimal
 from datetime import datetime, date, time
 from website.token import currentUser
 import sqlalchemy as sa
 
 purchase = Blueprint('purchase', __name__)
+Decimal = decimal.Decimal
+TWOPLACES = Decimal(10) ** -2
 
 @purchase.route('/purchases', methods=["POST"])
 def createPurchase():
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+
     products = request.json["products"]
     seller = request.json["seller"]
     total_amount = request.json["totalAmount"]
@@ -37,10 +42,12 @@ def createPurchase():
     db.session.add(purchase)
 
     for product in products:
-        decimal_price = Decimal(product["purchasedPrice"])
-        decimal_tax = Decimal(product["tax"])
-        tax_amount = format((decimal_tax / 100) * decimal_price, ".2f")
-        price_without_tax = decimal_price - Decimal(tax_amount)
+        product_stock = Decimal(product["stock"]).quantize(TWOPLACES)
+        product_purchased_price = Decimal(product["purchasedPrice"]).quantize(TWOPLACES)
+        product_tax = Decimal(product["tax"]).quantize(TWOPLACES)
+
+        tax_amount = Decimal(Decimal(product_tax / 100).quantize(TWOPLACES) * product_purchased_price).quantize(TWOPLACES)
+        price_without_tax = product_purchased_price - tax_amount
 
         expiration_date = product["expirationDate"].split("-")
         expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
@@ -64,12 +71,12 @@ def createPurchase():
                 product_barcode=product["barcode"],
                 product_name=product["productName"],
                 product_tax=product["tax"],
-                product_purchased_price=product["purchasedPrice"],
+                product_purchased_price=product_purchased_price,
                 product_selling_price=product["sellingPrice"],
-                product_stock=Decimal(product["stock"]),
+                product_stock=product_stock,
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
-                total_amount=Decimal(Decimal(product["purchasedPrice"]) * Decimal(product["stock"])),
+                total_amount=Decimal(product_purchased_price * product_stock).quantize(TWOPLACES),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -77,15 +84,15 @@ def createPurchase():
             product_query.name = product["productName"].lower()
             product_query.barcode = product["barcode"]
             product_query.tax = product["tax"]
-            product_query.purchased_price = product["purchasedPrice"]
+            product_query.purchased_price = product_purchased_price
             product_query.selling_price = product["sellingPrice"]
-            product_query.stock += Decimal(product["stock"])
+            product_query.stock += product_stock
             product_query.expiration_date = expiration_date
         else:
             created_product = Product(
                 name=product["productName"].lower(), 
                 barcode=product["barcode"], 
-                stock=product["stock"], 
+                stock=product_stock, 
                 tax=product["tax"], 
                 purchased_price=product["purchasedPrice"], 
                 selling_price= product["sellingPrice"],
@@ -107,7 +114,7 @@ def createPurchase():
                 product_stock=created_product.stock,
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
-                total_amount=Decimal(Decimal(created_product.purchased_price) * Decimal(created_product.stock)),
+                total_amount=Decimal(created_product.purchased_price * created_product.stock).quantize(TWOPLACES),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -118,11 +125,11 @@ def createPurchase():
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in getPurchaseItemsList(purchase.purchase_items):
-        subtotal.append(item['priceWithoutTax'] * Decimal(item['product']['stock']))
+        subtotal.append(Decimal(item['priceWithoutTax'] * Decimal(item['product']['stock'])).quantize(TWOPLACES))
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
-                purchase_taxes.append({key_v: item['taxAmount'] * Decimal(item['product']['stock'])})
+                purchase_taxes.append({key_v: Decimal(item['taxAmount'] * Decimal(item['product']['stock']).quantize(TWOPLACES)).quantize(TWOPLACES)})
     
     purchase.subtotal_amount = sum(subtotal)
     purchase_taxes = sumListOfDicts(purchase_taxes)
@@ -296,6 +303,9 @@ def getSellerDetails(name):
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["PUT"])
 def editPurchase(purchaseId):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+
     deleted_items = request.json["deletedItems"]
     purchaseItems = request.json["purchaseItems"]
 
@@ -307,21 +317,37 @@ def editPurchase(purchaseId):
         product = Product.query.filter_by(id=item["product"]["id"]).first()
         product.stock -= Decimal(item["product"]["stock"])
         PurchaseItem.query.filter_by(id=item["id"]).delete()
+        PurchaseTax.query.filter_by(purchase_id=purchaseId).filter_by(tax_name=item["product"]["tax"]).delete()
         db.session.commit()
 
     for item in purchaseItems:
-        subtotal.append(Decimal(item['priceWithoutTax']) * Decimal(item["product"]["stock"]))
+        item_stock = Decimal(item["product"]["stock"]).quantize(TWOPLACES)
+        item_purchased_price = Decimal(item["product"]["purchasedPrice"]).quantize(TWOPLACES)
+        item_selling_price = Decimal(item["product"]["sellingPrice"]).quantize(TWOPLACES)
+        item_tax = Decimal(item["product"]["tax"]).quantize(TWOPLACES)
+
+        tax_amount = Decimal(Decimal(item_tax / 100).quantize(TWOPLACES) * item_purchased_price).quantize(TWOPLACES)
+        price_without_tax = item_purchased_price - tax_amount
+
+        subtotal.append(Decimal(price_without_tax * item_stock).quantize(TWOPLACES))
 
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
-                purchase_taxes.append({key_v: Decimal(item['taxAmount']) * Decimal(item["product"]["stock"])})
+                purchase_taxes.append({key_v: tax_amount * item_stock})
         
         purchase_item = PurchaseItem.query.filter_by(id=item["id"]).first()
         product = Product.query.filter_by(id=item["product"]["id"]).first()
-        product.stock += (Decimal(item["product"]["stock"]) - purchase_item.product_stock)
-        purchase_item.product_stock = item["product"]["stock"]
-        purchase_item.total_amount = Decimal(product.purchased_price * Decimal(item["product"]["stock"]))
+
+        product.stock += (item_stock - purchase_item.product_stock)
+        product.purchased_price = item_purchased_price
+        product.selling_price = item_selling_price
+
+        purchase_item.product_stock = item_stock
+        purchase_item.product_purchased_price = item_purchased_price
+        purchase_item.product_selling_price = item_selling_price
+        purchase_item.total_amount = Decimal(item_purchased_price * item_stock).quantize(TWOPLACES)
+
         db.session.commit()
     
     purchase_query.subtotal_amount = sum(subtotal)

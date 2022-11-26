@@ -10,13 +10,18 @@ from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesLi
 from website import db
 from sqlalchemy import or_, asc, desc, func
 import sqlalchemy as sa
-from decimal import *
+import decimal
 from website.token import currentUser
 
 sale = Blueprint('sale', __name__)
+Decimal = decimal.Decimal
+TWOPLACES = Decimal(10) ** -2
 
 @sale.route('/sales', methods=["POST"])
 def createSale():
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+
     products = request.json["products"]
     total_amount = request.json["totalAmount"]
     customer_amount = request.json["customerAmount"]
@@ -37,10 +42,12 @@ def createSale():
     db.session.add(sale)
 
     for product in products:
-        decimal_price = Decimal(product["sellingPrice"])
-        decimal_tax = Decimal(product["tax"])
-        price_without_tax = decimal_price - (decimal_tax / 100) * decimal_price
-        tax_amount = (decimal_tax / 100) * decimal_price
+        product_quantity = Decimal(product["quantity"]).quantize(TWOPLACES)
+        decimal_price = Decimal(product["sellingPrice"]).quantize(TWOPLACES)
+        decimal_tax = Decimal(product["tax"]).quantize(TWOPLACES)
+        
+        tax_amount = Decimal(Decimal(decimal_tax / 100).quantize(TWOPLACES) * decimal_price).quantize(TWOPLACES)
+        price_without_tax = decimal_price - tax_amount
 
         product_query = Product.query.filter_by(id=product["id"]).one()
         sale_item = SaleItem(
@@ -51,16 +58,16 @@ def createSale():
             product_tax=product_query.tax,
             product_purchased_price=product_query.purchased_price,
             product_selling_price=product_query.selling_price,
-            product_quantity=Decimal(product["quantity"]),
+            product_quantity=product_quantity,
             price_without_tax=price_without_tax,
             tax_amount=tax_amount,
-            total_amount=Decimal(product_query.selling_price * Decimal(product["quantity"])),
+            total_amount=Decimal(product_query.selling_price * product_quantity).quantize(TWOPLACES),
             date_created=current_time,
             date_modified=current_time,
         )
-        stock_diff = product_query.stock - Decimal(product["quantity"])
+        stock_diff = product_query.stock - product_quantity
         if stock_diff >= 0:
-            product_query.stock -= Decimal(product["quantity"])
+            product_query.stock -= product_quantity
         else:
             product_query.stock = 0
         
@@ -70,11 +77,11 @@ def createSale():
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in getSaleItemsList(sale.sale_items):
-        subtotal.append(item['priceWithoutTax'] * Decimal(item['quantity']))
+        subtotal.append(Decimal(item['priceWithoutTax'] * Decimal(item['quantity']).quantize(TWOPLACES)).quantize(TWOPLACES))
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
-                sale_taxes.append({key_v: item['taxAmount'] * Decimal(item['quantity'])})
+                sale_taxes.append({key_v: Decimal(item['taxAmount']).quantize(TWOPLACES) * Decimal(item['quantity']).quantize(TWOPLACES)})
     
     sale.subtotal_amount = sum(subtotal)
     sale_taxes = sumListOfDicts(sale_taxes)
@@ -207,6 +214,9 @@ def getSaleDetails(saleId):
 
 @sale.route('/sales/<int:saleId>', methods=["PUT"])
 def editSale(saleId):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+
     deleted_items = request.json["deletedItems"]
     saleItems = request.json["saleItems"]
 
@@ -216,21 +226,27 @@ def editSale(saleId):
 
     for item in deleted_items:
         product = Product.query.filter_by(id=item["product"]["id"]).first()
-        product.stock += Decimal(item["quantity"])
+        product.stock += Decimal(item["quantity"]).quantize(TWOPLACES)
         SaleItem.query.filter_by(id=item["id"]).delete()
+        SaleTax.query.filter_by(sale_id=saleId).filter_by(tax_name=item["product"]["tax"]).delete()
         db.session.commit()
 
     for item in saleItems:
-        subtotal.append(Decimal(item['priceWithoutTax']) * Decimal(item['quantity']))
+        item_quantity = Decimal(item["quantity"]).quantize(TWOPLACES)
+
+        subtotal.append(Decimal(Decimal(item['priceWithoutTax']).quantize(TWOPLACES) * item_quantity).quantize(TWOPLACES))
+
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
-                sale_taxes.append({key_v: Decimal(item['taxAmount']) * Decimal(item['quantity'])})
+                sale_taxes.append({key_v: Decimal(Decimal(item['taxAmount']).quantize(TWOPLACES) * item_quantity).quantize(TWOPLACES)})
+        
         sale_item = SaleItem.query.filter_by(id=item["id"]).first()
         product = Product.query.filter_by(id=item["product"]["id"]).first()
-        product.stock -= (Decimal(item["quantity"]) - sale_item.product_quantity)
-        sale_item.product_quantity = item["quantity"]
-        sale_item.total_amount = Decimal(product.selling_price * Decimal(item["quantity"]))
+
+        product.stock -= (item_quantity - sale_item.product_quantity)
+        sale_item.product_quantity = item_quantity
+        sale_item.total_amount = Decimal(product.selling_price * item_quantity).quantize(TWOPLACES)
         db.session.commit()
     
     sale_query.subtotal_amount = sum(subtotal)
@@ -254,7 +270,7 @@ def deleteSale(saleId):
 
     for item in sale_query.sale_items:
         product = Product.query.filter_by(id=item.product_id).first()
-        product.stock += Decimal(item.product_quantity)
+        product.stock += item.product_quantity
         SaleItem.query.filter_by(id=item.id).delete()
         db.session.commit()
     

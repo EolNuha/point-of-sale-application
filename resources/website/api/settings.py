@@ -44,6 +44,7 @@ def deleteSettings(id):
 @settings.route('/settings/demo', methods=["GET"])
 def createDemoSettings():
     demo = [
+        ["storage", "storage", "notification", 1500],
         ["8", "eight", "tax", 8],
         ["18", "eighteen", "tax", 18],
     ]

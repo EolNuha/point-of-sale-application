@@ -225,5 +225,9 @@
 	"updatedSuccessfully": "{value} updated successfully!",
 	"viewDocument": "View",
 	"editSale": "Edit Sale",
-	"editPurchase": "Edit Purchase"
+	"editPurchase": "Edit Purchase",
+	"almostOutOfSpace": "You are almost out of space",
+	"outOfSpace": "You are out of space",
+	"almostOutOfSpaceText": "If you run out of storage space, you won't be able to receive notifications!",
+	"outOfSpaceText": "You will no longer recieve notifications, please upgrade to be able to receive notifications!"
 }

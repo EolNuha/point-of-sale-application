@@ -39,5 +39,18 @@ export default {
         (el) => el.startDate === start && el.endDate === end
       );
     };
+    app.config.globalProperties.$hideAlert = (ref) => {
+      const targetEl = document.getElementById(ref.targetEl);
+      const triggerEl = document.getElementById(ref.triggerEl);
+      const options = {
+        triggerEl: triggerEl,
+        transition: "transition-opacity",
+        duration: 200,
+        timing: "ease-out",
+      };
+      // eslint-disable-next-line no-undef
+      const dismiss = new Dismiss(targetEl, options);
+      dismiss.hide();
+    };
   },
 };

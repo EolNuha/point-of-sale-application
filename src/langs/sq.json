@@ -225,5 +225,11 @@
 	"updatedSuccessfully": "{value} u përditësua me sukses!",
 	"viewDocument": "Shiko",
 	"editSale": "Përditëso shitjen",
-	"editPurchase": "Përditëso blerjen"
+	"editPurchase": "Përditëso blerjen",
+	"almostOutOfSpace": "Ju jeni pothuajse pa hapësirë",
+	"outOfSpace": "Ju nuk keni hapësirë",
+	"almostOutOfSpaceText": "Nëse ju mbaron hapësira ruajtëse, nuk do të mund të merrni njoftime!",
+	"outOfSpaceText": "Nuk do të merrni më njoftime, ju lutemi kontaktoni pronarin për të marrë njoftime!",
+	"used": "të përdorura",
+	"of": "nga"
 }

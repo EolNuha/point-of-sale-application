@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, request
 from website.models.product import Product
 from website.models.notification import Notification
+from website.models.settings import Settings
 from website.jsonify.notification import getNotificationList
 from website.helpers import getPaginatedDict
 from datetime import datetime, timedelta, date, time
@@ -67,6 +68,10 @@ def updateNotification(id):
 
 @notification.route('/notifications/product-expire', methods=["GET"])
 def checkProductExpireNotification():
+    storage = Settings.query.filter_by(settings_type="notification").filter_by(settings_name="storage").first().settings_value
+    if Notification.query.count() >= int(storage):
+        return "Nothing added", 200
+
     date_start = datetime.combine(date.today(), time.min) + timedelta(days=1)
     date_end = datetime.combine(date.today(), time.max) + timedelta(days=4)
     today_beginning = datetime.combine(date.today(), time.min)

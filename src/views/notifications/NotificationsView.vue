@@ -174,7 +174,7 @@
               </div>
             </template>
           </div>
-          <div class="text-center">
+          <div class="text-center" v-if="total">
             <div
               class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-gray-700 mx-3"
             >
@@ -185,8 +185,9 @@
               ></div>
             </div>
             <small class="text-gray-700 dark:text-gray-400"
-              >{{ total }} of {{ storage }} ({{ getNotificationPercentage }}%)
-              used</small
+              >{{ total }} {{ $t("of") }} {{ storage }} ({{
+                getNotificationPercentage
+              }}%) {{ $t("used") }}</small
             >
           </div>
         </div>

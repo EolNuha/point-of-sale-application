@@ -1,137 +1,194 @@
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+    <div
+      id="hide-notification"
+      class="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200"
+      role="alert"
+      v-show="getNotificationPercentage >= 80"
+    >
+      <IconC
+        iconName="ExclamationCircleIcon"
+        iconClass="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800"
+      />
+      <span class="sr-only">Info</span>
+      <div class="ml-3 text-sm font-medium text-red-700 dark:text-red-800">
+        <b
+          >{{
+            getNotificationPercentage >= 100
+              ? $t("outOfSpace")
+              : $t("almostOutOfSpace")
+          }}
+          ({{ getNotificationPercentage }}%).</b
+        >
+        {{
+          getNotificationPercentage >= 100
+            ? $t("outOfSpaceText")
+            : $t("almostOutOfSpaceText")
+        }}
+      </div>
+      <button
+        id="hide-notification-btn"
+        type="button"
+        class="ml-auto -mx-1.5 -my-1.5 bg-red-100 text-red-500 rounded-full focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8 dark:bg-red-200 dark:text-red-600 dark:hover:bg-red-300"
+        @click="
+          $hideAlert({
+            triggerEl: 'hide-notification-btn',
+            targetEl: 'hide-notification',
+          })
+        "
+      >
+        <span class="sr-only">Close</span>
+        <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
+      </button>
+    </div>
     <div class="overflow-hidden rounded-xl mb-5 min-h-[80vh] relative">
-      <!-- {{ hasStarredMessages }} -->
       <div
         class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
       >
         <div
           v-if="$can('execute', 'notifications')"
-          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-neutral-900 py-0 border-b flex flex-row"
+          class="border-l-[3px] border-l-white dark:border-gray-700 bg-white rounded-t dark:bg-neutral-900 py-0 border-b flex items-center justify-between flex-row"
         >
-          <div class="px-3">
-            <button
-              id="select-all-tooltip-btn"
-              @click="
-                () =>
-                  areAllSelected
-                    ? (selectedItems = [])
-                    : (selectedItems = JSON.parse(
-                        JSON.stringify(notifications)
-                      ))
-              "
-              @mouseover="
-                $showTooltip({
-                  targetEl: `select-all-tooltip`,
-                  triggerEl: `select-all-tooltip-btn`,
-                })
-              "
-              class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
-            >
-              <input
-                type="checkbox"
-                class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-                :checked="areAllSelected"
-              />
-              <div
-                :id="`select-all-tooltip`"
-                role="tooltip"
-                class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
-              >
-                {{ $t("selectAll") }}
-              </div>
-            </button>
-          </div>
-          <template v-if="selectedItems?.length !== 0">
-            <div class="px-1">
-              <button
-                id="star-all-tooltip-btn"
-                @click="toggleStarStatus()"
-                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
-                @mouseover="
-                  $showTooltip({
-                    targetEl: `star-all-tooltip`,
-                    triggerEl: `star-all-tooltip-btn`,
-                  })
-                "
-              >
-                <IconC
-                  v-if="hasStarredMessages"
-                  iconName="StarIcon"
-                  iconType="solid"
-                  iconClass="w-5 h-5 text-yellow-300"
-                />
-                <IconC
-                  v-else
-                  iconName="StarIcon"
-                  iconType="outline"
-                  iconClass="w-5 h-5"
-                />
-                <div
-                  :id="`star-all-tooltip`"
-                  role="tooltip"
-                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
-                >
-                  {{ hasStarredMessages ? $t("removeStar") : $t("addStar") }}
-                </div>
-              </button>
-            </div>
+          <div class="flex flex-row">
             <div class="px-3">
               <button
-                id="read-all-tooltip-btn"
-                @click="toggleReadStatus()"
-                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                id="select-all-tooltip-btn"
+                @click="
+                  () =>
+                    areAllSelected
+                      ? (selectedItems = [])
+                      : (selectedItems = JSON.parse(
+                          JSON.stringify(notifications)
+                        ))
+                "
                 @mouseover="
                   $showTooltip({
-                    targetEl: `read-all-tooltip`,
-                    triggerEl: `read-all-tooltip-btn`,
+                    targetEl: `select-all-tooltip`,
+                    triggerEl: `select-all-tooltip-btn`,
                   })
                 "
+                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
               >
-                <IconC
-                  v-if="hasUnreadMessages"
-                  iconName="EnvelopeOpenIcon"
-                  iconType="outline"
-                  iconClass="w-5 h-5"
-                />
-                <IconC
-                  v-else
-                  iconName="EnvelopeIcon"
-                  iconType="outline"
-                  iconClass="w-5 h-5"
+                <input
+                  type="checkbox"
+                  class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+                  :checked="areAllSelected"
                 />
                 <div
-                  :id="`read-all-tooltip`"
+                  :id="`select-all-tooltip`"
                   role="tooltip"
                   class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                 >
-                  {{ hasUnreadMessages ? $t("markRead") : $t("markUnread") }}
+                  {{ $t("selectAll") }}
                 </div>
               </button>
             </div>
-            <div class="px-1">
-              <button
-                id="delete-all-tooltip-btn"
-                @click="deleteNotifications"
-                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
-                @mouseover="
-                  $showTooltip({
-                    targetEl: `delete-all-tooltip`,
-                    triggerEl: `delete-all-tooltip-btn`,
-                  })
-                "
-              >
-                <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
-                <div
-                  :id="`delete-all-tooltip`"
-                  role="tooltip"
-                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+            <template v-if="selectedItems?.length !== 0">
+              <div class="px-1">
+                <button
+                  id="star-all-tooltip-btn"
+                  @click="toggleStarStatus()"
+                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  @mouseover="
+                    $showTooltip({
+                      targetEl: `star-all-tooltip`,
+                      triggerEl: `star-all-tooltip-btn`,
+                    })
+                  "
                 >
-                  {{ $t("delete") }}
-                </div>
-              </button>
+                  <IconC
+                    v-if="hasStarredMessages"
+                    iconName="StarIcon"
+                    iconType="solid"
+                    iconClass="w-5 h-5 text-yellow-300"
+                  />
+                  <IconC
+                    v-else
+                    iconName="StarIcon"
+                    iconType="outline"
+                    iconClass="w-5 h-5"
+                  />
+                  <div
+                    :id="`star-all-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                  >
+                    {{ hasStarredMessages ? $t("removeStar") : $t("addStar") }}
+                  </div>
+                </button>
+              </div>
+              <div class="px-3">
+                <button
+                  id="read-all-tooltip-btn"
+                  @click="toggleReadStatus()"
+                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  @mouseover="
+                    $showTooltip({
+                      targetEl: `read-all-tooltip`,
+                      triggerEl: `read-all-tooltip-btn`,
+                    })
+                  "
+                >
+                  <IconC
+                    v-if="hasUnreadMessages"
+                    iconName="EnvelopeOpenIcon"
+                    iconType="outline"
+                    iconClass="w-5 h-5"
+                  />
+                  <IconC
+                    v-else
+                    iconName="EnvelopeIcon"
+                    iconType="outline"
+                    iconClass="w-5 h-5"
+                  />
+                  <div
+                    :id="`read-all-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                  >
+                    {{ hasUnreadMessages ? $t("markRead") : $t("markUnread") }}
+                  </div>
+                </button>
+              </div>
+              <div class="px-1">
+                <button
+                  id="delete-all-tooltip-btn"
+                  @click="deleteNotifications"
+                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  @mouseover="
+                    $showTooltip({
+                      targetEl: `delete-all-tooltip`,
+                      triggerEl: `delete-all-tooltip-btn`,
+                    })
+                  "
+                >
+                  <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
+                  <div
+                    :id="`delete-all-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                  >
+                    {{ $t("delete") }}
+                  </div>
+                </button>
+              </div>
+            </template>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-gray-700 mx-3"
+            >
+              <div
+                class="h-1.5 rounded-full"
+                :class="getStatus"
+                :style="`width: ${getNotificationPercentage}%`"
+              ></div>
             </div>
-          </template>
+            <small class="text-gray-700 dark:text-gray-400"
+              >{{ total }} of {{ storage }} ({{ getNotificationPercentage }}%)
+              used</small
+            >
+          </div>
         </div>
         <div
           class="border-l-[3px] border-l-white bg-white dark:bg-neutral-900 py-0 border-b dark:border-gray-700 px-2"
@@ -420,6 +477,8 @@ export default {
       currentPage: 1,
       activeTab: "all",
       colName: null,
+      total: null,
+      storage: null,
     };
   },
   computed: {
@@ -457,6 +516,22 @@ export default {
           ) && this.notifications?.length !== 0
       );
     },
+    getNotificationPercentage() {
+      const percentage = Math.floor((this.total * 100) / this.storage) || 0;
+      return percentage <= 100 ? percentage : 100;
+    },
+    getStatus() {
+      const v = this.getNotificationPercentage;
+      let color;
+      if (v >= 80) {
+        color = "bg-red-500";
+      } else if (v < 80 && v > 50) {
+        color = "bg-yellow-400";
+      } else if (v <= 50) {
+        color = "bg-theme-700";
+      }
+      return color;
+    },
   },
   watch: {
     colName: {
@@ -467,6 +542,13 @@ export default {
     },
   },
   async created() {
+    this.$store
+      .dispatch("settingsModule/getSettingsType", {
+        settingsType: "notification",
+      })
+      .then((response) => {
+        this.storage = Number(response.data[0]?.settingsValue);
+      });
     this.getNotifications(this.currentPage);
   },
   methods: {
@@ -488,6 +570,7 @@ export default {
             this.$store.getters["notificationsModule/getNotificationsList"];
           this.currentPage = page;
           this.isTableLoading = false;
+          if (!this.colName) this.total = this.pagination.total;
         })
         .catch(() => {
           this.isTableLoading = false;

@@ -76,6 +76,7 @@ def checkProductExpireNotification():
     date_end = datetime.combine(date.today(), time.max) + timedelta(days=4)
     today_beginning = datetime.combine(date.today(), time.min)
     today_end = datetime.combine(date.today(), time.max)
+
     almost_expired_products = Product.query.filter()\
         .filter(Product.expiration_date <= date_end)\
         .filter(Product.expiration_date >= date_start)\
@@ -84,7 +85,11 @@ def checkProductExpireNotification():
         .filter(Product.expiration_date <= today_end)\
         .filter(Product.expiration_date >= today_beginning)\
         .all()
+    
     for product in almost_expired_products:
+        if Notification.query.count() >= int(storage):
+            return "Nothing added", 200
+        
         time_diff = product.expiration_date - datetime.now()
         message = f"Product {product.name} expires in {time_diff.days + 1} days"
         notification_exists = Notification.query.filter_by(notification_message=message)\
@@ -106,6 +111,9 @@ def checkProductExpireNotification():
 
     
     for product in expired_products:
+        if Notification.query.count() >= int(storage):
+            return "Nothing added", 200
+
         message = f"Product {product.name} has expired"
         notification_exists = Notification.query.filter_by(notification_message=message)\
             .filter(Notification.date_created <= today_end)\

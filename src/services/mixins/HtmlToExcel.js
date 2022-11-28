@@ -1,6 +1,7 @@
 export default {
   methods: {
     tableToExcel(table, fileName) {
+      console.log(table);
       let uri =
           "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,",
         template =
@@ -13,7 +14,6 @@ export default {
             return c[p];
           });
         };
-      if (!table.nodeType) table = document.getElementById(table);
       let ctx = {
         worksheet: "Worksheet",
         table: table.innerHTML,

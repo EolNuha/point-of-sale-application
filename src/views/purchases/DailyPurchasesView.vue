@@ -46,9 +46,22 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
-            :disabled="!(allPurchases?.length > 0)"
+            :disabled="!(purchases?.length > 0)"
           >
-            <div class="inline-flex flex-row">
+            <div
+              class="inline-flex flex-row"
+              role="status"
+              v-if="isExcelLoading"
+            >
+              <IconC
+                iconType="custom"
+                iconName="SpinnerIcon"
+                iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
+              />
+              {{ $t("downloading") }}...
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="inline-flex flex-row" v-else>
               <IconC
                 iconType="custom"
                 iconName="ExcelFileIcon"
@@ -293,36 +306,6 @@
         </div>
       </div>
     </div>
-    <table id="table-data" class="hidden">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">{{ $t("sellerName") }}</th>
-          <th scope="col">{{ $t("invoiceNumber") }}</th>
-          <th scope="col" v-for="item in taxes" :key="item.settingsValue">
-            {{ $t("tax") }} {{ item.settingsName }}%
-          </th>
-          <th scope="col">{{ $t("subtotalAmount") }}</th>
-          <th scope="col">{{ $t("totalAmount") }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="purchase in allPurchases" :key="purchase.id">
-          <tr>
-            <td>
-              {{ purchase.id }}
-            </td>
-            <td>{{ purchase.sellerName }}</td>
-            <td>{{ purchase.sellerInvoiceNumber }}</td>
-            <td v-for="item in taxes" :key="item.settingsValue">
-              {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
-            </td>
-            <td>{{ purchase.subTotalAmount }} €</td>
-            <td>{{ purchase.totalAmount }} €</td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
@@ -346,6 +329,7 @@ export default {
   data() {
     return {
       isTableLoading: false,
+      isExcelLoading: false,
       currentPage: 1,
       searchQuery: "",
       sortColumn: null,
@@ -377,11 +361,6 @@ export default {
       async handler() {
         this.currentPage = 1;
         this.getPurchases(1);
-      },
-    },
-    "$store.state.purchaseModule.purchases": {
-      handler() {
-        this.getAllPurchases();
       },
     },
   },
@@ -420,7 +399,7 @@ export default {
       await this.$store
         .dispatch("purchaseModule/getAllDailyPurchases", {
           page: 1,
-          per_page: 1000,
+          per_page: this.pagination.total,
           date: this.purchaseDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
@@ -431,9 +410,79 @@ export default {
         });
     },
     async downloadExcel() {
+      this.isExcelLoading = true;
+      await this.getAllPurchases();
+
+      let table = document.createElement("table");
+      let thead = document.createElement("thead");
+      let tbody = document.createElement("tbody");
+
+      let headTr = document.createElement("tr");
+
+      let idTh = document.createElement("th");
+      idTh.innerHTML = "ID";
+      headTr.appendChild(idTh);
+
+      let sellerNameTh = document.createElement("th");
+      sellerNameTh.innerHTML = this.$t("sellerName");
+      headTr.appendChild(sellerNameTh);
+
+      let invoiceTh = document.createElement("th");
+      invoiceTh.innerHTML = this.$t("invoiceNumber");
+      headTr.appendChild(invoiceTh);
+
+      for await (const tax of this.taxes) {
+        let taxTh = document.createElement("td");
+        taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
+        headTr.appendChild(taxTh);
+      }
+
+      let subtotalTh = document.createElement("th");
+      subtotalTh.innerHTML = this.$t("subtotalAmount");
+      headTr.appendChild(subtotalTh);
+
+      let totalTh = document.createElement("th");
+      totalTh.innerHTML = this.$t("totalAmount");
+      headTr.appendChild(totalTh);
+
+      for await (const element of this.allPurchases) {
+        let bodyTr = document.createElement("tr");
+        let idTd = document.createElement("td");
+        idTd.innerHTML = element.id;
+        bodyTr.appendChild(idTd);
+
+        let sellerNameTd = document.createElement("td");
+        sellerNameTd.innerHTML = element.sellerName;
+        bodyTr.appendChild(sellerNameTd);
+
+        let invoiceTd = document.createElement("td");
+        invoiceTd.innerHTML = element.sellerInvoiceNumber;
+        bodyTr.appendChild(invoiceTd);
+
+        for await (const tax of this.taxes) {
+          let taxTd = document.createElement("td");
+          taxTd.innerHTML = `${this.getTaxValue(
+            element.taxes,
+            tax.settingsAlias
+          )} €`;
+          bodyTr.appendChild(taxTd);
+        }
+        let subtotalTd = document.createElement("td");
+        subtotalTd.innerHTML = `${element.subTotalAmount} €`;
+        let totalTd = document.createElement("td");
+        totalTd.innerHTML = `${element.totalAmount} €`;
+        bodyTr.appendChild(subtotalTd);
+        bodyTr.appendChild(totalTd);
+        tbody.appendChild(bodyTr);
+      }
+
+      thead.appendChild(headTr);
+      table.appendChild(thead);
+      table.appendChild(tbody);
       let fileName =
         this.purchaseDate.replaceAll(".", "-") + `-${this.$t("purchases")}`;
-      this.tableToExcel("table-data", fileName);
+      this.tableToExcel(table, fileName);
+      this.isExcelLoading = false;
     },
     sort(col) {
       this.sortColumn = col;

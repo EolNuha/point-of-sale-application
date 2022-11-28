@@ -43,7 +43,7 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
-            :disabled="!(allPurchases?.length > 0)"
+            :disabled="!(purchases?.length > 0)"
           >
             <div
               class="inline-flex flex-row"
@@ -252,11 +252,6 @@ export default {
         this.getPurchases(1);
       },
     },
-    "$store.state.purchaseModule.purchases": {
-      handler() {
-        this.getAllPurchases();
-      },
-    },
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
@@ -318,7 +313,7 @@ export default {
       await this.$store
         .dispatch("purchaseModule/getAllPurchases", {
           page: 1,
-          per_page: 1000,
+          per_page: this.pagination.total,
           startDate: this.startDate,
           endDate: this.endDate,
           search: this.searchQuery,
@@ -331,6 +326,8 @@ export default {
     },
     async downloadExcel() {
       this.isExcelLoading = true;
+      await this.getAllPurchases();
+
       let table = document.createElement("table");
       let thead = document.createElement("thead");
       let tbody = document.createElement("tbody");

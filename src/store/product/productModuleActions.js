@@ -17,6 +17,18 @@ export default {
         });
     });
   },
+  getAllProducts({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/products`, { params: data })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getProductDetails({ commit }, productId) {
     return new Promise((resolve, reject) => {
       axios

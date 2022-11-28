@@ -29,18 +29,46 @@
             />
           </div>
         </div>
-        <button
-          @click="
-            $router.push({
-              name: 'new-product',
-            })
-          "
-          v-if="$can('write', 'products')"
-          class="theme-gradient-btn flex items-center text-center"
-        >
-          <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-          {{ $t("createProduct") }}
-        </button>
+        <div class="flex flex-row items-center gap-2">
+          <button
+            @click="
+              $router.push({
+                name: 'new-product',
+              })
+            "
+            v-if="$can('write', 'products')"
+            class="theme-gradient-btn flex items-center text-center"
+          >
+            <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
+            {{ $t("createProduct") }}</button
+          ><button
+            @click="downloadExcel()"
+            class="green-gradient-btn inline-flex items-center text-center"
+            :disabled="!(products?.length > 0)"
+          >
+            <div
+              class="inline-flex flex-row"
+              role="status"
+              v-if="isExcelLoading"
+            >
+              <IconC
+                iconType="custom"
+                iconName="SpinnerIcon"
+                iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
+              />
+              {{ $t("downloading") }}...
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="inline-flex flex-row" v-else>
+              <IconC
+                iconType="custom"
+                iconName="ExcelFileIcon"
+                iconClass="w-5 h-5 fill-white mr-2"
+              />
+              {{ $t("download") }} Excel
+            </div>
+          </button>
+        </div>
       </div>
 
       <div class="rounded-xl my-5 min-h-65 relative">
@@ -363,6 +391,7 @@
 
 <script>
 import DeleteModal from "@/components/modals/DeleteModal.vue";
+import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 export default {
   components: {
     DeleteModal,
@@ -370,14 +399,17 @@ export default {
   data() {
     return {
       isTableLoading: true,
+      isExcelLoading: false,
       selectedProduct: {},
       selectedProductToDelete: {},
       currentPage: 1,
       searchQuery: "",
       sortColumn: null,
       sortDir: "desc",
+      allProducts: [],
     };
   },
+  mixins: [HtmlToExcel],
   watch: {
     searchQuery: {
       async handler() {
@@ -436,6 +468,19 @@ export default {
           this.$toast.error(this.$t("somethingWrong"));
         });
     },
+    async getAllProducts() {
+      await this.$store
+        .dispatch("productModule/getAllProducts", {
+          page: 1,
+          per_page: this.pagination.total,
+          search: this.searchQuery,
+          sort_column: this.sortColumn,
+          sort_dir: this.sortDir,
+        })
+        .then((res) => {
+          this.allProducts = res.data.data;
+        });
+    },
     stockStatus(v) {
       let color;
       let text;
@@ -455,6 +500,85 @@ export default {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getProducts(this.currentPage);
+    },
+    async downloadExcel() {
+      this.isExcelLoading = true;
+      await this.getAllProducts();
+
+      let table = document.createElement("table");
+      let thead = document.createElement("thead");
+      let tbody = document.createElement("tbody");
+
+      let headTr = document.createElement("tr");
+
+      let idTh = document.createElement("th");
+      idTh.innerHTML = "ID";
+      headTr.appendChild(idTh);
+
+      let nameTh = document.createElement("th");
+      nameTh.innerHTML = this.$t("productName");
+      headTr.appendChild(nameTh);
+
+      let barcodeTh = document.createElement("th");
+      barcodeTh.innerHTML = this.$t("barcode");
+      headTr.appendChild(barcodeTh);
+
+      let purchasedPriceTh = document.createElement("th");
+      purchasedPriceTh.innerHTML = this.$t("purchasedPrice");
+      headTr.appendChild(purchasedPriceTh);
+
+      let sellingPriceTh = document.createElement("th");
+      sellingPriceTh.innerHTML = this.$t("sellingPrice");
+      headTr.appendChild(sellingPriceTh);
+
+      let stockTh = document.createElement("th");
+      stockTh.innerHTML = this.$t("stock");
+      headTr.appendChild(stockTh);
+
+      let taxTh = document.createElement("th");
+      taxTh.innerHTML = this.$t("tax");
+      headTr.appendChild(taxTh);
+
+      for await (const element of this.allProducts) {
+        let bodyTr = document.createElement("tr");
+
+        let idTd = document.createElement("td");
+        idTd.innerHTML = element.id;
+        bodyTr.appendChild(idTd);
+
+        let nameTd = document.createElement("td");
+        nameTd.innerHTML = element.name;
+        bodyTr.appendChild(nameTd);
+
+        let barcodeTd = document.createElement("td");
+        barcodeTd.innerHTML = element.barcode;
+        bodyTr.appendChild(barcodeTd);
+
+        let purchasedPriceTd = document.createElement("td");
+        purchasedPriceTd.innerHTML = `${element.purchasedPrice} €`;
+        bodyTr.appendChild(purchasedPriceTd);
+
+        let sellingPriceTd = document.createElement("td");
+        sellingPriceTd.innerHTML = `${element.sellingPrice} €`;
+        bodyTr.appendChild(sellingPriceTd);
+
+        let stockTd = document.createElement("td");
+        stockTd.innerHTML = element.stock;
+        bodyTr.appendChild(stockTd);
+
+        let taxTd = document.createElement("td");
+        taxTd.innerHTML = `${element.tax}%`;
+        bodyTr.appendChild(taxTd);
+
+        tbody.appendChild(bodyTr);
+      }
+
+      thead.appendChild(headTr);
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
+      this.tableToExcel(table, this.$t("products"));
+      this.isExcelLoading = false;
     },
   },
 };

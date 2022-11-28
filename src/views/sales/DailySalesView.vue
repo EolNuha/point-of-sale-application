@@ -46,7 +46,7 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
-            :disabled="!(allSales?.length > 0)"
+            :disabled="!(sales?.length > 0)"
           >
             <div
               class="inline-flex flex-row"
@@ -349,7 +349,6 @@ export default {
       settingsType: "tax",
     });
     await this.getSales(this.currentPage);
-    this.getAllSales();
   },
   methods: {
     getTaxValue(arr, alias) {
@@ -380,7 +379,7 @@ export default {
       await this.$store
         .dispatch("saleModule/getAllDailySales", {
           page: 1,
-          per_page: 1000,
+          per_page: this.pagination.total,
           date: this.saleDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
@@ -392,6 +391,8 @@ export default {
     },
     async downloadExcel() {
       this.isExcelLoading = true;
+      await this.getAllSales();
+
       let table = document.createElement("table");
       let thead = document.createElement("thead");
       let tbody = document.createElement("tbody");
@@ -458,7 +459,6 @@ export default {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";
       this.getSales(this.currentPage);
-      this.getAllSales();
     },
     deleteSale(sale) {
       this.selectedSale = sale;

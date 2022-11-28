@@ -43,7 +43,7 @@
           <button
             @click="downloadExcel()"
             class="green-gradient-btn inline-flex items-center text-center"
-            :disabled="!(allSales?.length > 0)"
+            :disabled="!(sales?.length > 0)"
           >
             <div
               class="inline-flex flex-row"
@@ -248,11 +248,6 @@ export default {
         this.getSales(1);
       },
     },
-    "$store.state.saleModule.sales": {
-      handler() {
-        this.getAllSales();
-      },
-    },
   },
   computed: {
     sales() {
@@ -315,7 +310,7 @@ export default {
       await this.$store
         .dispatch("saleModule/getAllSales", {
           page: 1,
-          per_page: 1000,
+          per_page: this.pagination.total,
           startDate: this.startDate,
           endDate: this.endDate,
           search: this.searchQuery,
@@ -328,6 +323,7 @@ export default {
     },
     async downloadExcel() {
       this.isExcelLoading = true;
+      await this.getAllSales();
       let table = document.createElement("table");
       let thead = document.createElement("thead");
       let tbody = document.createElement("tbody");
@@ -355,7 +351,7 @@ export default {
       for await (const element of this.allSales) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated.substring(0, 10);
+        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
         bodyTr.appendChild(dateTd);
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
@@ -383,7 +379,7 @@ export default {
       if (idx !== -1) {
         fileName = `${this.$t(
           this.$getMonths[idx + 1].value
-        )}-${this.startDate.substring(0, 4)}-${this.$t("sales")}`;
+        )}-${this.startDate?.substring(0, 4)}-${this.$t("sales")}`;
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }

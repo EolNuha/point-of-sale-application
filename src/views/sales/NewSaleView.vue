@@ -91,7 +91,7 @@
                 <button
                   @click.stop
                   @click="toggleSelectProduct(product)"
-                  class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                 >
                   <input
                     type="checkbox"

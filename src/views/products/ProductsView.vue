@@ -260,7 +260,7 @@
                   <td class="py-2 px-6" v-if="$can('execute', 'products')">
                     <button
                       @click="updateSelectedProduct(product)"
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                     >
                       <input
                         type="checkbox"
@@ -269,12 +269,9 @@
                       />
                     </button>
                   </td>
-                  <th
-                    scope="row"
-                    class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
+                  <td scope="row" class="py-2 px-6">
                     {{ product.id }}
-                  </th>
+                  </td>
                   <td class="py-2 px-6">{{ product.name }}</td>
                   <td class="py-2 px-6">{{ product.barcode }}</td>
                   <td class="py-2 px-6 max-w-xs">
@@ -285,7 +282,7 @@
                   </td>
                   <td class="py-2 px-6">
                     <div
-                      class="flex items-center"
+                      class="flex items-center bg-white dark:bg-neutral-900 p-1.5 rounded-lg"
                       :id="`product-${product.id}-tooltip-btn`"
                       @mouseover="
                         $showTooltip({
@@ -313,7 +310,7 @@
                     v-if="$can('execute', 'products')"
                   >
                     <button
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                       :id="`product-${product.id}-btn`"
                       @click="
                         $toggleDropdown({

@@ -82,7 +82,7 @@
       <div class="overflow-hidden rounded-xl mb-5 min-h-65 relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
           <table
-            class="w-full text-sm text-left text-gray-700 dark:text-gray-400"
+            class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
           >
             <OverlayC v-if="isTableLoading" />
             <EmptyResultsC
@@ -173,7 +173,7 @@
             <tbody>
               <template v-for="sale in sales" :key="sale.id">
                 <tr
-                  class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:dark:bg-neutral-900/75"
+                  class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]"
                 >
                   <td class="py-2 px-6">
                     {{ sale.dateCreated?.substring(0, 10) }}
@@ -197,7 +197,7 @@
                           },
                         })
                       "
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                     >
                       <IconC
                         iconName="DocumentMagnifyingGlassIcon"

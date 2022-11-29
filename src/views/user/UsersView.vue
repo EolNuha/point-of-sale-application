@@ -209,7 +209,7 @@
                   <td class="py-2 px-6" v-if="$can('execute', 'users')">
                     <button
                       @click="updateSelectedUser(user)"
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                       v-if="currentUser.id !== user.id"
                     >
                       <input
@@ -232,7 +232,7 @@
                   <td class="py-2 px-6 max-w-xs">{{ $t(user.userType) }}</td>
                   <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'users')">
                     <button
-                      class="p-2.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                       :id="`user-${user.id}-btn`"
                       @click="
                         $toggleDropdown({

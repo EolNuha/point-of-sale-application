@@ -6,7 +6,7 @@
     <div class="flex flex-wrap items-center justify-between">
       <div class="inline-flex items-center">
         <button
-          class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 mr-3"
+          class="p-1.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700 mr-3"
           @click="$root.closeSide"
           v-show="$root.sidebar"
         >
@@ -16,7 +16,7 @@
           />
         </button>
         <button
-          class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 mr-3"
+          class="p-1.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700 mr-3"
           @click="$root.openSide"
           v-show="!$root.sidebar"
         >

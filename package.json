@@ -28,7 +28,6 @@
     "sweetalert2": "^11.4.35",
     "vee-validate": "^4.5.8",
     "vue": "^3.2.13",
-    "vue-barcode-scanner": "^0.5.1",
     "vue-i18n": "^9.2.2",
     "vue-loader": "^15.10.0",
     "vue-router": "^4.0.3",

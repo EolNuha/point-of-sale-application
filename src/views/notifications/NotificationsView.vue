@@ -2,16 +2,16 @@
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div
       id="hide-notification"
-      class="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200"
+      class="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-500 text-red-700 dark:text-white"
       role="alert"
       v-show="getNotificationPercentage >= 80"
     >
       <IconC
         iconName="ExclamationCircleIcon"
-        iconClass="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800"
+        iconClass="flex-shrink-0 w-5 h-5"
       />
       <span class="sr-only">Info</span>
-      <div class="ml-3 text-sm font-medium text-red-700 dark:text-red-800">
+      <div class="ml-3 text-sm font-medium">
         <b
           >{{
             getNotificationPercentage >= 100
@@ -29,7 +29,7 @@
       <button
         id="hide-notification-btn"
         type="button"
-        class="ml-auto -mx-1.5 -my-1.5 bg-red-100 text-red-500 rounded-full focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8 dark:bg-red-200 dark:text-red-600 dark:hover:bg-red-300"
+        class="ml-auto -mx-1.5 -my-1.5 bg-red-100 rounded-full focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8 dark:bg-red-500 dark:hover:bg-red-600"
         @click="
           $hideAlert({
             triggerEl: 'hide-notification-btn',
@@ -174,9 +174,12 @@
               </div>
             </template>
           </div>
-          <div class="text-center" v-if="total">
+          <div
+            class="flex flex-col items-end gap-1 justify-center w-[150px] md:w-[250px] mx-3"
+            v-if="total"
+          >
             <div
-              class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-gray-700 mx-3"
+              class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-gray-700"
             >
               <div
                 class="h-1.5 rounded-full"
@@ -560,6 +563,7 @@ export default {
       });
     },
     async getNotifications(page) {
+      this.isTableLoading = true;
       await this.$store
         .dispatch("notificationsModule/getNotificationsList", {
           per_page: 20,

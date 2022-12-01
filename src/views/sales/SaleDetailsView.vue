@@ -77,7 +77,11 @@
                   <th scope="col" class="py-3 px-6 text-right">
                     {{ $t("total") }}
                   </th>
-                  <th scope="col" class="py-3 px-6" v-if="edit"></th>
+                  <th
+                    scope="col"
+                    class="py-3 px-6"
+                    v-if="edit && sale.saleItems?.length > 1"
+                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -186,7 +190,7 @@
       <button
         class="theme-gradient-btn w-32 flex justify-center items-center"
         type="submit"
-        v-if="edit"
+        v-if="edit && sale.saleItems?.length > 1"
       >
         <div role="status" v-if="isUpdateLoading">
           <IconC

@@ -114,7 +114,7 @@ def createPurchase():
                 product_stock=created_product.stock,
                 price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
-                total_amount=Decimal(created_product.purchased_price * created_product.stock).quantize(TWOPLACES),
+                total_amount=Decimal(Decimal(created_product.purchased_price) * Decimal(created_product.stock)).quantize(TWOPLACES),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -314,7 +314,7 @@ def editPurchase(purchaseId):
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in deleted_items:
-        product = Product.query.filter_by(id=item["product"]["id"]).first()
+        product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
         product.stock -= Decimal(item["product"]["stock"])
         PurchaseItem.query.filter_by(id=item["id"]).delete()
         PurchaseTax.query.filter_by(purchase_id=purchaseId).filter_by(tax_name=item["product"]["tax"]).delete()
@@ -337,7 +337,7 @@ def editPurchase(purchaseId):
                 purchase_taxes.append({key_v: tax_amount * item_stock})
         
         purchase_item = PurchaseItem.query.filter_by(id=item["id"]).first()
-        product = Product.query.filter_by(id=item["product"]["id"]).first()
+        product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
 
         product.stock += (item_stock - purchase_item.product_stock)
         product.purchased_price = item_purchased_price

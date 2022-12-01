@@ -10,6 +10,7 @@
           <button
             class="red-gradient-btn inline-flex items-center text-center"
             @click="download"
+            type="button"
           >
             <div class="inline-flex flex-row" role="status" v-if="isPdfLoading">
               <IconC
@@ -32,6 +33,7 @@
           <button
             class="theme-gradient-btn inline-flex items-center text-center"
             @click="getPrintPdf"
+            type="button"
           >
             <div class="inline-flex flex-row">
               <IconC

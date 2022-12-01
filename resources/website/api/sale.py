@@ -226,7 +226,7 @@ def editSale(saleId):
 
     for item in deleted_items:
         product = Product.query.filter_by(id=item["product"]["id"]).first()
-        product.stock += Decimal(item["quantity"]).quantize(TWOPLACES)
+        if product: product.stock += Decimal(item["quantity"]).quantize(TWOPLACES)
         SaleItem.query.filter_by(id=item["id"]).delete()
         SaleTax.query.filter_by(sale_id=saleId).filter_by(tax_name=item["product"]["tax"]).delete()
         db.session.commit()
@@ -244,7 +244,7 @@ def editSale(saleId):
         sale_item = SaleItem.query.filter_by(id=item["id"]).first()
         product = Product.query.filter_by(id=item["product"]["id"]).first()
 
-        product.stock -= (item_quantity - sale_item.product_quantity)
+        if product: product.stock -= (item_quantity - sale_item.product_quantity)
         sale_item.product_quantity = item_quantity
         sale_item.total_amount = Decimal(product.selling_price * item_quantity).quantize(TWOPLACES)
         db.session.commit()
@@ -270,7 +270,7 @@ def deleteSale(saleId):
 
     for item in sale_query.sale_items:
         product = Product.query.filter_by(id=item.product_id).first()
-        product.stock += item.product_quantity
+        if product: product.stock += item.product_quantity
         SaleItem.query.filter_by(id=item.id).delete()
         db.session.commit()
     

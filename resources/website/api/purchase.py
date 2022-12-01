@@ -315,7 +315,7 @@ def editPurchase(purchaseId):
 
     for item in deleted_items:
         product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
-        product.stock -= Decimal(item["product"]["stock"])
+        if product: product.stock -= Decimal(item["product"]["stock"])
         PurchaseItem.query.filter_by(id=item["id"]).delete()
         PurchaseTax.query.filter_by(purchase_id=purchaseId).filter_by(tax_name=item["product"]["tax"]).delete()
         db.session.commit()
@@ -337,19 +337,20 @@ def editPurchase(purchaseId):
                 purchase_taxes.append({key_v: tax_amount * item_stock})
         
         purchase_item = PurchaseItem.query.filter_by(id=item["id"]).first()
-        product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
-
-        product.stock += (item_stock - purchase_item.product_stock)
-        product.purchased_price = item_purchased_price
-        product.selling_price = item_selling_price
 
         purchase_item.product_stock = item_stock
         purchase_item.product_purchased_price = item_purchased_price
         purchase_item.product_selling_price = item_selling_price
         purchase_item.total_amount = Decimal(item_purchased_price * item_stock).quantize(TWOPLACES)
 
-        db.session.commit()
+        product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
+        if product:
+            product.stock += (item_stock - purchase_item.product_stock)
+            product.purchased_price = item_purchased_price
+            product.selling_price = item_selling_price
     
+        db.session.commit()
+
     purchase_query.subtotal_amount = sum(subtotal)
     purchase_taxes = sumListOfDicts(purchase_taxes)
 
@@ -371,7 +372,7 @@ def deletePurchase(purchaseId):
 
     for item in purchase_query.purchase_items:
         product = Product.query.filter_by(id=item.product_id).first()
-        product.stock -= Decimal(item.product_stock)
+        if product: product.stock -= Decimal(item.product_stock)
         PurchaseItem.query.filter_by(id=item.id).delete()
         db.session.commit()
     

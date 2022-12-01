@@ -209,7 +209,11 @@ export default {
   watch: {
     searchQuery: {
       async handler(value) {
-        if (value === "") this.searchedProductsIndex = 0;
+        if (value === "") {
+          this.searchedProductsIndex = 0;
+          this.searchedProducts = [];
+          return;
+        }
         try {
           await this.$store
             .dispatch("productModule/getProducts", {
@@ -292,7 +296,8 @@ export default {
       }
       if (e.key === "Enter" && this.searchQuery) {
         const selectedPr = this.searchedProducts[this.searchedProductsIndex];
-        this.onSearchedProductClick(selectedPr);
+        if (!selectedPr) e.target.select();
+        else this.onSearchedProductClick(selectedPr);
       }
     },
     onSearchedProductClick(product) {

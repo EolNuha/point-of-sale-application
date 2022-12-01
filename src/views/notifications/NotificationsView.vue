@@ -562,8 +562,8 @@ export default {
         this.notifications.find((x) => x.id === item.id).star = item.star;
       });
     },
-    async getNotifications(page) {
-      this.isTableLoading = true;
+    async getNotifications(page, isLoading = true) {
+      this.isTableLoading = isLoading;
       await this.$store
         .dispatch("notificationsModule/getNotificationsList", {
           per_page: 20,
@@ -602,7 +602,7 @@ export default {
           notifications: items,
         })
         .then(() => {
-          this.getNotifications(this.currentPage);
+          this.getNotifications(this.currentPage, false);
           this.$store.dispatch("notificationsModule/getNotifications");
         });
     },
@@ -622,7 +622,7 @@ export default {
           star: star,
         })
         .then(() => {
-          this.getNotifications(this.currentPage);
+          this.getNotifications(this.currentPage, false);
           this.$store.dispatch("notificationsModule/getNotifications");
         });
     },

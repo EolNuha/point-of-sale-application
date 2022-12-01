@@ -113,7 +113,11 @@
                   <th scope="col" class="py-3 px-3 text-right">
                     {{ $t("total") }}
                   </th>
-                  <th scope="col" class="py-3 px-3" v-if="edit"></th>
+                  <th
+                    scope="col"
+                    class="py-3 px-3"
+                    v-if="edit && purchase.purchaseItems?.length > 1"
+                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -203,7 +207,10 @@
                       }}
                       €
                     </td>
-                    <td class="py-3 px-6 max-w-[60px]" v-if="edit">
+                    <td
+                      class="py-3 px-6 max-w-[60px]"
+                      v-if="edit && purchase.purchaseItems?.length > 1"
+                    >
                       <button
                         type="button"
                         :id="`delete-${item.id}-tooltip-btn`"

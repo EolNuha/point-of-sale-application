@@ -127,10 +127,12 @@ def getSales():
     else:
         looking_for = '%{0}%'.format(search)
         
-    paginated_items = Sale.query.filter(or_(
+    paginated_items = Sale.query.join(User).filter(or_(
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),
+        User.first_name.ilike(looking_for),
+        User.last_name.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created > date_start)\
@@ -196,10 +198,12 @@ def getDailySales():
     else:
         looking_for = '%{0}%'.format(search)
         
-    paginated_items = Sale.query.filter(or_(
+    paginated_items = Sale.query.join(User).filter(or_(
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),
+        User.first_name.ilike(looking_for),
+        User.last_name.ilike(looking_for),
         ))\
         .order_by(sort)\
         .filter(Sale.date_created <= sale_date_end)\

@@ -1,5 +1,6 @@
 from .. import db
 from datetime import datetime
+from sqlalchemy import Index
 
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,3 +38,5 @@ class SaleItem(db.Model):
     total_amount = db.Column(db.Numeric(precision=10, scale=2))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
+
+Index('ix_sales', Sale.id.asc(), Sale.total_amount.asc(), Sale.subtotal_amount.asc(), Sale.date_created.asc())

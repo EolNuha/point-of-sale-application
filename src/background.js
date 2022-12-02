@@ -47,7 +47,7 @@ async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     // icon: `./public/icon.png`,
-    title: "My First Desktop App",
+    title: "Egzoni Market",
     width: 800,
     height: 600,
     webPreferences: {
@@ -55,7 +55,12 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      devTools: isDevelopment,
     },
+  });
+  win.maximize();
+  win.on("close", (e) => {
+    if (BrowserWindow.getAllWindows().length > 1) e.preventDefault();
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

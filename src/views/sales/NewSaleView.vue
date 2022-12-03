@@ -35,7 +35,7 @@
         </button>
       </li>
       <li
-        class="ml-2 border-none"
+        class="pl-2"
         :id="`add-tab-tooltip-btn`"
         @mouseover="
           $showTooltip({

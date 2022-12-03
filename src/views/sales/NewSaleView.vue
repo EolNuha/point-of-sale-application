@@ -1,382 +1,95 @@
 <template>
-  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen p-4 relative">
-    <div class="flex justify-between gap-2">
-      <div class="flex items-center search-input-width relative">
-        <label for="simple-search" class="sr-only">{{ $t("search") }}</label>
-        <div class="relative w-full">
-          <div
-            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen relative">
+    <ul
+      class="divide-x dark:divide-gray-600 flex flex-wrap items-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-neutral-900 px-2 pt-2"
+    >
+      <li
+        v-for="(tab, index) in tabs"
+        :key="`tab-${index}`"
+        class="relative"
+        :class="tab === activeTab ? 'border-none' : ''"
+      >
+        <button
+          @click="activeTab = tab"
+          type="button"
+          class="min-w-[150px] inline-flex justify-between items-center px-4 py-2"
+          :class="
+            tab === activeTab
+              ? 'text-theme-600 bg-gray-200 active dark:bg-neutral-800 dark:text-theme-500 relative rounded-t-lg'
+              : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-neutral-900/75 dark:hover:text-gray-300 bg-white dark:bg-neutral-900'
+          "
+        >
+          <span>{{ $t("tab") }} {{ tab + 1 }}</span>
+          <button
+            v-if="tabs.length > 1"
+            @click.stop="removeTab(index)"
+            class="rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
           >
             <IconC
               iconType="solid"
-              iconName="MagnifyingGlassIcon"
-              iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              iconSize="20"
+              iconName="XMarkIcon"
+              iconClass="w-4 h-4"
             />
-          </div>
-          <input
-            @keydown="keyEvent"
-            v-model="searchQuery"
-            type="text"
-            class="default-input w-full pl-10"
-            :placeholder="$t('search')"
-          />
-        </div>
-        <div class="search-results" v-if="searchQuery">
-          <table
-            class="w-full bg-white dark:bg-neutral-700 text-sm text-left text-gray-700 dark:text-gray-400 border-solid border-t-0 border-[3px] border-gray-300 dark:border-neutral-700 relative"
-          >
-            <tbody>
-              <template v-for="product in searchedProducts" :key="product.id">
-                <tr
-                  @click="onSearchedProductClick(product)"
-                  class="border-b dark:border-neutral-700 cursor-default"
-                  :class="
-                    searchedProducts[searchedProductsIndex] === product
-                      ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
-                      : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 hover:dark:bg-neutral-900/[.5]'
-                  "
-                >
-                  <th
-                    scope="row"
-                    class="py-2 px-6 font-medium whitespace-nowrap"
-                  >
-                    {{ product.id }}
-                  </th>
-                  <td class="py-2 px-6">{{ product.name }}</td>
-                  <td class="py-2 px-6">{{ product.barcode }}</td>
-                  <td class="py-2 px-6">{{ product.sellingPrice }} €</td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <router-link :to="{ name: 'new-sale' }" target="_blank">
-        <button class="theme-gradient-btn flex items-center gap-2">
-          <IconC iconName="ArrowTopRightOnSquareIcon" iconClass="w-5 h-5" />
-          <span class="hidden sm:inline">{{ $t("newSale") }}</span>
+          </button>
         </button>
-      </router-link>
-    </div>
-    <div
-      class="overflow-x-auto relative rounded-lg my-5 scrollbar-style mb-[8.5rem]"
-    >
-      <table
-        class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
+      </li>
+      <li
+        class="ml-2 border-none"
+        :id="`add-tab-tooltip-btn`"
+        @mouseover="
+          $showTooltip({
+            targetEl: `add-tab-tooltip`,
+            triggerEl: `add-tab-tooltip-btn`,
+          })
+        "
       >
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
-        >
-          <tr>
-            <th scope="col" class="py-3 px-6"></th>
-            <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
-            <!-- <th scope="col" class="py-3 px-6"></th> -->
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="product in products" :key="product.id">
-            <tr
-              class="border-b dark:border-neutral-700 cursor-default"
-              :class="
-                isSelected(product.id)
-                  ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
-                  : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
-              "
-            >
-              <td class="py-2 px-6">
-                <button
-                  @click.stop
-                  @click="toggleSelectProduct(product)"
-                  class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
-                >
-                  <input
-                    type="checkbox"
-                    class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-                    :checked="isSelected(product.id)"
-                  />
-                </button>
-              </td>
-              <td class="py-2 px-6">
-                {{ product.id }}
-              </td>
-              <td class="py-2 px-6">{{ product.name }}</td>
-              <td class="py-2 px-6">{{ product.barcode }}</td>
-              <td class="py-2 px-6">
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  :id="`product-${product.id}-quantity`"
-                  v-model="product.quantity"
-                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
-                  @change="
-                    () => (
-                      product.quantity
-                        ? (product.quantity = product.quantity)
-                        : (product.quantity = 1),
-                      (total = getProductsTotal())
-                    )
-                  "
-                  @focus="$event.target.select()"
-                />
-              </td>
-              <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
-    </div>
-    <div
-      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-neutral-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
-    >
-      <div class="flex flex-row items-center">
         <button
-          :disabled="products?.length === 0"
-          @click="finishSaleModal()"
+          @click="addTab()"
           type="button"
-          id="finishSale"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="theme-gradient-btn px-2 py-1 flex items-center gap-2"
+          :disabled="tabs.length >= 5"
         >
-          <IconC iconType="solid" iconName="CheckIcon" iconClass="w-5 h-5" />
-          {{ $t("finish") }} (F8)
+          <IconC iconName="PlusIcon" iconClass="w-5 h-5" />
         </button>
-        <button
-          :disabled="products?.length === 0"
-          @click="openRemoveModal(JSON.parse(JSON.stringify(products)))"
-          type="button"
-          id="clearAll"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-        >
-          <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
-          {{ $t("clearAll") }} (F10)
-        </button>
-      </div>
+      </li>
       <div
-        class="flex flex-row items-center text-3xl md:text-7xl text-gray-700 dark:text-gray-300"
+        :id="`add-tab-tooltip`"
+        role="tooltip"
+        class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip"
       >
-        {{ $t("total") }}:
-        <div
-          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-neutral-800 rounded-lg"
-        >
-          <span id="total">{{ total }}</span
-          >€
-        </div>
+        {{ tabs.length >= 5 ? $t("maxTabs") : $t("addTab") }}
       </div>
-    </div>
-    <remove-modal
-      :value="selectedProductsToRemove"
-      title="Product"
-      :removeRef="removeModalRef"
-      @remove="removeProducts($event)"
-    />
-    <finish-sale-modal
-      :isLoading="isFinishSaleLoading"
-      :modalRef="finishSaleModalRef"
-      :total="total"
-      @submit="finishSale"
-    />
+    </ul>
+    <template v-for="tab in tabs" :key="tab">
+      <sale-tab v-show="tab === activeTab" :id="`tab-${tab}`" />
+    </template>
   </div>
 </template>
 
 <script>
-import RemoveModal from "@/components/modals/RemoveModal.vue";
-import FinishSaleModal from "@/components/modals/FinishSaleModal.vue";
+import SaleTab from "./SaleTab.vue";
 export default {
   components: {
-    RemoveModal,
-    FinishSaleModal,
+    SaleTab,
   },
   name: "NewSaleView",
   data() {
     return {
-      isFinishSaleLoading: false,
-      removeModalRef: "remove-modal",
-      finishSaleModalRef: "finish-sale-modal",
-      selectedProducts: [],
-      selectedProductsToRemove: [],
-      searchQuery: "",
-      searchedProducts: [],
-      searchedProductsIndex: 0,
-      lastSearchedProduct: {},
-      products: [],
-      total: "0.00",
+      tabs: [0],
+      activeTab: 0,
     };
   },
-  watch: {
-    searchQuery: {
-      async handler(value) {
-        if (value === "") {
-          this.searchedProductsIndex = 0;
-          this.searchedProducts = [];
-          return;
-        }
-        try {
-          await this.$store
-            .dispatch("productModule/getProducts", {
-              page: 1,
-              per_page: 10,
-              search: value,
-              sort_column: "name",
-              sort_dir: "asc",
-            })
-            .then((res) => {
-              this.searchedProducts = res.data.data;
-            });
-        } catch {
-          console.log();
-        }
-      },
-    },
-  },
-  computed: {
-    isSelected() {
-      return (id) => this.selectedProducts?.some((obj) => obj?.id === id);
-    },
-  },
-  created() {
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "Delete") {
-        const isEmpty = this.selectedProducts?.length === 0;
-        if (!isEmpty) {
-          this.openRemoveModal(this.selectedProducts);
-        }
-      }
-      if (e.key == "F8") {
-        const isProductsEmpty = this.products?.length === 0;
-        if (!isProductsEmpty) {
-          this.finishSaleModal();
-        }
-      }
-      if (e.key == "F10") {
-        const isProductsEmpty = this.products?.length === 0;
-        if (!isProductsEmpty) {
-          this.openRemoveModal(JSON.parse(JSON.stringify(this.products)));
-        }
-      }
-    });
-  },
-  async beforeRouteLeave(to, from, next) {
-    if (!(this.products?.length === 0)) {
-      const options = this.$swalConfirmObject();
-      options.html = `<p class='text-gray-500 dark:text-gray-300'>${this.$t(
-        "saleNotFinished"
-      )}</p>`;
-      options.icon = "info";
-      options.position = "top";
-      await this.$swal(options).then((result) => {
-        if (result.isDenied || result.isDismissed) {
-          return;
-        } else {
-          next();
-        }
-      });
-    } else {
-      next();
-    }
-  },
   methods: {
-    keyEvent(e) {
-      if (
-        e.key === "ArrowDown" &&
-        this.searchedProductsIndex < this.searchedProducts?.length - 1
-      ) {
-        this.searchedProductsIndex++;
-      }
-      if (e.key === "ArrowUp" && this.searchedProductsIndex > 0) {
-        e.preventDefault();
-        this.searchedProductsIndex--;
-      }
-      if (e.key === "Enter" && !this.searchQuery) {
-        const productId = this.lastSearchedProduct.id;
-        this.$putOnFocus(`product-${productId}-quantity`);
-      }
-      if (e.key === "Enter" && this.searchQuery) {
-        const selectedPr = this.searchedProducts[this.searchedProductsIndex];
-        if (!selectedPr) e.target.select();
-        else this.onSearchedProductClick(selectedPr);
-      }
+    addTab() {
+      this.tabs.push(this.tabs[this.tabs.length - 1] + 1);
+      this.activeTab = this.tabs[this.tabs.length - 1];
     },
-    onSearchedProductClick(product) {
-      this.lastSearchedProduct = product;
-      product.quantity = 1;
-      const objectIdx = this.products.findIndex(
-        (item) => item.id === product.id
-      );
-      if (objectIdx != -1) {
-        this.products[objectIdx].quantity++;
-      } else {
-        this.products.unshift(product);
-      }
-      this.total = this.getProductsTotal();
-      this.searchQuery = "";
-      this.searchedProductsIndex = 0;
-      this.searchedProducts = [];
-    },
-    getProductsTotal() {
-      const products = this.products;
-      const sum = products.reduce((accumulator, object) => {
-        return accumulator + object.sellingPrice * object.quantity;
-      }, 0);
-      return sum.toFixed(2);
-    },
-    openRemoveModal(products) {
-      this.selectedProductsToRemove = products;
-      this.$openModal(this.removeModalRef);
-      this.$putOnFocus("remove-modal-btn");
-    },
-    removeProducts(products) {
-      products.forEach((item) => {
-        this.products.splice(
-          this.products.findIndex((x) => x.id === item.id),
-          1
-        );
-      });
-      this.total = this.getProductsTotal();
-      this.selectedProducts = [];
-      this.$hideModal(this.removeModalRef);
-    },
-    finishSaleModal() {
-      this.$openModal(this.finishSaleModalRef);
-      this.$putOnFocus("customer_amount");
-    },
-    finishSale(e) {
-      this.isFinishSaleLoading = true;
-      const data = {
-        products: this.products,
-        totalAmount: this.total,
-        customerAmount: parseFloat(e).toFixed(2),
-        changeAmount: (parseFloat(e) - this.total).toFixed(2),
-      };
-      this.$store
-        .dispatch("saleModule/createSale", data)
-        .then(() => {
-          this.isFinishSaleLoading = false;
-          this.products = [];
-          this.selectedProducts = [];
-          this.total = (0).toFixed(2);
-          this.$hideModal(this.finishSaleModalRef);
-          this.$toast.success(this.$t("saleSuccess"));
-        })
-        .catch(() => {
-          this.isFinishSaleLoading = false;
-          this.$toast.error(this.$t("somethingWrong"));
-        });
-    },
-    toggleSelectProduct(notification) {
-      const idx = this.selectedProducts.findIndex(
-        (x) => x?.id === notification.id
-      );
-      if (idx !== -1) this.selectedProducts.splice(idx, 1);
-      if (idx === -1) this.selectedProducts.push(notification);
+    removeTab(idx) {
+      const tabIdx = this.tabs.indexOf(this.activeTab);
+      this.tabs.splice(idx, 1);
+      if (idx === tabIdx) this.activeTab = this.tabs[this.tabs.length - 1];
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "/src/styles/views/_newsale.scss";
-</style>

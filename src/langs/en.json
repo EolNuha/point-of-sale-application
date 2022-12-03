@@ -231,5 +231,8 @@
 	"almostOutOfSpaceText": "If you run out of storage space, you won't be able to receive notifications!",
 	"outOfSpaceText": "You will no longer recieve notifications, please upgrade to be able to receive notifications!",
 	"used": "të përdorura",
-	"of": "nga"
+	"of": "nga",
+	"tab": "Tab",
+	"addTab": "Add tab",
+	"maxTabs": "Max number of tabs is 5"
 }

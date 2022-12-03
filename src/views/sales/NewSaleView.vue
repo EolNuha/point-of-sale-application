@@ -47,7 +47,7 @@
         <button
           @click="addTab()"
           type="button"
-          class="theme-gradient-btn px-2 py-1 flex items-center gap-2"
+          class="p-1.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700 flex items-center gap-2"
           :disabled="tabs.length >= 5"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5" />

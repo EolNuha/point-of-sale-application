@@ -1,4 +1,4 @@
-# Vue Electron Flask App
+# Point of Sale Desktop Application
 
 ## Project setup
 ```

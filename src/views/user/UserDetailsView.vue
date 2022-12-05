@@ -100,23 +100,23 @@
         </div>
         <div>
           <label
-            for="userType"
+            for="userRole"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >{{ $t("userType") }}</label
+            >{{ $t("userRole") }}</label
           >
           <v-select
             class="block w-full default-input !p-1"
-            v-model="user.userType"
+            v-model="user.userRole"
             :clearable="false"
             :options="
-              currentUser.userType === 'superadmin'
+              currentUser.userRole === 'superadmin'
                 ? ['staff', 'manager', 'owner', 'superadmin']
                 : ['staff', 'manager', 'owner']
             "
             type="text"
-            name="userType"
-            id="userType"
-            placeholder="User Type"
+            name="userRole"
+            id="userRole"
+            :placeholder="$t('userRole')"
             :disabled="isDisabled() || !$can('execute', 'users')"
             required
             label="option"

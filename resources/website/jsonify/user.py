@@ -4,7 +4,7 @@ def getUserDict(item):
         "firstName": item.first_name,
         "lastName": item.last_name,
         "username": item.username,
-        "userType": item.user_type,
+        "userRole": item.user_role,
         "email": item.email,
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),

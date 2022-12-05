@@ -44,7 +44,7 @@ export default {
         });
     });
   },
-  getUserTypePermissions({ commit }, type) {
+  getUserRolePermissions({ commit }, type) {
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/permissions/${type}`)

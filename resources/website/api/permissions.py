@@ -9,7 +9,7 @@ permissions = Blueprint('permissions', __name__)
 
 @permissions.route('/permissions', methods=["POST"])
 def createPermission():
-    user_type = request.json["user_type"]
+    user_role = request.json["user_role"]
     subject = request.json["subject"]
     action = request.json["action"]
 
@@ -17,7 +17,7 @@ def createPermission():
         subject=subject.lower(), 
         action=action.lower(), 
         key=f"{subject}.{action}", 
-        user_type=user_type,
+        user_role=user_role,
         date_created=datetime.now(),
         date_modified=datetime.now(),
     )
@@ -32,7 +32,7 @@ def createPermission():
 @permissions.route('/permissions', methods=["GET"])
 def getUserPermissions():
     current_user = currentUser(request)
-    return jsonify(getPermissionsList(Permissions.query.filter_by(user_type=current_user.user_type).all()))
+    return jsonify(getPermissionsList(Permissions.query.filter_by(user_role=current_user.user_role).all()))
 
 
 @permissions.route('/permissions/all', methods=["GET"])
@@ -48,23 +48,23 @@ def getPermissionsAll():
         .group_by(Permissions.subject, Permissions.action).all()
     return jsonify(getPermissionsList(p))
 
-@permissions.route('/permissions/<string:user_type>', methods=["GET"])
-def getUserTypePermissions(user_type):
-    return jsonify(getPermissionsList(Permissions.query.filter_by(user_type=user_type).all()))
+@permissions.route('/permissions/<string:user_role>', methods=["GET"])
+def getUserRolePermissions(user_role):
+    return jsonify(getPermissionsList(Permissions.query.filter_by(user_role=user_role).all()))
 
 
 @permissions.route('/permissions', methods=["PUT"])
 def updatePermission():
-    user_type = request.json["user_type"]
+    user_role = request.json["user_role"]
     key = request.json["key"]
 
-    query = Permissions.query.filter_by(user_type=user_type).filter_by(key=key)
+    query = Permissions.query.filter_by(user_role=user_role).filter_by(key=key)
     if query.first():
         query.delete()
         db.session.commit()
     else:
         split_key = key.split(".")
-        db.session.add(Permissions(user_type=user_type, key=key, subject=split_key[0], action=split_key[1], 
+        db.session.add(Permissions(user_role=user_role, key=key, subject=split_key[0], action=split_key[1], 
             date_created=datetime.now(),
             date_modified=datetime.now(),))
         db.session.commit()
@@ -100,7 +100,7 @@ def createDemoSettings():
     ]
     for i in demo:
         db.session.add(Permissions(
-            user_type=i[0],
+            user_role=i[0],
             subject=i[1],
             action=i[3],
             key=i[2],

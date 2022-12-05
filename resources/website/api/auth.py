@@ -58,7 +58,7 @@ def signup():
     first_name = request.json["firstName"]
     last_name = request.json["lastName"]
     username = request.json["username"]
-    user_type = request.json["userType"]
+    user_role = request.json["userRole"]
 
     user = User.query\
         .filter_by(email = email)\
@@ -71,7 +71,7 @@ def signup():
             last_name = last_name,
             username = username,
             email = email,
-            user_type = user_type or "staff",
+            user_role = user_role or "staff",
             password = generate_password_hash(password),
             date_created=datetime.now(),
             date_modified=datetime.now(),
@@ -127,14 +127,14 @@ def updateUserDetails(id):
     first_name = request.json["firstName"]
     last_name = request.json["lastName"]
     username = request.json["username"]
-    user_type = request.json["userType"]
+    user_role = request.json["userRole"]
     user = User.query.filter_by(id=id).first()
 
     user.first_name = first_name
     user.last_name = last_name
     user.email = email
     user.username = username
-    user.user_type = user_type
+    user.user_role = user_role
     user.date_modified = datetime.now()
 
     db.session.commit()
@@ -180,7 +180,7 @@ def createDemoUsers():
             username=i[2], 
             email=i[3], 
             password=generate_password_hash("kosova22"), 
-            user_type=i[4],
+            user_role=i[4],
             date_created=datetime.now(),
             date_modified=datetime.now(),
             ))

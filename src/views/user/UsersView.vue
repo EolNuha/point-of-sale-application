@@ -171,11 +171,11 @@
                 <th
                   scope="col"
                   class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('user_type')"
+                  @click="sort('user_role')"
                 >
                   <div class="flex justify-between items-center">
                     {{ $t("type") }}
-                    <template v-if="sortColumn === 'user_type'">
+                    <template v-if="sortColumn === 'user_role'">
                       <IconC
                         iconName="ArrowLongDownIcon"
                         iconClass="w-4 h-4"
@@ -229,7 +229,7 @@
                   <td class="py-2 px-6">{{ user.lastName }}</td>
                   <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
                   <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
-                  <td class="py-2 px-6 max-w-xs">{{ $t(user.userType) }}</td>
+                  <td class="py-2 px-6 max-w-xs">{{ $t(user.userRole) }}</td>
                   <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'users')">
                     <button
                       class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"

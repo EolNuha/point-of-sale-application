@@ -76,23 +76,23 @@
             </div>
             <div>
               <label
-                for="userType"
+                for="userRole"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >{{ $t("userType") }}</label
+                >{{ $t("userRole") }}</label
               >
               <v-select
                 class="block w-full default-input !p-1"
-                v-model="userType"
+                v-model="userRole"
                 :clearable="false"
                 :options="
-                  currentUser.userType === 'superadmin'
+                  currentUser.userRole === 'superadmin'
                     ? ['staff', 'manager', 'owner', 'superadmin']
                     : ['staff', 'manager', 'owner']
                 "
                 type="text"
-                name="userType"
-                id="userType"
-                placeholder="User Type"
+                name="userRole"
+                id="userRole"
+                :placeholder="$t('userRole')"
                 required
                 label="option"
               >
@@ -177,7 +177,7 @@ export default {
       firstName: "",
       lastName: "",
       username: "",
-      userType: "staff",
+      userRole: "staff",
       isLoading: false,
     };
   },
@@ -198,7 +198,7 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         username: this.username,
-        userType: this.userType,
+        userRole: this.userRole,
       };
       this.$store
         .dispatch("userModule/createUser", data)

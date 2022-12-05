@@ -15,7 +15,7 @@
       <button
         class="theme-gradient-btn flex items-center text-center"
         type="button"
-        v-if="$store.state.userModule.currentUser.userType === 'superadmin'"
+        v-if="$store.state.userModule.currentUser.userRole === 'superadmin'"
         @click="$openModal(createRef)"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
@@ -103,7 +103,7 @@
         <li
           class="mr-2"
           @click="() => (activeTab = 'superadmin')"
-          v-if="$store.state.userModule.currentUser.userType === 'superadmin'"
+          v-if="$store.state.userModule.currentUser.userRole === 'superadmin'"
         >
           <p
             :class="
@@ -313,23 +313,23 @@ export default {
         this.isTableLoading = false;
       });
     await this.$store
-      .dispatch("permissionsModule/getUserTypePermissions", "staff")
+      .dispatch("permissionsModule/getUserRolePermissions", "staff")
       .then((res) => {
         this.staffPermissions = res.data;
         this.currentArr = res.data;
       });
     await this.$store
-      .dispatch("permissionsModule/getUserTypePermissions", "manager")
+      .dispatch("permissionsModule/getUserRolePermissions", "manager")
       .then((res) => {
         this.managerPermissions = res.data;
       });
     await this.$store
-      .dispatch("permissionsModule/getUserTypePermissions", "owner")
+      .dispatch("permissionsModule/getUserRolePermissions", "owner")
       .then((res) => {
         this.ownerPermissions = res.data;
       });
     await this.$store
-      .dispatch("permissionsModule/getUserTypePermissions", "superadmin")
+      .dispatch("permissionsModule/getUserRolePermissions", "superadmin")
       .then((res) => {
         this.superadminPermissions = res.data;
       });
@@ -352,7 +352,7 @@ export default {
   methods: {
     async togglePermission(item) {
       const data = {
-        user_type: this.activeTab,
+        user_role: this.activeTab,
         key: item.key,
       };
       if (this.isActive(item.key)) {
@@ -375,7 +375,7 @@ export default {
     },
     createFunc() {
       const data = {
-        user_type: this.$store.state.userModule.currentUser.userType,
+        user_role: this.$store.state.userModule.currentUser.userRole,
         ...this.permission,
       };
       this.isLoading = true;

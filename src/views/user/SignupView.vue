@@ -199,7 +199,7 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         username: this.username,
-        userType: null,
+        userRole: null,
       };
       this.$store
         .dispatch("userModule/createUser", data)

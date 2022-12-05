@@ -156,7 +156,7 @@
             <hr class="border-gray-300 dark:border-gray-600" />
           </div>
           <div class="flex flex-row justify-end p-5">
-            <div class="basis-3/4 md:basis-1/2 lg:basis-1/4">
+            <div class="basis-3/4 md:basis-1/2 lg:basis-1/3">
               <table class="text-gray-700 dark:text-gray-300 w-full">
                 <tbody>
                   <tr>
@@ -286,6 +286,11 @@ export default {
       }, 0);
       return this.roundTo2(sum).toFixed(2);
     },
+    getTaxValue() {
+      return (arr, alias) =>
+        arr?.find((x) => x.taxAlias === alias)?.taxValue ||
+        Number(0).toFixed(2);
+    },
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
@@ -300,11 +305,6 @@ export default {
   methods: {
     isRequired(value) {
       return value > 0 ? true : this.$t("isRequired");
-    },
-    getTaxValue(arr, alias) {
-      return (
-        arr?.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
-      );
     },
     async getPrintPdf() {
       let doc = new jsPDF();

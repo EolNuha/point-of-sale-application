@@ -37,7 +37,8 @@
             </button>
             <button
               @click="$emit('remove', value)"
-              id="remove-modal-btn"
+              :id="removeRef + '_remove_btn'"
+              :ref="removeRef + '_remove_btn'"
               type="button"
               class="red-gradient-btn h-10 w-20 inline-flex justify-center items-center"
             >

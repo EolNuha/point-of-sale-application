@@ -31,3 +31,5 @@ pnpm-debug.log*
 /resources/app.spec
 
 **/__pycache__/
+
+.venv

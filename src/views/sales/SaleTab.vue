@@ -114,12 +114,10 @@
                   v-model="product.quantity"
                   class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                   @change="
-                    () => (
+                    () =>
                       product.quantity
                         ? (product.quantity = product.quantity)
-                        : (product.quantity = 1),
-                      (total = getProductsTotal())
-                    )
+                        : (product.quantity = 1)
                   "
                   @focus="$event.target.select()"
                 />
@@ -207,8 +205,6 @@ export default {
       searchedProducts: [],
       searchedProductsIndex: 0,
       lastSearchedProduct: {},
-      products: [],
-      total: "0.00",
     };
   },
   watch: {
@@ -241,6 +237,26 @@ export default {
     isSelected() {
       return (id) => this.selectedProducts?.some((obj) => obj?.id === id);
     },
+    products: {
+      get() {
+        return this.$store.getters["saleModule/getCurrentSaleProducts"](
+          this.id
+        );
+      },
+      set(v) {
+        this.$store.commit("saleModule/SET_CURRENT_SALES", {
+          tab: this.id,
+          products: v,
+        });
+      },
+    },
+    total() {
+      const products = this.products;
+      const sum = products?.reduce((accumulator, object) => {
+        return accumulator + object.sellingPrice * object.quantity;
+      }, 0);
+      return sum?.toFixed(2);
+    },
   },
   created() {
     window.addEventListener("keydown", (e) => {
@@ -263,25 +279,6 @@ export default {
         }
       }
     });
-  },
-  async beforeRouteLeave(to, from, next) {
-    if (!(this.products?.length === 0)) {
-      const options = this.$swalConfirmObject();
-      options.html = `<p class='text-gray-500 dark:text-gray-300'>${this.$t(
-        "saleNotFinished"
-      )}</p>`;
-      options.icon = "info";
-      options.position = "top";
-      await this.$swal(options).then((result) => {
-        if (result.isDenied || result.isDismissed) {
-          return;
-        } else {
-          next();
-        }
-      });
-    } else {
-      next();
-    }
   },
   methods: {
     keyEvent(e) {
@@ -308,7 +305,7 @@ export default {
     onSearchedProductClick(product) {
       this.lastSearchedProduct = product;
       product.quantity = 1;
-      const objectIdx = this.products.findIndex(
+      const objectIdx = this.products?.findIndex(
         (item) => item.id === product.id
       );
       if (objectIdx != -1) {
@@ -316,17 +313,9 @@ export default {
       } else {
         this.products.unshift(product);
       }
-      this.total = this.getProductsTotal();
       this.searchQuery = "";
       this.searchedProductsIndex = 0;
       this.searchedProducts = [];
-    },
-    getProductsTotal() {
-      const products = this.products;
-      const sum = products.reduce((accumulator, object) => {
-        return accumulator + object.sellingPrice * object.quantity;
-      }, 0);
-      return sum.toFixed(2);
     },
     openRemoveModal(products) {
       this.selectedProductsToRemove = products;
@@ -336,11 +325,10 @@ export default {
     removeProducts(products) {
       products.forEach((item) => {
         this.products.splice(
-          this.products.findIndex((x) => x.id === item.id),
+          this.products?.findIndex((x) => x.id === item.id),
           1
         );
       });
-      this.total = this.getProductsTotal();
       this.selectedProducts = [];
       this.$hideModal(this.removeModalRef);
     },
@@ -362,7 +350,6 @@ export default {
           this.isFinishSaleLoading = false;
           this.products = [];
           this.selectedProducts = [];
-          this.total = (0).toFixed(2);
           this.$hideModal(this.finishSaleModalRef);
           this.$toast.success(this.$t("saleSuccess"));
         })
@@ -372,7 +359,7 @@ export default {
         });
     },
     toggleSelectProduct(notification) {
-      const idx = this.selectedProducts.findIndex(
+      const idx = this.selectedProducts?.findIndex(
         (x) => x?.id === notification.id
       );
       if (idx !== -1) this.selectedProducts.splice(idx, 1);

@@ -8,4 +8,7 @@ export default {
   SET_SALE(state, data) {
     state.sale = data;
   },
+  SET_CURRENT_SALES(state, data) {
+    state.currentSales.find((x) => x.tab === data.tab).products = data.products;
+  },
 };

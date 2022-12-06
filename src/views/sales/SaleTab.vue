@@ -166,12 +166,14 @@
       </div>
     </div>
     <remove-modal
+      :key="removeModalRef"
       :value="selectedProductsToRemove"
       title="Product"
       :removeRef="removeModalRef"
       @remove="removeProducts($event)"
     />
     <finish-sale-modal
+      :key="finishSaleModalRef"
       :isLoading="isFinishSaleLoading"
       :modalRef="finishSaleModalRef"
       :total="total"
@@ -260,19 +262,19 @@ export default {
   },
   created() {
     window.addEventListener("keydown", (e) => {
-      if (e.key == "Delete") {
+      if (e.key == "Delete" && this.id === this.$parent.activeTab) {
         const isEmpty = this.selectedProducts?.length === 0;
         if (!isEmpty) {
           this.openRemoveModal(this.selectedProducts);
         }
       }
-      if (e.key == "F8") {
+      if (e.key == "F8" && this.id === this.$parent.activeTab) {
         const isProductsEmpty = this.products?.length === 0;
         if (!isProductsEmpty) {
           this.finishSaleModal();
         }
       }
-      if (e.key == "F10") {
+      if (e.key == "F10" && this.id === this.$parent.activeTab) {
         const isProductsEmpty = this.products?.length === 0;
         if (!isProductsEmpty) {
           this.openRemoveModal(JSON.parse(JSON.stringify(this.products)));
@@ -320,7 +322,7 @@ export default {
     openRemoveModal(products) {
       this.selectedProductsToRemove = products;
       this.$openModal(this.removeModalRef);
-      this.$putOnFocus("remove-modal-btn");
+      this.$putOnFocus(this.removeModalRef + "_remove_btn");
     },
     removeProducts(products) {
       products.forEach((item) => {
@@ -334,7 +336,7 @@ export default {
     },
     finishSaleModal() {
       this.$openModal(this.finishSaleModalRef);
-      this.$putOnFocus("customer_amount");
+      this.$putOnFocus(this.finishSaleModalRef + "_customer_amount");
     },
     finishSale(e) {
       this.isFinishSaleLoading = true;

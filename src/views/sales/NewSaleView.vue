@@ -76,7 +76,7 @@ export default {
   name: "NewSaleView",
   data() {
     return {
-      activeTab: 0,
+      activeTab: this.$store.state.saleModule.currentTabs[0] || 0,
     };
   },
   // async beforeRouteLeave(to, from, next) {

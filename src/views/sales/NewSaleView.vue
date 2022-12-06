@@ -62,7 +62,7 @@
       </div>
     </ul>
     <template v-for="tab in tabs" :key="tab">
-      <sale-tab v-show="tab === activeTab" :id="`tab-${tab}`" />
+      <sale-tab v-show="tab === activeTab" :id="tab" />
     </template>
   </div>
 </template>
@@ -76,16 +76,52 @@ export default {
   name: "NewSaleView",
   data() {
     return {
-      tabs: [0],
       activeTab: 0,
     };
   },
+  // async beforeRouteLeave(to, from, next) {
+  //   if (!(this.products?.length === 0)) {
+  //     const options = this.$swalConfirmObject();
+  //     options.html = `<p class='text-gray-500 dark:text-gray-300'>${this.$t(
+  //       "saleNotFinished"
+  //     )}</p>`;
+  //     options.icon = "info";
+  //     options.position = "top";
+  //     await this.$swal(options).then((result) => {
+  //       if (result.isDenied || result.isDismissed) {
+  //         return;
+  //       } else {
+  //         next();
+  //       }
+  //     });
+  //   } else {
+  //     next();
+  //   }
+  // },
+  computed: {
+    tabs: {
+      get() {
+        return this.$store.state.saleModule.currentTabs;
+      },
+      set() {},
+    },
+    sales: {
+      get() {
+        return this.$store.state.saleModule.currentSales;
+      },
+      set() {},
+    },
+  },
   methods: {
     addTab() {
-      this.tabs.push(this.tabs[this.tabs.length - 1] + 1);
+      const lastTab = this.tabs[this.tabs.length - 1];
+      this.tabs.push(lastTab + 1);
+      this.sales.push({ tab: lastTab + 1, products: [] });
       this.activeTab = this.tabs[this.tabs.length - 1];
     },
     removeTab(idx) {
+      const saleIdx = this.sales.findIndex((x) => x.tab === this.tabs[idx]);
+      this.sales.splice(saleIdx, 1);
       const tabIdx = this.tabs.indexOf(this.activeTab);
       this.tabs.splice(idx, 1);
       if (idx === tabIdx) this.activeTab = this.tabs[this.tabs.length - 1];

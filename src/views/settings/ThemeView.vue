@@ -8,11 +8,11 @@
     >
       {{ $t("theme") }}
     </h5>
-    <div class="w-full bg-transparent rounded-lg">
+    <div class="w-full bg-transparent rounded">
       <div>
         <ul role="list" class="flex flex-col gap-2">
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setTheme('light');
@@ -45,7 +45,7 @@
             </div>
           </li>
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setTheme('dark');
@@ -94,7 +94,7 @@
             :key="item"
           >
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
               @click="
                 () => {
                   $root.setTextTheme(`theme-${item}`);

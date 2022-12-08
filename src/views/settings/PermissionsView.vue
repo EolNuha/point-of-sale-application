@@ -23,7 +23,7 @@
       </button>
     </div>
     <div
-      class="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-neutral-700 transition duration-500"
+      class="p-4 border border-gray-300 rounded bg-gray-50 dark:border-gray-600 dark:bg-neutral-700 transition duration-500"
       v-show="isInfoShowing"
     >
       <div class="flex items-center gap-2 text-gray-800 dark:text-gray-100">
@@ -120,9 +120,7 @@
       </ul>
     </div>
     <div>
-      <table
-        class="w-full text-sm text-left rounded-lg overflow-hidden relative"
-      >
+      <table class="w-full text-sm text-left rounded overflow-hidden relative">
         <OverlayC v-if="isTableLoading" />
         <thead
           class="text-md text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
@@ -182,10 +180,10 @@
     >
       <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-neutral-700">
+        <div class="relative bg-white rounded shadow dark:bg-neutral-700">
           <button
             type="button"
-            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
+            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
             @click="$hideModal(createRef)"
             :disabled="isLoading"
           >

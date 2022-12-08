@@ -10,7 +10,7 @@
 	@apply focus:ring-red-300;
 	@apply dark:focus:ring-red-800;
 	@apply font-medium;
-	@apply rounded-xl;
+	@apply rounded;
 	@apply text-sm;
 	@apply px-5;
 	@apply py-2;
@@ -29,7 +29,7 @@
 	@apply focus:ring-theme-400;
 	@apply dark:focus:ring-theme-700;
 	@apply font-medium;
-	@apply rounded-xl;
+	@apply rounded;
 	@apply text-sm;
 	@apply px-5;
 	@apply py-2;
@@ -48,7 +48,7 @@
 	@apply focus:ring-green-300;
 	@apply dark:focus:ring-green-800;
 	@apply font-medium;
-	@apply rounded-xl;
+	@apply rounded;
 	@apply text-sm;
 	@apply px-5;
 	@apply py-2;
@@ -62,7 +62,7 @@
 	@apply focus:ring-4;
 	@apply focus:outline-none;
 	@apply focus:ring-gray-200;
-	@apply rounded-xl;
+	@apply rounded;
 	@apply border;
 	@apply border-gray-500;
 	@apply text-sm;

@@ -5,7 +5,7 @@
     >
       Settings
     </h5>
-    <div class="w-full bg-transparent rounded-lg">
+    <div class="w-full bg-transparent rounded">
       <div>
         <ul role="list" class="flex flex-col gap-2">
           <router-link
@@ -13,7 +13,7 @@
             v-if="$can('read', 'permissions')"
           >
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
+              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
             >
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -39,7 +39,7 @@
           </router-link>
           <router-link :to="{ name: 'languages' }">
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
+              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
             >
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -65,7 +65,7 @@
           </router-link>
           <router-link :to="{ name: 'theme' }">
             <li
-              class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
+              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
             >
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -90,7 +90,7 @@
             </li>
           </router-link>
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white"
           >
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-0">

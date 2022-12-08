@@ -71,10 +71,10 @@
         </div>
       </div>
 
-      <div class="rounded-xl my-5 min-h-65 relative">
+      <div class="rounded my-5 min-h-65 relative">
         <div class="overflow-x-auto scrollbar-style">
           <table
-            class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400 overflow-hidden rounded-lg"
+            class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400 overflow-hidden rounded"
           >
             <OverlayC v-if="isTableLoading" />
             <EmptyResultsC
@@ -282,7 +282,7 @@
                   </td>
                   <td class="py-2 px-6">
                     <div
-                      class="flex items-center bg-white dark:bg-neutral-900 p-1.5 rounded-lg"
+                      class="flex items-center bg-white dark:bg-neutral-900 p-1.5 rounded"
                       :id="`product-${product.id}-tooltip-btn`"
                       @mouseover="
                         $showTooltip({
@@ -297,7 +297,7 @@
                     <div
                       :id="`product-${product.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip"
+                      class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 rounded shadow-sm opacity-0 tooltip"
                     >
                       {{ stockStatus(product.stock).text }}
                     </div>

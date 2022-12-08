@@ -2,7 +2,7 @@
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div
-        class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative"
+        class="bg-white dark:bg-neutral-900 p-5 rounded relative"
         id="dashboard-step-0"
       >
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
@@ -31,7 +31,7 @@
           iconClass="w-12 h-12 absolute right-[5px] bottom-[5px] text-theme-400"
         />
       </div>
-      <div class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative">
+      <div class="bg-white dark:bg-neutral-900 p-5 rounded relative">
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
           {{ $t("sales") }}
         </h3>
@@ -59,7 +59,7 @@
         />
       </div>
       <div
-        class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative"
+        class="bg-white dark:bg-neutral-900 p-5 rounded relative"
         id="dashboard-step-1"
       >
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
@@ -88,7 +88,7 @@
           iconClass="w-12 h-12 absolute right-[5px] bottom-[5px]  text-theme-400"
         />
       </div>
-      <div class="bg-white dark:bg-neutral-900 p-5 rounded-xl relative">
+      <div class="bg-white dark:bg-neutral-900 p-5 rounded relative">
         <div
           v-if="
             !$can('read', 'users') &&
@@ -127,12 +127,12 @@
       </div>
     </div>
     <div
-      class="bg-white dark:bg-neutral-900 rounded-xl my-5 py-8 relative px-5"
+      class="bg-white dark:bg-neutral-900 rounded my-5 py-8 relative px-5"
       id="dashboard-step-2"
     >
       <div
         v-if="!$can('read', 'analytics')"
-        class="min-h-[400px] rounded-lg absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        class="min-h-[400px] rounded absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
       >
         <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
         {{ $t("noPermissionText") }}
@@ -185,10 +185,10 @@
         <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4"
       /></router-link>
     </div>
-    <div class="bg-white dark:bg-neutral-900 rounded-xl py-8 relative px-5">
+    <div class="bg-white dark:bg-neutral-900 rounded py-8 relative px-5">
       <div
         v-if="!$can('read', 'analytics')"
-        class="min-h-[400px] rounded-lg absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        class="min-h-[400px] rounded absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
       >
         <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
         {{ $t("noPermissionText") }}

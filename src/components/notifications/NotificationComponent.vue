@@ -20,7 +20,7 @@
   <!-- Dropdown menu -->
   <div
     id="dropdownNotification"
-    class="hidden z-20 w-full max-w-xs bg-white divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800 dark:divide-gray-700 rounded-md"
+    class="hidden z-20 w-full max-w-xs bg-white divide-y divide-gray-100 shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800 dark:divide-gray-700 rounded"
     aria-labelledby="dropdownNotificationButton"
     data-popper-reference-hidden=""
     data-popper-escaped=""

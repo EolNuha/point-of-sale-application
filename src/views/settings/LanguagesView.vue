@@ -5,11 +5,11 @@
     >
       {{ $t("languages") }}
     </h5>
-    <div class="w-full bg-transparent rounded-lg">
+    <div class="w-full bg-transparent rounded">
       <div>
         <ul role="list" class="flex flex-col gap-2">
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setLang('en');
@@ -21,7 +21,7 @@
                 <IconC
                   iconType="custom"
                   iconName="EnglishFlagIcon"
-                  iconClass="w-8 h-8 rounded-lg"
+                  iconClass="w-8 h-8 rounded"
                 />
               </div>
               <div class="flex-1 min-w-0">
@@ -46,7 +46,7 @@
             </div>
           </li>
           <li
-            class="rounded-md px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setLang('sq');
@@ -58,7 +58,7 @@
                 <IconC
                   iconType="custom"
                   iconName="AlbanianFlagIcon"
-                  iconClass="w-8 h-8 rounded-lg"
+                  iconClass="w-8 h-8 rounded"
                 />
               </div>
               <div class="flex-1 min-w-0">

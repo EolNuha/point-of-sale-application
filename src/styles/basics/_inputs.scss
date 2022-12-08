@@ -20,7 +20,7 @@ input[type="date"] {
   @apply border-gray-300 #{!important};
   @apply text-gray-900 #{!important};
   @apply text-sm #{!important};
-  @apply rounded-xl #{!important};
+  @apply rounded #{!important};
   @apply focus:ring-theme-500 #{!important};
   @apply focus:border-theme-500 #{!important};
   @apply block;

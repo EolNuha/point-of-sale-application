@@ -2,7 +2,7 @@
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div
       id="hide-notification"
-      class="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-500 text-red-700 dark:text-white"
+      class="flex items-center p-4 mb-4 bg-red-100 rounded dark:bg-red-500 text-red-700 dark:text-white"
       role="alert"
       v-show="getNotificationPercentage >= 80"
     >
@@ -41,7 +41,7 @@
         <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
       </button>
     </div>
-    <div class="overflow-hidden rounded-xl mb-5 min-h-[80vh] relative">
+    <div class="overflow-hidden rounded mb-5 min-h-[80vh] relative">
       <div
         class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
       >
@@ -77,7 +77,7 @@
                 <div
                   :id="`select-all-tooltip`"
                   role="tooltip"
-                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                 >
                   {{ $t("selectAll") }}
                 </div>
@@ -111,7 +111,7 @@
                   <div
                     :id="`star-all-tooltip`"
                     role="tooltip"
-                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                   >
                     {{ hasStarredMessages ? $t("removeStar") : $t("addStar") }}
                   </div>
@@ -144,7 +144,7 @@
                   <div
                     :id="`read-all-tooltip`"
                     role="tooltip"
-                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                   >
                     {{ hasUnreadMessages ? $t("markRead") : $t("markUnread") }}
                   </div>
@@ -166,7 +166,7 @@
                   <div
                     :id="`delete-all-tooltip`"
                     role="tooltip"
-                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                   >
                     {{ $t("delete") }}
                   </div>
@@ -323,7 +323,7 @@
                     <div
                       :id="`select-${item.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
                       {{ $t("select") }}
                     </div>
@@ -368,7 +368,7 @@
                     <div
                       :id="`star-${item.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
                       {{ !item.star ? $t("addStar") : $t("removeStar") }}
                     </div>
@@ -410,7 +410,7 @@
                     <div
                       :id="`read-${item.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
                       {{ !item.read ? $t("markRead") : $t("markUnread") }}
                     </div>
@@ -447,7 +447,7 @@
                       <div
                         :id="`delete-${item.id}-tooltip`"
                         role="tooltip"
-                        class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                        class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                       >
                         {{ $t("delete") }}
                       </div>

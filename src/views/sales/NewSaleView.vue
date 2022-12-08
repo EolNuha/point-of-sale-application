@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen relative">
     <ul
-      class="divide-x dark:divide-gray-600 flex flex-wrap items-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-neutral-900 px-2 pt-2"
+      class="divide-x dark:divide-gray-800 flex flex-wrap items-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-neutral-900 px-2 pt-2"
     >
       <li
         v-for="(tab, index) in tabs"

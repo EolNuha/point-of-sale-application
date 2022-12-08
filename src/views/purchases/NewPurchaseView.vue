@@ -277,7 +277,7 @@
                 <div
                   :id="`product-${index}-tooltip`"
                   role="tooltip"
-                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
                 >
                   {{ $t("stockInfoMsg") }}
                 </div>

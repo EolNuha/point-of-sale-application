@@ -297,7 +297,7 @@
                     <div
                       :id="`product-${product.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-700 rounded shadow-sm opacity-0 tooltip"
+                      class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 rounded shadow-sm opacity-0 tooltip"
                     >
                       {{ stockStatus(product.stock).text }}
                     </div>

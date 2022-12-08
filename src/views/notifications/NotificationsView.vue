@@ -77,7 +77,7 @@
                 <div
                   :id="`select-all-tooltip`"
                   role="tooltip"
-                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                  class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                 >
                   {{ $t("selectAll") }}
                 </div>
@@ -111,7 +111,7 @@
                   <div
                     :id="`star-all-tooltip`"
                     role="tooltip"
-                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                   >
                     {{ hasStarredMessages ? $t("removeStar") : $t("addStar") }}
                   </div>
@@ -144,7 +144,7 @@
                   <div
                     :id="`read-all-tooltip`"
                     role="tooltip"
-                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                   >
                     {{ hasUnreadMessages ? $t("markRead") : $t("markUnread") }}
                   </div>
@@ -166,7 +166,7 @@
                   <div
                     :id="`delete-all-tooltip`"
                     role="tooltip"
-                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                    class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                   >
                     {{ $t("delete") }}
                   </div>
@@ -179,7 +179,7 @@
             v-if="total"
           >
             <div
-              class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-gray-700"
+              class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-neutral-700"
             >
               <div
                 class="h-1.5 rounded-full"
@@ -323,7 +323,7 @@
                     <div
                       :id="`select-${item.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
                       {{ $t("select") }}
                     </div>
@@ -368,7 +368,7 @@
                     <div
                       :id="`star-${item.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
                       {{ !item.star ? $t("addStar") : $t("removeStar") }}
                     </div>
@@ -410,7 +410,7 @@
                     <div
                       :id="`read-${item.id}-tooltip`"
                       role="tooltip"
-                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                      class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                     >
                       {{ !item.read ? $t("markRead") : $t("markUnread") }}
                     </div>
@@ -447,7 +447,7 @@
                       <div
                         :id="`delete-${item.id}-tooltip`"
                         role="tooltip"
-                        class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                        class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-neutral-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                       >
                         {{ $t("delete") }}
                       </div>

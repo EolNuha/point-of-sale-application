@@ -59,7 +59,7 @@
       </router-link> -->
     </div>
     <div
-      class="overflow-x-auto relative rounded-lg my-5 scrollbar-style mb-[8.5rem]"
+      class="overflow-x-auto relative rounded my-5 scrollbar-style mb-[8.5rem]"
     >
       <table
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
@@ -112,7 +112,7 @@
                   min="0.01"
                   :id="`product-${product.id}-quantity`"
                   v-model="product.quantity"
-                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
+                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                   @change="
                     () =>
                       product.quantity
@@ -137,7 +137,7 @@
           @click="finishSaleModal()"
           type="button"
           id="finishSale"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           <IconC iconType="solid" iconName="CheckIcon" iconClass="w-5 h-5" />
           {{ $t("finish") }} (F8)
@@ -147,7 +147,7 @@
           @click="openRemoveModal(JSON.parse(JSON.stringify(products)))"
           type="button"
           id="clearAll"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
           {{ $t("clearAll") }} (F10)
@@ -158,7 +158,7 @@
       >
         {{ $t("total") }}:
         <div
-          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-neutral-800 rounded-lg"
+          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-neutral-800 rounded"
         >
           <span>{{ total }}</span
           >€

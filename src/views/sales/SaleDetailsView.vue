@@ -47,7 +47,7 @@
         </div>
       </div>
       <div
-        class="bg-white dark:bg-neutral-900 rounded-xl relative my-5 px-10 py-8"
+        class="bg-white dark:bg-neutral-900 rounded relative my-5 px-10 py-8"
       >
         <div id="content">
           <OverlayC v-if="isLoading" />
@@ -61,7 +61,7 @@
               {{ $t("date") }}: {{ sale.dateCreated?.substring(0, 10) }}
             </p>
           </div>
-          <div class="overflow-x-auto sm:rounded-lg my-5 scrollbar-style">
+          <div class="overflow-x-auto sm:rounded my-5 scrollbar-style">
             <table
               class="w-full text-sm text-left text-gray-700 dark:text-gray-400 my-5"
             >
@@ -143,7 +143,7 @@
                         <div
                           :id="`delete-${item.id}-tooltip`"
                           role="tooltip"
-                          class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
+                          class="inline-block absolute invisible z-10 p-1.5 text-sm text-white bg-gray-700 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip"
                         >
                           {{ $t("delete") }}
                         </div>
@@ -209,7 +209,7 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full"
       >
         <div class="relative w-full max-w-7xl h-full md:h-auto">
-          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="relative bg-white rounded shadow dark:bg-gray-700">
             <div
               class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600"
             >

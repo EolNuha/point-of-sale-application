@@ -75,7 +75,7 @@
       <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold my-3">
         {{ $t("date") }}: {{ purchaseDate?.substring(0, 10) }}
       </h2>
-      <div class="overflow-hidden rounded-xl mb-5 min-h-65 relative">
+      <div class="overflow-hidden rounded mb-5 min-h-65 relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
           <table
             class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"

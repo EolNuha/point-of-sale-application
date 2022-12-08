@@ -41,7 +41,7 @@
         </button>
       </div>
 
-      <div class="overflow-hidden rounded-xl my-5 min-h-65 relative">
+      <div class="overflow-hidden rounded my-5 min-h-65 relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
           <table
             class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"

@@ -14,7 +14,7 @@ body.v-tour--active{
 }
 .v-step[data-v-61f60785]{
 	@apply backdrop-blur-sm;
-	@apply rounded-md;
+	@apply rounded;
 	@apply bg-white;
 	@apply dark:bg-neutral-900;
 	@apply text-gray-700;
@@ -83,7 +83,7 @@ body.v-tour--active{
 	@apply text-gray-500;
 	@apply bg-white;
 	@apply hover:bg-gray-100;
-	@apply rounded-md;
+	@apply rounded;
 	@apply border;
 	@apply border-gray-400;
 	@apply p-2;

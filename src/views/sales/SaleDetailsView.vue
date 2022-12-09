@@ -47,10 +47,10 @@
         </div>
       </div>
       <div
-        class="bg-white dark:bg-neutral-900 rounded relative my-5 px-10 py-8"
+        class="bg-white dark:bg-neutral-900 rounded relative my-5 px-10 py-8 flex flex-col"
       >
+        <OverlayC v-if="isLoading" />
         <div id="content">
-          <OverlayC v-if="isLoading" />
           <div class="flex items-center flex-row justify-between">
             <h2
               class="text-gray-700 dark:text-gray-300 text-3xl font-extrabold"

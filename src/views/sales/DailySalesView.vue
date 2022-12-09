@@ -1,7 +1,7 @@
 <!-- eslint-disable no-undef -->
 <template>
   <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
-    <div class="full-layout">
+    <div class="full-layout flex flex-col">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
           <div class="flex items-center search-input-width">
@@ -75,19 +75,21 @@
       <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold my-3">
         {{ $t("date") }}: {{ saleDate?.substring(0, 10) }}
       </h2>
-      <div class="overflow-hidden rounded mb-5 min-h-65 relative">
-        <div class="overflow-x-auto overflow-y-hidden scrollbar-style">
+      <div class="overflow-hidden rounded mb-5 flex grow relative">
+        <div
+          class="overflow-x-auto overflow-y-hidden scrollbar-style flex grow"
+        >
+          <OverlayC v-if="isTableLoading" />
+          <EmptyResultsC
+            v-if="sales?.length === 0 && !isTableLoading"
+            pluralText="Sales"
+            singularText="Sale"
+            :search="searchQuery"
+            routeName="new-sale"
+          />
           <table
             class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
           >
-            <OverlayC v-if="isTableLoading" />
-            <EmptyResultsC
-              v-if="sales?.length === 0 && !isTableLoading"
-              pluralText="Sales"
-              singularText="Sale"
-              :search="searchQuery"
-              routeName="new-sale"
-            />
             <thead
               class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
             >

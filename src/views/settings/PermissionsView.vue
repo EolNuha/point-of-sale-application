@@ -119,9 +119,9 @@
         </li>
       </ul>
     </div>
-    <div>
+    <div class="relative flex grow">
+      <OverlayC v-if="isTableLoading" />
       <table class="w-full text-sm text-left rounded overflow-hidden relative">
-        <OverlayC v-if="isTableLoading" />
         <thead
           class="text-md text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
         >

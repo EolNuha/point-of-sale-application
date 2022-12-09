@@ -3,7 +3,7 @@
     class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4 relative"
   >
     <div
-      class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded bg-white dark:bg-neutral-900 px-5 py-10 sm:px-20 relative"
+      class="w-full md:w-[70%] md:mx-auto my-auto px-4 rounded bg-white dark:bg-neutral-900 px-5 py-10 sm:px-20 flex flex-col grow relative"
     >
       <OverlayC v-if="isDataLoading" />
       <div class="flex items-center justify-center">

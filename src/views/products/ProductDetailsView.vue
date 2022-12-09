@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen relative">
+  <div
+    class="flex flex-col bg-gray-200 dark:bg-neutral-800 min-h-screen relative"
+  >
     <OverlayC v-if="isDataLoading" />
     <Form v-slot="{ errors }" class="p-5" @submit="updateProduct">
       <div class="mb-6">

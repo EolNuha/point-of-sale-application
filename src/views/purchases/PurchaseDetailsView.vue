@@ -47,7 +47,7 @@
         </div>
       </div>
       <div
-        class="bg-white dark:bg-neutral-900 rounded my-5 py-8 relative px-10"
+        class="bg-white dark:bg-neutral-900 rounded my-5 py-8 relative px-10 flex flex-col"
       >
         <OverlayC v-if="isLoading" />
         <div id="content">

@@ -24,7 +24,7 @@ export default {
     minHeight: {
       type: String,
       required: false,
-      default: "min-h-65",
+      default: "flex grow",
     },
   },
 };

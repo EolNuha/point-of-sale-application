@@ -1,6 +1,7 @@
 <template>
   <div
-    class="absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center min-h-65"
+    class="absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center"
+    :class="minHeight"
   >
     <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" v-if="!search" />
     <IconC iconName="MagnifyingGlassIcon" iconClass="w-12 h-12" v-else />
@@ -56,6 +57,11 @@ export default {
     search: {
       type: String,
       required: false,
+    },
+    minHeight: {
+      type: String,
+      required: false,
+      default: "flex grow",
     },
   },
 };

@@ -41,9 +41,9 @@
         <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
       </button>
     </div>
-    <div class="overflow-hidden rounded mb-5 min-h-[80vh] relative">
+    <div class="overflow-hidden rounded mb-5 min-h-[80vh] flex grow relative">
       <div
-        class="overflow-x-auto overflow-y-hidden scrollbar-style text-gray-500 dark:text-gray-400"
+        class="overflow-x-auto overflow-y-hidden scrollbar-style flex flex-col grow text-gray-500 dark:text-gray-400"
       >
         <div
           v-if="$can('execute', 'notifications')"
@@ -267,17 +267,17 @@
             </li>
           </ul>
         </div>
+        <OverlayC v-if="isTableLoading" />
+        <div
+          class="w-full z-50 overflow-hidden flex flex-col items-center justify-center grow"
+          v-if="notifications?.length === 0 && !isTableLoading"
+        >
+          <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" />
+          <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
+            {{ `No notifications have been added yet...` }}
+          </h2>
+        </div>
         <table class="w-full text-sm text-left relative">
-          <OverlayC v-if="isTableLoading" :minHeight="`min-h-65`" />
-          <div
-            class="w-full z-50 overflow-hidden flex flex-col items-center justify-center min-h-65"
-            v-if="notifications?.length === 0 && !isTableLoading"
-          >
-            <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" />
-            <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
-              {{ `No notifications have been added yet...` }}
-            </h2>
-          </div>
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr

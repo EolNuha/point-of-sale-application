@@ -4,7 +4,9 @@
 - [Project Description](#project-description)
 - [Commands for running on desktop](#commands-for-running-on-desktop)
 - [Commands for running on browser](#commands-for-running-on-browser)
+
 ![Cover](https://user-images.githubusercontent.com/67550672/206800422-b8c9d33a-d107-4f47-a89c-0e6c674d39a8.png)
+
 
 ## Project Description
 Point of sale (POS) applications are essential for businesses to manage transactions, inventory, and customer data. Our desktop POS application is designed to be user-friendly and efficient, making it a valuable tool for businesses of all sizes. With our application, retailers can easily process sales, manage inventory, track customer information, and generate reports. Our intuitive interface allows even those without prior experience to quickly learn how to use the application, making it a valuable asset for businesses looking to streamline their operations. Additionally, our application is customizable, allowing businesses to tailor it to their specific needs. Whether you're a small boutique store or a large retail chain, our POS application can help you manage and grow your business.

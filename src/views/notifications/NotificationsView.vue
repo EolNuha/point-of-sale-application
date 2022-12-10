@@ -277,7 +277,7 @@
             {{ `No notifications have been added yet...` }}
           </h2>
         </div>
-        <table class="w-full text-sm text-left relative">
+        <table class="w-full text-sm text-left">
           <tbody>
             <template v-for="item in notifications" :key="item.id">
               <tr

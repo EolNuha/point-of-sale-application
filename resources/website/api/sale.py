@@ -26,6 +26,7 @@ def createSale():
     total_amount = request.json["totalAmount"]
     customer_amount = request.json["customerAmount"]
     change_amount = request.json["changeAmount"]
+    is_regular = request.json["isRegular"]
     current_user = currentUser(request)
 
     current_time = datetime.now()
@@ -35,6 +36,7 @@ def createSale():
         customer_amount=customer_amount,
         change_amount=change_amount,
         user=current_user,
+        is_regular=is_regular,
         date_created=current_time,
         date_modified=current_time,
     )

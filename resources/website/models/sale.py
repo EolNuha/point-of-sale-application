@@ -9,6 +9,7 @@ class Sale(db.Model):
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=2))
     customer_amount = db.Column(db.Numeric(precision=10, scale=2))
     change_amount = db.Column(db.Numeric(precision=10, scale=2))
+    is_regular = db.Column(db.Boolean, default=True)
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
     sale_taxes = db.relationship('SaleTax', backref='sale', lazy=True)

@@ -51,12 +51,18 @@
           </table>
         </div>
       </div>
-      <!-- <router-link :to="{ name: 'new-sale' }" target="_blank">
-        <button class="theme-gradient-btn flex items-center gap-2">
-          <IconC iconName="ArrowTopRightOnSquareIcon" iconClass="w-5 h-5" />
-          <span class="hidden sm:inline">{{ $t("newSale") }}</span>
-        </button>
-      </router-link> -->
+      <div class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+        <input
+          id="regular-sale"
+          type="checkbox"
+          class="rounded text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+          v-model="isRegular"
+        />
+        <label for="regular-sale" class="flex items-center gap-2">
+          {{ $t("regular") }}
+          <IconC iconType="solid" iconName="PrinterIcon" iconClass="w-5 h-5" />
+        </label>
+      </div>
     </div>
     <div
       class="overflow-x-auto relative rounded my-5 scrollbar-style mb-[8.5rem]"
@@ -207,6 +213,7 @@ export default {
       searchedProducts: [],
       searchedProductsIndex: 0,
       lastSearchedProduct: {},
+      isRegular: false,
     };
   },
   watch: {
@@ -345,6 +352,7 @@ export default {
         totalAmount: this.total,
         customerAmount: parseFloat(e).toFixed(2),
         changeAmount: (parseFloat(e) - this.total).toFixed(2),
+        isRegular: this.isRegular,
       };
       this.$store
         .dispatch("saleModule/createSale", data)

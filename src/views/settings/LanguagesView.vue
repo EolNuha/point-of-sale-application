@@ -40,7 +40,7 @@
                 <input
                   type="radio"
                   :checked="$i18n.locale === 'en'"
-                  class="dark:bg-neutral-700"
+                  class="dark:bg-neutral-700 text-theme-500"
                 />
               </div>
             </div>
@@ -77,7 +77,7 @@
                 <input
                   type="radio"
                   :checked="$i18n.locale === 'sq'"
-                  class="dark:bg-neutral-700"
+                  class="dark:bg-neutral-700 text-theme-500"
                 />
               </div>
             </div>

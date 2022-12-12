@@ -262,9 +262,6 @@ export default {
     return {
       isFetchingSales: true,
       isFetchingPurchases: true,
-      myCallbacks: {
-        onStop: this.stopped,
-      },
     };
   },
   watch: {
@@ -308,11 +305,6 @@ export default {
     },
     purchases() {
       return this.$store.state.analyticsModule.purchases;
-    },
-  },
-  methods: {
-    stopped(current) {
-      console.log("STOP", current);
     },
   },
 };

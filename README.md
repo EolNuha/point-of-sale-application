@@ -1,4 +1,5 @@
-# Point of Sale Desktop Application
+# **QUICKSELL** - Point of Sale Desktop Application
+### *"Your One-Stop Point of Sale Solution"*
 
 ## Table of contents
 - [Project Description](#project-description)

@@ -31,7 +31,7 @@
             >
               <v-select
                 class="min-w-[8rem] w-fit default-input"
-                v-model="statusFilters"
+                v-model="typeFilters"
                 :placeholder="$t('type')"
                 :options="[
                   { name: $t('regular'), value: true },
@@ -284,7 +284,7 @@ export default {
         this.getSales(1);
       },
     },
-    statusFilters: {
+    typeFilters: {
       async handler() {
         this.currentPage = 1;
         this.getSales(1);
@@ -301,12 +301,12 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
-    statusFilters: {
+    typeFilters: {
       get() {
-        return this.$store.state.saleModule.statusFilters;
+        return this.$store.state.saleModule.typeFilters;
       },
       set(v) {
-        this.$store.state.saleModule.statusFilters = v;
+        this.$store.state.saleModule.typeFilters = v;
       },
     },
   },
@@ -346,7 +346,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
-          status_filter: this.statusFilters,
+          type_filter: this.typeFilters,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -367,7 +367,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
-          status_filter: this.statusFilters,
+          type_filter: this.typeFilters,
         })
         .then((response) => {
           this.allSales = response.data.data;

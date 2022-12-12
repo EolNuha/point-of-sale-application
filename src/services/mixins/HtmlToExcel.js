@@ -1,7 +1,6 @@
 export default {
   methods: {
     tableToExcel(table, fileName) {
-      console.log(table);
       let uri =
           "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,",
         template =

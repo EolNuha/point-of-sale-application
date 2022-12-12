@@ -109,8 +109,8 @@ def getSales():
     custom_end_date = request.args.get('endDate', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
-    status_filter = [x == 'true' for x in request.args.getlist('status_filter[]')]
-    if not status_filter: status_filter = [True, False]
+    type_filter = [x == 'true' for x in request.args.getlist('type_filter[]')]
+    if not type_filter: type_filter = [True, False]
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
     
@@ -141,7 +141,7 @@ def getSales():
         ))\
         .filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created > date_start)\
-        .filter(and_(Sale.is_regular.in_(status_filter)))\
+        .filter(and_(Sale.is_regular.in_(type_filter)))\
         .order_by(sort)\
         .with_entities(
             Sale.id.label("id"), 
@@ -183,8 +183,8 @@ def getDailySales():
     sale_date = sale_date.split(".")
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
-    status_filter = [x == 'true' for x in request.args.getlist('status_filter[]')]
-    if not status_filter: status_filter = [True, False]
+    type_filter = [x == 'true' for x in request.args.getlist('type_filter[]')]
+    if not type_filter: type_filter = [True, False]
 
     if sort_column == "user":
         sort_column = func.lower(User.first_name)
@@ -214,7 +214,7 @@ def getDailySales():
         User.first_name.ilike(looking_for),
         User.last_name.ilike(looking_for),
         ))\
-        .filter(and_(Sale.is_regular.in_(status_filter)))\
+        .filter(and_(Sale.is_regular.in_(type_filter)))\
         .order_by(sort)\
         .filter(Sale.date_created <= sale_date_end)\
         .filter(Sale.date_created >= sale_date_start)\

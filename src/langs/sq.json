@@ -235,5 +235,6 @@
 	"tab": "Faqja",
 	"addTab": "Shto faqe",
 	"maxTabs": "Numri maksimal i faqeve është 5",
-	"regular": "E rregullt"
+	"regular": "E rregullt",
+	"irregular": "E parregullt"
 }

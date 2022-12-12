@@ -54,6 +54,14 @@ input[type="date"] {
   @apply dark:text-gray-400 #{!important};
 }
 
+.vs--multiple .vs__selected {
+  @apply dark:bg-neutral-600;
+  @apply dark:text-gray-300;
+  .vs__deselect svg {
+    @apply dark:fill-gray-300;
+  }
+}
+
 //To override on build
 .vs__search, .vs__search:focus {
   color: var(--vs-search-input-color) !important;

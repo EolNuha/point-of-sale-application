@@ -8,7 +8,7 @@ from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
 from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesList, getDailySaleDict
 from website import db
-from sqlalchemy import or_, asc, desc, func
+from sqlalchemy import or_, and_, asc, desc, func
 import sqlalchemy as sa
 import decimal
 from website.token import currentUser
@@ -109,6 +109,8 @@ def getSales():
     custom_end_date = request.args.get('endDate', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
+    status_filter = [x == 'true' for x in request.args.getlist('status_filter[]')]
+    if not status_filter: status_filter = [True, False]
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
     
@@ -129,7 +131,8 @@ def getSales():
     else:
         looking_for = '%{0}%'.format(search)
         
-    paginated_items = Sale.query.join(User).filter(or_(
+    paginated_items = Sale.query\
+        .join(User).filter(or_(
         Sale.id.ilike(looking_for),
         Sale.total_amount.ilike(looking_for),
         Sale.subtotal_amount.ilike(looking_for),
@@ -138,11 +141,13 @@ def getSales():
         ))\
         .filter(Sale.date_created <= date_end)\
         .filter(Sale.date_created > date_start)\
+        .filter(and_(Sale.is_regular.in_(status_filter)))\
         .order_by(sort)\
         .with_entities(
             Sale.id.label("id"), 
             Sale.date_created.label("date_created"), 
             Sale.date_modified.label("date_modified"),
+            Sale.is_regular.label("is_regular"),
             sa.func.sum(Sale.subtotal_amount).label("subtotal_amount"),
             sa.func.sum(Sale.total_amount).label("total_amount"),
             sa.func.sum(Sale.change_amount).label("change_amount"),
@@ -178,6 +183,8 @@ def getDailySales():
     sale_date = sale_date.split(".")
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
+    status_filter = [x == 'true' for x in request.args.getlist('status_filter[]')]
+    if not status_filter: status_filter = [True, False]
 
     if sort_column == "user":
         sort_column = func.lower(User.first_name)
@@ -207,6 +214,7 @@ def getDailySales():
         User.first_name.ilike(looking_for),
         User.last_name.ilike(looking_for),
         ))\
+        .filter(and_(Sale.is_regular.in_(status_filter)))\
         .order_by(sort)\
         .filter(Sale.date_created <= sale_date_end)\
         .filter(Sale.date_created >= sale_date_start)\

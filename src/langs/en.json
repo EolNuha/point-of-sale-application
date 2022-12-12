@@ -235,5 +235,6 @@
 	"tab": "Tab",
 	"addTab": "Add tab",
 	"maxTabs": "Max number of tabs is 5",
-	"regular": "Regular"
+	"regular": "Regular",
+	"irregular": "Irregular"
 }

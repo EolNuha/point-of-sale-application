@@ -25,9 +25,42 @@
                   })
                 "
                 type="text"
-                class="default-input w-full pl-10"
+                class="default-input w-full px-10"
                 :placeholder="$t('search')"
               />
+              <div
+                v-if="showFilters"
+                class="flex absolute inset-y-0 right-10 items-center pr-3 pointer-cursor"
+              >
+                <v-select
+                  class="min-w-[8rem] w-fit default-input"
+                  v-model="statusFilters"
+                  :placeholder="$t('type')"
+                  :options="[
+                    { name: $t('regular'), value: true },
+                    { name: $t('irregular'), value: false },
+                  ]"
+                  :reduce="(options) => options.value"
+                  :clearable="false"
+                  :multiple="true"
+                  label="name"
+                ></v-select>
+              </div>
+              <button
+                class="flex absolute inset-y-0 right-0 items-center pointer-cursor p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-600"
+                @click="showFilters = !showFilters"
+              >
+                <IconC
+                  v-if="!showFilters"
+                  iconName="FunnelIcon"
+                  iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+                />
+                <IconC
+                  v-else
+                  iconName="XMarkIcon"
+                  iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -117,6 +150,33 @@
                 </th>
                 <th
                   scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('user')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("employee") }}
+                    <template v-if="sortColumn === 'user'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+                >
+                  {{ $t("type") }}
+                </th>
+                <th
+                  scope="col"
                   class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
                   v-for="item in taxes"
                   :key="item.settingsValue"
@@ -165,27 +225,6 @@
                     </template>
                   </div>
                 </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('user')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("employee") }}
-                    <template v-if="sortColumn === 'user'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
                 <th scope="col" class="py-3 px-6"></th>
               </tr>
             </thead>
@@ -195,6 +234,12 @@
                   class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]"
                 >
                   <td class="py-2 px-6">{{ sale.id }}</td>
+                  <td class="py-2 px-6">
+                    {{ sale.user?.firstName }} {{ sale.user?.lastName }}
+                  </td>
+                  <td class="py-2 px-6">
+                    {{ sale.isRegular ? $t("regular") : $t("irregular") }}
+                  </td>
                   <td
                     class="py-2 px-6"
                     v-for="item in taxes"
@@ -204,9 +249,6 @@
                   </td>
                   <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                   <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
-                  <td class="py-2 px-6">
-                    {{ sale.user?.firstName }} {{ sale.user?.lastName }}
-                  </td>
                   <td class="py-2 px-6 w-1.5" v-if="$can('read', 'sales')">
                     <button
                       class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
@@ -318,6 +360,7 @@ export default {
       sortDir: "desc",
       allSales: [],
       selectedSale: [],
+      showFilters: false,
     };
   },
   components: {
@@ -337,9 +380,23 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
+    statusFilters: {
+      get() {
+        return this.$store.state.saleModule.statusFilters;
+      },
+      set(v) {
+        this.$store.state.saleModule.statusFilters = v;
+      },
+    },
   },
   watch: {
     searchQuery: {
+      async handler() {
+        this.currentPage = 1;
+        this.getSales(1);
+      },
+    },
+    statusFilters: {
       async handler() {
         this.currentPage = 1;
         this.getSales(1);
@@ -367,6 +424,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          status_filter: this.statusFilters,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -386,6 +444,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          status_filter: this.statusFilters,
         })
         .then((response) => {
           this.allSales = response.data.data;

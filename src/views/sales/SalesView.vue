@@ -22,9 +22,42 @@
                 })
               "
               type="text"
-              class="default-input w-full pl-10"
+              class="default-input w-full px-10"
               :placeholder="$t('search')"
             />
+            <div
+              v-if="showFilters"
+              class="flex absolute inset-y-0 right-10 items-center pr-3 pointer-cursor"
+            >
+              <v-select
+                class="min-w-[8rem] w-fit default-input"
+                v-model="statusFilters"
+                :placeholder="$t('type')"
+                :options="[
+                  { name: $t('regular'), value: true },
+                  { name: $t('irregular'), value: false },
+                ]"
+                :reduce="(options) => options.value"
+                :clearable="false"
+                :multiple="true"
+                label="name"
+              ></v-select>
+            </div>
+            <button
+              class="flex absolute inset-y-0 right-0 items-center pointer-cursor p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-600"
+              @click="showFilters = !showFilters"
+            >
+              <IconC
+                v-if="!showFilters"
+                iconName="FunnelIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+              <IconC
+                v-else
+                iconName="XMarkIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+            </button>
           </div>
         </div>
         <div class="flex flex-row items-center gap-2">
@@ -237,6 +270,7 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       allSales: [],
+      showFilters: false,
     };
   },
   components: {
@@ -245,6 +279,12 @@ export default {
   mixins: [HtmlToExcel],
   watch: {
     searchQuery: {
+      async handler() {
+        this.currentPage = 1;
+        this.getSales(1);
+      },
+    },
+    statusFilters: {
       async handler() {
         this.currentPage = 1;
         this.getSales(1);
@@ -260,6 +300,14 @@ export default {
     },
     taxes() {
       return this.$store.state.settingsModule.settingsType;
+    },
+    statusFilters: {
+      get() {
+        return this.$store.state.saleModule.statusFilters;
+      },
+      set(v) {
+        this.$store.state.saleModule.statusFilters = v;
+      },
     },
   },
   async created() {
@@ -298,6 +346,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          status_filter: this.statusFilters,
         })
         .then(() => {
           this.isTableLoading = false;
@@ -318,6 +367,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          status_filter: this.statusFilters,
         })
         .then((response) => {
           this.allSales = response.data.data;

@@ -8,6 +8,7 @@ def getSaleDict(item):
         "subTotalAmount": item.subtotal_amount,
         "customerAmount": item.customer_amount,
         "changeAmount": item.change_amount,
+        "isRegular": item.is_regular,
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
     }
@@ -19,6 +20,7 @@ def getDailySaleDict(item):
         "subTotalAmount": item.subtotal_amount,
         "customerAmount": item.customer_amount,
         "changeAmount": item.change_amount,
+        "isRegular": item.is_regular,
         "taxes": getTaxesList(item.sale_taxes),
         "saleItems": getSaleItemsList(item.sale_items),
         "user": getUserDict(item.user),

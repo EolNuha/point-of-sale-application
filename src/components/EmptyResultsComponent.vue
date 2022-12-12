@@ -1,11 +1,11 @@
 <template>
   <div
-    class="absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center"
+    class="absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center text-gray-700 dark:text-gray-300"
     :class="minHeight"
   >
     <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" v-if="!search" />
     <IconC iconName="MagnifyingGlassIcon" iconClass="w-12 h-12" v-else />
-    <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
+    <h2 class="text-2xl my-4">
       {{
         search
           ? $t("noResultsFound", {

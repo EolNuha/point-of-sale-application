@@ -6,5 +6,5 @@ export default {
   sale: {},
   currentSales: [{ tab: 0, products: [] }],
   currentTabs: [0],
-  statusFilters: [],
+  typeFilters: [],
 };

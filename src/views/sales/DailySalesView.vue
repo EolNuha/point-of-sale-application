@@ -464,6 +464,14 @@ export default {
       idTh.innerHTML = "ID";
       headTr.appendChild(idTh);
 
+      let employeeTh = document.createElement("th");
+      employeeTh.innerHTML = this.$t("employee");
+      headTr.appendChild(employeeTh);
+
+      let typeTh = document.createElement("th");
+      typeTh.innerHTML = this.$t("type");
+      headTr.appendChild(typeTh);
+
       for await (const tax of this.taxes) {
         let taxTh = document.createElement("td");
         taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
@@ -478,15 +486,21 @@ export default {
       totalTh.innerHTML = this.$t("totalAmount");
       headTr.appendChild(totalTh);
 
-      let employeeTh = document.createElement("th");
-      employeeTh.innerHTML = this.$t("employee");
-      headTr.appendChild(employeeTh);
-
       for await (const element of this.allSales) {
         let bodyTr = document.createElement("tr");
+
         let idTd = document.createElement("td");
         idTd.innerHTML = element.id;
         bodyTr.appendChild(idTd);
+        let employeeTd = document.createElement("td");
+        employeeTd.innerHTML = `${element.user.firstName} ${element.user.lastName}`;
+        bodyTr.appendChild(employeeTd);
+        let typeTd = document.createElement("td");
+        typeTd.innerHTML = element.isRegular
+          ? this.$t("regular")
+          : this.$t("irregular");
+        bodyTr.appendChild(typeTd);
+
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${this.getTaxValue(
@@ -495,16 +509,14 @@ export default {
           )} €`;
           bodyTr.appendChild(taxTd);
         }
+
         let subtotalTd = document.createElement("td");
         subtotalTd.innerHTML = `${element.subTotalAmount} €`;
         let totalTd = document.createElement("td");
         totalTd.innerHTML = `${element.totalAmount} €`;
-        let employeeTd = document.createElement("td");
-        employeeTd.innerHTML = `${element.user.firstName} ${element.user.lastName}`;
 
         bodyTr.appendChild(subtotalTd);
         bodyTr.appendChild(totalTd);
-        bodyTr.appendChild(employeeTd);
         tbody.appendChild(bodyTr);
       }
 

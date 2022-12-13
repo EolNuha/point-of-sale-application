@@ -49,8 +49,11 @@ def createPurchase():
         tax_amount = Decimal(Decimal(product_tax / 100).quantize(TWOPLACES) * product_purchased_price).quantize(TWOPLACES)
         price_without_tax = product_purchased_price - tax_amount
 
-        expiration_date = product["expirationDate"].split("-")
-        expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+        if product["expirationDate"]:
+            expiration_date = product["expirationDate"].split("-")
+            expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+        else:
+            expiration_date = None
 
         product_query = Product.query.filter_by(name=product["productName"].lower()).first()
 

@@ -236,5 +236,6 @@
 	"addTab": "Shto faqe",
 	"maxTabs": "Numri maksimal i faqeve është 5",
 	"regular": "E rregullt",
-	"irregular": "E parregullt"
+	"irregular": "E parregullt",
+	"expirationFieldEmptyMsg": "Lënia e kësaj fushe bosh tregon se produkti nuk ka një datë skadence."
 }

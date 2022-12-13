@@ -236,5 +236,6 @@
 	"addTab": "Add tab",
 	"maxTabs": "Max number of tabs is 5",
 	"regular": "Regular",
-	"irregular": "Irregular"
+	"irregular": "Irregular",
+	"expirationFieldEmptyMsg": "Leaving this field blank indicates that the product does not have an expiration date."
 }

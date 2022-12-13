@@ -136,7 +136,6 @@
           >
           <Field
             name="product_expire"
-            :rules="isRequired"
             v-model="product.expirationDate"
             :min="minDate"
             type="date"

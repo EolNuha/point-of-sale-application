@@ -241,7 +241,6 @@
               <Field
                 :name="`${index}product_expire`"
                 :id="`${index}product_expire`"
-                :rules="isRequired"
                 v-model="product.expirationDate"
                 :min="minDate"
                 type="date"

@@ -48,6 +48,10 @@ input[type="date"] {
   @apply bg-neutral-700 #{!important};
 }
 
+.vs__dropdown-option--highlight {
+  @apply bg-theme-500 #{!important};
+}
+
 .vs__search::placeholder {
   @apply text-sm #{!important};
   @apply text-gray-500 #{!important};

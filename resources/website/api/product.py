@@ -19,8 +19,11 @@ def createProduct():
     selling_price = request.json["sellingPrice"]
     expiration_date = request.json["expirationDate"]
 
-    expiration_date = expiration_date.split("-")
-    expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+    if expiration_date:
+        expiration_date = expiration_date.split("-")
+        expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+    else:
+        expiration_date = None
 
     found_with_name = Product.query.filter_by(name=name).first()
     found_with_barcode = Product.query.filter_by(barcode=barcode).first()
@@ -94,8 +97,11 @@ def updateProductDetails(productId):
     selling_price = request.json["sellingPrice"]
     expiration_date = request.json["expirationDate"]
 
-    expiration_date = expiration_date.split("-")
-    expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+    if expiration_date:
+        expiration_date = expiration_date.split("-")
+        expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
+    else:
+        expiration_date = None
     
     product = Product.query.filter_by(id=productId).first_or_404()
 

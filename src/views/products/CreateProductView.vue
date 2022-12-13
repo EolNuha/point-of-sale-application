@@ -110,23 +110,31 @@
             >{{ $t("tax") }}</label
           >
           <Field
-            name="product_tax"
             :rules="isRequired"
+            type="text"
             v-model="product.tax"
+            class="hidden"
+            name="product_tax"
             id="product_tax"
+          />
+          <v-select
+            class="block w-full default-input !p-[1px]"
             :class="errors.product_tax ? 'ring-2 ring-red-500' : ''"
-            class="default-input w-full"
-            required
-            as="select"
+            v-model="product.tax"
+            :clearable="false"
+            :options="taxes"
+            :reduce="(t) => t.settingsValue"
+            :label="`settingsValue`"
+            type="text"
+            :placeholder="$t('tax')"
           >
-            <option
-              v-for="item in taxes"
-              :key="item.settingsValue"
-              :value="item.settingsValue"
-            >
-              {{ item.settingsName }}%
-            </option>
-          </Field>
+            <template v-slot:option="option">
+              {{ option.settingsValue }}%
+            </template>
+            <template v-slot:selected-option="option">
+              {{ option.settingsValue }}%
+            </template>
+          </v-select>
           <span class="text-red-700">{{ errors.product_tax }}</span>
         </div>
         <div class="basis-1/2">

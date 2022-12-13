@@ -172,19 +172,30 @@
               <Field
                 required
                 :rules="isRequired"
-                type="number"
-                step="1"
+                type="text"
                 v-model="product.tax"
-                :placeholder="$t('tax')"
-                class="default-input w-full"
-                :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
+                class="hidden"
                 :name="`${index}tax`"
                 :id="`${index}tax`"
-                as="select"
+              />
+              <v-select
+                class="block w-full default-input !p-[1px]"
+                :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
+                v-model="product.tax"
+                :clearable="false"
+                :options="taxes"
+                :reduce="(t) => t.settingsValue"
+                :label="`settingsValue`"
+                type="text"
+                :placeholder="$t('tax')"
               >
-                <option value="8">8%</option>
-                <option value="18">18%</option></Field
-              >
+                <template v-slot:option="option">
+                  {{ option.settingsValue }}%
+                </template>
+                <template v-slot:selected-option="option">
+                  {{ option.settingsValue }}%
+                </template>
+              </v-select>
               <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
             </div>
             <div>
@@ -402,8 +413,14 @@ export default {
     minDate() {
       return this.formatDate(new Date());
     },
+    taxes() {
+      return this.$store.state.settingsModule.settingsType;
+    },
   },
   async created() {
+    await this.$store.dispatch("settingsModule/getSettingsType", {
+      settingsType: "tax",
+    });
     this.getSellers("");
     this.getProducts("");
   },

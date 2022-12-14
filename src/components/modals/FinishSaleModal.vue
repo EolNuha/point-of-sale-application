@@ -7,19 +7,23 @@
     <div class="relative p-4 w-full max-w-md h-full md:h-auto">
       <!-- Modal content -->
       <div class="relative bg-white rounded shadow dark:bg-neutral-700">
-        <button
-          type="button"
-          class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
-          @click="$hideModal(modalRef)"
-          :disabled="isLoading"
+        <div
+          class="pl-6 pr-3 pt-3 text-gray-700 dark:text-gray-200 flex justify-between items-center"
         >
-          <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
-          <span class="sr-only">Close modal</span>
-        </button>
-        <div class="py-6 px-6 lg:px-8">
-          <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+          <h3 class="text-xl font-medium">
             {{ $t("finishSale") }}
           </h3>
+          <button
+            type="button"
+            class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-800/50"
+            @click="$hideModal(modalRef)"
+            :disabled="isLoading"
+          >
+            <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <div class="pb-6 pt-3 px-6">
           <Form
             v-slot="{ errors }"
             @submit="$emit('submit', customerAmount)"

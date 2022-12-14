@@ -7,13 +7,13 @@
   >
     <div class="relative p-4 w-full max-w-md h-full md:h-auto">
       <div class="relative bg-white rounded shadow dark:bg-neutral-700">
-        <div class="flex items-center p-2.5">
-          <p class="text-gray-700 dark:text-gray-200 text-xl">
-            {{ $t("remove") }} {{ $t("products") }}
-          </p>
+        <div
+          class="text-gray-700 dark:text-gray-200 flex justify-between items-center p-2.5"
+        >
+          <p class="text-xl">{{ $t("remove") }} {{ $t("products") }}</p>
           <button
             type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
+            class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-800/50"
             @click="$hideModal(removeRef)"
             :disabled="isLoading"
           >

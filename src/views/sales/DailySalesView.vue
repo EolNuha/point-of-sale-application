@@ -171,9 +171,24 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('is_regular')"
                 >
-                  {{ $t("type") }}
+                  <div class="flex justify-between items-center">
+                    {{ $t("type") }}
+                    <template v-if="sortColumn === 'is_regular'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
                 </th>
                 <th
                   scope="col"

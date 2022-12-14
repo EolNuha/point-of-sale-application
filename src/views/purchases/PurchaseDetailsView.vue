@@ -291,14 +291,14 @@
         <div class="relative w-full max-w-7xl h-full md:h-auto">
           <div class="relative bg-white rounded shadow dark:bg-neutral-700">
             <div
-              class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600"
+              class="text-gray-700 dark:text-gray-200 flex justify-between items-center p-4 rounded-t border-b dark:border-gray-600"
             >
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              <h3 class="text-xl font-semibold">
                 {{ $t("printDoc", { value: $t("purchase").toLowerCase() }) }}
               </h3>
               <button
                 type="button"
-                class="p-1.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-800/50"
                 @click="$hideModal('printModal')"
               >
                 <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />

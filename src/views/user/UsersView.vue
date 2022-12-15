@@ -42,9 +42,7 @@
       </div>
 
       <div class="overflow-hidden rounded my-5 flex grow relative">
-        <div
-          class="overflow-x-auto overflow-y-hidden scrollbar-style flex grow"
-        >
+        <div class="overflow-x-auto overflow-y-hidden scrollbar-style grow">
           <OverlayC v-if="isTableLoading" />
           <EmptyResultsC
             v-if="users?.length === 0 && !isTableLoading"

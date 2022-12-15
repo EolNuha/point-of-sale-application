@@ -72,7 +72,7 @@
       </div>
 
       <div class="rounded my-5 flex grow relative">
-        <div class="overflow-x-auto scrollbar-style flex grow">
+        <div class="overflow-x-auto scrollbar-style grow">
           <OverlayC v-if="isTableLoading" />
           <EmptyResultsC
             v-if="products?.length === 0 && !isTableLoading"

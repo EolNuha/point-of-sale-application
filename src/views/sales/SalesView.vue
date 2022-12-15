@@ -113,9 +113,7 @@
         @changeMonthDates="monthDates = $event"
       />
       <div class="overflow-hidden rounded mb-5 flex grow relative">
-        <div
-          class="overflow-x-auto overflow-y-hidden scrollbar-style flex grow"
-        >
+        <div class="overflow-x-auto overflow-y-hidden scrollbar-style grow">
           <OverlayC v-if="isTableLoading" />
           <EmptyResultsC
             v-if="sales?.length === 0 && !isTableLoading"

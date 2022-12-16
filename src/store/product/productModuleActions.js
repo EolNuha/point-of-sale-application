@@ -72,6 +72,21 @@ export default {
         });
     });
   },
+  deleteProducts({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/products`,
+        method: "DELETE",
+        data,
+      })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   deleteProduct({ commit }, productId) {
     return new Promise((resolve, reject) => {
       axios

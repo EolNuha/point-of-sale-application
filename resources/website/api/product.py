@@ -131,6 +131,14 @@ def deleteProductDetails(productId):
     db.session.commit()
     return "Success", 200
 
+@product.route('/products', methods=["DELETE"])
+def deleteProducts():
+    products = request.json["products"]
+    for item in products:
+        Product.query.filter_by(id=item["id"]).delete()
+        db.session.commit()
+    return "Success", 200
+
 
 @product.route('/products/demo', methods=["GET"])
 def createDemoProducts():

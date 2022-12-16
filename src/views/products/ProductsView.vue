@@ -31,6 +31,14 @@
         </div>
         <div class="flex flex-row items-center gap-2">
           <button
+            @click="deleteProducts"
+            v-if="$can('execute', 'products') && selectedProducts?.length > 0"
+            class="red-gradient-btn flex items-center text-center"
+          >
+            <IconC iconName="TrashIcon" iconClass="w-5 h-5 mr-2" />
+            {{ $t("delete") }} ({{ selectedProducts?.length }})
+          </button>
+          <button
             @click="
               $router.push({
                 name: 'new-product',
@@ -92,7 +100,25 @@
                   scope="col"
                   class="py-3 px-6"
                   v-if="$can('execute', 'products')"
-                ></th>
+                >
+                  <button
+                    @click="
+                      () =>
+                        areAllSelected
+                          ? (selectedProducts = [])
+                          : (selectedProducts = JSON.parse(
+                              JSON.stringify(products)
+                            ))
+                    "
+                    class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+                  >
+                    <input
+                      type="checkbox"
+                      class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+                      :checked="areAllSelected"
+                    />
+                  </button>
+                </th>
                 <th
                   scope="col"
                   class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
@@ -252,20 +278,22 @@
                 <tr
                   class="border-b dark:border-gray-700"
                   :class="
-                    selectedProduct === product
+                    selectedProducts.some((obj) => obj?.id === product.id)
                       ? 'bg-theme-100 dark:bg-theme-400 dark:text-black font-bold'
                       : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
                   "
                 >
                   <td class="py-2 px-6" v-if="$can('execute', 'products')">
                     <button
-                      @click="updateSelectedProduct(product)"
+                      @click="toggleSelectProduct(product)"
                       class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
                     >
                       <input
                         type="checkbox"
-                        class="rounded-full cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-                        :checked="selectedProduct === product"
+                        class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
+                        :checked="
+                          selectedProducts.some((obj) => obj?.id === product.id)
+                        "
                       />
                     </button>
                   </td>
@@ -377,11 +405,25 @@
         @reload="getProducts(currentPage)"
       >
       </delete-modal>
+      <delete-modal
+        :itemId="{ products: selectedProducts }"
+        deleteAction="productModule/deleteProducts"
+        :title="$t('products')"
+        deleteRef="delete-multiple-modal"
+        @reload="
+          getProducts(currentPage);
+          selectedProducts = [];
+        "
+      >
+      </delete-modal>
     </div>
     <PaginationC
       :pagination="pagination"
       :currentPage="currentPage"
-      @pageChange="getProducts($event)"
+      @pageChange="
+        getProducts($event);
+        selectedProducts = [];
+      "
     />
   </div>
 </template>
@@ -397,7 +439,7 @@ export default {
     return {
       isTableLoading: true,
       isExcelLoading: false,
-      selectedProduct: {},
+      selectedProducts: [],
       selectedProductToDelete: {},
       currentPage: 1,
       searchQuery: "",
@@ -422,6 +464,18 @@ export default {
     pagination() {
       return this.$store.getters["productModule/getProductsPagination"];
     },
+    areAllSelected() {
+      const productsCopy = JSON.parse(JSON.stringify(this.products));
+      const selectedItemsCopy = JSON.parse(
+        JSON.stringify(this.selectedProducts)
+      );
+      return (
+        JSON.stringify(productsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))) ===
+          JSON.stringify(
+            selectedItemsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))
+          ) && this.products?.length !== 0
+      );
+    },
   },
   async created() {
     window.addEventListener("keydown", (e) => {
@@ -435,16 +489,18 @@ export default {
     await this.getProducts(this.currentPage);
   },
   methods: {
-    updateSelectedProduct(product) {
-      if (this.selectedProduct.id === product.id) {
-        this.selectedProduct = {};
-      } else {
-        this.selectedProduct = product;
-      }
+    toggleSelectProduct(product) {
+      const idx = this.selectedProducts.findIndex((x) => x?.id === product.id);
+      if (idx !== -1) this.selectedProducts.splice(idx, 1);
+      if (idx === -1) this.selectedProducts.push(product);
     },
     deleteProduct(product) {
       this.selectedProductToDelete = product;
       this.$openModal("delete-modal");
+      this.$putOnFocus("delete-item-modal-btn");
+    },
+    deleteProducts() {
+      this.$openModal("delete-multiple-modal");
       this.$putOnFocus("delete-item-modal-btn");
     },
     async getProducts(page) {

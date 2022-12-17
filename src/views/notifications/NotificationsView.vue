@@ -73,6 +73,7 @@
                   type="checkbox"
                   class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                   :checked="areAllSelected"
+                  :indeterminate="selectedItems.length > 0 && !areAllSelected"
                 />
                 <div
                   :id="`select-all-tooltip`"

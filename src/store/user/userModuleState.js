@@ -5,4 +5,5 @@ export default {
   pagination: new Pagination(),
   user: {},
   currentUser: {},
+  isActiveFilters: [true],
 };

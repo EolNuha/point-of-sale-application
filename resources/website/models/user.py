@@ -10,6 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(200))
     user_role = db.Column(db.Enum("staff", "manager", "owner", "superadmin"), default="staff")
+    active = db.Column(db.Boolean, default=True)
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
     sales = db.relationship('Sale', backref='user', lazy=True)

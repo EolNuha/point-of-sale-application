@@ -237,5 +237,13 @@
 	"maxTabs": "Max number of tabs is 5",
 	"regular": "Regular",
 	"irregular": "Irregular",
-	"expirationFieldEmptyMsg": "Leaving this field blank indicates that the product does not have an expiration date."
+	"expirationFieldEmptyMsg": "Leaving this field blank indicates that the product does not have an expiration date.",
+	"active": "Active",
+	"inactive": "Inactive",
+	"deactivate": "Deactivate",
+	"activate": "Activate",
+	"areYouSureTo": "Are you sure you want to {action} this?",
+	"activateSuccess": "{subject} was activated successfully!",
+	"deactivateSuccess": "{subject} was deactivated successfully!",
+	"status": "Status"
 }

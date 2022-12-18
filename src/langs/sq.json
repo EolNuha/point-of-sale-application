@@ -237,5 +237,13 @@
 	"maxTabs": "Numri maksimal i faqeve është 5",
 	"regular": "E rregullt",
 	"irregular": "E parregullt",
-	"expirationFieldEmptyMsg": "Lënia e kësaj fushe bosh tregon se produkti nuk ka një datë skadence."
+	"expirationFieldEmptyMsg": "Lënia e kësaj fushe bosh tregon se produkti nuk ka një datë skadence.",	
+	"active": "Aktiv",
+	"inactive": "Joaktiv",
+	"deactivate": "Çaktivizoni",
+	"activate": "Aktivizoni",
+	"areYouSureTo": "A jeni të sigurt që dëshironi ta {action} këtë?",
+	"activateSuccess": "{subject} u aktivizua me sukses!",
+	"deactivateSuccess": "{subject} u çaktivizua me sukses!",
+	"status": "Statusi"
 }

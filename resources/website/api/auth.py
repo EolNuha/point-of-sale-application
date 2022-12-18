@@ -8,7 +8,7 @@ from website import db
 from website.helpers import getPaginatedDict
 from website.jsonify.user import getUsersList, getUserDict
 from website.token import token_required
-from sqlalchemy import or_, asc, desc
+from sqlalchemy import or_, asc, desc, and_
 
 auth = Blueprint('auth', __name__)
 
@@ -93,6 +93,8 @@ def users():
     search = request.args.get('search', '*', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
+    active = [x == 'true' for x in request.args.getlist('active[]')]
+    if not active: active = [True, False]
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
@@ -110,6 +112,7 @@ def users():
         User.username.ilike(looking_for),
         User.email.ilike(looking_for),
         ))\
+        .filter(and_(User.active.in_(active)))\
         .order_by(sort)\
         .paginate(page=page, per_page=per_page)
 
@@ -128,6 +131,7 @@ def updateUserDetails(id):
     last_name = request.json["lastName"]
     username = request.json["username"]
     user_role = request.json["userRole"]
+    active = request.json["active"]
     user = User.query.filter_by(id=id).first()
 
     user.first_name = first_name
@@ -135,6 +139,7 @@ def updateUserDetails(id):
     user.email = email
     user.username = username
     user.user_role = user_role
+    user.active = active
     user.date_modified = datetime.now()
 
     db.session.commit()

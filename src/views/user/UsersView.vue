@@ -22,9 +22,42 @@
                 })
               "
               type="text"
-              class="default-input w-full pl-10"
+              class="default-input w-full px-10"
               :placeholder="$t('search')"
             />
+            <div
+              v-if="showFilters"
+              class="flex absolute inset-y-0 right-10 items-center pr-3 pointer-cursor"
+            >
+              <v-select
+                class="min-w-[8rem] w-fit default-input"
+                v-model="isActiveFilters"
+                :placeholder="$t('status')"
+                :options="[
+                  { name: $t('active'), value: true },
+                  { name: $t('inactive'), value: false },
+                ]"
+                :reduce="(options) => options.value"
+                :clearable="false"
+                :multiple="true"
+                label="name"
+              ></v-select>
+            </div>
+            <button
+              class="flex absolute inset-y-0 right-0 items-center pointer-cursor p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-600"
+              @click="showFilters = !showFilters"
+            >
+              <IconC
+                v-if="!showFilters"
+                iconName="FunnelIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+              <IconC
+                v-else
+                iconName="XMarkIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+            </button>
           </div>
         </div>
         <button
@@ -58,11 +91,6 @@
               class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
             >
               <tr>
-                <th
-                  scope="col"
-                  class="py-3 px-6"
-                  v-if="$can('execute', 'users')"
-                ></th>
                 <th
                   scope="col"
                   class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
@@ -191,6 +219,27 @@
                 </th>
                 <th
                   scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('active')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("status") }}
+                    <template v-if="sortColumn === 'active'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
                   class="py-3 px-6"
                   v-if="$can('execute', 'users')"
                 ></th>
@@ -199,26 +248,8 @@
             <tbody>
               <template v-for="user in users" :key="user.id">
                 <tr
-                  class="border-b dark:border-gray-700"
-                  :class="
-                    selectedUser === user
-                      ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
-                      : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
-                  "
+                  class="border-b dark:border-gray-700 bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]"
                 >
-                  <td class="py-2 px-6" v-if="$can('execute', 'users')">
-                    <button
-                      @click="updateSelectedUser(user)"
-                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
-                      v-if="currentUser.id !== user.id"
-                    >
-                      <input
-                        type="checkbox"
-                        class="rounded-full cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-                        :checked="selectedUser === user"
-                      />
-                    </button>
-                  </td>
                   <th
                     scope="row"
                     class="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -230,6 +261,14 @@
                   <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
                   <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
                   <td class="py-2 px-6 max-w-xs">{{ $t(user.userRole) }}</td>
+                  <td class="py-2 px-6 max-w-xs">
+                    <div
+                      class="py-1.5 px-2.5 rounded inline text-white"
+                      :class="user.active ? 'bg-green-500' : 'bg-red-500'"
+                    >
+                      {{ user.active ? $t("active") : $t("inactive") }}
+                    </div>
+                  </td>
                   <td class="py-2 px-6 w-1.5" v-if="$can('execute', 'users')">
                     <button
                       class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
@@ -274,14 +313,19 @@
                         </li>
                         <li
                           class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
-                          @click="deleteUser(user)"
+                          @click="
+                            changeUserActiveStatus(
+                              JSON.parse(JSON.stringify(user)),
+                              !user.active
+                            )
+                          "
                           v-if="currentUser.id !== user.id"
                         >
                           <IconC
                             iconName="TrashIcon"
                             iconClass="w-5 h-5 cursor-pointer"
                           />
-                          {{ $t("delete") }}
+                          {{ user.active ? $t("deactivate") : $t("activate") }}
                         </li>
                       </ul>
                     </div>
@@ -292,14 +336,14 @@
           </table>
         </div>
       </div>
-      <delete-modal
-        :itemId="selectedUserToDelete.id"
-        deleteAction="userModule/deleteUser"
-        title="User"
-        deleteRef="delete-modal"
-        @reload="getUsers(currentPage)"
+      <red-action-modal
+        :actionTitle="selectedUser.active ? $t('activate') : $t('deactivate')"
+        :actionText="`${$t('user')}`"
+        :isLoading="isDeactivateLoading"
+        :modalRef="`deactivate-modal`"
+        @submit="deactivateUser()"
       >
-      </delete-modal>
+      </red-action-modal>
     </div>
     <PaginationC
       :pagination="pagination"
@@ -310,24 +354,31 @@
 </template>
 
 <script>
-import DeleteModal from "@/components/modals/DeleteModal.vue";
+import RedActionModal from "@/components/modals/RedActionModal.vue";
 export default {
   components: {
-    DeleteModal,
+    RedActionModal,
   },
   data() {
     return {
       isTableLoading: false,
+      isDeactivateLoading: false,
       selectedUser: {},
-      selectedUserToDelete: {},
       currentPage: 1,
       searchQuery: "",
       sortColumn: null,
       sortDir: "desc",
+      showFilters: false,
     };
   },
   watch: {
     searchQuery: {
+      async handler() {
+        this.currentPage = 1;
+        this.getUsers(1);
+      },
+    },
+    isActiveFilters: {
       async handler() {
         this.currentPage = 1;
         this.getUsers(1);
@@ -344,30 +395,43 @@ export default {
     currentUser() {
       return this.$store.state.userModule.currentUser;
     },
+    isActiveFilters: {
+      get() {
+        return this.$store.state.userModule.isActiveFilters;
+      },
+      set(v) {
+        this.$store.state.userModule.isActiveFilters = v;
+      },
+    },
   },
   created() {
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedUser).length === 0;
-        if (!isEmpty) {
-          this.deleteUser(this.selectedUser);
-        }
-      }
-    });
     this.getUsers(this.currentPage);
   },
   methods: {
-    updateSelectedUser(user) {
-      if (this.selectedUser.id === user.id) {
-        this.selectedUser = {};
-      } else {
-        this.selectedUser = user;
-      }
+    changeUserActiveStatus(user, activeStatus) {
+      user.active = activeStatus;
+      this.selectedUser = user;
+      this.$openModal("deactivate-modal");
+      this.$putOnFocus("deactivate-item-modal-btn");
     },
-    deleteUser(user) {
-      this.selectedUserToDelete = user;
-      this.$openModal("delete-modal");
-      this.$putOnFocus("delete-item-modal-btn");
+    deactivateUser() {
+      this.isDeactivateLoading = true;
+      this.$store
+        .dispatch("userModule/updateUserDetails", this.selectedUser)
+        .then(() => {
+          this.isDeactivateLoading = false;
+          this.getUsers(this.currentPage);
+          this.$hideModal("deactivate-modal");
+          this.$toast.success(
+            this.selectedUser.active
+              ? this.$t("activateSuccess", { subject: this.$t("user") })
+              : this.$t("deactivateSuccess", { subject: this.$t("user") })
+          );
+        })
+        .catch((error) => {
+          this.isDeactivateLoading = false;
+          this.$toast.error(error.response.data || this.$t("somethingWrong"));
+        });
     },
     getUsers(page) {
       this.isTableLoading = true;
@@ -377,6 +441,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          active: this.isActiveFilters,
         })
         .then(() => {
           this.isTableLoading = false;

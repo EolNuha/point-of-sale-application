@@ -401,14 +401,6 @@
         </div>
       </div>
       <delete-modal
-        :itemId="selectedProductToDelete.id"
-        deleteAction="productModule/deleteProduct"
-        :title="$t('product')"
-        deleteRef="delete-modal"
-        @reload="getProducts(currentPage)"
-      >
-      </delete-modal>
-      <delete-modal
         :itemId="{ products: selectedProducts }"
         deleteAction="productModule/deleteProducts"
         :title="$t('products')"
@@ -417,6 +409,14 @@
           getProducts(currentPage);
           selectedProducts = [];
         "
+      >
+      </delete-modal>
+      <delete-modal
+        :itemId="selectedProductToDelete.id"
+        deleteAction="productModule/deleteProduct"
+        :title="$t('product')"
+        deleteRef="delete-modal"
+        @reload="getProducts(currentPage)"
       >
       </delete-modal>
     </div>
@@ -483,9 +483,9 @@ export default {
   async created() {
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
-        const isEmpty = Object.keys(this.selectedProduct)?.length === 0;
+        const isEmpty = this.selectedProducts?.length === 0;
         if (!isEmpty) {
-          this.deleteProduct(this.selectedProduct);
+          this.deleteProducts();
         }
       }
     });

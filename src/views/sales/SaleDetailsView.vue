@@ -33,6 +33,7 @@
           <button
             class="theme-gradient-btn inline-flex items-center text-center"
             @click="getPrintPdf"
+            :disabled="isLoading"
             type="button"
           >
             <div class="inline-flex flex-row">

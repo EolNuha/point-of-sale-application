@@ -373,7 +373,8 @@ export default {
     },
     getTaxValue() {
       return (arr, alias) =>
-        arr?.find((x) => x.taxAlias === alias)?.taxValue || 0;
+        arr?.find((x) => x.taxAlias === alias)?.taxValue ||
+        Number(0).toFixed(2);
     },
   },
   async created() {
@@ -393,10 +394,25 @@ export default {
     isRequired(value) {
       return value > 0 ? true : this.$t("isRequired");
     },
+    removeClass(element, className) {
+      element.classList.remove(...className);
+      const children = element.children;
+      for (const child of children) {
+        this.removeClass(child, className);
+      }
+    },
     async getPrintPdf() {
       let doc = new jsPDF();
       let elementHTML = document.getElementById("content");
-      await doc.html(elementHTML, {
+      let copiedElement = elementHTML.cloneNode(true);
+      this.removeClass(copiedElement, [
+        "dark:bg-neutral-700",
+        "dark:bg-neutral-900",
+        "dark:text-gray-300",
+        "dark:text-gray-400",
+        "dark:border-gray-600",
+      ]);
+      await doc.html(copiedElement, {
         margin: [10, 10, 10, 10],
         autoPaging: "text",
         x: 0,

@@ -492,7 +492,7 @@ export default {
     deletePurchase(purchase) {
       this.selectedPurchase = purchase;
       this.$openModal("delete-modal");
-      this.$putOnFocus("delete-item-modal-btn");
+      this.$putOnFocus("delete-modal-btn");
     },
   },
 };

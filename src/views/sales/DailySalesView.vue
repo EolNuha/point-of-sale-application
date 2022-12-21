@@ -549,7 +549,7 @@ export default {
     deleteSale(sale) {
       this.selectedSale = sale;
       this.$openModal("delete-modal");
-      this.$putOnFocus("delete-item-modal-btn");
+      this.$putOnFocus("delete-modal-btn");
     },
   },
 };

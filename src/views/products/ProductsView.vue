@@ -500,11 +500,11 @@ export default {
     deleteProduct(product) {
       this.selectedProductToDelete = product;
       this.$openModal("delete-modal");
-      this.$putOnFocus("delete-item-modal-btn");
+      this.$putOnFocus("delete-modal-btn");
     },
     deleteProducts() {
       this.$openModal("delete-multiple-modal");
-      this.$putOnFocus("delete-item-modal-btn");
+      this.$putOnFocus("delete-multiple-modal-btn");
     },
     async getProducts(page) {
       this.isTableLoading = true;

@@ -633,7 +633,7 @@ export default {
           notifications: this.selectedItems,
         })
         .then(async () => {
-          await this.getNotifications(this.currentPage);
+          await this.getNotifications(this.currentPage, false);
           await this.$store.dispatch("notificationsModule/getNotifications");
           this.selectedItems = [];
           this.$toast.success(
@@ -652,7 +652,7 @@ export default {
       this.$store
         .dispatch("notificationsModule/deleteNotification", id)
         .then(async () => {
-          await this.getNotifications(this.currentPage);
+          await this.getNotifications(this.currentPage, false);
           await this.$store.dispatch("notificationsModule/getNotifications");
           this.$toast.success(
             this.$t("deleteSuccess", { title: this.$t("notification") })

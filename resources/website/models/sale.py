@@ -5,6 +5,8 @@ from sqlalchemy import Index
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    gross_profit_amount = db.Column(db.Numeric(precision=10, scale=2))
+    net_profit_amount = db.Column(db.Numeric(precision=10, scale=2))
     total_amount = db.Column(db.Numeric(precision=10, scale=2))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=2))
     customer_amount = db.Column(db.Numeric(precision=10, scale=2))

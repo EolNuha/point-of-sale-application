@@ -5,6 +5,8 @@ def getSaleDict(item):
     return {
         "id": item.id,
         "totalAmount": item.total_amount,
+        "grossProfitAmount": item.gross_profit_amount,
+        "netProfitAmount": item.net_profit_amount,
         "subTotalAmount": item.subtotal_amount,
         "customerAmount": item.customer_amount,
         "changeAmount": item.change_amount,
@@ -17,6 +19,8 @@ def getDailySaleDict(item):
     return {
         "id": item.id,
         "totalAmount": item.total_amount,
+        "grossProfitAmount": item.gross_profit_amount,
+        "netProfitAmount": item.net_profit_amount,
         "subTotalAmount": item.subtotal_amount,
         "customerAmount": item.customer_amount,
         "changeAmount": item.change_amount,

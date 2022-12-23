@@ -75,18 +75,21 @@ def createSale():
         
         db.session.add(sale_item)
 
-    subtotal, sale_taxes = [], []
+    subtotal, sale_taxes, grosstotal = [], [], []
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in getSaleItemsList(sale.sale_items):
         subtotal.append(Decimal(item['priceWithoutTax'] * Decimal(item['quantity']).quantize(TWOPLACES)).quantize(TWOPLACES))
+        grosstotal.append(Decimal(item['product']['purchasedPrice'] * Decimal(item['quantity']).quantize(TWOPLACES)).quantize(TWOPLACES))
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
                 sale_taxes.append({key_v: Decimal(item['taxAmount']).quantize(TWOPLACES) * Decimal(item['quantity']).quantize(TWOPLACES)})
     
     sale.subtotal_amount = sum(subtotal)
+    sale.gross_profit_amount = Decimal(total_amount) - sum(grosstotal)
     sale_taxes = sumListOfDicts(sale_taxes)
+    sale.net_profit_amount = sale.gross_profit_amount - sum(sale_taxes.values())
     for key, value in sale_taxes.items():
         split_key = key.split("+")
         db.session.add(
@@ -150,6 +153,8 @@ def getSales():
             Sale.is_regular.label("is_regular"),
             sa.func.sum(Sale.subtotal_amount).label("subtotal_amount"),
             sa.func.sum(Sale.total_amount).label("total_amount"),
+            sa.func.sum(Sale.gross_profit_amount).label("gross_profit_amount"),
+            sa.func.sum(Sale.net_profit_amount).label("net_profit_amount"),
             sa.func.sum(Sale.change_amount).label("change_amount"),
             sa.func.sum(Sale.customer_amount).label("customer_amount"),
         )\
@@ -235,7 +240,7 @@ def editSale(saleId):
     saleItems = request.json["saleItems"]
 
     sale_query = Sale.query.filter_by(id=saleId).first_or_404()
-    subtotal, sale_taxes = [], []
+    subtotal, sale_taxes, grosstotal = [], [], []
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in deleted_items:
@@ -249,7 +254,7 @@ def editSale(saleId):
         item_quantity = Decimal(item["quantity"]).quantize(TWOPLACES)
 
         subtotal.append(Decimal(Decimal(item['priceWithoutTax']).quantize(TWOPLACES) * item_quantity).quantize(TWOPLACES))
-
+        grosstotal.append(Decimal(Decimal(item['product']['purchasedPrice']) * item_quantity).quantize(TWOPLACES))
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
@@ -275,6 +280,8 @@ def editSale(saleId):
 
     total_sum = SaleItem.query.filter_by(sale_id=saleId).with_entities(func.sum(SaleItem.total_amount).label('total')).first().total
     sale_query.total_amount = total_sum
+    sale_query.gross_profit_amount = Decimal(total_sum) - sum(grosstotal)
+    sale_query.net_profit_amount = sale_query.gross_profit_amount - sum(sale_taxes.values())
     db.session.commit()
     return "Success", 200
 

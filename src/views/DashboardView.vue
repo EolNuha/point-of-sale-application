@@ -150,7 +150,11 @@
         </div>
         <div class="inline-flex items-center flex-col" v-if="!isFetchingSales">
           <h3 class="text-3xl text-gray-900 dark:text-white">
-            {{ $store.state.analyticsModule.sales.info.currTotal }}€
+            {{
+              roundTo2(
+                $store.state.analyticsModule.sales.info.currTotal
+              ).toFixed(2)
+            }}€
           </h3>
           <p
             class="inline-flex items-center text-green-500"
@@ -209,7 +213,11 @@
           v-if="!isFetchingPurchases"
         >
           <h3 class="text-3xl text-gray-900 dark:text-white">
-            {{ $store.state.analyticsModule.purchases.info.currTotal }}€
+            {{
+              roundTo2(
+                $store.state.analyticsModule.purchases.info.currTotal
+              ).toFixed(2)
+            }}€
           </h3>
           <p
             class="inline-flex items-center text-green-500"
@@ -305,6 +313,9 @@ export default {
     },
     purchases() {
       return this.$store.state.analyticsModule.purchases;
+    },
+    roundTo2() {
+      return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
     },
   },
 };

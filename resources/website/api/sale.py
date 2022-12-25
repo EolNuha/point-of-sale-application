@@ -12,6 +12,7 @@ from sqlalchemy import or_, and_, asc, desc, func
 import sqlalchemy as sa
 import decimal
 from website.token import currentUser
+from functools import reduce
 
 sale = Blueprint('sale', __name__)
 Decimal = decimal.Decimal
@@ -108,6 +109,9 @@ def createSale():
 
 @sale.route('/sales', methods=["GET"])
 def getSales():
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
     sort_column = request.args.get('sort_column', "id", type=str)
@@ -180,7 +184,31 @@ def getSales():
         
         item["taxes"] = getTaxesList(taxes)
 
-    return jsonify(getPaginatedDict(json_sale_items, paginated_items))
+    paginated_dict = getPaginatedDict(json_sale_items, paginated_items)
+
+    total = reduce(lambda x, y: x + y['totalAmount'], json_sale_items, 0)
+    subtotal = reduce(lambda x, y: x + y['subTotalAmount'], json_sale_items, 0)
+    gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], json_sale_items, 0)
+    net_total = reduce(lambda x, y: x + y['netProfitAmount'], json_sale_items, 0)
+
+    taxes_total = []
+    for settings in Settings.query.filter_by(settings_type="tax").all():
+        total_tax_value = sum(Decimal(tax['taxValue']) for item in json_sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
+        taxes_total.append(
+            {
+                "taxAlias": settings.settings_alias, 
+                "taxName": settings.settings_name, 
+                "taxValue": total_tax_value
+            }
+        )
+    
+    paginated_dict["pagination"]["salesTotalAmount"] = total
+    paginated_dict["pagination"]["salesSubTotalAmount"] = subtotal
+    paginated_dict["pagination"]["salesTotalGrossProfit"] = gross_total
+    paginated_dict["pagination"]["salesTotalNetProfit"] = net_total
+    paginated_dict["pagination"]["taxes"] = taxes_total
+    
+    return jsonify(paginated_dict)
 
 @sale.route('/sales/daily', methods=["GET"])
 def getDailySales():

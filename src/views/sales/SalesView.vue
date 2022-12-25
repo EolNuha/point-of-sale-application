@@ -200,6 +200,48 @@
                     </template>
                   </div>
                 </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('gross_profit_amount')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("grossProfit") }}
+                    <template v-if="sortColumn === 'gross_profit_amount'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  @click="sort('net_profit_amount')"
+                >
+                  <div class="flex justify-between items-center">
+                    {{ $t("netProfit") }}
+                    <template v-if="sortColumn === 'net_profit_amount'">
+                      <IconC
+                        iconName="ArrowLongDownIcon"
+                        iconClass="w-4 h-4"
+                        v-if="sortDir === 'desc'"
+                      />
+                      <IconC
+                        iconName="ArrowLongUpIcon"
+                        iconClass="w-4 h-4"
+                        v-else
+                      />
+                    </template>
+                  </div>
+                </th>
                 <th scope="col" class="py-3 px-6"></th>
               </tr>
             </thead>
@@ -220,6 +262,8 @@
                   </td>
                   <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
                   <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
+                  <td class="py-2 px-6">{{ sale.grossProfitAmount }} €</td>
+                  <td class="py-2 px-6">{{ sale.netProfitAmount }} €</td>
                   <td class="py-2 px-6">
                     <button
                       @click="
@@ -240,6 +284,29 @@
                   </td>
                 </tr>
               </template>
+              <tr
+                class="text-md uppercase font-bold bg-white border-b dark:bg-neutral-900 dark:border-gray-700"
+              >
+                <td class="py-4 px-6">{{ $t("total") }}</td>
+                <td
+                  class="py-2 px-6"
+                  v-for="item in pagination.taxes"
+                  :key="item.settingsValue"
+                >
+                  {{ item.taxValue }} €
+                </td>
+                <td class="py-4 px-6">
+                  {{ pagination.salesSubTotalAmount }} €
+                </td>
+                <td class="py-4 px-6">{{ pagination.salesTotalAmount }} €</td>
+                <td class="py-4 px-6">
+                  {{ pagination.salesTotalGrossProfit }} €
+                </td>
+                <td class="py-4 px-6">
+                  {{ pagination.salesTotalNetProfit }} €
+                </td>
+                <td class="py-4 px-6"></td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -245,5 +245,7 @@
 	"areYouSureTo": "A jeni të sigurt që dëshironi ta {action} këtë?",
 	"activateSuccess": "{subject} u aktivizua me sukses!",
 	"deactivateSuccess": "{subject} u çaktivizua me sukses!",
-	"status": "Statusi"
+	"status": "Statusi",
+	"grossProfit": "Fitimi Bruto",
+	"netProfit": "Fitimi Neto"
 }

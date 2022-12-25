@@ -245,5 +245,7 @@
 	"areYouSureTo": "Are you sure you want to {action} this?",
 	"activateSuccess": "{subject} was activated successfully!",
 	"deactivateSuccess": "{subject} was deactivated successfully!",
-	"status": "Status"
+	"status": "Status",
+	"grossProfit": "Gross Profit",
+	"netProfit": "Net Profit"
 }

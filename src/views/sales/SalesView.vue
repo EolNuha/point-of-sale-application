@@ -293,7 +293,7 @@
                   v-for="item in pagination.taxes"
                   :key="item.settingsValue"
                 >
-                  {{ item.taxValue }} €
+                  {{ Number(item.taxValue).toFixed(2) }} €
                 </td>
                 <td class="py-4 px-6">
                   {{ pagination.salesSubTotalAmount }} €

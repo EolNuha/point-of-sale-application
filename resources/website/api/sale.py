@@ -165,9 +165,9 @@ def getSales():
         .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
         .paginate(page=page, per_page=per_page)
 
-    json_sale_items = getSalesList(paginated_items.items)
+    sale_items = getSalesList(paginated_items.items)
 
-    for item in json_sale_items:
+    for item in sale_items:
         date_split = item["dateCreated"].split(".")
         item_date = date(year=int(date_split[2][:4]), month=int(date_split[1]), day=int(date_split[0]))
 
@@ -184,16 +184,16 @@ def getSales():
         
         item["taxes"] = getTaxesList(taxes)
 
-    paginated_dict = getPaginatedDict(json_sale_items, paginated_items)
+    paginated_dict = getPaginatedDict(sale_items, paginated_items)
 
-    total = reduce(lambda x, y: x + y['totalAmount'], json_sale_items, 0)
-    subtotal = reduce(lambda x, y: x + y['subTotalAmount'], json_sale_items, 0)
-    gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], json_sale_items, 0)
-    net_total = reduce(lambda x, y: x + y['netProfitAmount'], json_sale_items, 0)
+    total = reduce(lambda x, y: x + y['totalAmount'], sale_items, 0)
+    subtotal = reduce(lambda x, y: x + y['subTotalAmount'], sale_items, 0)
+    gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], sale_items, 0)
+    net_total = reduce(lambda x, y: x + y['netProfitAmount'], sale_items, 0)
 
     taxes_total = []
     for settings in Settings.query.filter_by(settings_type="tax").all():
-        total_tax_value = sum(Decimal(tax['taxValue']) for item in json_sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
+        total_tax_value = sum(Decimal(tax['taxValue']) for item in sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
         taxes_total.append(
             {
                 "taxAlias": settings.settings_alias, 
@@ -253,7 +253,32 @@ def getDailySales():
         .filter(Sale.date_created >= sale_date_start)\
         .paginate(page=page, per_page=per_page)
 
-    return jsonify(getPaginatedDict(getDailySalesList(paginated_items.items), paginated_items))
+    sale_items = getDailySalesList(paginated_items.items)
+    paginated_dict = getPaginatedDict(getDailySalesList(paginated_items.items), paginated_items)
+
+    total = reduce(lambda x, y: x + y['totalAmount'], sale_items, 0)
+    subtotal = reduce(lambda x, y: x + y['subTotalAmount'], sale_items, 0)
+    gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], sale_items, 0)
+    net_total = reduce(lambda x, y: x + y['netProfitAmount'], sale_items, 0)
+
+    taxes_total = []
+    for settings in Settings.query.filter_by(settings_type="tax").all():
+        total_tax_value = sum(Decimal(tax['taxValue']) for item in sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
+        taxes_total.append(
+            {
+                "taxAlias": settings.settings_alias, 
+                "taxName": settings.settings_name, 
+                "taxValue": total_tax_value
+            }
+        )
+    
+    paginated_dict["pagination"]["salesTotalAmount"] = total
+    paginated_dict["pagination"]["salesSubTotalAmount"] = subtotal
+    paginated_dict["pagination"]["salesTotalGrossProfit"] = gross_total
+    paginated_dict["pagination"]["salesTotalNetProfit"] = net_total
+    paginated_dict["pagination"]["taxes"] = taxes_total
+
+    return jsonify(paginated_dict)
 
 @sale.route('/sales/<int:saleId>', methods=["GET"])
 def getSaleDetails(saleId):

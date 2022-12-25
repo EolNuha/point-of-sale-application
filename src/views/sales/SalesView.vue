@@ -435,7 +435,7 @@ export default {
           type_filter: this.typeFilters,
         })
         .then((response) => {
-          this.allSales = response.data.data;
+          this.allSales = response.data;
         });
     },
     async downloadExcel() {
@@ -452,20 +452,22 @@ export default {
       headTr.appendChild(dateTh);
 
       for await (const tax of this.taxes) {
-        let taxTh = document.createElement("td");
+        let taxTh = document.createElement("th");
         taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
         headTr.appendChild(taxTh);
       }
+      for await (const item of [
+        "subtotalAmount",
+        "totalAmount",
+        "grossProfit",
+        "netProfit",
+      ]) {
+        let itemTh = document.createElement("th");
+        itemTh.innerHTML = this.$t(item);
+        headTr.appendChild(itemTh);
+      }
 
-      let subtotalTh = document.createElement("th");
-      subtotalTh.innerHTML = this.$t("subtotalAmount");
-      headTr.appendChild(subtotalTh);
-
-      let totalTh = document.createElement("th");
-      totalTh.innerHTML = this.$t("totalAmount");
-      headTr.appendChild(totalTh);
-
-      for await (const element of this.allSales) {
+      for await (const element of this.allSales.data) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
         dateTd.innerHTML = element.dateCreated?.substring(0, 10);
@@ -478,14 +480,40 @@ export default {
           )} €`;
           bodyTr.appendChild(taxTd);
         }
-        let subtotalTd = document.createElement("td");
-        subtotalTd.innerHTML = `${element.subTotalAmount} €`;
-        let totalTd = document.createElement("td");
-        totalTd.innerHTML = `${element.totalAmount} €`;
-        bodyTr.appendChild(subtotalTd);
-        bodyTr.appendChild(totalTd);
+        for await (const item of [
+          "subTotalAmount",
+          "totalAmount",
+          "grossProfitAmount",
+          "netProfitAmount",
+        ]) {
+          let itemTd = document.createElement("td");
+          itemTd.innerHTML = `${element[item]} €`;
+          bodyTr.appendChild(itemTd);
+        }
         tbody.appendChild(bodyTr);
       }
+
+      let totalTr = document.createElement("tr");
+      let bottomTd = document.createElement("th");
+      bottomTd.innerHTML = this.$t("total");
+      totalTr.appendChild(bottomTd);
+      for await (const tax of this.allSales.pagination.taxes) {
+        let taxTd = document.createElement("th");
+        taxTd.innerHTML = `${tax.taxValue} €`;
+        totalTr.appendChild(taxTd);
+      }
+      for await (const item of [
+        "salesSubTotalAmount",
+        "salesTotalAmount",
+        "salesTotalGrossProfit",
+        "salesTotalNetProfit",
+      ]) {
+        let itemTh = document.createElement("th");
+        itemTh.innerHTML = `${this.allSales.pagination[item]} €`;
+        totalTr.appendChild(itemTh);
+      }
+
+      tbody.appendChild(totalTr);
 
       thead.appendChild(headTr);
       table.appendChild(thead);

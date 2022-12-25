@@ -143,13 +143,13 @@
             class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("expirationDate") }}
             <button
-              :id="`product-exp-${index}-tooltip-btn`"
+              :id="`product-exp-tooltip-btn`"
               class="cursor-default"
               type="button"
               @mouseover="
                 $showTooltip({
-                  targetEl: `product-exp-${index}-tooltip`,
-                  triggerEl: `product-exp-${index}-tooltip-btn`,
+                  targetEl: `product-exp-tooltip`,
+                  triggerEl: `product-exp-tooltip-btn`,
                   placement: `right`,
                 })
               "
@@ -157,7 +157,7 @@
               <IconC iconName="InformationCircleIcon" iconClass="w-4 h-4" />
             </button>
             <div
-              :id="`product-exp-${index}-tooltip`"
+              :id="`product-exp-tooltip`"
               role="tooltip"
               class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
             >

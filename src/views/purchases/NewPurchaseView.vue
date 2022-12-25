@@ -103,7 +103,7 @@
       >
         {{ $t("purchasedProducts") }}:
       </h2>
-      <div v-for="(product, index) in products" :key="index">
+      <div v-for="(product, index) in products" :key="index" class="mb-5">
         <div class="flex flex-row gap-2">
           <div
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full"
@@ -342,15 +342,15 @@
             />
           </button>
         </div>
-        <div class="flex justify-end my-3 gap-2">
-          <button
-            type="button"
-            class="theme-gradient-btn flex items-center justify-center"
-            @click="addProduct"
-          >
-            <IconC iconName="PlusIcon" iconClass="w-5 h-5" />
-          </button>
-        </div>
+      </div>
+      <div class="flex justify-end my-3 gap-2">
+        <button
+          type="button"
+          class="theme-gradient-btn flex items-center justify-center"
+          @click="addProduct"
+        >
+          <IconC iconName="PlusIcon" iconClass="w-5 h-5" />
+        </button>
       </div>
       <div>
         <button

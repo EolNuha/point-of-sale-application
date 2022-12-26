@@ -24,7 +24,7 @@
       <div
         class="flex flex-row flex-wrap sm:flex-nowrap items-center gap-2 text-gray-700 dark:text-gray-200"
       >
-        <span class="font-bold">{{ $t("product") }}:</span>
+        <span class="font-bold">{{ $t("seller") }}:</span>
         <v-select
           class="w-full min-w-[150px] md:w-[200px] default-input"
           v-model="selectedSeller"

@@ -29,7 +29,7 @@
           placeholder="Select date start"
           :max="endDate"
         />
-        <span class="text-gray-500">to</span>
+        <span class="text-gray-500">{{ $t("to") }}</span>
         <input
           @input="
             $debounce(() => {

@@ -175,6 +175,7 @@ export default {
       .dispatch("userModule/getUserDetails", this.$route.params.userId)
       .then(() => {
         this.isDataLoading = false;
+        document.title = `${this.user.firstName} ${this.user.lastName}`;
       })
       .catch(() => {
         this.isDataLoading = false;

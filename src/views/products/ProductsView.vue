@@ -1,8 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div
-    class="overflow-x-hidden flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4"
-  >
+  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
     <div class="full-layout flex flex-col">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center search-input-width">

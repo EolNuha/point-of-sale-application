@@ -301,6 +301,7 @@ export default {
       .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)
       .then(() => {
         this.isLoading = false;
+        document.title = `${this.$t("sale")} #${this.sale.id}`;
       });
   },
   methods: {

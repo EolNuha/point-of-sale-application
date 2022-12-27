@@ -389,6 +389,7 @@ export default {
       )
       .then(() => {
         this.isLoading = false;
+        document.title = `${this.$t("purchase")} #${this.purchase.id}`;
       });
   },
   methods: {

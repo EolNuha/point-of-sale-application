@@ -278,15 +278,15 @@ export default {
     },
   },
   async created() {
-    this.reload();
+    await this.reload();
   },
   methods: {
-    reload() {
+    async reload() {
       this.isDataLoading = true;
-      this.$store.dispatch("settingsModule/getSettingsType", {
+      await this.$store.dispatch("settingsModule/getSettingsType", {
         settingsType: "tax",
       });
-      this.$store
+      await this.$store
         .dispatch(
           "productModule/getProductDetails",
           this.$route.params.productId
@@ -294,6 +294,7 @@ export default {
         .then(async (response) => {
           this.$route.meta.title = response.data.name;
           this.isDataLoading = false;
+          document.title = this.product.name;
         });
     },
     formatDate(date) {

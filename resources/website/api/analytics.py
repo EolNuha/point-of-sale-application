@@ -60,6 +60,56 @@ def getSales():
     })
     return jsonify(sale_analytics)
 
+@analytics.route('/analytics/sales-gross-profit', methods=["GET"])
+def getSalesGrossProfit():
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+    prev_date_start = request_dates["prev_date_start"]
+    prev_date_end = request_dates["prev_date_end"]
+
+    curr_sales = Sale.query.filter(Sale.date_created <= date_end)\
+        .filter(Sale.date_created >= date_start)\
+        .with_entities(
+            Sale.id.label("id"), 
+            Sale.date_created.label("date_created"), 
+            sa.func.sum(Sale.gross_profit_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
+        .all()
+
+    prev_sales = Sale.query.filter(Sale.date_created <= prev_date_end)\
+        .filter(Sale.date_created >= prev_date_start)\
+        .with_entities(
+            Sale.id.label("id"), 
+            Sale.date_created.label("date_created"), 
+            sa.func.sum(Sale.gross_profit_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))\
+        .all()
+
+    sale_analytics = {"options": [], "series": [], "info": {}}
+    
+    dates = get_curr_prev_chart(date_start, date_end, curr_sales, prev_sales)
+    
+    curr_comp_series = dates["curr_series"]
+    prev_comp_series = dates["prev_series"]
+    sale_analytics["options"] = dates["options"]
+    curr_total = sum(curr_comp_series)
+    prev_total = sum(prev_comp_series)
+
+    sale_analytics["series"].append({"name": "grossProfit", "data": curr_comp_series})
+    sale_analytics["series"].append({"name": "grossProfitPreviousPeriod", "data": prev_comp_series})
+    
+    percentage_diff = get_percentage_change(Decimal(curr_total), Decimal(prev_total))
+    sale_analytics["info"].update({
+        "chartName": "sales-revenue", 
+        "currTotal": curr_total, 
+        "prevTotal": prev_total, 
+        "percentageDiff": percentage_diff
+    })
+    return jsonify(sale_analytics)
+
 
 @analytics.route('/analytics/sales/<string:day>', methods=["GET"])
 def getSaleStats(day):

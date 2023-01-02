@@ -16,6 +16,19 @@ export default {
         });
     });
   },
+  getSalesGrossProfit({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/sales-gross-profit`, { params: data })
+        .then(async (response) => {
+          commit("SET_SALES_GROSS_PROFIT", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getSaleStats({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

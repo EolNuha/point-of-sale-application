@@ -2,6 +2,9 @@ export default {
   SET_SALES(state, data) {
     state.sales = data;
   },
+  SET_SALES_GROSS_PROFIT(state, data) {
+    state.salesGrossProfit = data;
+  },
   SET_SALE_STATS(state, data) {
     state.sale = data;
   },

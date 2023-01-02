@@ -1,5 +1,6 @@
 export default {
   sales: [],
+  salesGrossProfit: [],
   sale: [],
   purchases: [],
   purchase: [],

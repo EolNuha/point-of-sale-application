@@ -7,6 +7,13 @@
       :textContent="$t('totalDayRevenueSales')"
     >
     </AreaChartMoney>
+    <AreaChartMoney
+      :dispatchModule="`analyticsModule/getSalesGrossProfit`"
+      :chartData="$store.state.analyticsModule.salesGrossProfit"
+      :titleContent="$t('grossProfit')"
+      :textContent="$t('totalSalesGrossProfit')"
+    >
+    </AreaChartMoney>
     <AreaChartSpecificDate
       :dispatchModule="`analyticsModule/getSaleStats`"
       :chartData="$store.state.analyticsModule.sale"

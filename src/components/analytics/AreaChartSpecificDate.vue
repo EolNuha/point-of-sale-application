@@ -38,12 +38,13 @@
           </p>
         </div>
         <div
-          class="inline-flex items-center text-green-500 text-3xl"
+          class="inline-flex flex-col items-center text-green-500"
           v-if="!isFetching"
         >
           <h3 class="text-3xl text-gray-900 dark:text-white">
             {{ Number(chartData.info.currTotal).toFixed(2) }}€
           </h3>
+          <slot name="totalExtra"></slot>
         </div>
       </div>
 

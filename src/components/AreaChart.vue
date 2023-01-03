@@ -19,11 +19,9 @@ export default {
     };
   },
   created() {
-    const theme = getComputedStyle(document.body)
-      .getPropertyValue("--color-theme-500")
-      .replaceAll(" ", "");
     this.options = {
-      colors: [theme, "#fdba8c"],
+      // orange "#fdba8c",
+      colors: this.getColors(),
       chart: {
         id: this.chartData.info.chartName,
       },
@@ -74,6 +72,27 @@ export default {
       },
     };
     this.series = this.chartData.series;
+  },
+  methods: {
+    getColors() {
+      const theme500 = getComputedStyle(document.body)
+        .getPropertyValue("--color-theme-500")
+        .replaceAll(" ", "");
+      const theme300 = getComputedStyle(document.body)
+        .getPropertyValue("--color-theme-300")
+        .replaceAll(" ", "");
+      const theme = [theme500, theme300];
+
+      const colors = [
+        "#3b82f6",
+        "#93c5fd",
+        "#ef4444",
+        "#fca5a5",
+        "#a855f7",
+        "#d8b4fe",
+      ];
+      return [...theme, ...colors.filter((color) => !theme.includes(color))];
+    },
   },
 };
 </script>

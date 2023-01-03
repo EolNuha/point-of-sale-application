@@ -20,6 +20,16 @@
       :titleContent="`${$t('sales')} ${$t('on')}`"
       :textContent="$t('revenueMade')"
     >
+      <template #totalExtra>
+        <p>
+          {{ $t("gross") }}:
+          {{
+            Number($store.state.analyticsModule.sale.info.grossTotal).toFixed(
+              2
+            )
+          }}€
+        </p>
+      </template>
     </AreaChartSpecificDate>
   </div>
 </template>

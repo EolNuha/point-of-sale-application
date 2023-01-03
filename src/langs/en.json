@@ -250,5 +250,7 @@
 	"status": "Status",
 	"grossProfit": "Gross Profit",
 	"grossProfitPreviousPeriod": "Gross profit (previous period)",
-	"netProfit": "Net Profit"
+	"netProfit": "Net Profit",
+	"gross": "Gross",
+	"net": "Net"
 }

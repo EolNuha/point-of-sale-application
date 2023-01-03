@@ -127,6 +127,15 @@ def getSaleStats(day):
         )\
         .group_by(sa.func.strftime("%Y-%m-%d-%H-%M", Sale.date_created))\
         .all()
+    gross_profit = Sale.query.filter(Sale.date_created <= date_end)\
+        .filter(Sale.date_created >= date_start)\
+        .with_entities(
+            Sale.id.label("id"), 
+            Sale.date_created.label("date_created"), 
+            sa.func.sum(Sale.gross_profit_amount).label("total_amount"),
+        )\
+        .group_by(sa.func.strftime("%Y-%m-%d-%H-%M", Sale.date_created))\
+        .all()
 
     sale_analytics = {"options": [], "series": [], "info": {}}
 
@@ -136,9 +145,12 @@ def getSaleStats(day):
         sale_analytics["options"].append(item.date_created.strftime('%H:%M'))
         curr_series.append(item.total_amount)
 
+    gross_series = [item.total_amount for item in gross_profit]
+
     sale_analytics["series"].append({"name": "revenue", "data": curr_series})
+    sale_analytics["series"].append({"name": "grossProfit", "data": gross_series})
     curr_total = sum(curr_series)
-    sale_analytics["info"].update({"chartName": f"{day}--sale-revenue", "currTotal": curr_total})
+    sale_analytics["info"].update({"chartName": f"{day}--sale-revenue", "currTotal": curr_total, "grossTotal": sum(gross_series)})
     return jsonify(sale_analytics)
 
 

@@ -250,5 +250,7 @@
 	"status": "Statusi",
 	"grossProfit": "Fitimi Bruto",
 	"grossProfitPreviousPeriod": "Fitimi bruto (periudha e kaluar)",
-	"netProfit": "Fitimi Neto"
+	"netProfit": "Fitimi Neto",
+	"gross": "Bruto",
+	"net": "Neto"
 }

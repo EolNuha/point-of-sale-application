@@ -285,6 +285,7 @@
                 </tr>
               </template>
               <tr
+                v-if="sales?.length !== 0"
                 class="text-md uppercase font-bold bg-white border-b dark:bg-neutral-900 dark:border-gray-700"
               >
                 <td class="py-4 px-6">{{ $t("total") }}</td>

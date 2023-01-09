@@ -204,7 +204,7 @@ export default {
   methods: {
     switchView() {
       this.detailedView = !this.detailedView;
-      this.getPurchases();
+      this.getPurchases(this.currentPage);
     },
     getTaxValue(arr, alias) {
       return (

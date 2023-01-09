@@ -102,16 +102,37 @@
           </button>
         </div>
       </div>
-      <DateFilter
-        :startDate="startDate"
-        :endDate="endDate"
-        :searchQuery="searchQuery"
-        :dispatchModule="`saleModule/getSales`"
-        @isTableLoading="isTableLoading = $event"
-        @startDateChange="startDate = $event"
-        @endDateChange="endDate = $event"
-        @changeMonthDates="monthDates = $event"
-      />
+      <div class="flex items-center justify-between w-full">
+        <DateFilter
+          :startDate="startDate"
+          :endDate="endDate"
+          :searchQuery="searchQuery"
+          :dispatchModule="salesDispatch"
+          @isTableLoading="isTableLoading = $event"
+          @startDateChange="startDate = $event"
+          @endDateChange="endDate = $event"
+          @changeMonthDates="monthDates = $event"
+        />
+        <button
+          type="button"
+          @click="switchView"
+          class="p-1.5 hover:bg-gray-300 rounded dark:hover:bg-neutral-700 flex items-center gap-2 dark:text-gray-200"
+        >
+          <IconC
+            iconType="custom"
+            iconName="GridIcon"
+            iconClass="w-6 h-6"
+            v-if="!detailedView"
+          />
+          <IconC
+            iconType="custom"
+            iconName="TableIcon"
+            iconClass="w-6 h-6"
+            v-else
+          />
+          {{ detailedView ? $t("groupedView") : $t("detailedView") }}
+        </button>
+      </div>
       <div class="overflow-hidden rounded mb-5 flex grow relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style grow">
           <OverlayC v-if="isTableLoading" />
@@ -122,194 +143,21 @@
             :search="searchQuery"
             routeName="new-sale"
           />
-          <table
-            class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
-          >
-            <thead
-              class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
-            >
-              <tr>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('date_created')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("date") }}
-                    <template v-if="sortColumn === 'date_created'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
-                  v-for="item in taxes"
-                  :key="item.settingsValue"
-                >
-                  {{ $t("tax") }} {{ item.settingsName }}%
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('subtotal_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("subtotalAmount") }}
-                    <template v-if="sortColumn === 'subtotal_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('total_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("totalAmount") }}
-                    <template v-if="sortColumn === 'total_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('gross_profit_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("grossProfit") }}
-                    <template v-if="sortColumn === 'gross_profit_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('net_profit_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("netProfit") }}
-                    <template v-if="sortColumn === 'net_profit_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th scope="col" class="py-3 px-6"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="sale in sales" :key="sale.id">
-                <tr
-                  class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]"
-                >
-                  <td class="py-2 px-6">
-                    {{ sale.dateCreated?.substring(0, 10) }}
-                  </td>
-                  <td
-                    class="py-2 px-6"
-                    v-for="item in taxes"
-                    :key="item.settingsValue"
-                  >
-                    {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
-                  </td>
-                  <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
-                  <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
-                  <td class="py-2 px-6">{{ sale.grossProfitAmount }} €</td>
-                  <td class="py-2 px-6">{{ sale.netProfitAmount }} €</td>
-                  <td class="py-2 px-6">
-                    <button
-                      @click="
-                        $router.push({
-                          name: 'daily-sales',
-                          query: {
-                            saleDate: sale.dateCreated?.substring(0, 10),
-                          },
-                        })
-                      "
-                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
-                    >
-                      <IconC
-                        iconName="DocumentMagnifyingGlassIcon"
-                        iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                      />
-                    </button>
-                  </td>
-                </tr>
-              </template>
-              <tr
-                v-if="sales?.length !== 0"
-                class="text-md uppercase font-bold bg-white border-b dark:bg-neutral-900 dark:border-gray-700"
-              >
-                <td class="py-4 px-6">{{ $t("total") }}</td>
-                <td
-                  class="py-2 px-6"
-                  v-for="item in pagination.taxes"
-                  :key="item.settingsValue"
-                >
-                  {{ Number(item.taxValue).toFixed(2) }} €
-                </td>
-                <td class="py-4 px-6">
-                  {{ pagination.salesSubTotalAmount }} €
-                </td>
-                <td class="py-4 px-6">{{ pagination.salesTotalAmount }} €</td>
-                <td class="py-4 px-6">
-                  {{ pagination.salesTotalGrossProfit }} €
-                </td>
-                <td class="py-4 px-6">
-                  {{ pagination.salesTotalNetProfit }} €
-                </td>
-                <td class="py-4 px-6"></td>
-              </tr>
-            </tbody>
-          </table>
+          <detailed-view
+            v-if="detailedView"
+            :sales="sales"
+            :taxes="taxes"
+            :pagination="pagination"
+            @sort="sort($event)"
+            @reload="getSales(currentPage)"
+          />
+          <grouped-view
+            v-else
+            :sales="sales"
+            :taxes="taxes"
+            :pagination="pagination"
+            @sort="sort($event)"
+          />
         </div>
       </div>
     </div>
@@ -324,6 +172,8 @@
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
+import DetailedView from "./DetailedView.vue";
+import GroupedView from "./GroupedView.vue";
 export default {
   data() {
     return {
@@ -337,10 +187,13 @@ export default {
       sortDir: "desc",
       allSales: [],
       showFilters: false,
+      detailedView: true,
     };
   },
   components: {
     DateFilter,
+    DetailedView,
+    GroupedView,
   },
   mixins: [HtmlToExcel],
   watch: {
@@ -375,6 +228,16 @@ export default {
         this.$store.state.saleModule.typeFilters = v;
       },
     },
+    salesDispatch() {
+      return this.detailedView
+        ? "saleModule/getSalesDetailed"
+        : "saleModule/getSales";
+    },
+    allSalesDispatch() {
+      return this.detailedView
+        ? "saleModule/getAllSalesDetailed"
+        : "saleModule/getAllSales";
+    },
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
@@ -387,6 +250,10 @@ export default {
     await this.getSales(this.currentPage);
   },
   methods: {
+    switchView() {
+      this.detailedView = !this.detailedView;
+      this.getSales(this.currentPage);
+    },
     getTaxValue(arr, alias) {
       return (
         arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
@@ -405,7 +272,7 @@ export default {
     async getSales(page) {
       this.isTableLoading = true;
       await this.$store
-        .dispatch("saleModule/getSales", {
+        .dispatch(this.salesDispatch, {
           page: page,
           startDate: this.startDate,
           endDate: this.endDate,
@@ -425,7 +292,7 @@ export default {
     },
     async getAllSales() {
       await this.$store
-        .dispatch("saleModule/getAllSales", {
+        .dispatch(this.allSalesDispatch, {
           page: 1,
           per_page: this.pagination.total,
           startDate: this.startDate,

@@ -210,6 +210,84 @@ def getSales():
     
     return jsonify(paginated_dict)
 
+@sale.route('/sales-detailed', methods=["GET"])
+def getSalesDetailed():
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+    type_filter = [x == 'true' for x in request.args.getlist('type_filter[]')]
+    if not type_filter: type_filter = [True, False]
+
+    if sort_column == "user":
+        sort_column = func.lower(User.first_name)
+    elif sort_column == "tax":
+        sort_column = func.lower(SaleTax.tax_value)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+    
+    custom_start_date = custom_start_date.split("-")
+    custom_end_date = custom_end_date.split("-")
+
+    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
+    date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
+
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    search = request.args.get('search', '*', type=str)
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = Sale.query\
+        .join(User).filter(or_(
+        Sale.id.ilike(looking_for),
+        Sale.total_amount.ilike(looking_for),
+        Sale.subtotal_amount.ilike(looking_for),
+        User.first_name.ilike(looking_for),
+        User.last_name.ilike(looking_for),
+        ))\
+        .filter(Sale.date_created <= date_end)\
+        .filter(Sale.date_created > date_start)\
+        .filter(and_(Sale.is_regular.in_(type_filter)))\
+        .order_by(sort)\
+        .paginate(page=page, per_page=per_page)
+    
+    sale_items = getDailySalesList(paginated_items.items)
+    paginated_dict = getPaginatedDict(getDailySalesList(paginated_items.items), paginated_items)
+
+    total = reduce(lambda x, y: x + y['totalAmount'], sale_items, 0)
+    subtotal = reduce(lambda x, y: x + y['subTotalAmount'], sale_items, 0)
+    gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], sale_items, 0)
+    net_total = reduce(lambda x, y: x + y['netProfitAmount'], sale_items, 0)
+
+    taxes_total = []
+    for settings in Settings.query.filter_by(settings_type="tax").all():
+        total_tax_value = sum(Decimal(tax['taxValue']) for item in sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
+        taxes_total.append(
+            {
+                "taxAlias": settings.settings_alias, 
+                "taxName": settings.settings_name, 
+                "taxValue": total_tax_value
+            }
+        )
+    
+    paginated_dict["pagination"]["salesTotalAmount"] = total
+    paginated_dict["pagination"]["salesSubTotalAmount"] = subtotal
+    paginated_dict["pagination"]["salesTotalGrossProfit"] = gross_total
+    paginated_dict["pagination"]["salesTotalNetProfit"] = net_total
+    paginated_dict["pagination"]["taxes"] = taxes_total
+
+    return jsonify(paginated_dict)
+
+
 @sale.route('/sales/daily', methods=["GET"])
 def getDailySales():
     sale_date = request.args.get('date', type=str)

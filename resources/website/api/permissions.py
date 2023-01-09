@@ -70,8 +70,10 @@ def updatePermission():
         db.session.commit()
     return "success", 200
 
-@permissions.route('/permissions/demo', methods=["GET"])
+@permissions.before_app_first_request
 def createDemoSettings():
+    if(Permissions.query.count() > 0):
+        return
     demo = [
         ["superadmin", "dashboard", "dashboard.read", "read"],
         ["superadmin", "dashboard", "dashboard.write", "write"],

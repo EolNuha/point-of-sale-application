@@ -169,13 +169,12 @@ def currentUser():
         .filter_by(public_id = data['public_id'])\
         .first_or_404()))
 
-@auth.route('/users/demo', methods=["GET"])
+@auth.before_app_first_request
 def createDemoUsers():
+    if (User.query.count() > 0):
+        return
     demo = [
         ["eol", "nuha", "eolnuha", "eol@gmail.com", "superadmin"],
-        ["ledri", "nuha", "ledrinuha", "ledri@gmail.com", "staff"],
-        ["lela", "nuha", "lelanuha", "lela@gmail.com", "staff"],
-        ["edona", "saliu", "edonasaliu", "edona@gmail.com", "staff"],
     ]
     for i in demo:
         db.session.add(User(

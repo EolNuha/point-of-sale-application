@@ -41,8 +41,10 @@ def deleteSettings(id):
     
     return "success",200
 
-@settings.route('/settings/demo', methods=["GET"])
+@settings.before_app_first_request
 def createDemoSettings():
+    if(Settings.query.count() > 0):
+        return
     demo = [
         ["storage", "storage", "notification", 1500],
         ["8", "eight", "tax", 8],

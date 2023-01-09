@@ -60,6 +60,10 @@ export default {
 
       let headTr = document.createElement("tr");
 
+      let dateTh = document.createElement("th");
+      dateTh.innerHTML = this.$t("date");
+      headTr.appendChild(dateTh);
+
       let idTh = document.createElement("th");
       idTh.innerHTML = "ID";
       headTr.appendChild(idTh);
@@ -88,6 +92,9 @@ export default {
 
       for await (const element of this.allPurchases) {
         let bodyTr = document.createElement("tr");
+        let dateTd = document.createElement("td");
+        dateTd.innerHTML = element?.substring(0, 10);
+        bodyTr.appendChild(dateTd);
         let idTd = document.createElement("td");
         idTd.innerHTML = element.id;
         bodyTr.appendChild(idTd);

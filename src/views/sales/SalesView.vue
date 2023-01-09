@@ -172,6 +172,7 @@
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
+import SalesTables from "@/services/mixins/SalesTables";
 import DetailedView from "./DetailedView.vue";
 import GroupedView from "./GroupedView.vue";
 export default {
@@ -195,7 +196,7 @@ export default {
     DetailedView,
     GroupedView,
   },
-  mixins: [HtmlToExcel],
+  mixins: [HtmlToExcel, SalesTables],
   watch: {
     searchQuery: {
       async handler() {
@@ -309,83 +310,10 @@ export default {
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllSales();
-      let table = document.createElement("table");
-      let thead = document.createElement("thead");
-      let tbody = document.createElement("tbody");
 
-      let headTr = document.createElement("tr");
-
-      let dateTh = document.createElement("th");
-      dateTh.innerHTML = this.$t("date");
-      headTr.appendChild(dateTh);
-
-      for await (const tax of this.taxes) {
-        let taxTh = document.createElement("th");
-        taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
-        headTr.appendChild(taxTh);
-      }
-      for await (const item of [
-        "subtotalAmount",
-        "totalAmount",
-        "grossProfit",
-        "netProfit",
-      ]) {
-        let itemTh = document.createElement("th");
-        itemTh.innerHTML = this.$t(item);
-        headTr.appendChild(itemTh);
-      }
-
-      for await (const element of this.allSales.data) {
-        let bodyTr = document.createElement("tr");
-        let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
-        bodyTr.appendChild(dateTd);
-        for await (const tax of this.taxes) {
-          let taxTd = document.createElement("td");
-          taxTd.innerHTML = `${this.getTaxValue(
-            element.taxes,
-            tax.settingsAlias
-          )} €`;
-          bodyTr.appendChild(taxTd);
-        }
-        for await (const item of [
-          "subTotalAmount",
-          "totalAmount",
-          "grossProfitAmount",
-          "netProfitAmount",
-        ]) {
-          let itemTd = document.createElement("td");
-          itemTd.innerHTML = `${element[item]} €`;
-          bodyTr.appendChild(itemTd);
-        }
-        tbody.appendChild(bodyTr);
-      }
-
-      let totalTr = document.createElement("tr");
-      let bottomTd = document.createElement("th");
-      bottomTd.innerHTML = this.$t("total");
-      totalTr.appendChild(bottomTd);
-      for await (const tax of this.allSales.pagination.taxes) {
-        let taxTd = document.createElement("th");
-        taxTd.innerHTML = `${tax.taxValue} €`;
-        totalTr.appendChild(taxTd);
-      }
-      for await (const item of [
-        "salesSubTotalAmount",
-        "salesTotalAmount",
-        "salesTotalGrossProfit",
-        "salesTotalNetProfit",
-      ]) {
-        let itemTh = document.createElement("th");
-        itemTh.innerHTML = `${this.allSales.pagination[item]} €`;
-        totalTr.appendChild(itemTh);
-      }
-
-      tbody.appendChild(totalTr);
-
-      thead.appendChild(headTr);
-      table.appendChild(thead);
-      table.appendChild(tbody);
+      const table = this.detailedView
+        ? await this.gridExcelView()
+        : await this.tableExcelView();
 
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);

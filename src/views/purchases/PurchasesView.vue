@@ -89,7 +89,7 @@
             iconType="custom"
             iconName="GridIcon"
             iconClass="w-6 h-6"
-            v-if="!gridView"
+            v-if="!detailedView"
           />
           <IconC
             iconType="custom"
@@ -97,7 +97,7 @@
             iconClass="w-6 h-6"
             v-else
           />
-          {{ gridView ? $t("groupedView") : $t("detailedView") }}
+          {{ detailedView ? $t("groupedView") : $t("detailedView") }}
         </button>
       </div>
       <div class="overflow-hidden rounded mb-5 flex grow relative">
@@ -110,14 +110,14 @@
             routeName="new-purchase"
             :search="searchQuery"
           />
-          <grid-view
-            v-if="gridView"
+          <detailed-view
+            v-if="detailedView"
             :purchases="purchases"
             :taxes="taxes"
             @sort="sort($event)"
             @reload="getPurchases(currentPage)"
           />
-          <table-view
+          <grouped-view
             v-else
             :purchases="purchases"
             :taxes="taxes"
@@ -139,8 +139,8 @@
 import DateFilter from "@/components/DateFilterComponent.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
 import PurchaseTables from "@/services/mixins/PurchaseTables";
-import GridView from "./GridView.vue";
-import TableView from "./TableView.vue";
+import DetailedView from "./DetailedView.vue";
+import GroupedView from "./GroupedView.vue";
 export default {
   data() {
     return {
@@ -154,13 +154,13 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       allPurchases: [],
-      gridView: true,
+      detailedView: true,
     };
   },
   components: {
     DateFilter,
-    GridView,
-    TableView,
+    DetailedView,
+    GroupedView,
   },
   mixins: [HtmlToExcel, PurchaseTables],
   watch: {
@@ -191,19 +191,19 @@ export default {
       return this.$store.state.settingsModule.settingsType;
     },
     purchasesDispatch() {
-      return this.gridView
+      return this.detailedView
         ? "purchaseModule/getPurchasesDetailed"
         : "purchaseModule/getPurchases";
     },
     allPurchasesDispatch() {
-      return this.gridView
+      return this.detailedView
         ? "purchaseModule/getAllPurchasesDetailed"
         : "purchaseModule/getAllPurchases";
     },
   },
   methods: {
     switchView() {
-      this.gridView = !this.gridView;
+      this.detailedView = !this.detailedView;
       this.getPurchases();
     },
     getTaxValue(arr, alias) {
@@ -259,7 +259,7 @@ export default {
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllPurchases();
-      const table = this.gridView
+      const table = this.detailedView
         ? await this.gridExcelView()
         : await this.tableExcelView();
 

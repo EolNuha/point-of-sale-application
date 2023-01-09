@@ -188,7 +188,9 @@
                     $router.push({
                       name: 'sale-view',
                       params: { saleId: sale.id },
-                      query: { saleDate: saleDate },
+                      query: {
+                        saleDate: sale.dateCreated?.substring(0, 10),
+                      },
                     })
                   "
                 >
@@ -204,7 +206,9 @@
                     $router.push({
                       name: 'sale-edit',
                       params: { saleId: sale.id },
-                      query: { saleDate: saleDate },
+                      query: {
+                        saleDate: sale.dateCreated?.substring(0, 10),
+                      },
                     })
                   "
                   v-if="$can('execute', 'sales')"

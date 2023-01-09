@@ -93,7 +93,7 @@ export default {
       for await (const element of this.allPurchases) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
-        dateTd.innerHTML = element?.substring(0, 10);
+        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
         bodyTr.appendChild(dateTd);
         let idTd = document.createElement("td");
         idTd.innerHTML = element.id;

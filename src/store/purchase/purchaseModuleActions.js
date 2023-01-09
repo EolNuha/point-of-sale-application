@@ -32,10 +32,36 @@ export default {
         });
     });
   },
+  getPurchasesDetailed({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/purchases-detailed`, { params: data })
+        .then(async (response) => {
+          commit("SET_PURCHASES", response.data.data);
+          commit("SET_PAGINATION", response.data.pagination);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getAllPurchases({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/purchases`, { params: data })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getAllPurchasesDetailed({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/purchases-detailed`, { params: data })
         .then(async (response) => {
           resolve(response);
         })

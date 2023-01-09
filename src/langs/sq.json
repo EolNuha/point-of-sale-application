@@ -252,5 +252,7 @@
 	"grossProfitPreviousPeriod": "Fitimi bruto (periudha e kaluar)",
 	"netProfit": "Fitimi Neto",
 	"gross": "Bruto",
-	"net": "Neto"
+	"net": "Neto",
+	"detailedView": "Të detajuara",
+	"groupedView": "Të grupuara"
 }

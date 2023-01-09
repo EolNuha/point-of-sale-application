@@ -217,6 +217,44 @@ def getPurchases():
 
     return jsonify(getPaginatedDict(join_purchase_items, paginated_items))
 
+@purchase.route('/purchases-detailed', methods=["GET"])
+def getPurchasesDetailed():
+    custom_start_date = request.args.get('startDate', type=str)
+    custom_end_date = request.args.get('endDate', type=str)
+    custom_start_date = custom_start_date.split("-")
+    custom_end_date = custom_end_date.split("-")
+    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_dir = request.args.get('sort_dir', "desc", type=str)
+
+    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+
+    date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
+    date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    search = request.args.get('search', '*', type=str)
+
+    if '*' in search or '_' in search: 
+        looking_for = search.replace('_', '__')\
+            .replace('*', '%')\
+            .replace('?', '_')
+    else:
+        looking_for = '%{0}%'.format(search)
+        
+    paginated_items = Purchase.query.filter(or_(
+        Purchase.id.ilike(looking_for),
+        Purchase.seller_name.ilike(looking_for),
+        Purchase.seller_invoice_number.ilike(looking_for),
+        Purchase.seller_fiscal_number.ilike(looking_for),
+        Purchase.seller_tax_number.ilike(looking_for),
+        ))\
+        .order_by(sort)\
+        .filter(Purchase.date_created <= date_end)\
+        .filter(Purchase.date_created > date_start)\
+        .paginate(page=page, per_page=per_page)
+
+    return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))
+
 @purchase.route('/purchases/daily', methods=["GET"])
 def getDailyPurchases():
     purchase_date = request.args.get('date', type=str)

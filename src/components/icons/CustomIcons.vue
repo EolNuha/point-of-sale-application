@@ -260,6 +260,62 @@
       </defs>
     </svg>
   </template>
+  <template v-if="iconName == 'GridIcon'">
+    <svg
+      viewBox="0,0,24,24"
+      xmlns="http://www.w3.org/2000/svg"
+      :class="iconClass"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M3.4 15A1.6 1.6 0 015 13.4h4a1.6 1.6 0 011.6 1.6v4A1.6 1.6 0 019 20.6H5A1.6 1.6 0 013.4 19v-4zm1.6-.4a.4.4 0 00-.4.4v4c0 .22.18.4.4.4h4a.4.4 0 00.4-.4v-4a.4.4 0 00-.4-.4H5z"
+      ></path>
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M3.4 5A1.6 1.6 0 015 3.4h4A1.6 1.6 0 0110.6 5v4A1.6 1.6 0 019 10.6H5A1.6 1.6 0 013.4 9V5zM5 4.6a.4.4 0 00-.4.4v4c0 .22.18.4.4.4h4a.4.4 0 00.4-.4V5a.4.4 0 00-.4-.4H5z"
+      ></path>
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M13.4 15a1.6 1.6 0 011.6-1.6h4a1.6 1.6 0 011.6 1.6v4a1.6 1.6 0 01-1.6 1.6h-4a1.6 1.6 0 01-1.6-1.6v-4zm1.6-.4a.4.4 0 00-.4.4v4c0 .22.18.4.4.4h4a.4.4 0 00.4-.4v-4a.4.4 0 00-.4-.4h-4z"
+      ></path>
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M13.4 5A1.6 1.6 0 0115 3.4h4A1.6 1.6 0 0120.6 5v4a1.6 1.6 0 01-1.6 1.6h-4A1.6 1.6 0 0113.4 9V5zm1.6-.4a.4.4 0 00-.4.4v4c0 .22.18.4.4.4h4a.4.4 0 00.4-.4V5a.4.4 0 00-.4-.4h-4z"
+      ></path>
+    </svg>
+  </template>
+  <template v-if="iconName == 'TableIcon'">
+    <svg
+      viewBox="0,0,24,24"
+      xmlns="http://www.w3.org/2000/svg"
+      :class="iconClass"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M3 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1V5zm1.5 3.5v-3h3v3h-3z"
+      ></path>
+      <path d="M11 4.25a.75.75 0 000 1.5h10a.75.75 0 000-1.5H11z"></path>
+      <path
+        d="M10.25 8a.75.75 0 01.75-.75h5a.75.75 0 010 1.5h-5a.75.75 0 01-.75-.75z"
+      ></path>
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M3 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4zm1.5 3.5v-3h3v3h-3z"
+      ></path>
+      <path
+        d="M10.25 15a.75.75 0 01.75-.75h10a.75.75 0 010 1.5H11a.75.75 0 01-.75-.75z"
+      ></path>
+      <path d="M11 17.25a.75.75 0 000 1.5h5a.75.75 0 000-1.5h-5z"></path>
+    </svg>
+  </template>
 </template>
 
 <script>

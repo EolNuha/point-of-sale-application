@@ -252,5 +252,7 @@
 	"grossProfitPreviousPeriod": "Gross profit (previous period)",
 	"netProfit": "Net Profit",
 	"gross": "Gross",
-	"net": "Net"
+	"net": "Net",
+	"detailedView": "Detailed View",
+	"groupedView": "Grouped View"
 }

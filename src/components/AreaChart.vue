@@ -76,7 +76,7 @@ export default {
   methods: {
     getColors() {
       const theme500 = getComputedStyle(document.body)
-        .getPropertyValue("--color-theme-500")
+        .getPropertyValue("--color-theme-700")
         .replaceAll(" ", "");
       const theme300 = getComputedStyle(document.body)
         .getPropertyValue("--color-theme-300")

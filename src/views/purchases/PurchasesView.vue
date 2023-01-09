@@ -69,16 +69,37 @@
           </button>
         </div>
       </div>
-      <DateFilter
-        :startDate="startDate"
-        :endDate="endDate"
-        :searchQuery="searchQuery"
-        :dispatchModule="`purchaseModule/getPurchases`"
-        @isTableLoading="isTableLoading = $event"
-        @startDateChange="startDate = $event"
-        @endDateChange="endDate = $event"
-        @changeMonthDates="monthDates = $event"
-      />
+      <div class="flex items-center justify-between w-full">
+        <DateFilter
+          :startDate="startDate"
+          :endDate="endDate"
+          :searchQuery="searchQuery"
+          :dispatchModule="purchasesDispatch"
+          @isTableLoading="isTableLoading = $event"
+          @startDateChange="startDate = $event"
+          @endDateChange="endDate = $event"
+          @changeMonthDates="monthDates = $event"
+        />
+        <button
+          type="button"
+          @click="switchView"
+          class="p-1.5 hover:bg-gray-300 rounded dark:hover:bg-neutral-700 flex items-center gap-2 dark:text-gray-200"
+        >
+          <IconC
+            iconType="custom"
+            iconName="GridIcon"
+            iconClass="w-6 h-6"
+            v-if="!gridView"
+          />
+          <IconC
+            iconType="custom"
+            iconName="TableIcon"
+            iconClass="w-6 h-6"
+            v-else
+          />
+          {{ gridView ? $t("groupedView") : $t("detailedView") }}
+        </button>
+      </div>
       <div class="overflow-hidden rounded mb-5 flex grow relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style grow">
           <OverlayC v-if="isTableLoading" />
@@ -89,129 +110,20 @@
             routeName="new-purchase"
             :search="searchQuery"
           />
-          <table
-            class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
-          >
-            <thead
-              class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
-            >
-              <tr>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('date_created')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("date") }}
-                    <template v-if="sortColumn === 'date_created'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
-                  v-for="item in taxes"
-                  :key="item.settingsValue"
-                >
-                  {{ $t("tax") }} {{ item.settingsName }}%
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('subtotal_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("subtotalAmount") }}
-                    <template v-if="sortColumn === 'subtotal_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-                  @click="sort('total_amount')"
-                >
-                  <div class="flex justify-between items-center">
-                    {{ $t("totalAmount") }}
-                    <template v-if="sortColumn === 'total_amount'">
-                      <IconC
-                        iconName="ArrowLongDownIcon"
-                        iconClass="w-4 h-4"
-                        v-if="sortDir === 'desc'"
-                      />
-                      <IconC
-                        iconName="ArrowLongUpIcon"
-                        iconClass="w-4 h-4"
-                        v-else
-                      />
-                    </template>
-                  </div>
-                </th>
-                <th scope="col" class="py-3 px-6"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="purchase in purchases" :key="purchase.id">
-                <tr
-                  class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]"
-                >
-                  <td class="py-2 px-6">
-                    {{ purchase.dateCreated?.substring(0, 10) }}
-                  </td>
-                  <td
-                    class="py-2 px-6"
-                    v-for="item in taxes"
-                    :key="item.settingsValue"
-                  >
-                    {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
-                  </td>
-                  <td class="py-2 px-6">{{ purchase.subTotalAmount }} €</td>
-                  <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
-                  <td class="py-2 px-6">
-                    <button
-                      @click="
-                        $router.push({
-                          name: 'daily-purchases',
-                          query: {
-                            purchaseDate: purchase.dateCreated?.substring(
-                              0,
-                              10
-                            ),
-                          },
-                        })
-                      "
-                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
-                    >
-                      <IconC
-                        iconName="DocumentMagnifyingGlassIcon"
-                        iconClass="h-5 w-5 text-gray-900 dark:text-gray-300"
-                      />
-                    </button>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
+          <grid-view
+            v-if="gridView"
+            :purchases="purchases"
+            :taxes="taxes"
+            @sort="sort($event)"
+            @reload="getPurchases(currentPage)"
+          />
+          <table-view
+            v-else
+            :purchases="purchases"
+            :taxes="taxes"
+            @sort="sort($event)"
+            @reload="getPurchases(currentPage)"
+          />
         </div>
       </div>
     </div>
@@ -226,6 +138,9 @@
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
 import HtmlToExcel from "@/services/mixins/HtmlToExcel";
+import PurchaseTables from "@/services/mixins/PurchaseTables";
+import GridView from "./GridView.vue";
+import TableView from "./TableView.vue";
 export default {
   data() {
     return {
@@ -239,12 +154,15 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       allPurchases: [],
+      gridView: true,
     };
   },
   components: {
     DateFilter,
+    GridView,
+    TableView,
   },
-  mixins: [HtmlToExcel],
+  mixins: [HtmlToExcel, PurchaseTables],
   watch: {
     searchQuery: {
       async handler() {
@@ -272,8 +190,22 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settingsType;
     },
+    purchasesDispatch() {
+      return this.gridView
+        ? "purchaseModule/getPurchasesDetailed"
+        : "purchaseModule/getPurchases";
+    },
+    allPurchasesDispatch() {
+      return this.gridView
+        ? "purchaseModule/getAllPurchasesDetailed"
+        : "purchaseModule/getAllPurchases";
+    },
   },
   methods: {
+    switchView() {
+      this.gridView = !this.gridView;
+      this.getPurchases();
+    },
     getTaxValue(arr, alias) {
       return (
         arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
@@ -292,7 +224,7 @@ export default {
     async getPurchases(page) {
       this.isTableLoading = true;
       await this.$store
-        .dispatch("purchaseModule/getPurchases", {
+        .dispatch(this.purchasesDispatch, {
           page: page,
           startDate: this.startDate,
           endDate: this.endDate,
@@ -311,7 +243,7 @@ export default {
     },
     async getAllPurchases() {
       await this.$store
-        .dispatch("purchaseModule/getAllPurchases", {
+        .dispatch(this.allPurchasesDispatch, {
           page: 1,
           per_page: this.pagination.total,
           startDate: this.startDate,
@@ -327,56 +259,10 @@ export default {
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllPurchases();
+      const table = this.gridView
+        ? await this.gridExcelView()
+        : await this.tableExcelView();
 
-      let table = document.createElement("table");
-      let thead = document.createElement("thead");
-      let tbody = document.createElement("tbody");
-
-      let headTr = document.createElement("tr");
-
-      let dateTh = document.createElement("th");
-      dateTh.innerHTML = this.$t("date");
-      headTr.appendChild(dateTh);
-
-      for await (const tax of this.taxes) {
-        let taxTh = document.createElement("td");
-        taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
-        headTr.appendChild(taxTh);
-      }
-
-      let subtotalTh = document.createElement("th");
-      subtotalTh.innerHTML = this.$t("subtotalAmount");
-      headTr.appendChild(subtotalTh);
-
-      let totalTh = document.createElement("th");
-      totalTh.innerHTML = this.$t("totalAmount");
-      headTr.appendChild(totalTh);
-
-      for await (const element of this.allPurchases) {
-        let bodyTr = document.createElement("tr");
-        let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
-        bodyTr.appendChild(dateTd);
-        for await (const tax of this.taxes) {
-          let taxTd = document.createElement("td");
-          taxTd.innerHTML = `${this.getTaxValue(
-            element.taxes,
-            tax.settingsAlias
-          )} €`;
-          bodyTr.appendChild(taxTd);
-        }
-        let subtotalTd = document.createElement("td");
-        subtotalTd.innerHTML = `${element.subTotalAmount} €`;
-        let totalTd = document.createElement("td");
-        totalTd.innerHTML = `${element.totalAmount} €`;
-        bodyTr.appendChild(subtotalTd);
-        bodyTr.appendChild(totalTd);
-        tbody.appendChild(bodyTr);
-      }
-
-      thead.appendChild(headTr);
-      table.appendChild(thead);
-      table.appendChild(tbody);
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {

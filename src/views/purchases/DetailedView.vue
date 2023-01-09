@@ -168,7 +168,9 @@
                     $router.push({
                       name: 'purchase-view',
                       params: { purchaseId: purchase.id },
-                      query: { purchaseDate: purchaseDate },
+                      query: {
+                        purchaseDate: purchase.dateCreated?.substring(0, 10),
+                      },
                     })
                   "
                 >
@@ -184,7 +186,9 @@
                     $router.push({
                       name: 'purchase-edit',
                       params: { purchaseId: purchase.id },
-                      query: { purchaseDate: purchaseDate },
+                      query: {
+                        purchaseDate: purchase.dateCreated?.substring(0, 10),
+                      },
                     })
                   "
                   v-if="$can('execute', 'purchases')"

@@ -170,8 +170,6 @@
                 >{{ $t("tax") }}</label
               >
               <Field
-                required
-                :rules="isRequired"
                 type="text"
                 v-model="product.tax"
                 class="hidden"
@@ -394,7 +392,7 @@ export default {
           barcode: "",
           productName: "",
           stock: "",
-          tax: 8,
+          tax: 0,
           purchasedPrice: "",
           sellingPrice: "",
           expirationDate: "",
@@ -414,7 +412,11 @@ export default {
       return this.formatDate(new Date());
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      const t = this.$store.state.settingsModule.settingsType;
+      t.unshift({
+        settingsValue: 0,
+      });
+      return t;
     },
   },
   async created() {
@@ -442,7 +444,7 @@ export default {
         barcode: "",
         productName: "",
         stock: "",
-        tax: 8,
+        tax: 0,
         purchasedPrice: "",
         sellingPrice: "",
         expirationDate: "",

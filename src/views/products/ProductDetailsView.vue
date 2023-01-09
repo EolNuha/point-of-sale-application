@@ -110,7 +110,6 @@
             >{{ $t("tax") }}</label
           >
           <Field
-            :rules="isRequired"
             type="text"
             v-model="product.tax"
             class="hidden"
@@ -271,7 +270,11 @@ export default {
       return this.$store.state.productModule.product;
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      const t = this.$store.state.settingsModule.settingsType;
+      t.unshift({
+        settingsValue: 0,
+      });
+      return t;
     },
     minDate() {
       return this.formatDate(new Date());

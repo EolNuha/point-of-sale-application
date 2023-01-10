@@ -84,11 +84,11 @@ export default {
       const theme = [theme500, theme300];
 
       const colors = [
-        "#3b82f6",
+        "#1d4ed8",
         "#93c5fd",
-        "#ef4444",
+        "#b91c1c",
         "#fca5a5",
-        "#a855f7",
+        "#7e22ce",
         "#d8b4fe",
       ];
       return [...theme, ...colors.filter((color) => !theme.includes(color))];

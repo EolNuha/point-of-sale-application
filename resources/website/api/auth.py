@@ -183,7 +183,7 @@ def createDemoUsers():
             last_name=i[1], 
             username=i[2], 
             email=i[3], 
-            password=generate_password_hash("kosova22"), 
+            password=generate_password_hash("admin"), 
             user_role=i[4],
             date_created=datetime.now(),
             date_modified=datetime.now(),

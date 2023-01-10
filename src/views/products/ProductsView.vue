@@ -96,7 +96,7 @@
               <tr>
                 <th
                   scope="col"
-                  class="py-3 px-6"
+                  class="py-0 px-6"
                   v-if="$can('execute', 'products')"
                 >
                   <button

@@ -39,7 +39,7 @@ export default {
     return {
       userTheme: "light",
       textTheme: "theme-blue",
-      userLang: "en",
+      userLang: "sq",
       sidebar: true,
     };
   },
@@ -55,7 +55,7 @@ export default {
     this.setTheme(initUserTheme);
     this.setTextTheme(initTextTheme);
     const initUserLang = this.getLang();
-    this.setLang(initUserLang || "en");
+    this.setLang(initUserLang || "sq");
     this.setUserData();
     // this.$tours["dashboardTour"].start();
   },

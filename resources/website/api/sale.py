@@ -16,7 +16,7 @@ from functools import reduce
 
 sale = Blueprint('sale', __name__)
 Decimal = decimal.Decimal
-TWOPLACES = Decimal(10) ** -2
+FOURPLACES = Decimal(10) ** -4
 
 @sale.route('/sales', methods=["POST"])
 def createSale():
@@ -45,11 +45,11 @@ def createSale():
     db.session.add(sale)
 
     for product in products:
-        product_quantity = Decimal(product["quantity"]).quantize(TWOPLACES)
-        decimal_price = Decimal(product["sellingPrice"]).quantize(TWOPLACES)
-        decimal_tax = Decimal(product["tax"]).quantize(TWOPLACES)
+        product_quantity = Decimal(product["quantity"]).quantize(FOURPLACES)
+        decimal_price = Decimal(product["sellingPrice"]).quantize(FOURPLACES)
+        decimal_tax = Decimal(product["tax"]).quantize(FOURPLACES)
         
-        tax_amount = Decimal(Decimal(decimal_tax / 100).quantize(TWOPLACES) * decimal_price).quantize(TWOPLACES)
+        tax_amount = Decimal(Decimal(decimal_tax / 100).quantize(FOURPLACES) * decimal_price).quantize(FOURPLACES)
         price_without_tax = decimal_price - tax_amount
 
         product_query = Product.query.filter_by(id=product["id"]).one()
@@ -64,7 +64,7 @@ def createSale():
             product_quantity=product_quantity,
             price_without_tax=price_without_tax,
             tax_amount=tax_amount,
-            total_amount=Decimal(product_query.selling_price * product_quantity).quantize(TWOPLACES),
+            total_amount=Decimal(product_query.selling_price * product_quantity).quantize(FOURPLACES),
             date_created=current_time,
             date_modified=current_time,
         )
@@ -79,13 +79,13 @@ def createSale():
     subtotal, sale_taxes, grosstotal = [], [], []
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
-    for item in getSaleItemsList(sale.sale_items):
-        subtotal.append(Decimal(item['priceWithoutTax'] * Decimal(item['quantity']).quantize(TWOPLACES)).quantize(TWOPLACES))
-        grosstotal.append(Decimal(item['product']['purchasedPrice'] * Decimal(item['quantity']).quantize(TWOPLACES)).quantize(TWOPLACES))
+    for item in sale.sale_items:
+        subtotal.append(Decimal(item.price_without_tax * Decimal(item.product_quantity).quantize(FOURPLACES)).quantize(FOURPLACES))
+        grosstotal.append(Decimal(item.product_purchased_price * Decimal(item.product_quantity).quantize(FOURPLACES)).quantize(FOURPLACES))
         for tax in taxes:
-            if item['product']['tax'] == int(tax.settings_value):
+            if item.product_tax == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
-                sale_taxes.append({key_v: Decimal(item['taxAmount']).quantize(TWOPLACES) * Decimal(item['quantity']).quantize(TWOPLACES)})
+                sale_taxes.append({key_v: Decimal(item.tax_amount).quantize(FOURPLACES) * Decimal(item.product_quantity).quantize(FOURPLACES)})
     
     sale.subtotal_amount = sum(subtotal)
     sale.gross_profit_amount = Decimal(total_amount) - sum(grosstotal)
@@ -217,7 +217,7 @@ def getSalesDetailed():
 
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
-    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
     type_filter = [x == 'true' for x in request.args.getlist('type_filter[]')]
     if not type_filter: type_filter = [True, False]
@@ -226,6 +226,8 @@ def getSalesDetailed():
         sort_column = func.lower(User.first_name)
     elif sort_column == "tax":
         sort_column = func.lower(SaleTax.tax_value)
+    elif sort_column == "date_created":
+        sort_column = Sale.date_created
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
     
@@ -376,27 +378,27 @@ def editSale(saleId):
 
     for item in deleted_items:
         product = Product.query.filter_by(id=item["product"]["id"]).first()
-        if product: product.stock += Decimal(item["quantity"]).quantize(TWOPLACES)
+        if product: product.stock += Decimal(item["quantity"]).quantize(FOURPLACES)
         SaleItem.query.filter_by(id=item["id"]).delete()
         SaleTax.query.filter_by(sale_id=saleId).filter_by(tax_name=item["product"]["tax"]).delete()
         db.session.commit()
 
     for item in saleItems:
-        item_quantity = Decimal(item["quantity"]).quantize(TWOPLACES)
+        item_quantity = Decimal(item["quantity"]).quantize(FOURPLACES)
 
-        subtotal.append(Decimal(Decimal(item['priceWithoutTax']).quantize(TWOPLACES) * item_quantity).quantize(TWOPLACES))
-        grosstotal.append(Decimal(Decimal(item['product']['purchasedPrice']) * item_quantity).quantize(TWOPLACES))
+        subtotal.append(Decimal(Decimal(item['priceWithoutTax']).quantize(FOURPLACES) * item_quantity).quantize(FOURPLACES))
+        grosstotal.append(Decimal(Decimal(item['product']['purchasedPrice']) * item_quantity).quantize(FOURPLACES))
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
-                sale_taxes.append({key_v: Decimal(Decimal(item['taxAmount']).quantize(TWOPLACES) * item_quantity).quantize(TWOPLACES)})
+                sale_taxes.append({key_v: Decimal(Decimal(item['taxAmount']).quantize(FOURPLACES) * item_quantity).quantize(FOURPLACES)})
         
         sale_item = SaleItem.query.filter_by(id=item["id"]).first()
         product = Product.query.filter_by(id=item["product"]["id"]).first()
 
         if product: product.stock -= (item_quantity - sale_item.product_quantity)
         sale_item.product_quantity = item_quantity
-        sale_item.total_amount = Decimal(product.selling_price * item_quantity).quantize(TWOPLACES)
+        sale_item.total_amount = Decimal(product.selling_price * item_quantity).quantize(FOURPLACES)
         db.session.commit()
     
     sale_query.subtotal_amount = sum(subtotal)

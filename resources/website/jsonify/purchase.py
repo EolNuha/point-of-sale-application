@@ -1,19 +1,27 @@
 from .settings import getTaxesList
+import decimal
+Decimal = decimal.Decimal
+FOURPLACES = Decimal(10) ** -4
+TWOPLACES = Decimal(10) ** -2
 
 def getPurchaseDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "totalAmount": item.total_amount,
-        "subTotalAmount": item.subtotal_amount,
+        "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
+        "subTotalAmount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
     }
 
 def getDailyPurchaseDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "totalAmount": item.total_amount,
-        "subTotalAmount": item.subtotal_amount,
+        "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
+        "subTotalAmount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
         "sellerName": item.seller_name,
         "sellerInvoiceNumber": item.seller_invoice_number,
         "sellerFiscalNumber": item.seller_fiscal_number,
@@ -25,25 +33,29 @@ def getDailyPurchaseDict(item):
     }
 
 def getPurchaseItemDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
         "product": {
             "id": item.product_id,
             "name": item.product_name,
             "barcode": item.product_barcode,
-            "stock": item.product_stock,
+            "stock": Decimal(item.product_stock).quantize(TWOPLACES),
             "tax": item.product_tax,
-            "purchasedPrice": item.product_purchased_price,
-            "sellingPrice": item.product_selling_price,
+            "purchasedPrice": Decimal(item.product_purchased_price).quantize(TWOPLACES),
+            "sellingPrice": Decimal(item.product_selling_price).quantize(TWOPLACES),
         },
-        "priceWithoutTax": item.price_without_tax,
-        "taxAmount": item.tax_amount,
-        "totalAmount": item.total_amount,
+        "priceWithoutTax": Decimal(item.price_without_tax).quantize(TWOPLACES),
+        "taxAmount": Decimal(item.tax_amount).quantize(TWOPLACES),
+        "totalAmount":  Decimal(item.total_amount).quantize(TWOPLACES),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
     }
 
 def getSellerDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
         "sellerName": item.seller_name,

@@ -35,7 +35,7 @@ def createProduct():
 
 
     product = Product(
-        name=name.lower(), 
+        name=name, 
         barcode=barcode, 
         stock=stock, 
         tax=tax, 

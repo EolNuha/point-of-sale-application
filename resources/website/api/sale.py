@@ -6,7 +6,7 @@ from website.models.sale import Sale, SaleItem, SaleTax
 from website.models.user import User
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
-from website.jsonify.sale import getSalesList, getSaleItemsList, getDailySalesList, getDailySaleDict
+from website.jsonify.sale import getSalesList, getDailySalesList, getDailySaleDict
 from website import db
 from sqlalchemy import or_, and_, asc, desc, func
 import sqlalchemy as sa

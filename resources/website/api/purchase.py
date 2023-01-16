@@ -4,7 +4,7 @@ from website.models.purchase import Purchase, PurchaseItem, PurchaseTax
 from website.models.product import Product
 from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
-from website.jsonify.purchase import getPurchasesList, getPurchaseItemsList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
+from website.jsonify.purchase import getPurchasesList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
 from website import db
 from sqlalchemy import or_, asc, desc, func
 import decimal

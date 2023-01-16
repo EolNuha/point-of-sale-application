@@ -113,7 +113,7 @@ def createPurchase():
                 product_selling_price=created_product.selling_price,
                 product_stock=created_product.stock,
                 tax_amount=tax_amount,
-                total_amount=Decimal(Decimal(created_product.purchased_price + tax_amount) * Decimal(created_product.stock)).quantize(FOURPLACES),
+                total_amount=Decimal((Decimal(created_product.purchased_price).quantize(FOURPLACES) + tax_amount) * Decimal(created_product.stock)).quantize(FOURPLACES),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -376,7 +376,8 @@ def editPurchase(purchaseId):
         purchase_item.product_stock = item_stock
         purchase_item.product_purchased_price = item_purchased_price
         purchase_item.product_selling_price = item_selling_price
-        purchase_item.total_amount = Decimal(item_purchased_price * item_stock).quantize(FOURPLACES)
+        purchase_item.tax_amount = tax_amount
+        purchase_item.total_amount = Decimal((Decimal(item_purchased_price).quantize(FOURPLACES) + tax_amount) * Decimal(item_stock)).quantize(FOURPLACES)
 
         product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
         if product:

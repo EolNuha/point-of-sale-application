@@ -177,7 +177,7 @@
                   >{{ $t("tax") }}</label
                 >
                 <Field
-                  type="text"
+                  type="number"
                   v-model="product.tax"
                   class="hidden"
                   :name="`${index}tax`"
@@ -357,7 +357,6 @@
                     required
                     :rules="isRequired"
                     type="number"
-                    step="1"
                     v-model="product.stock"
                     :placeholder="$t('stock')"
                     class="default-input w-full"

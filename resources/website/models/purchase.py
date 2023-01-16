@@ -35,7 +35,6 @@ class PurchaseItem(db.Model):
     product_purchased_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
     product_selling_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
     product_stock = db.Column(db.Numeric(precision=10, scale=4))
-    price_without_tax = db.Column(db.Numeric(precision=10, scale=4))
     tax_amount = db.Column(db.Numeric(precision=10, scale=4))
     total_amount = db.Column(db.Numeric(precision=10, scale=4), default=0)
     date_created = db.Column(db.DateTime, default=datetime.now())

@@ -46,7 +46,6 @@ def createPurchase():
         product_purchased_price = Decimal(product["purchasedPrice"]).quantize(FOURPLACES)
         product_tax = Decimal(product["tax"]).quantize(FOURPLACES)
         tax_amount = Decimal(product_purchased_price / (1 - product_tax / 100) - product_purchased_price).quantize(FOURPLACES)
-        price_without_tax = product_purchased_price - tax_amount
 
         if product["expirationDate"]:
             expiration_date = product["expirationDate"].split("-")
@@ -76,7 +75,6 @@ def createPurchase():
                 product_purchased_price=product_purchased_price,
                 product_selling_price=product["sellingPrice"],
                 product_stock=product_stock,
-                price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
                 total_amount=Decimal((product_purchased_price + tax_amount) * product_stock).quantize(FOURPLACES),
                 date_created=current_time,
@@ -114,7 +112,6 @@ def createPurchase():
                 product_purchased_price=created_product.purchased_price,
                 product_selling_price=created_product.selling_price,
                 product_stock=created_product.stock,
-                price_without_tax=price_without_tax,
                 tax_amount=tax_amount,
                 total_amount=Decimal(Decimal(created_product.purchased_price + tax_amount) * Decimal(created_product.stock)).quantize(FOURPLACES),
                 date_created=current_time,

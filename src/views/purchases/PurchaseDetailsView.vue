@@ -104,11 +104,14 @@
                   <th scope="col" class="py-3 px-3">{{ $t("barcode") }}</th>
                   <th scope="col" class="py-3 px-3">{{ $t("stock") }}</th>
                   <th scope="col" class="py-3 px-3">
-                    {{ $t("purchasedPrice") }}
+                    {{ $t("purchasedPriceWOTax") }}
                   </th>
                   <th scope="col" class="py-3 px-3">
-                    {{ $t("sellingPrice") }}
+                    {{ $t("purchasedPrice") }}
                   </th>
+                  <!-- <th scope="col" class="py-3 px-3">
+                    {{ $t("sellingPrice") }}
+                  </th> -->
                   <th scope="col" class="py-3 px-3">{{ $t("tax") }}</th>
                   <th scope="col" class="py-3 px-3 text-right">
                     {{ $t("total") }}
@@ -165,12 +168,15 @@
                           step="0.01"
                           min="0.01"
                           class="default-input max-w-[100px]"
-                          v-model="item.product.purchasedPrice"
+                          v-model="item.product.purchasedPriceWOTax"
                         />
                       </div>
-                      <div v-else>{{ item.product.purchasedPrice }} €</div>
+                      <div v-else>{{ item.product.purchasedPriceWOTax }} €</div>
                     </td>
                     <td class="py-3 px-3">
+                      <div>{{ item.product.purchasedPrice }} €</div>
+                    </td>
+                    <!-- <td class="py-3 px-3">
                       <div v-if="edit">
                         <Field
                           required
@@ -189,7 +195,7 @@
                         />
                       </div>
                       <div v-else>{{ item.product.sellingPrice }} €</div>
-                    </td>
+                    </td> -->
                     <td class="py-3 px-3">
                       {{ item.taxAmount }}
                       € ({{ item.product.tax }}%)

@@ -43,10 +43,10 @@ def createPurchase():
 
     for product in products:
         product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-        product_purchased_price = Decimal(product["purchasedPrice"]).quantize(FOURPLACES)
+        product_purchased_price_wo_tax = Decimal(product["purchasedPrice"]).quantize(FOURPLACES)
         product_tax = Decimal(product["tax"]).quantize(FOURPLACES)
-        tax_amount = Decimal(product_purchased_price / (1 - product_tax / 100) - product_purchased_price).quantize(FOURPLACES)
-
+        tax_amount = Decimal(Decimal(product_tax / 100).quantize(FOURPLACES) * product_purchased_price_wo_tax).quantize(FOURPLACES)
+        product_purchased_price = product_purchased_price_wo_tax + tax_amount
         if product["expirationDate"]:
             expiration_date = product["expirationDate"].split("-")
             expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
@@ -72,11 +72,12 @@ def createPurchase():
                 product_barcode=product["barcode"],
                 product_name=product["productName"],
                 product_tax=product["tax"],
+                product_purchased_price_wo_tax=product_purchased_price_wo_tax,
                 product_purchased_price=product_purchased_price,
                 product_selling_price=product["sellingPrice"],
                 product_stock=product_stock,
                 tax_amount=tax_amount,
-                total_amount=Decimal((product_purchased_price + tax_amount) * product_stock).quantize(FOURPLACES),
+                total_amount=Decimal(product_purchased_price * product_stock).quantize(FOURPLACES),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -84,6 +85,7 @@ def createPurchase():
             product_query.name = product["productName"]
             product_query.barcode = product["barcode"]
             product_query.tax = product["tax"]
+            product_query.purchased_price_wo_tax = product_purchased_price_wo_tax
             product_query.purchased_price = product_purchased_price
             product_query.selling_price = product["sellingPrice"]
             product_query.stock += product_stock
@@ -94,7 +96,8 @@ def createPurchase():
                 barcode=product["barcode"], 
                 stock=product_stock, 
                 tax=product["tax"], 
-                purchased_price=product["purchasedPrice"], 
+                purchased_price_wo_tax=product_purchased_price_wo_tax, 
+                purchased_price=product_purchased_price, 
                 selling_price= product["sellingPrice"],
                 expiration_date=expiration_date,
                 date_created=current_time,
@@ -109,11 +112,12 @@ def createPurchase():
                 product_barcode=created_product.barcode,
                 product_name=created_product.name,
                 product_tax=created_product.tax,
+                product_purchased_price_wo_tax=created_product.purchased_price_wo_tax,
                 product_purchased_price=created_product.purchased_price,
                 product_selling_price=created_product.selling_price,
                 product_stock=created_product.stock,
                 tax_amount=tax_amount,
-                total_amount=Decimal((Decimal(created_product.purchased_price).quantize(FOURPLACES) + tax_amount) * Decimal(created_product.stock)).quantize(FOURPLACES),
+                total_amount=Decimal(product_purchased_price * product_stock).quantize(FOURPLACES),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -124,7 +128,7 @@ def createPurchase():
     taxes = Settings.query.filter_by(settings_type="tax").all()
 
     for item in purchase.purchase_items:
-        subtotal.append(Decimal(item.product_purchased_price * Decimal(item.product_stock)).quantize(FOURPLACES))
+        subtotal.append(Decimal(item.product_purchased_price_wo_tax * Decimal(item.product_stock)).quantize(FOURPLACES))
         for tax in taxes:
             if item.product_tax == int(tax.settings_value):
                 key_v = tax.settings_name + "+" + tax.settings_alias
@@ -359,12 +363,13 @@ def editPurchase(purchaseId):
 
     for item in purchaseItems:
         item_stock = Decimal(item["product"]["stock"]).quantize(FOURPLACES)
+        item_purchased_price_wo_tax = Decimal(item["product"]["purchasedPriceWOTax"]).quantize(FOURPLACES)
         item_purchased_price = Decimal(item["product"]["purchasedPrice"]).quantize(FOURPLACES)
         item_selling_price = Decimal(item["product"]["sellingPrice"]).quantize(FOURPLACES)
         item_tax = Decimal(item["product"]["tax"]).quantize(FOURPLACES)
-        tax_amount = Decimal(item_purchased_price / (1 - item_tax / 100) - item_purchased_price).quantize(FOURPLACES)
+        tax_amount = Decimal(Decimal(item_tax / 100).quantize(FOURPLACES) * item_purchased_price_wo_tax).quantize(FOURPLACES)
 
-        subtotal.append(Decimal(item_purchased_price * item_stock).quantize(FOURPLACES))
+        subtotal.append(Decimal(item_purchased_price_wo_tax * item_stock).quantize(FOURPLACES))
 
         for tax in taxes:
             if item['product']['tax'] == int(tax.settings_value):
@@ -374,14 +379,16 @@ def editPurchase(purchaseId):
         purchase_item = PurchaseItem.query.filter_by(id=item["id"]).first()
 
         purchase_item.product_stock = item_stock
+        purchase_item.product_purchased_price_wo_tax = item_purchased_price_wo_tax
         purchase_item.product_purchased_price = item_purchased_price
         purchase_item.product_selling_price = item_selling_price
         purchase_item.tax_amount = tax_amount
-        purchase_item.total_amount = Decimal((Decimal(item_purchased_price).quantize(FOURPLACES) + tax_amount) * Decimal(item_stock)).quantize(FOURPLACES)
+        purchase_item.total_amount = Decimal(Decimal(item_purchased_price).quantize(FOURPLACES) * Decimal(item_stock)).quantize(FOURPLACES)
 
         product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
         if product:
             product.stock += (item_stock - purchase_item.product_stock)
+            product.purchased_price_wo_tax = item_purchased_price_wo_tax
             product.purchased_price = item_purchased_price
             product.selling_price = item_selling_price
     

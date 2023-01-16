@@ -55,6 +55,7 @@
 	"name": "Name",
 	"barcode": "Barcode",
 	"purchasedPrice": "Purchased price",
+	"purchasedPriceWOTax": "Purchased price w/o tax",
 	"sellingPrice": "Selling Price",
 	"quantity": "Quantity",
 	"stock": "Stock",

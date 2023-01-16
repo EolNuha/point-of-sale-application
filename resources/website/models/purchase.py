@@ -33,6 +33,7 @@ class PurchaseItem(db.Model):
     product_name = db.Column(db.String(200))
     product_tax=db.Column(db.Integer, default=18)
     product_purchased_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
+    product_purchased_price_wo_tax = db.Column(db.Numeric(precision=10, scale=4), default=0)
     product_selling_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
     product_stock = db.Column(db.Numeric(precision=10, scale=4))
     tax_amount = db.Column(db.Numeric(precision=10, scale=4))

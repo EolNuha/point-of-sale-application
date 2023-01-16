@@ -511,8 +511,8 @@ export default {
         return (
           accumulator +
           this.roundTo4(
-            (Number(object.purchasedPrice) /
-              this.roundTo4(1 - object.tax / 100)) *
+            Number(object.purchasedPrice) *
+              Number(1 + object.tax / 100) *
               Number(object.stock)
           )
         );

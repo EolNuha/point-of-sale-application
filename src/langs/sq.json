@@ -55,6 +55,7 @@
 	"name": "Emri",
 	"barcode": "Barkodi",
 	"purchasedPrice": "Çmimi i blerjes",
+	"purchasedPriceWOTax": "Çmimi i blerjes (pa TVSH)",
 	"sellingPrice": "Çmimi i shitjes",
 	"quantity": "Sasia",
 	"stock": "Sasia",

@@ -43,6 +43,7 @@ def getPurchaseItemDict(item):
             "barcode": item.product_barcode,
             "stock": Decimal(item.product_stock).quantize(TWOPLACES),
             "tax": item.product_tax,
+            "purchasedPriceWOTax": Decimal(item.product_purchased_price_wo_tax).quantize(TWOPLACES),
             "purchasedPrice": Decimal(item.product_purchased_price).quantize(TWOPLACES),
             "sellingPrice": Decimal(item.product_selling_price).quantize(TWOPLACES),
         },

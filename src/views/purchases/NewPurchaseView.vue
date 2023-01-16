@@ -389,12 +389,12 @@ export default {
       },
       products: [
         {
-          barcode: "",
+          barcode: null,
           productName: "",
-          stock: "",
+          stock: null,
           tax: 0,
-          purchasedPrice: "",
-          sellingPrice: "",
+          purchasedPrice: null,
+          sellingPrice: null,
           expirationDate: "",
           search: "",
         },
@@ -417,6 +417,13 @@ export default {
         settingsValue: 0,
       });
       return t;
+    },
+    roundTo2() {
+      return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+    },
+    roundTo4() {
+      return (num) =>
+        Math.round((Number(num) + Number.EPSILON) * 10000) / 10000;
     },
   },
   async created() {
@@ -441,12 +448,12 @@ export default {
     },
     addProduct() {
       const product = {
-        barcode: "",
+        barcode: null,
         productName: "",
-        stock: "",
+        stock: null,
         tax: 0,
-        purchasedPrice: "",
-        sellingPrice: "",
+        purchasedPrice: null,
+        sellingPrice: null,
         expirationDate: "",
         search: "",
       };
@@ -458,9 +465,16 @@ export default {
     getProductsTotal() {
       const products = this.products;
       const sum = products.reduce((accumulator, object) => {
-        return accumulator + object.purchasedPrice * object.stock;
+        return (
+          accumulator +
+          this.roundTo4(
+            (Number(object.purchasedPrice) /
+              this.roundTo4(1 - object.tax / 100)) *
+              Number(object.stock)
+          )
+        );
       }, 0);
-      return sum.toFixed(2);
+      return sum?.toFixed(2);
     },
     async searchSellers(search, loading) {
       this.seller.search = search;

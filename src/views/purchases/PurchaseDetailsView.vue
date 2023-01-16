@@ -193,19 +193,11 @@
                       <div v-else>{{ item.product.sellingPrice }} €</div>
                     </td>
                     <td class="py-3 px-3">
-                      {{
-                        roundTo2(
-                          (item.product.tax / 100) * item.product.purchasedPrice
-                        ).toFixed(2)
-                      }}
+                      {{ item.taxAmount }}
                       € ({{ item.product.tax }}%)
                     </td>
                     <td class="py-3 px-3 text-right">
-                      {{
-                        roundTo2(
-                          item.product.purchasedPrice * item.product.stock
-                        ).toFixed(2)
-                      }}
+                      {{ item.totalAmount }}
                       €
                     </td>
                     <td
@@ -246,7 +238,9 @@
                 <tbody>
                   <tr>
                     <td class="py-2">{{ $t("subTotal") }}</td>
-                    <td class="text-right py-2">{{ getTotalWithoutTax }} €</td>
+                    <td class="text-right py-2">
+                      {{ purchase.subTotalAmount }} €
+                    </td>
                   </tr>
                   <tr v-for="item in taxes" :key="item.settingsValue">
                     <template v-if="!edit">
@@ -260,7 +254,9 @@
                   </tr>
                   <tr class="font-bold text-xl">
                     <td class="py-2">{{ $t("total") }}</td>
-                    <td class="text-right py-2">{{ getProductsTotal }} €</td>
+                    <td class="text-right py-2">
+                      {{ purchase.totalAmount }} €
+                    </td>
                   </tr>
                 </tbody>
               </table>

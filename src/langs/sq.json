@@ -254,5 +254,6 @@
 	"gross": "Bruto",
 	"net": "Neto",
 	"detailedView": "Të detajuara",
-	"groupedView": "Të grupuara"
+	"groupedView": "Të grupuara",
+	"withoutTax": "pa TVSH"
 }

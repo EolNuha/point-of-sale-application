@@ -106,7 +106,6 @@
                   <th scope="col" class="py-3 px-3">
                     {{ $t("purchasedPrice") }}
                   </th>
-                  <!-- <th scope="col" class="py-3 px-3">{{ $t("priceWithoutTax") }}</th> -->
                   <th scope="col" class="py-3 px-3">
                     {{ $t("sellingPrice") }}
                   </th>
@@ -171,7 +170,6 @@
                       </div>
                       <div v-else>{{ item.product.purchasedPrice }} €</div>
                     </td>
-                    <!-- <td class="py-3 px-3">{{ item.priceWithoutTax }} €</td> -->
                     <td class="py-3 px-3">
                       <div v-if="edit">
                         <Field

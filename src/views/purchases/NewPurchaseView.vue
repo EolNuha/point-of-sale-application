@@ -99,246 +99,290 @@
         </div>
       </div>
       <h2
-        class="mb-4 mt-7 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
+        class="mb-0 mt-7 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
       >
         {{ $t("purchasedProducts") }}:
       </h2>
-      <div v-for="(product, index) in products" :key="index" class="mb-5">
-        <div class="flex flex-row gap-2">
-          <div
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full"
-          >
-            <div>
-              <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("productName") }}</label
-              >
-              <Field
-                required
-                :rules="isRequired"
-                type="text"
-                v-model="product.productName"
-                :placeholder="$t('productName')"
-                class="hidden"
-                :name="`${index}name`"
-                :id="`${index}name`"
-              />
-              <v-select
-                class="block w-full default-input !p-[1px]"
-                :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
-                v-model="product.productName"
-                @search="
-                  ($event, loading) => searchProducts($event, loading, index)
-                "
-                @close="
-                  product.search ? getProductDetails(product.search, index) : ''
-                "
-                :clearable="true"
-                :filterable="false"
-                :options="productsList"
-                :reduce="(productsList) => productsList.name"
-                label="name"
-                type="text"
-                :placeholder="$t('productName')"
-                :taggable="true"
-                @option:selected="getProductDetails($event, index)"
-              />
-              <span class="text-red-700">{{ errors[`${index}name`] }}</span>
-            </div>
-            <div>
-              <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("barcode") }}</label
-              >
-              <Field
-                required
-                :rules="isRequired"
-                type="number"
-                step="1"
-                v-model="product.barcode"
-                :placeholder="$t('barcode')"
-                class="default-input w-full"
-                :class="errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''"
-                :name="`${index}barcode`"
-                :id="`${index}barcode`"
-              />
-              <span class="text-red-700">{{ errors[`${index}barcode`] }}</span>
-            </div>
-            <div>
-              <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("tax") }}</label
-              >
-              <Field
-                type="text"
-                v-model="product.tax"
-                class="hidden"
-                :name="`${index}tax`"
-                :id="`${index}tax`"
-              />
-              <v-select
-                class="block w-full default-input !p-[1px]"
-                :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
-                v-model="product.tax"
-                :clearable="false"
-                :options="taxes"
-                :reduce="(t) => t.settingsValue"
-                :label="`settingsValue`"
-                type="text"
-                :placeholder="$t('tax')"
-              >
-                <template v-slot:option="option">
-                  {{ option.settingsValue }}%
-                </template>
-                <template v-slot:selected-option="option">
-                  {{ option.settingsValue }}%
-                </template>
-              </v-select>
-              <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
-            </div>
-            <div>
-              <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("purchasedPrice") }}</label
-              >
-              <Field
-                required
-                :rules="isRequired"
-                type="number"
-                step="0.01"
-                v-model="product.purchasedPrice"
-                :placeholder="$t('purchasedPrice')"
-                class="default-input w-full"
-                :class="
-                  errors[`${index}purchasedPrice`] ? 'ring-2 ring-red-500' : ''
-                "
-                :name="`${index}purchasedPrice`"
-                :id="`${index}purchasedPrice`"
-              />
-              <span class="text-red-700">{{
-                errors[`${index}purchasedPrice`]
-              }}</span>
-            </div>
-            <div>
-              <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("sellingPrice") }}</label
-              >
-              <Field
-                required
-                :rules="isRequired"
-                type="number"
-                step="0.01"
-                v-model="product.sellingPrice"
-                :placeholder="$t('sellingPrice')"
-                class="default-input w-full"
-                :class="
-                  errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''
-                "
-                :name="`${index}sellingPrice`"
-                :id="`${index}sellingPrice`"
-              />
-              <span class="text-red-700">{{
-                errors[`${index}sellingPrice`]
-              }}</span>
-            </div>
-            <div>
-              <label
-                class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("expirationDate") }}
-                <button
-                  :id="`product-exp-${index}-tooltip-btn`"
-                  class="cursor-default"
-                  type="button"
-                  @mouseover="
-                    $showTooltip({
-                      targetEl: `product-exp-${index}-tooltip`,
-                      triggerEl: `product-exp-${index}-tooltip-btn`,
-                      placement: `right`,
-                    })
+      <div class="divide-y divide-gray-400">
+        <div v-for="(product, index) in products" :key="index" class="py-5">
+          <div class="flex flex-row gap-2">
+            <div
+              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full"
+            >
+              <div>
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("productName") }}</label
+                >
+                <Field
+                  required
+                  :rules="isRequired"
+                  type="text"
+                  v-model="product.productName"
+                  :placeholder="$t('productName')"
+                  class="hidden"
+                  :name="`${index}name`"
+                  :id="`${index}name`"
+                />
+                <v-select
+                  class="block w-full default-input !p-[1px]"
+                  :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
+                  v-model="product.productName"
+                  @search="
+                    ($event, loading) => searchProducts($event, loading, index)
                   "
-                >
-                  <IconC iconName="InformationCircleIcon" iconClass="w-4 h-4" />
-                </button>
-                <div
-                  :id="`product-exp-${index}-tooltip`"
-                  role="tooltip"
-                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
-                >
-                  {{ $t("expirationFieldEmptyMsg") }}
-                </div>
-              </label>
-              <Field
-                :name="`${index}product_expire`"
-                :id="`${index}product_expire`"
-                v-model="product.expirationDate"
-                :min="minDate"
-                type="date"
-                :class="
-                  errors[`${index}product_expire`] ? 'ring-2 ring-red-500' : ''
-                "
-                class="default-input w-full"
-                :placeholder="$t('expirationDate')"
-                required
-              />
-              <span class="text-red-700">{{
-                errors[`${index}product_expire`]
-              }}</span>
-            </div>
-            <div>
-              <label
-                class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >{{ $t("stock") }}
-                <button
-                  :id="`product-${index}-tooltip-btn`"
-                  class="cursor-default"
-                  type="button"
-                  @mouseover="
-                    $showTooltip({
-                      targetEl: `product-${index}-tooltip`,
-                      triggerEl: `product-${index}-tooltip-btn`,
-                      placement: `right`,
-                    })
+                  @close="
+                    product.search
+                      ? getProductDetails(product.search, index)
+                      : ''
                   "
+                  :clearable="true"
+                  :filterable="false"
+                  :options="productsList"
+                  :reduce="(productsList) => productsList.name"
+                  label="name"
+                  type="text"
+                  :placeholder="$t('productName')"
+                  :taggable="true"
+                  @option:selected="getProductDetails($event, index)"
+                />
+                <span class="text-red-700">{{ errors[`${index}name`] }}</span>
+              </div>
+              <div>
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("barcode") }}</label
                 >
-                  <IconC iconName="InformationCircleIcon" iconClass="w-4 h-4" />
-                </button>
-                <div
-                  :id="`product-${index}-tooltip`"
-                  role="tooltip"
-                  class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
-                >
-                  {{ $t("stockInfoMsg") }}
-                </div>
-              </label>
-              <div class="flex items-center gap-2">
                 <Field
                   required
                   :rules="isRequired"
                   type="number"
                   step="1"
-                  v-model="product.stock"
-                  :placeholder="$t('stock')"
+                  v-model="product.barcode"
+                  :placeholder="$t('barcode')"
                   class="default-input w-full"
-                  :class="errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''"
-                  :name="`${index}stock`"
-                  :id="`${index}stock`"
+                  :class="
+                    errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''
+                  "
+                  :name="`${index}barcode`"
+                  :id="`${index}barcode`"
                 />
+                <span class="text-red-700">{{
+                  errors[`${index}barcode`]
+                }}</span>
               </div>
-              <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
+              <div>
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("tax") }}</label
+                >
+                <Field
+                  type="text"
+                  v-model="product.tax"
+                  class="hidden"
+                  :name="`${index}tax`"
+                  :id="`${index}tax`"
+                />
+                <v-select
+                  class="block w-full default-input !p-[1px]"
+                  :class="errors[`${index}tax`] ? 'ring-2 ring-red-500' : ''"
+                  v-model="product.tax"
+                  :clearable="false"
+                  :options="taxes"
+                  :reduce="(t) => t.settingsValue"
+                  :label="`settingsValue`"
+                  type="text"
+                  :placeholder="$t('tax')"
+                >
+                  <template v-slot:option="option">
+                    {{ option.settingsValue }}%
+                  </template>
+                  <template v-slot:selected-option="option">
+                    {{ option.settingsValue }}%
+                  </template>
+                </v-select>
+                <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("purchasedPrice") }}
+                  <button
+                    :id="`purchased-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `purchased-${index}-tooltip`,
+                        triggerEl: `purchased-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`purchased-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("purchasedPrice") }} {{ $t("withoutTax") }}
+                  </div>
+                </label>
+                <Field
+                  required
+                  :rules="isRequired"
+                  type="number"
+                  step="0.01"
+                  v-model="product.purchasedPrice"
+                  :placeholder="`${$t('purchasedPrice')} (${$t('withoutTax')})`"
+                  class="default-input w-full"
+                  :class="
+                    errors[`${index}purchasedPrice`]
+                      ? 'ring-2 ring-red-500'
+                      : ''
+                  "
+                  :name="`${index}purchasedPrice`"
+                  :id="`${index}purchasedPrice`"
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}purchasedPrice`]
+                }}</span>
+              </div>
+              <div>
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("sellingPrice") }}</label
+                >
+                <Field
+                  required
+                  :rules="isRequired"
+                  type="number"
+                  step="0.01"
+                  v-model="product.sellingPrice"
+                  :placeholder="$t('sellingPrice')"
+                  class="default-input w-full"
+                  :class="
+                    errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''
+                  "
+                  :name="`${index}sellingPrice`"
+                  :id="`${index}sellingPrice`"
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}sellingPrice`]
+                }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("expirationDate") }}
+                  <button
+                    :id="`product-exp-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `product-exp-${index}-tooltip`,
+                        triggerEl: `product-exp-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`product-exp-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("expirationFieldEmptyMsg") }}
+                  </div>
+                </label>
+                <Field
+                  :name="`${index}product_expire`"
+                  :id="`${index}product_expire`"
+                  v-model="product.expirationDate"
+                  :min="minDate"
+                  type="date"
+                  :class="
+                    errors[`${index}product_expire`]
+                      ? 'ring-2 ring-red-500'
+                      : ''
+                  "
+                  class="default-input w-full"
+                  :placeholder="$t('expirationDate')"
+                  required
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}product_expire`]
+                }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("stock") }}
+                  <button
+                    :id="`product-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `product-${index}-tooltip`,
+                        triggerEl: `product-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`product-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("stockInfoMsg") }}
+                  </div>
+                </label>
+                <div class="flex items-center gap-2">
+                  <Field
+                    required
+                    :rules="isRequired"
+                    type="number"
+                    step="1"
+                    v-model="product.stock"
+                    :placeholder="$t('stock')"
+                    class="default-input w-full"
+                    :class="
+                      errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''
+                    "
+                    :name="`${index}stock`"
+                    :id="`${index}stock`"
+                  />
+                </div>
+                <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
+              </div>
             </div>
+            <button
+              v-show="products?.length != 1"
+              type="button"
+              class="p-1.5 rounded hover:bg-gray-300/50 dark:hover:bg-neutral-900/50"
+              @click="removeProduct(index)"
+            >
+              <IconC
+                iconName="TrashIcon"
+                iconClass="w-5 h-5 text-red-700 cursor-pointer"
+              />
+            </button>
           </div>
-          <button
-            v-show="products?.length != 1"
-            type="button"
-            class="p-1.5 rounded hover:bg-gray-300/50 dark:hover:bg-neutral-900/50"
-            @click="removeProduct(index)"
-          >
-            <IconC
-              iconName="TrashIcon"
-              iconClass="w-5 h-5 text-red-700 cursor-pointer"
-            />
-          </button>
         </div>
       </div>
       <div class="flex justify-end my-3 gap-2">

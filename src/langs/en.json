@@ -254,5 +254,7 @@
 	"gross": "Gross",
 	"net": "Net",
 	"detailedView": "Detailed View",
-	"groupedView": "Grouped View"
+	"groupedView": "Grouped View",
+	"purchasedPriceInfoMsg": "Purchased Price without tax",
+	"withoutTax": "without tax"
 }

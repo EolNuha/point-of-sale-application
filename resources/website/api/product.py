@@ -93,6 +93,7 @@ def updateProductDetails(productId):
     barcode = request.json["barcode"]
     stock = request.json["stock"]
     tax = request.json["tax"]
+    purchased_price_wo_tax = request.json["purchasedPriceWOTax"]
     purchased_price = request.json["purchasedPrice"]
     selling_price = request.json["sellingPrice"]
     expiration_date = request.json["expirationDate"]
@@ -117,6 +118,7 @@ def updateProductDetails(productId):
     product.barcode = barcode
     product.stock = stock
     product.tax = tax
+    product.purchased_price_wo_tax = purchased_price_wo_tax
     product.purchased_price = purchased_price
     product.selling_price = selling_price
     product.expiration_date = expiration_date

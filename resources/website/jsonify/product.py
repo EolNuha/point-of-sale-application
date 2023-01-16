@@ -12,6 +12,7 @@ def getProductsDict(item):
         "barcode": item.barcode,
         "stock": Decimal(item.stock).quantize(TWOPLACES),
         "tax": item.tax,
+        "purchasedPriceWOTax": Decimal(item.purchased_price_wo_tax).quantize(TWOPLACES),
         "purchasedPrice": Decimal(item.purchased_price).quantize(TWOPLACES),
         "sellingPrice": Decimal(item.selling_price).quantize(TWOPLACES),
         "expirationDate": item.expiration_date.strftime('%Y-%m-%d') if item.expiration_date else None,

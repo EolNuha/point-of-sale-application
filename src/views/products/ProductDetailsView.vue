@@ -4,25 +4,25 @@
   >
     <OverlayC v-if="isDataLoading" />
     <Form v-slot="{ errors }" class="p-5" @submit="updateProduct">
-      <div class="mb-6">
-        <label
-          for="product_name"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >{{ $t("productName") }}</label
-        >
-        <Field
-          name="product_name"
-          :rules="isRequired"
-          v-model="product.name"
-          type="text"
-          id="product_name"
-          class="default-input w-full"
-          placeholder="Enter product name"
-          required
-        />
-        <span class="text-red-700">{{ errors.product_name }}</span>
-      </div>
       <div class="mb-6 flex gap-4">
+        <div class="basis-1/2">
+          <label
+            for="product_name"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("productName") }}</label
+          >
+          <Field
+            name="product_name"
+            :rules="isRequired"
+            v-model="product.name"
+            type="text"
+            id="product_name"
+            class="default-input w-full"
+            placeholder="Enter product name"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_name }}</span>
+        </div>
         <div class="basis-1/2">
           <label
             for="product_barcode"
@@ -42,6 +42,8 @@
           />
           <span class="text-red-700">{{ errors.product_barcode }}</span>
         </div>
+      </div>
+      <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
             for="product_stock"
@@ -60,6 +62,29 @@
             required
           />
           <span class="text-red-700">{{ errors.product_stock }}</span>
+        </div>
+        <div class="basis-1/2">
+          <label
+            for="product_purchased_price_wo_tax"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("purchasedPriceWOTax") }}</label
+          >
+          <Field
+            name="product_purchased_price_wo_tax"
+            :rules="isRequired"
+            v-model="product.purchasedPriceWOTax"
+            type="number"
+            id="product_purchased_price_wo_tax"
+            :class="
+              errors.product_purchased_price_wo_tax ? 'ring-2 ring-red-500' : ''
+            "
+            class="default-input w-full"
+            placeholder="Enter product purchased price w/o tax"
+            required
+          />
+          <span class="text-red-700">{{
+            errors.product_purchased_price_wo_tax
+          }}</span>
         </div>
       </div>
       <div class="mb-6 flex gap-4">

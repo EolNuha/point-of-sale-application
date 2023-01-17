@@ -47,6 +47,9 @@ def createDemoSettings():
         return
     demo = [
         ["storage", "storage", "notification", 1500],
+        ["pcs", "pcs", "measure", "pcs"],
+        ["kg", "kg", "measure", "kg"],
+        ["liter", "liter", "measure", "liter"],
         ["8", "eight", "tax", 8],
         ["18", "eighteen", "tax", 18],
     ]

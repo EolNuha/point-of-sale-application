@@ -72,6 +72,7 @@
                 <tr>
                   <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
                   <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
+                  <th scope="col" class="py-3 px-6">{{ $t("measure") }}</th>
                   <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>
                   <th scope="col" class="py-3 px-6">{{ $t("price") }}</th>
                   <th scope="col" class="py-3 px-6">{{ $t("tax") }}</th>
@@ -95,6 +96,7 @@
                       {{ item.product.name }}
                     </td>
                     <td class="py-3 px-6">{{ item.product.barcode }}</td>
+                    <td class="py-3 px-6">{{ item.product.measure }}</td>
                     <td class="py-3 px-6">
                       <div v-if="edit">
                         <Field

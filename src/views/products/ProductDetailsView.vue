@@ -107,25 +107,6 @@
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
-            for="product_purchasedprice"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchasedPrice") }}</label
-          >
-          <Field
-            name="product_purchasedprice"
-            :rules="isRequired"
-            v-model="product.purchasedPrice"
-            type="number"
-            step="0.01"
-            id="product_purchasedprice"
-            class="default-input w-full"
-            placeholder="Enter product price"
-            required
-          />
-          <span class="text-red-700">{{ errors.product_purchasedprice }}</span>
-        </div>
-        <div class="basis-1/2">
-          <label
             for="product_purchased_price_wo_tax"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("purchasedPriceWOTax") }}</label
@@ -147,6 +128,25 @@
             errors.product_purchased_price_wo_tax
           }}</span>
         </div>
+        <div class="basis-1/2">
+          <label
+            for="product_purchasedprice"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("purchasedPrice") }}</label
+          >
+          <Field
+            name="product_purchasedprice"
+            :rules="isRequired"
+            v-model="product.purchasedPrice"
+            type="number"
+            step="0.01"
+            id="product_purchasedprice"
+            class="default-input w-full"
+            placeholder="Enter product price"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_purchasedprice }}</span>
+        </div>
       </div>
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
@@ -163,7 +163,7 @@
             step="0.01"
             id="product_sellingprice"
             class="default-input w-full"
-            placeholder="Enter product price"
+            placeholder="Enter product selling price"
             required
           />
           <span class="text-red-700">{{ errors.product_sellingprice }}</span>

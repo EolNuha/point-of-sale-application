@@ -61,6 +61,7 @@ def createSale():
             product_tax=product_query.tax,
             product_purchased_price=product_query.purchased_price,
             product_selling_price=product_query.selling_price,
+            product_measure=product_query.measure,
             product_quantity=product_quantity,
             price_without_tax=price_without_tax,
             tax_amount=tax_amount,

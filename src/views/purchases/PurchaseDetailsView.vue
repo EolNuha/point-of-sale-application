@@ -135,22 +135,7 @@
                     </td>
                     <td class="py-3 px-3">{{ item.product.barcode }}</td>
                     <td class="py-3 px-3">
-                      <div v-if="edit">
-                        <Field
-                          required
-                          :rules="isRequired"
-                          :name="`${item.id}-measure`"
-                          :class="
-                            errors[`${item.id}-measure`]
-                              ? 'ring-2 ring-red-500'
-                              : ''
-                          "
-                          type="text"
-                          class="default-input max-w-[100px]"
-                          v-model="item.product.measure"
-                        />
-                      </div>
-                      <div v-else>
+                      <div>
                         {{ $t(item.product.measure) }}
                       </div>
                     </td>
@@ -175,6 +160,9 @@
                       <div v-else>x {{ item.product.stock }}</div>
                     </td>
                     <td class="py-3 px-3">
+                      <div>{{ item.product.purchasedPriceWOTax }} €</div>
+                    </td>
+                    <td class="py-3 px-3">
                       <div v-if="edit">
                         <Field
                           required
@@ -189,13 +177,10 @@
                           step="0.01"
                           min="0.01"
                           class="default-input max-w-[100px]"
-                          v-model="item.product.purchasedPriceWOTax"
+                          v-model="item.product.purchasedPrice"
                         />
                       </div>
-                      <div v-else>{{ item.product.purchasedPriceWOTax }} €</div>
-                    </td>
-                    <td class="py-3 px-3">
-                      <div>{{ item.product.purchasedPrice }} €</div>
+                      <div v-else>{{ item.product.purchasedPrice }} €</div>
                     </td>
                     <!-- <td class="py-3 px-3">
                       <div v-if="edit">

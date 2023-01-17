@@ -368,7 +368,6 @@ def editPurchase(purchaseId):
     for item in purchaseItems:
         item_stock = Decimal(item["product"]["stock"]).quantize(FOURPLACES)
         item_purchased_price = Decimal(item["product"]["purchasedPrice"]).quantize(FOURPLACES)
-        item_selling_price = Decimal(item["product"]["sellingPrice"]).quantize(FOURPLACES)
         item_tax = Decimal(item["product"]["tax"]).quantize(FOURPLACES)
         tax_amount = Decimal(Decimal(item_tax / 100).quantize(FOURPLACES) * item_purchased_price).quantize(FOURPLACES)
         item_purchased_price_wo_tax = item_purchased_price - tax_amount
@@ -385,9 +384,7 @@ def editPurchase(purchaseId):
         purchase_item.product_stock = item_stock
         purchase_item.product_purchased_price_wo_tax = item_purchased_price_wo_tax
         purchase_item.product_purchased_price = item_purchased_price
-        purchase_item.product_selling_price = item_selling_price
         purchase_item.tax_amount = tax_amount
-        purchase_item.product_measure = item["product"]["measure"]
         purchase_item.total_amount = Decimal(Decimal(item_purchased_price).quantize(FOURPLACES) * Decimal(item_stock)).quantize(FOURPLACES)
 
         product = Product.query.filter_by(barcode=item["product"]["barcode"]).first()
@@ -395,8 +392,6 @@ def editPurchase(purchaseId):
             product.stock += (item_stock - purchase_item.product_stock)
             product.purchased_price_wo_tax = item_purchased_price_wo_tax
             product.purchased_price = item_purchased_price
-            product.selling_price = item_selling_price
-            product.product_measure = item["product"]["measure"]
     
         db.session.commit()
 

@@ -18,6 +18,7 @@ def createProduct():
     purchased_price = request.json["purchasedPrice"]
     selling_price = request.json["sellingPrice"]
     expiration_date = request.json["expirationDate"]
+    measure = request.json["measure"]
 
     if expiration_date:
         expiration_date = expiration_date.split("-")
@@ -41,6 +42,7 @@ def createProduct():
         tax=tax, 
         purchased_price=purchased_price, 
         selling_price=selling_price,
+        measure=measure,
         expiration_date=expiration_date,
         date_created=datetime.now(),
         date_modified=datetime.now(),
@@ -95,6 +97,7 @@ def updateProductDetails(productId):
     tax = request.json["tax"]
     purchased_price_wo_tax = request.json["purchasedPriceWOTax"]
     purchased_price = request.json["purchasedPrice"]
+    measure = request.json["measure"]
     selling_price = request.json["sellingPrice"]
     expiration_date = request.json["expirationDate"]
 
@@ -121,6 +124,7 @@ def updateProductDetails(productId):
     product.purchased_price_wo_tax = purchased_price_wo_tax
     product.purchased_price = purchased_price
     product.selling_price = selling_price
+    product.measure = measure
     product.expiration_date = expiration_date
     product.date_modified = datetime.now()
 

@@ -23,7 +23,7 @@ export default [
   {
     path: "/products/create",
     name: "new-product",
-    component: CreateProductView,
+    component: ProductDetailsView,
     meta: {
       title: "createProduct",
       breadcrumb: [

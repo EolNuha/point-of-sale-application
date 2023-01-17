@@ -2,8 +2,15 @@
   <div
     class="flex flex-col bg-gray-200 dark:bg-neutral-800 min-h-screen relative"
   >
-    <OverlayC v-if="isDataLoading" />
-    <Form v-slot="{ errors }" class="p-5" @submit="updateProduct">
+    <OverlayC
+      v-if="isDataLoading"
+      :outerDiv="`opacity-[95] bg-gray-100 dark:bg-neutral-900 `"
+    />
+    <Form
+      v-slot="{ errors }"
+      class="p-5"
+      @submit="isAdd ? createProduct : updateProduct"
+    >
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
@@ -46,6 +53,39 @@
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
+            for="product_measure"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("measure") }}</label
+          >
+          <Field
+            type="text"
+            v-model="product.measure"
+            class="hidden"
+            name="product_measure"
+            id="product_measure"
+          />
+          <v-select
+            class="block w-full default-input !p-[1px]"
+            :class="errors.product_measure ? 'ring-2 ring-red-500' : ''"
+            v-model="product.measure"
+            :clearable="false"
+            :options="measures"
+            :reduce="(t) => t.settingsValue"
+            :label="`settingsValue`"
+            type="text"
+            :placeholder="$t('measure')"
+          >
+            <template v-slot:option="option">
+              {{ $t(option.settingsValue) }}
+            </template>
+            <template v-slot:selected-option="option">
+              {{ $t(option.settingsValue) }}
+            </template>
+          </v-select>
+          <span class="text-red-700">{{ errors.product_measure }}</span>
+        </div>
+        <div class="basis-1/2">
+          <label
             for="product_stock"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("stock") }}</label
@@ -62,6 +102,27 @@
             required
           />
           <span class="text-red-700">{{ errors.product_stock }}</span>
+        </div>
+      </div>
+      <div class="mb-6 flex gap-4">
+        <div class="basis-1/2">
+          <label
+            for="product_purchasedprice"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("purchasedPrice") }}</label
+          >
+          <Field
+            name="product_purchasedprice"
+            :rules="isRequired"
+            v-model="product.purchasedPrice"
+            type="number"
+            step="0.01"
+            id="product_purchasedprice"
+            class="default-input w-full"
+            placeholder="Enter product price"
+            required
+          />
+          <span class="text-red-700">{{ errors.product_purchasedprice }}</span>
         </div>
         <div class="basis-1/2">
           <label
@@ -90,25 +151,6 @@
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
-            for="product_purchasedprice"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchasedPrice") }}</label
-          >
-          <Field
-            name="product_purchasedprice"
-            :rules="isRequired"
-            v-model="product.purchasedPrice"
-            type="number"
-            step="0.01"
-            id="product_purchasedprice"
-            class="default-input w-full"
-            placeholder="Enter product price"
-            required
-          />
-          <span class="text-red-700">{{ errors.product_purchasedprice }}</span>
-        </div>
-        <div class="basis-1/2">
-          <label
             for="product_sellingprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >{{ $t("sellingPrice") }}</label
@@ -126,8 +168,6 @@
           />
           <span class="text-red-700">{{ errors.product_sellingprice }}</span>
         </div>
-      </div>
-      <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
             for="product_tax"
@@ -161,6 +201,8 @@
           </v-select>
           <span class="text-red-700">{{ errors.product_tax }}</span>
         </div>
+      </div>
+      <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
             for="product_expire"
@@ -201,9 +243,7 @@
           />
           <span class="text-red-700">{{ errors.product_expire }}</span>
         </div>
-      </div>
-      <div class="mb-6 flex gap-4">
-        <div class="basis-1/2">
+        <div class="basis-1/2" v-if="!isAdd">
           <label
             for="dateCreated"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -219,6 +259,8 @@
             disabled
           />
         </div>
+      </div>
+      <div class="mb-6 flex gap-4" v-if="!isAdd">
         <div class="basis-1/2">
           <label
             for="dateModified"
@@ -247,7 +289,7 @@
           />
           <span class="sr-only">Loading...</span>
         </div>
-        <div v-else>{{ $t("update") }}</div>
+        <div v-else>{{ isAdd ? "Submit" : $t("update") }}</div>
       </button>
     </Form>
   </div>
@@ -255,7 +297,7 @@
 
 <script>
 import { Field, Form } from "vee-validate";
-
+import Product from "@/models/product";
 export default {
   name: "ProductDetailsView",
   components: {
@@ -266,6 +308,8 @@ export default {
     return {
       isDataLoading: true,
       isUpdateLoading: false,
+      measures: [],
+      isAdd: true,
     };
   },
   watch: {
@@ -295,7 +339,9 @@ export default {
       return this.$store.state.productModule.product;
     },
     taxes() {
-      const t = this.$store.state.settingsModule.settingsType;
+      const t = JSON.parse(
+        JSON.stringify(this.$store.state.settingsModule.settingsType)
+      );
       t.unshift({
         settingsValue: 0,
       });
@@ -308,22 +354,36 @@ export default {
   async created() {
     await this.reload();
   },
+  unmounted() {
+    this.$store.state.productModule.product = new Product();
+  },
   methods: {
     async reload() {
       this.isDataLoading = true;
+      await this.$store
+        .dispatch("settingsModule/getSettingsType", {
+          settingsType: "measure",
+        })
+        .then((response) => {
+          this.measures = response.data;
+        });
       await this.$store.dispatch("settingsModule/getSettingsType", {
         settingsType: "tax",
       });
-      await this.$store
-        .dispatch(
-          "productModule/getProductDetails",
-          this.$route.params.productId
-        )
-        .then(async (response) => {
-          this.$route.meta.title = response.data.name;
-          this.isDataLoading = false;
-          document.title = this.product.name;
-        });
+      if (this.$route.params.productId) {
+        this.isAdd = false;
+        await this.$store
+          .dispatch(
+            "productModule/getProductDetails",
+            this.$route.params.productId
+          )
+          .then(async (response) => {
+            this.$route.meta.title = response.data.name;
+            this.isDataLoading = false;
+            document.title = this.product.name;
+          });
+      }
+      this.isDataLoading = false;
     },
     formatDate(date) {
       return (
@@ -344,6 +404,24 @@ export default {
         .then(() => {
           this.isUpdateLoading = false;
           this.$toast.success(this.$t("productUpdatedSuccessfully"));
+        })
+        .catch((error) => {
+          this.isUpdateLoading = false;
+          this.$toast.error(
+            this.$t(error.response.data) || this.$t("somethingWrong")
+          );
+        });
+    },
+    createProduct() {
+      this.isUpdateLoading = true;
+      this.$store
+        .dispatch("productModule/createProduct", this.product)
+        .then(() => {
+          this.isUpdateLoading = false;
+          this.$router.push({
+            name: "products",
+          });
+          this.$toast.success(this.$t("productCreatedSuccessfully"));
         })
         .catch((error) => {
           this.isUpdateLoading = false;

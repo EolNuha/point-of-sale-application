@@ -71,7 +71,7 @@
               :to="{ name: item.to, query: item.query ? $route.query : {} }"
               class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white"
               :class="item.active ? '!text-theme-600' : ''"
-              >{{ $t(item.text($route)) }}</router-link
+              >{{ crumb(item) }}</router-link
             >
           </div>
         </li>
@@ -173,6 +173,9 @@ export default {
   computed: {
     user() {
       return this.$store.state.userModule.currentUser;
+    },
+    crumb() {
+      return (item) => this.$t(item.text(this.$route));
     },
   },
   methods: {

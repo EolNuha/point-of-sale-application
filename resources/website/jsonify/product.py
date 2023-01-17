@@ -10,6 +10,7 @@ def getProductsDict(item):
         "id": item.id,
         "name": item.name,
         "barcode": item.barcode,
+        "measure": item.measure,
         "stock": Decimal(item.stock).quantize(TWOPLACES),
         "tax": item.tax,
         "purchasedPriceWOTax": Decimal(item.purchased_price_wo_tax).quantize(TWOPLACES),

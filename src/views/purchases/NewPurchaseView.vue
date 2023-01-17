@@ -112,6 +112,51 @@
               <div>
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("barcode") }}</label
+                >
+                <Field
+                  required
+                  :rules="isRequired"
+                  type="number"
+                  step="1"
+                  v-model="product.barcode"
+                  :placeholder="$t('barcode')"
+                  class="hidden"
+                  :name="`${index}barcode`"
+                  :id="`${index}barcode`"
+                />
+                <v-select
+                  class="block w-full default-input !p-[1px]"
+                  :class="
+                    errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''
+                  "
+                  v-model="product.barcode"
+                  @search="
+                    ($event, loading) =>
+                      searchProducts($event, loading, index, 'barcode')
+                  "
+                  @close="
+                    product.search
+                      ? getProductDetailsBarcode(product.search, index)
+                      : ''
+                  "
+                  :clearable="true"
+                  :filterable="false"
+                  :options="productsList"
+                  :reduce="(productsList) => productsList.barcode"
+                  label="barcode"
+                  type="text"
+                  :placeholder="$t('barcode')"
+                  :taggable="true"
+                  @option:selected="getProductDetailsBarcode($event, index)"
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}barcode`]
+                }}</span>
+              </div>
+              <div>
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >{{ $t("productName") }}</label
                 >
                 <Field
@@ -129,7 +174,8 @@
                   :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
                   v-model="product.productName"
                   @search="
-                    ($event, loading) => searchProducts($event, loading, index)
+                    ($event, loading) =>
+                      searchProducts($event, loading, index, 'name')
                   "
                   @close="
                     product.search
@@ -151,25 +197,84 @@
               <div>
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("barcode") }}</label
+                  >{{ $t("measure") }}</label
                 >
                 <Field
-                  required
-                  :rules="isRequired"
-                  type="number"
-                  step="1"
-                  v-model="product.barcode"
-                  :placeholder="$t('barcode')"
-                  class="default-input w-full"
-                  :class="
-                    errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''
-                  "
-                  :name="`${index}barcode`"
-                  :id="`${index}barcode`"
+                  type="text"
+                  v-model="product.measure"
+                  class="hidden"
+                  :name="`${index}measure`"
+                  :id="`${index}measure`"
                 />
+                <v-select
+                  class="block w-full default-input !p-[1px]"
+                  :class="
+                    errors[`${index}measure`] ? 'ring-2 ring-red-500' : ''
+                  "
+                  v-model="product.measure"
+                  :clearable="false"
+                  :options="measures"
+                  :reduce="(t) => t.settingsValue"
+                  :label="`settingsValue`"
+                  type="text"
+                  :placeholder="$t('measure')"
+                >
+                  <template v-slot:option="option">
+                    {{ $t(option.settingsValue) }}
+                  </template>
+                  <template v-slot:selected-option="option">
+                    {{ $t(option.settingsValue) }}
+                  </template>
+                </v-select>
                 <span class="text-red-700">{{
-                  errors[`${index}barcode`]
+                  errors[`${index}measure`]
                 }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("stock") }}
+                  <button
+                    :id="`product-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `product-${index}-tooltip`,
+                        triggerEl: `product-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`product-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("stockInfoMsg") }}
+                  </div>
+                </label>
+                <div class="flex items-center gap-2">
+                  <Field
+                    required
+                    :rules="isRequired"
+                    type="number"
+                    v-model="product.stock"
+                    :placeholder="$t('stock')"
+                    class="default-input w-full"
+                    :class="
+                      errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''
+                    "
+                    :name="`${index}stock`"
+                    :id="`${index}stock`"
+                  />
+                </div>
+                <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
               </div>
               <div>
                 <label
@@ -229,7 +334,7 @@
                     role="tooltip"
                     class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
                   >
-                    {{ $t("purchasedPrice") }} {{ $t("withoutTax") }}
+                    {{ $t("purchasedPrice") }} {{ $t("withTax") }}
                   </div>
                 </label>
                 <Field
@@ -238,7 +343,7 @@
                   type="number"
                   step="0.01"
                   v-model="product.purchasedPrice"
-                  :placeholder="`${$t('purchasedPrice')} (${$t('withoutTax')})`"
+                  :placeholder="`${$t('purchasedPrice')} (${$t('withTax')})`"
                   class="default-input w-full"
                   :class="
                     errors[`${index}purchasedPrice`]
@@ -323,52 +428,6 @@
                   errors[`${index}product_expire`]
                 }}</span>
               </div>
-              <div>
-                <label
-                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("stock") }}
-                  <button
-                    :id="`product-${index}-tooltip-btn`"
-                    class="cursor-default"
-                    type="button"
-                    @mouseover="
-                      $showTooltip({
-                        targetEl: `product-${index}-tooltip`,
-                        triggerEl: `product-${index}-tooltip-btn`,
-                        placement: `right`,
-                      })
-                    "
-                  >
-                    <IconC
-                      iconName="InformationCircleIcon"
-                      iconClass="w-4 h-4"
-                    />
-                  </button>
-                  <div
-                    :id="`product-${index}-tooltip`"
-                    role="tooltip"
-                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
-                  >
-                    {{ $t("stockInfoMsg") }}
-                  </div>
-                </label>
-                <div class="flex items-center gap-2">
-                  <Field
-                    required
-                    :rules="isRequired"
-                    type="number"
-                    v-model="product.stock"
-                    :placeholder="$t('stock')"
-                    class="default-input w-full"
-                    :class="
-                      errors[`${index}stock`] ? 'ring-2 ring-red-500' : ''
-                    "
-                    :name="`${index}stock`"
-                    :id="`${index}stock`"
-                  />
-                </div>
-                <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
-              </div>
             </div>
             <button
               v-show="products?.length != 1"
@@ -423,6 +482,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      measures: [],
       seller: {
         sellerName: "",
         invoiceNumber: "",
@@ -438,6 +498,7 @@ export default {
           tax: 0,
           purchasedPrice: null,
           sellingPrice: null,
+          measure: "pcs",
           expirationDate: "",
           search: "",
         },
@@ -455,7 +516,9 @@ export default {
       return this.formatDate(new Date());
     },
     taxes() {
-      const t = this.$store.state.settingsModule.settingsType;
+      const t = JSON.parse(
+        JSON.stringify(this.$store.state.settingsModule.settingsType)
+      );
       t.unshift({
         settingsValue: 0,
       });
@@ -470,6 +533,13 @@ export default {
     },
   },
   async created() {
+    await this.$store
+      .dispatch("settingsModule/getSettingsType", {
+        settingsType: "measure",
+      })
+      .then((response) => {
+        this.measures = response.data;
+      });
     await this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",
     });
@@ -497,6 +567,7 @@ export default {
         tax: 0,
         purchasedPrice: null,
         sellingPrice: null,
+        measure: "pcs",
         expirationDate: "",
         search: "",
       };
@@ -545,17 +616,17 @@ export default {
         this.seller.taxNumber = sellerInfo?.sellerTaxNumber;
       }
     },
-    async searchProducts(search, loading, idx) {
+    async searchProducts(search, loading, idx, type = "barcode") {
       this.products[idx].search = search;
       loading(true);
-      await this.getProducts(search);
+      await this.getProducts(search, type);
       loading(false);
     },
-    async getProducts(search) {
+    async getProducts(search, type = "barcode") {
       await this.$store.dispatch("productModule/getProducts", {
         page: 1,
         per_page: 20,
-        sort_column: "name",
+        sort_column: type,
         sort_dir: "asc",
         search: search,
       });
@@ -572,6 +643,20 @@ export default {
         this.products[idx].sellingPrice = productInfo.sellingPrice;
         this.products[idx].purchasedPrice = productInfo.purchasedPrice;
         this.products[idx].expirationDate = productInfo.expirationDate;
+        this.products[idx].measure = productInfo.measure;
+      }
+    },
+    getProductDetailsBarcode(e, idx) {
+      const barcode = e.barcode ? e.barcode : e;
+      this.products[idx].barcode = barcode;
+      const productInfo = this.productsList.find((x) => x.barcode === barcode);
+      if (productInfo) {
+        this.products[idx].productName = productInfo.name;
+        this.products[idx].tax = productInfo.tax;
+        this.products[idx].sellingPrice = productInfo.sellingPrice;
+        this.products[idx].purchasedPrice = productInfo.purchasedPrice;
+        this.products[idx].expirationDate = productInfo.expirationDate;
+        this.products[idx].measure = productInfo.measure;
       }
     },
     submit() {

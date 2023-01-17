@@ -256,5 +256,10 @@
 	"net": "Neto",
 	"detailedView": "Të detajuara",
 	"groupedView": "Të grupuara",
-	"withoutTax": "pa TVSH"
+	"withoutTax": "pa TVSH",
+	"withTax": "me TVSH",
+	"measure": "Nj. matëse",
+	"pcs": "Copë",
+	"kg": "Kg",
+	"liter": "Litër"
 }

@@ -37,6 +37,7 @@ class SaleItem(db.Model):
     product_selling_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
     product_quantity = db.Column(db.Numeric(precision=10, scale=4))
     price_without_tax = db.Column(db.Numeric(precision=10, scale=4))
+    product_measure = db.Column(db.Enum("pcs", "kg", "liter"), default="pcs")
     tax_amount = db.Column(db.Numeric(precision=10, scale=4))
     total_amount = db.Column(db.Numeric(precision=10, scale=4))
     date_created = db.Column(db.DateTime, default=datetime.now())

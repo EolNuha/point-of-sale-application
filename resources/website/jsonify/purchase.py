@@ -45,6 +45,7 @@ def getPurchaseItemDict(item):
             "tax": item.product_tax,
             "purchasedPriceWOTax": Decimal(item.product_purchased_price_wo_tax).quantize(TWOPLACES),
             "purchasedPrice": Decimal(item.product_purchased_price).quantize(TWOPLACES),
+            "measure": item.product_measure,
             "sellingPrice": Decimal(item.product_selling_price).quantize(TWOPLACES),
         },
         "taxAmount": Decimal(item.tax_amount).quantize(TWOPLACES),

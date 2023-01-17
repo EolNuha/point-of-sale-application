@@ -102,6 +102,7 @@
                 <tr>
                   <th scope="col" class="py-3 px-3">{{ $t("productName") }}</th>
                   <th scope="col" class="py-3 px-3">{{ $t("barcode") }}</th>
+                  <th scope="col" class="py-3 px-3">{{ $t("measure") }}</th>
                   <th scope="col" class="py-3 px-3">{{ $t("stock") }}</th>
                   <th scope="col" class="py-3 px-3">
                     {{ $t("purchasedPriceWOTax") }}
@@ -133,6 +134,26 @@
                       {{ item.product.name }}
                     </td>
                     <td class="py-3 px-3">{{ item.product.barcode }}</td>
+                    <td class="py-3 px-3">
+                      <div v-if="edit">
+                        <Field
+                          required
+                          :rules="isRequired"
+                          :name="`${item.id}-measure`"
+                          :class="
+                            errors[`${item.id}-measure`]
+                              ? 'ring-2 ring-red-500'
+                              : ''
+                          "
+                          type="text"
+                          class="default-input max-w-[100px]"
+                          v-model="item.product.measure"
+                        />
+                      </div>
+                      <div v-else>
+                        {{ $t(item.product.measure) }}
+                      </div>
+                    </td>
                     <td class="py-3 px-3">
                       <div v-if="edit">
                         <Field

@@ -257,5 +257,10 @@
 	"detailedView": "Detailed View",
 	"groupedView": "Grouped View",
 	"purchasedPriceInfoMsg": "Purchased Price without tax",
-	"withoutTax": "without tax"
+	"withoutTax": "without tax",
+	"withTax": "with tax",
+	"measure": "Measure",
+	"pcs": "Pcs",
+	"kg": "Kg",
+	"liter": "Liter"
 }

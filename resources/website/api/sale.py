@@ -115,7 +115,7 @@ def getSales():
 
     custom_start_date = request.args.get('startDate', type=str)
     custom_end_date = request.args.get('endDate', type=str)
-    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
     type_filter = [x == 'true' for x in request.args.getlist('type_filter[]')]
     if not type_filter: type_filter = [True, False]

@@ -6,7 +6,7 @@
       >
         {{ $t("sellerInfo") }}:
       </h2>
-      <div class="mb-6 flex gap-2">
+      <div class="mb-3 flex gap-2">
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -59,25 +59,7 @@
           <span class="text-red-700">{{ errors.fiscalNumber }}</span>
         </div>
       </div>
-      <div class="mb-6 flex gap-2">
-        <div class="basis-1/2">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("invoiceNumber") }}</label
-          >
-          <Field
-            required
-            :rules="isRequired"
-            type="text"
-            v-model="seller.invoiceNumber"
-            :placeholder="$t('invoiceNumber')"
-            class="default-input w-full"
-            :class="errors.invoiceNumber ? 'ring-2 ring-red-500' : ''"
-            name="invoiceNumber"
-            id="invoiceNumber"
-          />
-          <span class="text-red-700">{{ errors.invoiceNumber }}</span>
-        </div>
+      <div class="mb-3 flex gap-2">
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -96,6 +78,44 @@
             id="taxNumber"
           />
           <span class="text-red-700">{{ errors.taxNumber }}</span>
+        </div>
+        <div class="basis-1/2">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("invoiceNumber") }}</label
+          >
+          <Field
+            required
+            :rules="isRequired"
+            type="text"
+            v-model="seller.invoiceNumber"
+            :placeholder="$t('invoiceNumber')"
+            class="default-input w-full"
+            :class="errors.invoiceNumber ? 'ring-2 ring-red-500' : ''"
+            name="invoiceNumber"
+            id="invoiceNumber"
+          />
+          <span class="text-red-700">{{ errors.invoiceNumber }}</span>
+        </div>
+      </div>
+      <div class="mb-3 flex gap-2">
+        <div class="basis-1/2">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("purchaseDate") }}</label
+          >
+          <Field
+            required
+            :rules="isRequired"
+            type="date"
+            v-model="seller.purchaseDate"
+            :placeholder="$t('purchaseDate')"
+            class="default-input w-full"
+            :class="errors.purchaseDate ? 'ring-2 ring-red-500' : ''"
+            name="purchaseDate"
+            id="purchaseDate"
+          />
+          <span class="text-red-700">{{ errors.purchaseDate }}</span>
         </div>
       </div>
       <h2
@@ -488,6 +508,7 @@ export default {
         invoiceNumber: "",
         fiscalNumber: "",
         taxNumber: "",
+        purchaseDate: "",
         search: "",
       },
       products: [
@@ -581,11 +602,7 @@ export default {
       const sum = products.reduce((accumulator, object) => {
         return (
           accumulator +
-          this.roundTo4(
-            Number(object.purchasedPrice) *
-              Number(1 + object.tax / 100) *
-              Number(object.stock)
-          )
+          this.roundTo4(Number(object.purchasedPrice) * Number(object.stock))
         );
       }, 0);
       return sum?.toFixed(2);

@@ -27,6 +27,8 @@ def createPurchase():
     current_user = currentUser(request)
 
     current_time = datetime.now()
+    purchase_date_split = seller["purchaseDate"].split("-")
+    purchase_date = datetime.combine(date(year=int(purchase_date_split[0]), month=int(purchase_date_split[1]), day=int(purchase_date_split[2])), time.min)
 
     purchase = Purchase(
         total_amount=total_amount,
@@ -35,7 +37,7 @@ def createPurchase():
         seller_fiscal_number=seller["fiscalNumber"],
         seller_tax_number=seller["taxNumber"],
         user=current_user,
-        date_created=current_time,
+        date_created=purchase_date,
         date_modified=current_time,
     )
 
@@ -54,6 +56,7 @@ def createPurchase():
             expiration_date = None
 
         product_query = Product.query.filter_by(name=product["productName"]).first()
+        measure = str(product["measure"])
 
         found_with_barcode = Product.query.filter_by(barcode=product["barcode"]).first()
         if found_with_barcode and found_with_barcode.name != product["productName"]:
@@ -76,7 +79,7 @@ def createPurchase():
                 product_purchased_price=product_purchased_price,
                 product_selling_price=product["sellingPrice"],
                 product_stock=product_stock,
-                product_measure=product["measure"],
+                product_measure=measure,
                 tax_amount=tax_amount,
                 total_amount=Decimal(product_purchased_price * product_stock).quantize(FOURPLACES),
                 date_created=current_time,
@@ -89,7 +92,7 @@ def createPurchase():
             product_query.purchased_price_wo_tax = product_purchased_price_wo_tax
             product_query.purchased_price = product_purchased_price
             product_query.selling_price = product["sellingPrice"]
-            product_query.measure = product["measure"],
+            product_query.measure=measure
             product_query.stock += product_stock
             product_query.expiration_date = expiration_date
         else:
@@ -101,7 +104,7 @@ def createPurchase():
                 purchased_price_wo_tax=product_purchased_price_wo_tax, 
                 purchased_price=product_purchased_price, 
                 selling_price= product["sellingPrice"],
-                measure=product["measure"],
+                measure=measure,
                 expiration_date=expiration_date,
                 date_created=current_time,
                 date_modified=current_time,
@@ -119,7 +122,7 @@ def createPurchase():
                 product_purchased_price=created_product.purchased_price,
                 product_selling_price=created_product.selling_price,
                 product_stock=created_product.stock,
-                product_measure=created_product.measure,
+                product_measure=measure,
                 tax_amount=tax_amount,
                 total_amount=Decimal(product_purchased_price * product_stock).quantize(FOURPLACES),
                 date_created=current_time,
@@ -162,7 +165,7 @@ def getPurchases():
     custom_end_date = request.args.get('endDate', type=str)
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
-    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
@@ -189,7 +192,7 @@ def getPurchases():
         ))\
         .order_by(sort)\
         .filter(Purchase.date_created <= date_end)\
-        .filter(Purchase.date_created > date_start)\
+        .filter(Purchase.date_created >= date_start)\
         .with_entities(
             Purchase.id.label("id"), 
             Purchase.date_created.label("date_created"), 
@@ -227,7 +230,7 @@ def getPurchasesDetailed():
     custom_end_date = request.args.get('endDate', type=str)
     custom_start_date = custom_start_date.split("-")
     custom_end_date = custom_end_date.split("-")
-    sort_column = request.args.get('sort_column', "id", type=str)
+    sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
@@ -254,7 +257,7 @@ def getPurchasesDetailed():
         ))\
         .order_by(sort)\
         .filter(Purchase.date_created <= date_end)\
-        .filter(Purchase.date_created > date_start)\
+        .filter(Purchase.date_created >= date_start)\
         .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))

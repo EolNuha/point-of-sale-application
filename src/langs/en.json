@@ -262,5 +262,6 @@
 	"measure": "Measure",
 	"pcs": "Pcs",
 	"kg": "Kg",
-	"liter": "Liter"
+	"liter": "Liter",
+	"purchaseDate": "Purchase Date"
 }

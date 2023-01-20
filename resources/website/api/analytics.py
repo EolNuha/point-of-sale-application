@@ -7,8 +7,11 @@ import sqlalchemy as sa
 from decimal import *
 from website.helpers import get_percentage_change, get_curr_prev_chart, get_curr_prev_dates
 from website.token import currentUser
+import decimal
 
 analytics = Blueprint('analytics', __name__)
+Decimal = decimal.Decimal
+TWOPLACES = Decimal(10) ** -2
 
 @analytics.route('/analytics/sales', methods=["GET"])
 def getSales():
@@ -113,6 +116,8 @@ def getSalesGrossProfit():
 
 @analytics.route('/analytics/sales/<string:day>', methods=["GET"])
 def getSaleStats(day):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     startdate = day.split("-")
 
     date_start = datetime.combine(date(year=int(startdate[0]), month=int(startdate[1]), day=int(startdate[2])), time.min)
@@ -124,33 +129,28 @@ def getSaleStats(day):
             Sale.id.label("id"), 
             Sale.date_created.label("date_created"), 
             sa.func.sum(Sale.total_amount).label("total_amount"),
+            sa.func.sum(Sale.gross_profit_amount).label("gross_profit_amount"),
+            sa.func.sum(Sale.net_profit_amount).label("net_profit_amount"),
         )\
-        .group_by(sa.func.strftime("%Y-%m-%d-%H-%M", Sale.date_created))\
-        .all()
-    gross_profit = Sale.query.filter(Sale.date_created <= date_end)\
-        .filter(Sale.date_created >= date_start)\
-        .with_entities(
-            Sale.id.label("id"), 
-            Sale.date_created.label("date_created"), 
-            sa.func.sum(Sale.gross_profit_amount).label("total_amount"),
-        )\
-        .group_by(sa.func.strftime("%Y-%m-%d-%H-%M", Sale.date_created))\
+        .group_by(sa.func.strftime("%H-%M", Sale.date_created))\
         .all()
 
     sale_analytics = {"options": [], "series": [], "info": {}}
 
     curr_series = []
+    gross_series = []
+    net_series = []
 
     for item in sales:
         sale_analytics["options"].append(item.date_created.strftime('%H:%M'))
-        curr_series.append(item.total_amount)
-
-    gross_series = [item.total_amount for item in gross_profit]
+        curr_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
+        gross_series.append(Decimal(item.gross_profit_amount).quantize(TWOPLACES))
+        net_series.append(Decimal(item.net_profit_amount).quantize(TWOPLACES))
 
     sale_analytics["series"].append({"name": "revenue", "data": curr_series})
     sale_analytics["series"].append({"name": "grossProfit", "data": gross_series})
-    curr_total = sum(curr_series)
-    sale_analytics["info"].update({"chartName": f"{day}--sale-revenue", "currTotal": curr_total, "grossTotal": sum(gross_series)})
+    sale_analytics["series"].append({"name": "netProfit", "data": net_series})
+    sale_analytics["info"].update({"chartName": f"{day}--sale-revenue", "currTotal": sum(curr_series), "grossTotal": sum(gross_series), "netTotal": sum(net_series)})
     return jsonify(sale_analytics)
 
 

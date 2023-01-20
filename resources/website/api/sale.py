@@ -89,9 +89,9 @@ def createSale():
                 sale_taxes.append({key_v: Decimal(item.tax_amount).quantize(FOURPLACES) * Decimal(item.product_quantity).quantize(FOURPLACES)})
     
     sale.subtotal_amount = sum(subtotal)
-    sale.gross_profit_amount = Decimal(total_amount) - sum(grosstotal)
+    sale.gross_profit_amount = Decimal(total_amount).quantize(FOURPLACES) - sum(grosstotal)
     sale_taxes = sumListOfDicts(sale_taxes)
-    sale.net_profit_amount = sale.gross_profit_amount - sum(sale_taxes.values())
+    sale.net_profit_amount = Decimal(sale.gross_profit_amount - sum(sale_taxes.values())).quantize(FOURPLACES)
     for key, value in sale_taxes.items():
         split_key = key.split("+")
         db.session.add(
@@ -148,7 +148,7 @@ def getSales():
         User.last_name.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= date_end)\
-        .filter(Sale.date_created > date_start)\
+        .filter(Sale.date_created >= date_start)\
         .filter(and_(Sale.is_regular.in_(type_filter)))\
         .order_by(sort)\
         .with_entities(
@@ -173,7 +173,7 @@ def getSales():
         item_date = date(year=int(date_split[2][:4]), month=int(date_split[1]), day=int(date_split[0]))
 
         taxes = SaleTax.query.filter(SaleTax.date_created <= datetime.combine(item_date, time.max))\
-            .filter(SaleTax.date_created > datetime.combine(item_date, time.min))\
+            .filter(SaleTax.date_created >= datetime.combine(item_date, time.min))\
             .order_by(SaleTax.tax_name.desc())\
             .with_entities(
             SaleTax.id.label("id"), 
@@ -258,7 +258,7 @@ def getSalesDetailed():
         User.last_name.ilike(looking_for),
         ))\
         .filter(Sale.date_created <= date_end)\
-        .filter(Sale.date_created > date_start)\
+        .filter(Sale.date_created >= date_start)\
         .filter(and_(Sale.is_regular.in_(type_filter)))\
         .order_by(sort)\
         .paginate(page=page, per_page=per_page)

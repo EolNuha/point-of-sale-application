@@ -3,6 +3,10 @@ from decimal import *
 import pandas as pd
 from datetime import datetime, date, time, timedelta
 from collections import Counter
+import decimal
+Decimal = decimal.Decimal
+TWOPLACES = Decimal(10) ** -2
+
 def get_page_range(page, total):
     if page < 4 or page in range(total - 2, total + 1): show = 5
     else: show = 3
@@ -38,6 +42,8 @@ def get_percentage_change(current, previous):
         return ""
 
 def get_curr_prev_chart(date_start, date_end, curr, prev):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     date_ranges = pd.date_range(date_start, date_end)
     date_ranges = [d.strftime("%d/%m/%Y") for d in date_ranges]
     date_diff = abs((date_start - date_end).days)
@@ -51,12 +57,12 @@ def get_curr_prev_chart(date_start, date_end, curr, prev):
 
     for item in curr:
         curr_options.append(item.date_created.strftime('%d/%m/%Y'))
-        curr_incomp_series.append(item.total_amount)
+        curr_incomp_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
 
     for item in prev:
         option_date = item.date_created + timedelta(date_diff)
         prev_options.append(option_date.strftime('%d/%m/%Y'))
-        prev_incomp_series.append(item.total_amount)
+        prev_incomp_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
     
     for index, d in enumerate(date_ranges):
         if d in curr_options:

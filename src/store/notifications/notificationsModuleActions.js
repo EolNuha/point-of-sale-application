@@ -74,19 +74,6 @@ export default {
         });
     });
   },
-  checkProductExpiration({ commit, dispatch }, data) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`/api/notifications/product-expire`, { params: data })
-        .then(async (response) => {
-          dispatch("getNotifications");
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  },
   updateNotification({ commit, dispatch }, data) {
     return new Promise((resolve, reject) => {
       axios({

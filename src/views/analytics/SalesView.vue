@@ -29,6 +29,12 @@
             )
           }}€
         </p>
+        <p>
+          {{ $t("net") }}:
+          {{
+            Number($store.state.analyticsModule.sale.info.netTotal).toFixed(2)
+          }}€
+        </p>
       </template>
     </AreaChartSpecificDate>
   </div>

@@ -605,7 +605,7 @@ export default {
           this.roundTo4(Number(object.purchasedPrice) * Number(object.stock))
         );
       }, 0);
-      return sum?.toFixed(2);
+      return sum;
     },
     async searchSellers(search, loading) {
       this.seller.search = search;

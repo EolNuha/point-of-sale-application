@@ -210,7 +210,7 @@ def getPurchases():
         item_date = date(year=int(date_split[2][:4]), month=int(date_split[1]), day=int(date_split[0]))
 
         taxes = PurchaseTax.query.filter(PurchaseTax.date_created <= datetime.combine(item_date, time.max))\
-            .filter(PurchaseTax.date_created > datetime.combine(item_date, time.min))\
+            .filter(PurchaseTax.date_created >= datetime.combine(item_date, time.min))\
             .order_by(PurchaseTax.tax_name.desc())\
             .with_entities(
             PurchaseTax.id.label("id"), 

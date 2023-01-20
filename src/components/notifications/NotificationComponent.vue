@@ -7,7 +7,8 @@
       $toggleDropdown({
         targetEl: `dropdownNotification`,
         triggerEl: `dropdownNotificationButton`,
-      })
+      });
+      getNotifications();
     "
   >
     <IconC iconName="BellIcon" iconType="solid" iconClass="w-6 h-6" />
@@ -38,7 +39,15 @@
       {{ $t("notifications") }}
     </div>
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
+      <div v-if="isLoading" class="flex justify-center items-center py-5">
+        <IconC
+          iconType="custom"
+          iconName="SpinnerIcon"
+          iconClass="w-6 h-6 text-gray-200 animate-spin fill-theme-600"
+        />
+      </div>
       <router-link
+        v-else
         class="flex py-3 px-4"
         :class="
           !item.read
@@ -81,6 +90,12 @@
 <script>
 import moment from "moment";
 export default {
+  data() {
+    return {
+      isLoading: false,
+      isDropdownOpened: false,
+    };
+  },
   computed: {
     notifications() {
       return this.$store.state.notificationsModule.notifications.data || [];
@@ -99,6 +114,17 @@ export default {
         .replace("days", this.$t("days"))
         .replace("Product", this.$t("product"))
         .replace("has expired", this.$t("hasExpired"));
+    },
+    async getNotifications() {
+      if (!this.isDropdownOpened) {
+        this.isLoading = true;
+        await this.$store
+          .dispatch("notificationsModule/getNotifications")
+          .then(() => {
+            this.isLoading = false;
+          });
+      }
+      this.isDropdownOpened = !this.isDropdownOpened;
     },
   },
 };

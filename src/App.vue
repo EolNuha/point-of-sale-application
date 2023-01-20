@@ -48,7 +48,6 @@ export default {
       logoutUser();
       this.$router.push({ name: "signin" });
     });
-    this.$store.dispatch("notificationsModule/checkProductExpiration");
     const initUserTheme =
       this.getTheme("theme-preference") || this.getMediaPreference();
     const initTextTheme = this.getTheme("text-theme") || this.textTheme;

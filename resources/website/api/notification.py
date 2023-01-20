@@ -66,7 +66,7 @@ def updateNotification(id):
     db.session.commit()
     return "Success", 200
 
-@notification.route('/notifications/product-expire', methods=["GET"])
+@notification.before_app_first_request
 def checkProductExpireNotification():
     storage = Settings.query.filter_by(settings_type="notification").filter_by(settings_name="storage").first().settings_value
     if Notification.query.count() >= int(storage):

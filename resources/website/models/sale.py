@@ -40,6 +40,8 @@ class SaleItem(db.Model):
     product_measure = db.Column(db.Enum("pcs", "kg", "liter"), default="pcs")
     tax_amount = db.Column(db.Numeric(precision=10, scale=4))
     total_amount = db.Column(db.Numeric(precision=10, scale=4))
+    gross_profit_amount = db.Column(db.Numeric(precision=10, scale=4))
+    net_profit_amount = db.Column(db.Numeric(precision=10, scale=4))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
 

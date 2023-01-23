@@ -66,6 +66,8 @@ def createSale():
             price_without_tax=price_without_tax,
             tax_amount=tax_amount,
             total_amount=Decimal(product_query.selling_price * product_quantity).quantize(FOURPLACES),
+            gross_profit_amount=Decimal(product_query.selling_price * product_quantity).quantize(FOURPLACES),
+            net_profit_amount=Decimal(product_query.purchased_price * product_quantity).quantize(FOURPLACES) - tax_amount,
             date_created=current_time,
             date_modified=current_time,
         )

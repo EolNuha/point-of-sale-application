@@ -293,6 +293,8 @@ def getSellerStats(name):
 
 @analytics.route('/analytics/products-sold-by-amount', methods=["GET"])
 def getTopProducts():
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
     date_end = request_dates["date_end"]
@@ -306,14 +308,71 @@ def getTopProducts():
             sa.func.sum(SaleItem.total_amount).label("total_amount"),
         )\
         .group_by(SaleItem.product_name)\
-        .order_by(sa.func.sum(SaleItem.total_amount)).limit(10).all()
+        .order_by(sa.func.sum(SaleItem.total_amount).desc()).limit(10).all()
 
     products_analytics = {"options": [], "series": [], "info": {}}
     curr_series = []
 
     for item in products:
         products_analytics["options"].append(item.product_name)
-        curr_series.append(item.total_amount)
+        curr_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
+
+    products_analytics["series"].append({"name": "revenue", "data": curr_series})
+    products_analytics["info"].update({"chartName": "top-products-revenue", "currTotal": sum(curr_series)})
+    return jsonify(products_analytics)
+
+
+@analytics.route('/analytics/products-sold-by-gross-profit', methods=["GET"])
+def getTopProductsByGrossProfit():
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+
+    products = SaleItem.query.filter(SaleItem.date_created <= date_end)\
+        .filter(SaleItem.date_created >= date_start)\
+        .with_entities(
+            SaleItem.id.label("id"), 
+            SaleItem.date_created.label("date_created"), 
+            SaleItem.product_name.label("product_name"), 
+            sa.func.sum(SaleItem.gross_profit_amount).label("gross_profit_amount"),
+        )\
+        .group_by(SaleItem.product_name)\
+        .order_by(sa.func.sum(SaleItem.gross_profit_amount).desc()).limit(10).all()
+
+    products_analytics = {"options": [], "series": [], "info": {}}
+    curr_series = []
+
+    for item in products:
+        products_analytics["options"].append(item.product_name)
+        curr_series.append(Decimal(item.gross_profit_amount).quantize(TWOPLACES))
+
+    products_analytics["series"].append({"name": "revenue", "data": curr_series})
+    products_analytics["info"].update({"chartName": "top-products-revenue", "currTotal": sum(curr_series)})
+    return jsonify(products_analytics)
+
+@analytics.route('/analytics/products-sold-by-net-profit', methods=["GET"])
+def getTopProductsByNetProfit():
+    request_dates = get_curr_prev_dates(request)
+    date_start = request_dates["date_start"]
+    date_end = request_dates["date_end"]
+
+    products = SaleItem.query.filter(SaleItem.date_created <= date_end)\
+        .filter(SaleItem.date_created >= date_start)\
+        .with_entities(
+            SaleItem.id.label("id"), 
+            SaleItem.date_created.label("date_created"), 
+            SaleItem.product_name.label("product_name"), 
+            sa.func.sum(SaleItem.net_profit_amount).label("net_profit_amount"),
+        )\
+        .group_by(SaleItem.product_name)\
+        .order_by(sa.func.sum(SaleItem.net_profit_amount).desc()).limit(10).all()
+
+    products_analytics = {"options": [], "series": [], "info": {}}
+    curr_series = []
+
+    for item in products:
+        products_analytics["options"].append(item.product_name)
+        curr_series.append(Decimal(item.net_profit_amount).quantize(TWOPLACES))
 
     products_analytics["series"].append({"name": "revenue", "data": curr_series})
     products_analytics["info"].update({"chartName": "top-products-revenue", "currTotal": sum(curr_series)})

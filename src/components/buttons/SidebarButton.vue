@@ -8,10 +8,15 @@
       <IconC
         iconType="outline"
         :iconName="item.icon"
-        iconClass="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+        :iconClass="
+          isOpened
+            ? 'flex-shrink-0 w-6 h-6 text-black transition duration-75 group-hover:text-gray-900 dark:text-white dark:group-hover:text-white'
+            : 'flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'
+        "
       />
       <span
         class="flex-1 ml-3 text-left whitespace-nowrap"
+        :class="isOpened ? 'font-medium text-black' : 'font-normal'"
         sidebar-toggle-item=""
         >{{ $t(item.title) }}</span
       >
@@ -19,7 +24,7 @@
         iconName="ChevronRightIcon"
         :iconClass="
           isOpened
-            ? 'w-4 h-4 transform rotate-90 transition duration-200 ease-in-out'
+            ? 'w-4 h-4 transform rotate-90 transition duration-200 ease-in-out text-theme-500'
             : 'w-4 h-4 transition duration-200 ease-in-out'
         "
       />
@@ -60,6 +65,9 @@ export default {
     return {
       isOpened: false,
     };
+  },
+  created() {
+    console.log(this.item);
   },
 };
 </script>

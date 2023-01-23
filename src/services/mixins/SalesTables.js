@@ -37,7 +37,7 @@ export default {
           taxTd.innerHTML = `${this.getTaxValue(
             element.taxes,
             tax.settingsAlias
-          )} €`;
+          )}`;
           bodyTr.appendChild(taxTd);
         }
         for await (const item of [
@@ -47,7 +47,7 @@ export default {
           "netProfitAmount",
         ]) {
           let itemTd = document.createElement("td");
-          itemTd.innerHTML = `${element[item]} €`;
+          itemTd.innerHTML = `${element[item]}`;
           bodyTr.appendChild(itemTd);
         }
         tbody.appendChild(bodyTr);
@@ -59,7 +59,7 @@ export default {
       totalTr.appendChild(bottomTd);
       for await (const tax of this.allSales.pagination.taxes) {
         let taxTd = document.createElement("th");
-        taxTd.innerHTML = `${tax.taxValue} €`;
+        taxTd.innerHTML = `${tax.taxValue}`;
         totalTr.appendChild(taxTd);
       }
       for await (const item of [
@@ -69,7 +69,7 @@ export default {
         "salesTotalNetProfit",
       ]) {
         let itemTh = document.createElement("th");
-        itemTh.innerHTML = `${this.allSales.pagination[item]} €`;
+        itemTh.innerHTML = `${this.allSales.pagination[item]}`;
         totalTr.appendChild(itemTh);
       }
 
@@ -143,7 +143,7 @@ export default {
           taxTd.innerHTML = `${this.getTaxValue(
             element.taxes,
             tax.settingsAlias
-          )} €`;
+          )}`;
           bodyTr.appendChild(taxTd);
         }
 
@@ -154,7 +154,7 @@ export default {
           "netProfitAmount",
         ]) {
           let itemTd = document.createElement("td");
-          itemTd.innerHTML = `${element[item]} €`;
+          itemTd.innerHTML = `${element[item]}`;
           bodyTr.appendChild(itemTd);
         }
         tbody.appendChild(bodyTr);
@@ -175,7 +175,7 @@ export default {
       totalTr.appendChild(empty2Td);
       for await (const tax of this.allSales.pagination.taxes) {
         let taxTd = document.createElement("th");
-        taxTd.innerHTML = `${tax.taxValue} €`;
+        taxTd.innerHTML = `${tax.taxValue}`;
         totalTr.appendChild(taxTd);
       }
       for await (const item of [
@@ -185,7 +185,7 @@ export default {
         "salesTotalNetProfit",
       ]) {
         let itemTh = document.createElement("th");
-        itemTh.innerHTML = `${this.allSales.pagination[item]} €`;
+        itemTh.innerHTML = `${this.allSales.pagination[item]}`;
         totalTr.appendChild(itemTh);
       }
 

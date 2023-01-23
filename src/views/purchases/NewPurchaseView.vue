@@ -508,7 +508,7 @@ export default {
         invoiceNumber: "",
         fiscalNumber: "",
         taxNumber: "",
-        purchaseDate: "",
+        purchaseDate: new Date(),
         search: "",
       },
       products: [
@@ -554,6 +554,7 @@ export default {
     },
   },
   async created() {
+    this.seller.purchaseDate = this.minDate;
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
         settingsType: "measure",

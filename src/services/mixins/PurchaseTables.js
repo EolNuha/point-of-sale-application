@@ -12,7 +12,7 @@ export default {
       headTr.appendChild(dateTh);
 
       for await (const tax of this.taxes) {
-        let taxTh = document.createElement("td");
+        let taxTh = document.createElement("th");
         taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
         headTr.appendChild(taxTh);
       }
@@ -35,13 +35,13 @@ export default {
           taxTd.innerHTML = `${this.getTaxValue(
             element.taxes,
             tax.settingsAlias
-          )} €`;
+          )}`;
           bodyTr.appendChild(taxTd);
         }
         let subtotalTd = document.createElement("td");
-        subtotalTd.innerHTML = `${element.subTotalAmount} €`;
+        subtotalTd.innerHTML = `${element.subTotalAmount}`;
         let totalTd = document.createElement("td");
-        totalTd.innerHTML = `${element.totalAmount} €`;
+        totalTd.innerHTML = `${element.totalAmount}`;
         bodyTr.appendChild(subtotalTd);
         bodyTr.appendChild(totalTd);
         tbody.appendChild(bodyTr);
@@ -77,7 +77,7 @@ export default {
       headTr.appendChild(invoiceTh);
 
       for await (const tax of this.taxes) {
-        let taxTh = document.createElement("td");
+        let taxTh = document.createElement("th");
         taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
         headTr.appendChild(taxTh);
       }
@@ -112,13 +112,13 @@ export default {
           taxTd.innerHTML = `${this.getTaxValue(
             element.taxes,
             tax.settingsAlias
-          )} €`;
+          )}`;
           bodyTr.appendChild(taxTd);
         }
         let subtotalTd = document.createElement("td");
-        subtotalTd.innerHTML = `${element.subTotalAmount} €`;
+        subtotalTd.innerHTML = `${element.subTotalAmount}`;
         let totalTd = document.createElement("td");
-        totalTd.innerHTML = `${element.totalAmount} €`;
+        totalTd.innerHTML = `${element.totalAmount}`;
         bodyTr.appendChild(subtotalTd);
         bodyTr.appendChild(totalTd);
         tbody.appendChild(bodyTr);

@@ -50,6 +50,9 @@ def createDemoSettings():
         ["pcs", "pcs", "measure", "pcs"],
         ["kg", "kg", "measure", "kg"],
         ["liter", "liter", "measure", "liter"],
+        ["purchase", "purchase", "purchasetype", "purchase"],
+        ["investment", "investment", "purchasetype", "investment"],
+        ["expense", "expense", "purchasetype", "expense"],
         ["8", "eight", "tax", 8],
         ["18", "eighteen", "tax", 18],
     ]

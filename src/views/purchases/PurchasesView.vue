@@ -22,9 +22,46 @@
                 })
               "
               type="text"
-              class="default-input w-full pl-10"
+              class="default-input w-full px-10"
               :placeholder="$t('search')"
             />
+            <div
+              v-if="showFilters"
+              class="flex absolute inset-y-0 right-10 items-center pr-3 pointer-cursor"
+            >
+              <v-select
+                class="min-w-[8rem] w-fit default-input"
+                v-model="typeFilters"
+                :placeholder="$t('type')"
+                :options="purchaseTypes"
+                :reduce="(t) => t.settingsValue"
+                :label="`settingsValue`"
+                :clearable="false"
+                :multiple="true"
+              >
+                <template v-slot:option="option">
+                  {{ $t(option.settingsValue) }}
+                </template>
+                <template v-slot:selected-option="option">
+                  {{ $t(option.settingsValue) }}
+                </template></v-select
+              >
+            </div>
+            <button
+              class="flex absolute inset-y-0 right-0 items-center pointer-cursor p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-600"
+              @click="showFilters = !showFilters"
+            >
+              <IconC
+                v-if="!showFilters"
+                iconName="FunnelIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+              <IconC
+                v-else
+                iconName="XMarkIcon"
+                iconClass="w-5 h-5 text-gray-500 dark:text-gray-400"
+              />
+            </button>
           </div>
         </div>
         <div class="flex flex-row items-center gap-2">
@@ -155,6 +192,9 @@ export default {
       sortDir: "desc",
       allPurchases: [],
       detailedView: true,
+      showFilters: false,
+      typeFilters: [],
+      purchaseTypes: [],
     };
   },
   components: {
@@ -170,8 +210,21 @@ export default {
         this.getPurchases(1);
       },
     },
+    typeFilters: {
+      async handler() {
+        this.currentPage = 1;
+        this.getPurchases(1);
+      },
+    },
   },
   async created() {
+    await this.$store
+      .dispatch("settingsModule/getSettingsType", {
+        settingsType: "purchasetype",
+      })
+      .then((response) => {
+        this.purchaseTypes = response.data;
+      });
     this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",
     });
@@ -231,6 +284,7 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          type_filter: this.typeFilters,
         })
         .then(() => {
           this.isTableLoading = false;

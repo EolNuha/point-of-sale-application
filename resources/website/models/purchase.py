@@ -9,6 +9,7 @@ class Purchase(db.Model):
     seller_invoice_number = db.Column(db.String(200))
     seller_fiscal_number = db.Column(db.Integer)
     seller_tax_number = db.Column(db.Integer)
+    purchase_type = db.Column(db.Enum("purchase", "investment", "expense"), default="purchase")
     total_amount = db.Column(db.Numeric(precision=10, scale=4))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=4))
     date_created = db.Column(db.DateTime, default=datetime.now())

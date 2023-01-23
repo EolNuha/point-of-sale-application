@@ -6,7 +6,7 @@ from website.helpers import getPaginatedDict, sumListOfDicts
 from website.jsonify.settings import getTaxesList
 from website.jsonify.purchase import getPurchasesList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
 from website import db
-from sqlalchemy import or_, asc, desc, func
+from sqlalchemy import or_, asc, desc, func, and_
 import decimal
 from datetime import datetime, date, time
 from website.token import currentUser
@@ -36,6 +36,7 @@ def createPurchase():
         seller_invoice_number=seller["invoiceNumber"],
         seller_fiscal_number=seller["fiscalNumber"],
         seller_tax_number=seller["taxNumber"],
+        purchase_type=seller["purchaseType"],
         user=current_user,
         date_created=purchase_date,
         date_modified=current_time,
@@ -167,6 +168,8 @@ def getPurchases():
     custom_end_date = custom_end_date.split("-")
     sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
+    type_filter = request.args.getlist('type_filter[]')
+    if not type_filter: type_filter = ['purchase', 'investment', 'expense']
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
@@ -193,6 +196,7 @@ def getPurchases():
         .order_by(sort)\
         .filter(Purchase.date_created <= date_end)\
         .filter(Purchase.date_created >= date_start)\
+        .filter(and_(Purchase.purchase_type.in_(type_filter)))\
         .with_entities(
             Purchase.id.label("id"), 
             Purchase.date_created.label("date_created"), 
@@ -232,6 +236,8 @@ def getPurchasesDetailed():
     custom_end_date = custom_end_date.split("-")
     sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
+    type_filter = request.args.getlist('type_filter[]')
+    if not type_filter: type_filter = ['purchase', 'investment', 'expense']
 
     sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
@@ -258,6 +264,7 @@ def getPurchasesDetailed():
         .order_by(sort)\
         .filter(Purchase.date_created <= date_end)\
         .filter(Purchase.date_created >= date_start)\
+        .filter(and_(Purchase.purchase_type.in_(type_filter)))\
         .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))
@@ -268,6 +275,8 @@ def getDailyPurchases():
     purchase_date = purchase_date.split(".")
     sort_column = request.args.get('sort_column', "id", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
+    type_filter = request.args.getlist('type_filter[]')
+    if not type_filter: type_filter = ['purchase', 'investment', 'expense']
 
     if sort_column == "tax":
         sort_column = func.lower(PurchaseTax.tax_value)
@@ -298,6 +307,7 @@ def getDailyPurchases():
         .order_by(sort)\
         .filter(Purchase.date_created <= purchase_date_end)\
         .filter(Purchase.date_created >= purchase_date_start)\
+        .filter(and_(Purchase.purchase_type.in_(type_filter)))\
         .paginate(page=page, per_page=per_page)
 
     return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))

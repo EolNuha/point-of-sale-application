@@ -117,6 +117,41 @@
           />
           <span class="text-red-700">{{ errors.purchaseDate }}</span>
         </div>
+        <div class="basis-1/2">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >{{ $t("purchaseType") }}</label
+          >
+          <Field
+            required
+            :rules="isRequired"
+            type="number"
+            step="1"
+            v-model="seller.purchaseType"
+            class="hidden"
+            :name="`${index}purchaseType`"
+            :id="`${index}purchaseType`"
+          />
+          <v-select
+            class="block w-full default-input !p-[1px]"
+            :class="errors[`${index}purchaseType`] ? 'ring-2 ring-red-500' : ''"
+            v-model="seller.purchaseType"
+            :options="purchaseTypes"
+            :reduce="(t) => t.settingsValue"
+            :label="`settingsValue`"
+            :clearable="false"
+            type="text"
+            :placeholder="$t('purchaseType')"
+          >
+            <template v-slot:option="option">
+              {{ $t(option.settingsValue) }}
+            </template>
+            <template v-slot:selected-option="option">
+              {{ $t(option.settingsValue) }}
+            </template>
+          </v-select>
+          <span class="text-red-700">{{ errors[`${index}purchaseType`] }}</span>
+        </div>
       </div>
       <h2
         class="mb-0 mt-7 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
@@ -503,12 +538,14 @@ export default {
     return {
       isLoading: false,
       measures: [],
+      purchaseTypes: [],
       seller: {
         sellerName: "",
         invoiceNumber: "",
         fiscalNumber: "",
         taxNumber: "",
         purchaseDate: new Date(),
+        purchaseType: "purchase",
         search: "",
       },
       products: [
@@ -561,6 +598,13 @@ export default {
       })
       .then((response) => {
         this.measures = response.data;
+      });
+    await this.$store
+      .dispatch("settingsModule/getSettingsType", {
+        settingsType: "purchasetype",
+      })
+      .then((response) => {
+        this.purchaseTypes = response.data;
       });
     await this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",

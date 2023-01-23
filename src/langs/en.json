@@ -265,5 +265,8 @@
 	"pcs": "Pcs",
 	"kg": "Kg",
 	"liter": "Liter",
-	"purchaseDate": "Purchase Date"
+	"purchaseDate": "Purchase Date",
+	"investment": "Investment",
+	"expense": "Expense",
+	"purchaseType": "Purchase type"
 }

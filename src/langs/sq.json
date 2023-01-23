@@ -264,5 +264,8 @@
 	"pcs": "Copë",
 	"kg": "Kg",
 	"liter": "Litër",
-	"purchaseDate": "Date e blerjes"
+	"purchaseDate": "Date e blerjes",
+	"investment": "Investim",
+	"expense": "Shpenzim",
+	"purchaseType": "Lloji i blerjes"
 }

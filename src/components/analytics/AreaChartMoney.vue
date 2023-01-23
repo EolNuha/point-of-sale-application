@@ -31,28 +31,28 @@
         </div>
         <div class="inline-flex items-center flex-col" v-if="!isFetching">
           <h3 class="text-3xl text-gray-900 dark:text-white">
-            {{ Number(chartData.info.currTotal).toFixed(2) }}€
+            {{ Number(chartData?.info?.currTotal).toFixed(2) }}€
           </h3>
           <p
             class="inline-flex items-center text-green-500"
-            v-if="chartData.info.percentageDiff > 0"
+            v-if="chartData?.info?.percentageDiff > 0"
           >
-            +{{ chartData.info.percentageDiff }}%<IconC
+            +{{ chartData?.info?.percentageDiff }}%<IconC
               iconName="ArrowLongUpIcon"
               iconClass="w-5 h-5"
             />
           </p>
           <p
             class="inline-flex items-center text-gray-500"
-            v-if="chartData.info.percentageDiff === 0"
+            v-if="chartData?.info?.percentageDiff === 0"
           >
-            {{ chartData.info.percentageDiff }}%
+            {{ chartData?.info?.percentageDiff }}%
           </p>
           <p
             class="inline-flex items-center text-red-700"
-            v-if="chartData.info.percentageDiff < 0"
+            v-if="chartData?.info?.percentageDiff < 0"
           >
-            {{ chartData.info.percentageDiff }}%<IconC
+            {{ chartData?.info?.percentageDiff }}%<IconC
               iconName="ArrowLongDownIcon"
               iconClass="w-5 h-5"
             />

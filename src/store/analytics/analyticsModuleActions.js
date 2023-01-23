@@ -81,6 +81,32 @@ export default {
         });
     });
   },
+  getProductsbyGrossProfit({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/products-sold-by-gross-profit`, { params: data })
+        .then(async (response) => {
+          commit("SET_PRODUCTS_SOLD_BY_GROSS_PROFIT", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getProductsbyNetProfit({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/products-sold-by-net-profit`, { params: data })
+        .then(async (response) => {
+          commit("SET_PRODUCTS_SOLD_BY_NET_PROFIT", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getProductStats({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

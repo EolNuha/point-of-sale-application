@@ -8,10 +8,25 @@
     >
     </AreaChartMoney>
     <AreaChartMoney
+      :dispatchModule="`analyticsModule/getProductsbyGrossProfit`"
+      :chartData="$store.state.analyticsModule.productsSoldbyGrossProfit"
+      :titleContent="`${$t('topProducts')} - ${$t('grossProfit')}`"
+      :textContent="$t('topProductsMostGrossProfit')"
+    >
+    </AreaChartMoney>
+    <AreaChartMoney
+      :dispatchModule="`analyticsModule/getProductsbyNetProfit`"
+      :chartData="$store.state.analyticsModule.productsSoldbyNetProfit"
+      :titleContent="`${$t('topProducts')} - ${$t('netProfit')}`"
+      :textContent="$t('topProductsMostNetProfit')"
+    >
+    </AreaChartMoney>
+    <AreaChartMoney
+      v-if="selectedProduct"
       :dispatchModule="`analyticsModule/getProductStats`"
-      :id="selectedProduct.id"
+      :id="selectedProduct?.id"
       :chartData="$store.state.analyticsModule.productStats"
-      :titleContent="`${$t('product')}: ${selectedProduct.name}`"
+      :titleContent="`${$t('product')}: ${selectedProduct?.name}`"
       :textContent="$t('revenueMade')"
     >
       <div
@@ -44,7 +59,7 @@ export default {
       isFetching: true,
       startDate: "",
       endDate: "",
-      selectedProduct: {},
+      selectedProduct: null,
       search: "",
     };
   },

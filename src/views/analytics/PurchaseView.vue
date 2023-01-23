@@ -15,6 +15,7 @@
     >
     </AreaChartSpecificDate>
     <AreaChartMoney
+      v-if="selectedSeller"
       :dispatchModule="`analyticsModule/getSellerStats`"
       :id="selectedSeller.sellerName"
       :chartData="$store.state.analyticsModule.sellerStats"
@@ -54,7 +55,7 @@ export default {
       currentDate: "",
       startDate: "",
       endDate: "",
-      selectedSeller: {},
+      selectedSeller: null,
       search: "",
     };
   },

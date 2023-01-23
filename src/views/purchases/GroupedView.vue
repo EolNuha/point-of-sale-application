@@ -24,31 +24,20 @@
             </template>
           </div>
         </th>
-        <th
-          scope="col"
-          class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
-          v-for="item in taxes"
-          :key="item.settingsValue"
-        >
-          {{ $t("tax") }} {{ item.settingsName }}%
-        </th>
-        <th
-          scope="col"
-          class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
-          @click="sort('subtotal_amount')"
-        >
-          <div class="flex justify-between items-center">
-            {{ $t("subtotalAmount") }}
-            <template v-if="sortColumn === 'subtotal_amount'">
-              <IconC
-                iconName="ArrowLongDownIcon"
-                iconClass="w-4 h-4"
-                v-if="sortDir === 'desc'"
-              />
-              <IconC iconName="ArrowLongUpIcon" iconClass="w-4 h-4" v-else />
-            </template>
-          </div>
-        </th>
+        <template v-for="item in taxes" :key="item.settingsValue">
+          <th
+            scope="col"
+            class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+          >
+            {{ item.settingsName }}%
+          </th>
+          <th
+            scope="col"
+            class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+          >
+            {{ $t("subTotal") }} {{ item.settingsName }}%
+          </th>
+        </template>
         <th
           scope="col"
           class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
@@ -77,10 +66,14 @@
           <td class="py-2 px-6">
             {{ purchase.dateCreated?.substring(0, 10) }}
           </td>
-          <td class="py-2 px-6" v-for="item in taxes" :key="item.settingsValue">
-            {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
-          </td>
-          <td class="py-2 px-6">{{ purchase.subTotalAmount }} €</td>
+          <template v-for="item in taxes" :key="item.settingsValue">
+            <td class="py-2 px-6">
+              {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
+            </td>
+            <td class="py-2 px-6">
+              {{ getTotalWOTaxValue(purchase.taxes, item.settingsAlias) }} €
+            </td>
+          </template>
           <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
           <td class="py-2 px-6">
             <button
@@ -120,6 +113,12 @@ export default {
     getTaxValue(arr, alias) {
       return (
         arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
+      );
+    },
+    getTotalWOTaxValue(arr, alias) {
+      return (
+        arr.find((x) => x.taxAlias === alias)?.totalWithoutTax ||
+        Number(0).toFixed(2)
       );
     },
     sort(col) {

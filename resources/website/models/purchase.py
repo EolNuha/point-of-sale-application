@@ -23,6 +23,7 @@ class PurchaseTax(db.Model):
     tax_name = db.Column(db.String(200))
     tax_alias = db.Column(db.String(200))
     tax_value = db.Column(db.Numeric(precision=10, scale=4))
+    total_without_tax = db.Column(db.Numeric(precision=10, scale=4))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
 

@@ -3,8 +3,7 @@ from website.models.settings import Settings
 from website.models.purchase import Purchase, PurchaseItem, PurchaseTax
 from website.models.product import Product
 from website.helpers import getPaginatedDict, sumListOfDicts
-from website.jsonify.settings import getTaxesList
-from website.jsonify.purchase import getPurchasesList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
+from website.jsonify.purchase import getTaxesList, getPurchasesList, getDailyPurchasesList, getDailyPurchaseDict, getSellersList, getSellerDict
 from website import db
 from sqlalchemy import or_, asc, desc, func, and_
 import decimal
@@ -28,7 +27,7 @@ def createPurchase():
 
     current_time = datetime.now()
     purchase_date_split = seller["purchaseDate"].split("-")
-    purchase_date = datetime.combine(date(year=int(purchase_date_split[0]), month=int(purchase_date_split[1]), day=int(purchase_date_split[2])), time.min)
+    purchase_date = datetime.combine(date(year=int(purchase_date_split[0]), month=int(purchase_date_split[1]), day=int(purchase_date_split[2])), datetime.now().time())
 
     purchase = Purchase(
         total_amount=total_amount,
@@ -139,8 +138,9 @@ def createPurchase():
         subtotal.append(Decimal(item.product_purchased_price_wo_tax * Decimal(item.product_stock)).quantize(FOURPLACES))
         for tax in taxes:
             if item.product_tax == int(tax.settings_value):
-                key_v = tax.settings_name + "+" + tax.settings_alias
-                purchase_taxes.append({key_v: Decimal(item.tax_amount * Decimal(item.product_stock).quantize(FOURPLACES)).quantize(FOURPLACES)})
+                total_tax_amount = Decimal(item.tax_amount * Decimal(item.product_stock).quantize(FOURPLACES)).quantize(FOURPLACES)
+                key_v = tax.settings_name + "+" + tax.settings_alias + "+" + str(Decimal(item.total_amount - total_tax_amount).quantize(FOURPLACES))
+                purchase_taxes.append({key_v: total_tax_amount})
     
     purchase.subtotal_amount = sum(subtotal)
     purchase_taxes = sumListOfDicts(purchase_taxes)
@@ -152,6 +152,7 @@ def createPurchase():
                 tax_name=str(split_key[0]), 
                 tax_alias=str(split_key[1]), 
                 tax_value=value,
+                total_without_tax=Decimal(split_key[2]),
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -221,6 +222,7 @@ def getPurchases():
             PurchaseTax.tax_name.label("tax_name"), 
             PurchaseTax.tax_alias.label("tax_alias"),
             sa.func.sum(PurchaseTax.tax_value).label("tax_value"),
+            sa.func.sum(PurchaseTax.total_without_tax).label("total_without_tax"),
         )\
         .group_by(PurchaseTax.tax_name).all()
         

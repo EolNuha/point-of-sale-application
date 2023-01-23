@@ -264,6 +264,12 @@ export default {
         arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
       );
     },
+    getTotalWOTaxValue(arr, alias) {
+      return (
+        arr.find((x) => x.taxAlias === alias)?.totalWithoutTax ||
+        Number(0).toFixed(2)
+      );
+    },
     getMonth(v) {
       const month = String(v).padStart(2, "0");
       const year = new Date().getFullYear();

@@ -167,7 +167,7 @@
                         <Field
                           required
                           :rules="isRequired"
-                          :name="`${item.id}-purchasedPrice`"
+                          :name="`${item.igid}-purchasedPrice`"
                           :class="
                             errors[`${item.id}-purchasedPrice`]
                               ? 'ring-2 ring-red-500'
@@ -246,22 +246,35 @@
             <div class="basis-3/4 md:basis-1/2 lg:basis-1/3">
               <table class="text-gray-700 dark:text-gray-300 w-full">
                 <tbody>
-                  <tr>
-                    <td class="py-2">{{ $t("subTotal") }}</td>
-                    <td class="text-right py-2">
-                      {{ purchase.subTotalAmount }} €
-                    </td>
-                  </tr>
-                  <tr v-for="item in taxes" :key="item.settingsValue">
-                    <template v-if="!edit">
-                      <td class="py-2 uppercase">
-                        {{ $t("tax") }} ({{ item.settingsValue }}%)
-                      </td>
-                      <td class="text-right py-2">
-                        {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
-                      </td>
-                    </template>
-                  </tr>
+                  <template v-for="item in taxes" :key="item.settingsValue">
+                    <tr>
+                      <template v-if="!edit">
+                        <td class="py-2 uppercase">
+                          {{ $t("tax") }} ({{ item.settingsValue }}%)
+                        </td>
+                        <td class="text-right py-2">
+                          {{ getTaxValue(purchase.taxes, item.settingsAlias) }}
+                          €
+                        </td>
+                      </template>
+                    </tr>
+                    <tr>
+                      <template v-if="!edit">
+                        <td class="py-2 uppercase">
+                          {{ $t("subTotal") }} ({{ item.settingsValue }}%)
+                        </td>
+                        <td class="text-right py-2">
+                          {{
+                            getTotalWOTaxValue(
+                              purchase.taxes,
+                              item.settingsAlias
+                            )
+                          }}
+                          €
+                        </td>
+                      </template>
+                    </tr>
+                  </template>
                   <tr class="font-bold text-xl">
                     <td class="py-2">{{ $t("total") }}</td>
                     <td class="text-right py-2">
@@ -381,6 +394,11 @@ export default {
     getTaxValue() {
       return (arr, alias) =>
         arr?.find((x) => x.taxAlias === alias)?.taxValue ||
+        Number(0).toFixed(2);
+    },
+    getTotalWOTaxValue() {
+      return (arr, alias) =>
+        arr?.find((x) => x.taxAlias === alias)?.totalWithoutTax ||
         Number(0).toFixed(2);
     },
   },

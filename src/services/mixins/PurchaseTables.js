@@ -15,11 +15,10 @@ export default {
         let taxTh = document.createElement("th");
         taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
         headTr.appendChild(taxTh);
+        let totalWOTaxTh = document.createElement("th");
+        totalWOTaxTh.innerHTML = `${this.$t("subTotal")} ${tax.settingsName}%`;
+        headTr.appendChild(totalWOTaxTh);
       }
-
-      let subtotalTh = document.createElement("th");
-      subtotalTh.innerHTML = this.$t("subtotalAmount");
-      headTr.appendChild(subtotalTh);
 
       let totalTh = document.createElement("th");
       totalTh.innerHTML = this.$t("totalAmount");
@@ -37,12 +36,15 @@ export default {
             tax.settingsAlias
           )}`;
           bodyTr.appendChild(taxTd);
+          let totalWOTaxTd = document.createElement("td");
+          totalWOTaxTd.innerHTML = `${this.getTotalWOTaxValue(
+            element.taxes,
+            tax.settingsAlias
+          )}`;
+          bodyTr.appendChild(totalWOTaxTd);
         }
-        let subtotalTd = document.createElement("td");
-        subtotalTd.innerHTML = `${element.subTotalAmount}`;
         let totalTd = document.createElement("td");
         totalTd.innerHTML = `${element.totalAmount}`;
-        bodyTr.appendChild(subtotalTd);
         bodyTr.appendChild(totalTd);
         tbody.appendChild(bodyTr);
       }
@@ -76,15 +78,22 @@ export default {
       invoiceTh.innerHTML = this.$t("invoiceNumber");
       headTr.appendChild(invoiceTh);
 
+      let fiscalTh = document.createElement("th");
+      fiscalTh.innerHTML = this.$t("fiscalNumber");
+      headTr.appendChild(fiscalTh);
+
+      let taxTh = document.createElement("th");
+      taxTh.innerHTML = this.$t("taxNumber");
+      headTr.appendChild(taxTh);
+
       for await (const tax of this.taxes) {
         let taxTh = document.createElement("th");
         taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
         headTr.appendChild(taxTh);
+        let totalWOTaxTh = document.createElement("th");
+        totalWOTaxTh.innerHTML = `${this.$t("subTotal")} ${tax.settingsName}%`;
+        headTr.appendChild(totalWOTaxTh);
       }
-
-      let subtotalTh = document.createElement("th");
-      subtotalTh.innerHTML = this.$t("subtotalAmount");
-      headTr.appendChild(subtotalTh);
 
       let totalTh = document.createElement("th");
       totalTh.innerHTML = this.$t("totalAmount");
@@ -107,6 +116,14 @@ export default {
         invoiceTd.innerHTML = element.sellerInvoiceNumber;
         bodyTr.appendChild(invoiceTd);
 
+        let fiscalTd = document.createElement("td");
+        fiscalTd.innerHTML = element.sellerFiscalNumber;
+        bodyTr.appendChild(fiscalTd);
+
+        let taxTd = document.createElement("td");
+        taxTd.innerHTML = element.sellerTaxNumber;
+        bodyTr.appendChild(taxTd);
+
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${this.getTaxValue(
@@ -114,12 +131,15 @@ export default {
             tax.settingsAlias
           )}`;
           bodyTr.appendChild(taxTd);
+          let totalWOTaxTd = document.createElement("td");
+          totalWOTaxTd.innerHTML = `${this.getTotalWOTaxValue(
+            element.taxes,
+            tax.settingsAlias
+          )}`;
+          bodyTr.appendChild(totalWOTaxTd);
         }
-        let subtotalTd = document.createElement("td");
-        subtotalTd.innerHTML = `${element.subTotalAmount}`;
         let totalTd = document.createElement("td");
         totalTd.innerHTML = `${element.totalAmount}`;
-        bodyTr.appendChild(subtotalTd);
         bodyTr.appendChild(totalTd);
         tbody.appendChild(bodyTr);
       }

@@ -66,8 +66,5 @@ export default {
       isOpened: false,
     };
   },
-  created() {
-    console.log(this.item);
-  },
 };
 </script>

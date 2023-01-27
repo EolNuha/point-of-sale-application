@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div
         class="bg-white dark:bg-neutral-900 p-5 rounded relative"
@@ -95,7 +95,7 @@
             !$can('write', 'users') &&
             !$can('read', 'analytics')
           "
-          class="min-h-[50px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+          class="min-h-[50px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-neutral-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
         >
           <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
         </div>
@@ -132,7 +132,7 @@
     >
       <div
         v-if="!$can('read', 'analytics')"
-        class="min-h-[400px] rounded absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        class="min-h-[400px] rounded absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-neutral-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
       >
         <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
         {{ $t("noPermissionText") }}
@@ -192,7 +192,7 @@
     <div class="bg-white dark:bg-neutral-900 rounded py-8 relative px-5">
       <div
         v-if="!$can('read', 'analytics')"
-        class="min-h-[400px] rounded absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        class="min-h-[400px] rounded absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-neutral-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
       >
         <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
         {{ $t("noPermissionText") }}

@@ -45,7 +45,7 @@ body.v-tour--active{
 	visibility:hidden;
 }
 .v-step__arrow--dark[data-v-61f60785]:before{
-	@apply bg-gray-300;
+	@apply bg-neutral-300;
 	@apply dark:bg-neutral-800;
 }
 .v-step__arrow[data-v-61f60785]:before{
@@ -72,7 +72,7 @@ body.v-tour--active{
 .v-step__header[data-v-61f60785]{
 	margin:-20px -20px 5px;
 	padding:5px;
-	@apply bg-gray-200;
+	@apply bg-neutral-200;
 	@apply dark:bg-neutral-800;
 	@apply rounded-t-md;
 }
@@ -82,7 +82,7 @@ body.v-tour--active{
 .v-step__button[data-v-61f60785]{
 	@apply text-gray-500;
 	@apply bg-white;
-	@apply hover:bg-gray-100;
+	@apply hover:bg-neutral-100;
 	@apply rounded;
 	@apply border;
 	@apply border-gray-400;

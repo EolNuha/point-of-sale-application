@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div class="border-b border-gray-200 dark:border-gray-500 mb-5">
       <ul
         class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
@@ -37,7 +37,7 @@
     </div>
     <div class="grid grid-cols-6 gap-4">
       <div
-        class="overflow-x-hidden flex items-center justify-center flex-col bg-gray-300 dark:bg-neutral-700 rounded p-2.5 text-gray-700 dark:text-gray-300 cursor-pointer"
+        class="overflow-x-hidden flex items-center justify-center flex-col bg-neutral-300 dark:bg-neutral-700 rounded p-2.5 text-gray-700 dark:text-gray-300 cursor-pointer"
         v-for="icon in icons"
         :key="icon"
         @click="copy(icon)"

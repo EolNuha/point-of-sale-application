@@ -15,7 +15,7 @@ input[type="date"] {
 }
 
 .default-input {
-	@apply bg-gray-50 #{!important};
+	@apply bg-neutral-50 #{!important};
   @apply border;
   @apply border-gray-300 #{!important};
   @apply text-gray-900 #{!important};

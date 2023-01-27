@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen relative">
+  <div class="bg-neutral-200 dark:bg-neutral-800 min-h-screen relative">
     <ul
       class="divide-x dark:divide-gray-800 flex flex-wrap items-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-neutral-900 px-2 pt-2"
     >
@@ -15,15 +15,15 @@
           class="min-w-[150px] inline-flex justify-between items-center px-4 py-2"
           :class="
             tab === activeTab
-              ? 'text-theme-600 bg-gray-200 active dark:bg-neutral-800 dark:text-theme-500 relative rounded-t-lg'
-              : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-neutral-900/75 dark:hover:text-gray-300 bg-white dark:bg-neutral-900'
+              ? 'text-theme-600 bg-neutral-200 active dark:bg-neutral-800 dark:text-theme-500 relative rounded-t-lg'
+              : 'hover:text-gray-600 hover:bg-neutral-50 dark:hover:bg-neutral-900/75 dark:hover:text-gray-300 bg-white dark:bg-neutral-900'
           "
         >
           <span>{{ $t("tab") }} {{ tab + 1 }}</span>
           <button
             v-if="tabs.length > 1"
             @click.stop="removeTab(index)"
-            class="rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+            class="rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
           >
             <IconC
               iconType="solid"
@@ -47,7 +47,7 @@
         <button
           @click="addTab()"
           type="button"
-          class="p-1.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700 flex items-center gap-2"
+          class="p-1.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700 flex items-center gap-2"
           :disabled="tabs.length >= 5"
         >
           <IconC iconName="PlusIcon" iconClass="w-5 h-5" />

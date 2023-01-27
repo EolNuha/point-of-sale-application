@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div class="flex items-center justify-between mb-5">
       <h5
         class="text-3xl font-bold leading-none text-gray-900 dark:text-white flex items-center gap-2"
@@ -23,7 +23,7 @@
       </button>
     </div>
     <div
-      class="p-4 border border-gray-300 rounded bg-gray-50 dark:border-gray-600 dark:bg-neutral-700 transition duration-500"
+      class="p-4 border border-gray-300 rounded bg-neutral-50 dark:border-gray-600 dark:bg-neutral-700 transition duration-500"
       v-show="isInfoShowing"
     >
       <div class="flex items-center gap-2 text-gray-800 dark:text-gray-100">
@@ -123,7 +123,7 @@
       <OverlayC v-if="isTableLoading" />
       <table class="w-full text-sm text-left rounded overflow-hidden relative">
         <thead
-          class="text-md text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
+          class="text-md text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
         >
           <tr>
             <th scope="col" class="py-3 px-6">
@@ -164,7 +164,7 @@
                     @click.stop
                   />
                   <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-theme-300 dark:peer-focus:ring-theme-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-theme-600"
+                    class="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-theme-300 dark:peer-focus:ring-theme-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-theme-600"
                   ></div>
                 </label>
               </td>
@@ -183,7 +183,7 @@
         <div class="relative bg-white rounded shadow dark:bg-neutral-700">
           <button
             type="button"
-            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
+            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-neutral-200 hover:text-gray-900 rounded text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-neutral-800 dark:hover:text-white"
             @click="$hideModal(createRef)"
             :disabled="isLoading"
           >

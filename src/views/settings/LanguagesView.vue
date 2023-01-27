@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <h5
       class="text-3xl font-bold leading-none text-gray-900 dark:text-white mb-5"
     >
@@ -9,7 +9,7 @@
       <div>
         <ul role="list" class="flex flex-col gap-2">
           <li
-            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setLang('en');
@@ -46,7 +46,7 @@
             </div>
           </li>
           <li
-            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setLang('sq');

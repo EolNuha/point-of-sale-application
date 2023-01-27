@@ -13,7 +13,7 @@ export default {
     outerDiv: {
       type: String,
       required: false,
-      default: "opacity-75 bg-gray-100 dark:bg-neutral-900 ",
+      default: "opacity-75 bg-neutral-100 dark:bg-neutral-900 ",
     },
     innerDiv: {
       type: String,

@@ -34,7 +34,7 @@
     "
   >
     <div
-      class="block py-2 px-4 font-medium text-center text-gray-700 bg-gray-50 dark:bg-neutral-800 dark:text-white rounded-t-md"
+      class="block py-2 px-4 font-medium text-center text-gray-700 bg-neutral-50 dark:bg-neutral-800 dark:text-white rounded-t-md"
     >
       {{ $t("notifications") }}
     </div>
@@ -51,8 +51,8 @@
         class="flex py-3 px-4"
         :class="
           !item.read
-            ? 'bg-gray-200/50 hover:bg-gray-200/75 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/75 border-l-[3px] !border-l-theme-500'
-            : 'hover:bg-gray-100 dark:hover:bg-neutral-700/50'
+            ? 'bg-neutral-200/50 hover:bg-neutral-200/75 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/75 border-l-[3px] !border-l-theme-500'
+            : 'hover:bg-neutral-100 dark:hover:bg-neutral-700/50'
         "
         v-for="item in notifications"
         :key="item.id"
@@ -74,7 +74,7 @@
     </div>
     <router-link
       :to="{ name: 'notifications' }"
-      class="rounded-b-md block py-2 text-sm font-medium text-center text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white"
+      class="rounded-b-md block py-2 text-sm font-medium text-center text-gray-900 bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-white"
     >
       <div class="inline-flex items-center">
         <IconC

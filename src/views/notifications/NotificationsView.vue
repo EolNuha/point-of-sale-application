@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div
       id="hide-notification"
       class="flex items-center p-4 mb-4 bg-red-100 rounded dark:bg-red-500 text-red-700 dark:text-white"
@@ -67,7 +67,7 @@
                     triggerEl: `select-all-tooltip-btn`,
                   })
                 "
-                class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
               >
                 <input
                   type="checkbox"
@@ -89,7 +89,7 @@
                 <button
                   id="star-all-tooltip-btn"
                   @click="toggleStarStatus()"
-                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                   @mouseover="
                     $showTooltip({
                       targetEl: `star-all-tooltip`,
@@ -122,7 +122,7 @@
                 <button
                   id="read-all-tooltip-btn"
                   @click="toggleReadStatus()"
-                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                   @mouseover="
                     $showTooltip({
                       targetEl: `read-all-tooltip`,
@@ -155,7 +155,7 @@
                 <button
                   id="delete-all-tooltip-btn"
                   @click="deleteNotifications"
-                  class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                  class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                   @mouseover="
                     $showTooltip({
                       targetEl: `delete-all-tooltip`,
@@ -180,7 +180,7 @@
             v-if="total"
           >
             <div
-              class="w-[150px] md:w-[200px] bg-gray-300 rounded-full h-1.5 dark:bg-neutral-700"
+              class="w-[150px] md:w-[200px] bg-neutral-300 rounded-full h-1.5 dark:bg-neutral-700"
             >
               <div
                 class="h-1.5 rounded-full"
@@ -285,7 +285,7 @@
                 class="group border-l-[3px] border-l-white hover:border-l-gray-200 bg-white hover:text-black hover:dark:text-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:shadow-[inset_0_0px_15px_-2px_rgba(0,0,0,0.2)] hover:dark:shadow-[inset_0_0px_15px_-2px_rgba(255,255,255,0.2)] cursor-pointer"
                 :class="{
                   '!border-l-theme-500': !item.read,
-                  'bg-gray-100 dark:bg-neutral-900/50  border-l-gray-100':
+                  'bg-neutral-100 dark:bg-neutral-900/50  border-l-gray-100':
                     selectedItems.some((obj) => obj?.id === item.id),
                 }"
                 @click="
@@ -306,7 +306,7 @@
                     :id="`select-${item.id}-tooltip-btn`"
                     @click.stop
                     @click="toggleSelectNotification(item)"
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                    class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                     @mouseover="
                       $showTooltip({
                         targetEl: `select-${item.id}-tooltip`,
@@ -339,7 +339,7 @@
                     @click="
                       toggleSingleNotification(item.id, item.read, !item.star)
                     "
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                    class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                     :class="
                       !$can('execute', 'notifications')
                         ? 'cursor-not-allowed'
@@ -382,7 +382,7 @@
                     @click="
                       toggleSingleNotification(item.id, !item.read, item.star)
                     "
-                    class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                    class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                     :class="
                       !$can('execute', 'notifications')
                         ? 'cursor-not-allowed'
@@ -436,7 +436,7 @@
                       :id="`delete-${item.id}-tooltip-btn`"
                       @click.stop
                       @click="deleteNotification(item.id)"
-                      class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50 hidden group-hover:block"
+                      class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 hidden group-hover:block"
                       @mouseover="
                         $showTooltip({
                           targetEl: `delete-${item.id}-tooltip`,

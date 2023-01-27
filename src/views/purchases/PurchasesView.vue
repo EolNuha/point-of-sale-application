@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div class="full-layout flex flex-col">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center search-input-width">
@@ -48,7 +48,7 @@
               >
             </div>
             <button
-              class="flex absolute inset-y-0 right-0 items-center pointer-cursor p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-600"
+              class="flex absolute inset-y-0 right-0 items-center pointer-cursor p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-600"
               @click="showFilters = !showFilters"
             >
               <IconC
@@ -120,7 +120,7 @@
         <button
           type="button"
           @click="switchView"
-          class="p-1.5 hover:bg-gray-300 rounded dark:hover:bg-neutral-700 flex items-center gap-2 dark:text-gray-200"
+          class="p-1.5 hover:bg-neutral-300 rounded dark:hover:bg-neutral-700 flex items-center gap-2 dark:text-gray-200"
         >
           <IconC
             iconType="custom"

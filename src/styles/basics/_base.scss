@@ -23,7 +23,7 @@
 }
 
 body {
-  @apply bg-gray-200;
+  @apply bg-neutral-200;
   @apply dark:bg-neutral-800;
 }
 
@@ -36,7 +36,7 @@ div[modal-backdrop] {
 
 .swal2-popup.swal2-toast {
   background: currentColor;
-  @apply bg-gray-300;
+  @apply bg-neutral-300;
   @apply dark:bg-neutral-700;
 }
 
@@ -48,4 +48,13 @@ div[modal-backdrop] {
 }
 .Vue-Toastification__toast {
   border-radius: 4px !important;
+}
+
+.main-div {
+  @apply flex-col;
+  @apply flex;
+  @apply bg-neutral-200;
+  @apply dark:bg-neutral-800;
+  @apply min-h-screen;
+  @apply p-4;
 }

@@ -6,7 +6,7 @@
     <div class="flex flex-wrap items-center justify-between">
       <div class="inline-flex items-center">
         <button
-          class="p-1.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700 mr-3"
+          class="p-1.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700 mr-3"
           @click="$root.closeSide"
           v-show="$root.sidebar"
         >
@@ -16,7 +16,7 @@
           />
         </button>
         <button
-          class="p-1.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700 mr-3"
+          class="p-1.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700 mr-3"
           @click="$root.openSide"
           v-show="!$root.sidebar"
         >
@@ -113,7 +113,7 @@
           <li>
             <router-link
               :to="{ name: 'user-details', params: { userId: user.id || '1' } }"
-              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="UserIcon" iconClass="w-5 h-5" />
               {{ $t("profile") }}</router-link
@@ -122,7 +122,7 @@
           <li>
             <router-link
               :to="{ name: 'settings' }"
-              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
+              class="inline-flex items-center font-normal gap-1 w-full text-sm py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:hover:text-white text-gray-500 dark:text-gray-400"
             >
               <IconC iconName="Cog8ToothIcon" iconClass="w-5 h-5" />
               {{ $t("settings") }}</router-link
@@ -132,7 +132,7 @@
         <div class="py-1">
           <button
             @click="logout"
-            class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-gray-200 dark:hover:text-white"
+            class="flex items-center w-full gap-1 py-2 px-4 text-sm text-gray-700 hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:text-gray-200 dark:hover:text-white"
           >
             <IconC iconName="ArrowRightOnRectangleIcon" iconClass="h-5 w-5" />
             {{ $t("signout") }}

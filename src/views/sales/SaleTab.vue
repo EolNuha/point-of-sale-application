@@ -33,7 +33,7 @@
                   :class="
                     searchedProducts[searchedProductsIndex] === product
                       ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
-                      : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 hover:dark:bg-neutral-900/[.5]'
+                      : 'bg-white dark:bg-neutral-900 hover:bg-neutral-100/75 hover:dark:bg-neutral-900/[.5]'
                   "
                 >
                   <th
@@ -71,7 +71,7 @@
         class="w-full text-sm text-left text-gray-700 dark:text-gray-400 relative"
       >
         <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
+          class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400"
         >
           <tr>
             <th scope="col" class="py-3 px-6"></th>
@@ -90,14 +90,14 @@
               :class="
                 isSelected(product.id)
                   ? 'bg-theme-100 dark:bg-theme-400 dark:text-black bg-opacity-25 font-bold'
-                  : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
+                  : 'bg-white dark:bg-neutral-900 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]'
               "
             >
               <td class="py-2 px-6">
                 <button
                   @click.stop
                   @click="toggleSelectProduct(product)"
-                  class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+                  class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
                 >
                   <input
                     type="checkbox"
@@ -118,7 +118,7 @@
                   min="0.01"
                   :id="`product-${product.id}-quantity`"
                   v-model="product.quantity"
-                  class="max-w-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
+                  class="max-w-[100px] bg-neutral-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full px-2 py-1 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                   @change="
                     () =>
                       product.quantity
@@ -135,7 +135,7 @@
       </table>
     </div>
     <div
-      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-gray-100 dark:bg-neutral-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
+      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-neutral-100 dark:bg-neutral-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
     >
       <div class="flex flex-row items-center">
         <button
@@ -143,7 +143,7 @@
           @click="finishSaleModal()"
           type="button"
           id="finishSale"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-neutral-200 border border-gray-300 focus:outline-none hover:bg-neutral-100 focus:ring-4 focus:ring-gray-200 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           <IconC iconType="solid" iconName="CheckIcon" iconClass="w-5 h-5" />
           {{ $t("finish") }} (F8)
@@ -153,7 +153,7 @@
           @click="openRemoveModal(JSON.parse(JSON.stringify(products)))"
           type="button"
           id="clearAll"
-          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="flex justify-center items-center flex-col gap-2 text-center text-gray-900 bg-neutral-200 border border-gray-300 focus:outline-none hover:bg-neutral-100 focus:ring-4 focus:ring-gray-200 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-neutral-800 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800/75 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           <IconC iconName="TrashIcon" iconClass="w-5 h-5" />
           {{ $t("clearAll") }} (F10)
@@ -164,7 +164,7 @@
       >
         {{ $t("total") }}:
         <div
-          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-gray-200 dark:bg-neutral-800 rounded"
+          class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-neutral-200 dark:bg-neutral-800 rounded"
         >
           <span>{{ total }}</span
           >€

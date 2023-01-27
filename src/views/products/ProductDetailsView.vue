@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex flex-col bg-gray-200 dark:bg-neutral-800 min-h-screen relative"
+    class="flex flex-col bg-neutral-200 dark:bg-neutral-800 min-h-screen relative"
   >
     <OverlayC
       v-if="isDataLoading"
-      :outerDiv="`opacity-[95] bg-gray-100 dark:bg-neutral-900 `"
+      :outerDiv="`opacity-[95] bg-neutral-100 dark:bg-neutral-900 `"
     />
     <Form
       v-slot="{ errors }"

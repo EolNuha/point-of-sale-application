@@ -10,8 +10,8 @@ export default {
         focusConfirm: true,
         reverseButtons: true,
         customClass: {
-          popup: "bg-gray-300 dark:bg-neutral-700",
-          header: "bg-gray-300 dark:bg-neutral-700",
+          popup: "bg-neutral-300 dark:bg-neutral-700",
+          header: "bg-neutral-300 dark:bg-neutral-700",
           confirmButton: "theme-gradient-btn",
           cancelButton: "gray-outline-btn mr-2",
           closeButton:

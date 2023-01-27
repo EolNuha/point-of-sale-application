@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div
       class="text-blue-500 text-green-500 text-red-500 text-purple-500 text-orange-500 text-yellow-500"
     ></div>
@@ -12,7 +12,7 @@
       <div>
         <ul role="list" class="flex flex-col gap-2">
           <li
-            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setTheme('light');
@@ -45,7 +45,7 @@
             </div>
           </li>
           <li
-            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
             @click="
               () => {
                 $root.setTheme('dark');
@@ -94,7 +94,7 @@
             :key="item"
           >
             <li
-              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-gray-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
+              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white cursor-pointer"
               @click="
                 () => {
                   $root.setTextTheme(`theme-${item}`);

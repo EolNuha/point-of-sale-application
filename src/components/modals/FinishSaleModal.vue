@@ -15,7 +15,7 @@
           </h3>
           <button
             type="button"
-            class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-800/50"
+            class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-800/50"
             @click="$hideModal(modalRef)"
             :disabled="isLoading"
           >
@@ -41,7 +41,7 @@
                 type="number"
                 name="sale_total"
                 id="sale_total"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                class="bg-neutral-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Sale total"
                 disabled
               />
@@ -63,7 +63,7 @@
                 :id="modalRef + '_customer_amount'"
                 :ref="modalRef + '_customer_amount'"
                 step="0.01"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                class="bg-neutral-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 :placeholder="$t('customerAmount')"
                 required
                 :disabled="isLoading"
@@ -83,7 +83,7 @@
                 type="number"
                 name="change_amount"
                 id="change_amount"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:text-white"
+                class="bg-neutral-50 border border-gray-300 text-gray-900 text-sm rounded block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:text-white"
                 :placeholder="$t('changeAmount')"
                 disabled
               />

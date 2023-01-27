@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gray-200 dark:bg-neutral-800 min-h-screen p-3 flex items-center justify-center flex-col"
+    class="bg-neutral-200 dark:bg-neutral-800 min-h-screen p-3 flex items-center justify-center flex-col"
   >
     <img src="@/assets/images/404.svg" class="max-w-full w-[30rem]" />
     <h1 class="text-gray-700 dark:text-gray-300 text-6xl font-extrabold">

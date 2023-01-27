@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <Form v-slot="{ errors }" @submit="submit()">
       <h2
         class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
@@ -487,7 +487,7 @@
             <button
               v-show="products?.length != 1"
               type="button"
-              class="p-1.5 rounded hover:bg-gray-300/50 dark:hover:bg-neutral-900/50"
+              class="p-1.5 rounded hover:bg-neutral-300/50 dark:hover:bg-neutral-900/50"
               @click="removeProduct(index)"
             >
               <IconC

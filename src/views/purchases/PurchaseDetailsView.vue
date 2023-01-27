@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div
+    class="flex flex-col bg-neutral-200 dark:bg-neutral-800 min-h-screen p-4"
+  >
     <Form v-slot="{ errors }" @submit="updatePurchase">
       <div
         class="flex items-center justify-between flex-wrap gap-2"
@@ -97,7 +99,7 @@
               class="w-full text-sm text-left text-gray-700 dark:text-gray-400 my-5"
             >
               <thead
-                class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400"
+                class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400"
               >
                 <tr>
                   <th scope="col" class="py-3 px-3">{{ $t("productName") }}</th>
@@ -218,7 +220,7 @@
                         type="button"
                         :id="`delete-${item.id}-tooltip-btn`"
                         @click="deletePurchaseItem(index)"
-                        class="p-3.5 rounded-full hover:bg-gray-200/50 dark:hover:bg-neutral-800/50"
+                        class="p-3.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
                         @mouseover="
                           $showTooltip({
                             targetEl: `delete-${item.id}-tooltip`,
@@ -318,7 +320,7 @@
               </h3>
               <button
                 type="button"
-                class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-800/50"
+                class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-800/50"
                 @click="$hideModal('printModal')"
               >
                 <IconC iconName="XMarkIcon" iconClass="w-5 h-5" />

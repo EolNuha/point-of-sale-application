@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4 relative"
-  >
+  <div class="main-div relative">
     <div
       class="w-full sm:max-w-md md:mx-auto my-auto rounded bg-white dark:bg-neutral-900 p-6 sm:p-8 flex flex-col grow relative"
     >

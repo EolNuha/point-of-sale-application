@@ -13,7 +13,7 @@
           <p class="text-xl">{{ $t("delete") }} {{ title }}</p>
           <button
             type="button"
-            class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-800/50"
+            class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-800/50"
             @click="$hideModal(deleteRef)"
             :disabled="isLoading"
           >

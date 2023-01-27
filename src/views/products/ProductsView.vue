@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="flex-col flex bg-gray-200 dark:bg-neutral-800 min-h-screen p-4">
+  <div class="main-div">
     <div class="full-layout flex flex-col">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center search-input-width">
@@ -91,7 +91,7 @@
             class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400 overflow-hidden rounded"
           >
             <thead
-              class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
+              class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
             >
               <tr>
                 <th
@@ -108,7 +108,7 @@
                               JSON.stringify(products)
                             ))
                     "
-                    class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+                    class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
                   >
                     <input
                       type="checkbox"
@@ -122,7 +122,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('id')"
                 >
                   <div class="flex justify-between items-center">
@@ -143,7 +143,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('name')"
                 >
                   <div class="flex justify-between items-center">
@@ -164,7 +164,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('barcode')"
                 >
                   <div class="flex justify-between items-center">
@@ -185,7 +185,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('purchased_price')"
                 >
                   <div class="flex justify-between items-center">
@@ -206,7 +206,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('selling_price')"
                 >
                   <div class="flex justify-between items-center">
@@ -227,7 +227,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('stock')"
                 >
                   <div class="flex justify-between items-center">
@@ -248,7 +248,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+                  class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
                   @click="sort('tax')"
                 >
                   <div class="flex justify-between items-center">
@@ -281,13 +281,13 @@
                   :class="
                     selectedProducts.some((obj) => obj?.id === product.id)
                       ? 'bg-theme-100 dark:bg-theme-400 dark:text-black font-bold'
-                      : 'bg-white dark:bg-neutral-900 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]'
+                      : 'bg-white dark:bg-neutral-900 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]'
                   "
                 >
                   <td class="py-2 px-6" v-if="$can('execute', 'products')">
                     <button
                       @click="toggleSelectProduct(product)"
-                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+                      class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
                     >
                       <input
                         type="checkbox"
@@ -339,7 +339,7 @@
                     v-if="$can('execute', 'products')"
                   >
                     <button
-                      class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+                      class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
                       :id="`product-${product.id}-btn`"
                       @click="
                         $toggleDropdown({
@@ -364,7 +364,7 @@
                         aria-labelledby="dropdownDefault"
                       >
                         <li
-                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 w-full"
                           @click="
                             $router.push({
                               name: 'product-view',
@@ -380,7 +380,7 @@
                           {{ $t("edit") }}
                         </li>
                         <li
-                          class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full"
+                          class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 w-full"
                           @click="deleteProduct(product)"
                         >
                           <IconC

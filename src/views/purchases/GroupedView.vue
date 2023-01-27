@@ -4,12 +4,12 @@
     class="bg-white dark:bg-neutral-800 w-full text-sm text-left text-gray-700 dark:text-gray-400"
   >
     <thead
-      class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
+      class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400 cursor-default"
     >
       <tr>
         <th
           scope="col"
-          class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+          class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
           @click="sort('date_created')"
         >
           <div class="flex justify-between items-center">
@@ -27,20 +27,20 @@
         <template v-for="item in taxes" :key="item.settingsValue">
           <th
             scope="col"
-            class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+            class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
           >
             {{ item.settingsName }}%
           </th>
           <th
             scope="col"
-            class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+            class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
           >
             {{ $t("subTotal") }} {{ item.settingsName }}%
           </th>
         </template>
         <th
           scope="col"
-          class="py-3 px-6 hover:bg-gray-200/[.6] hover:dark:bg-neutral-600"
+          class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
           @click="sort('total_amount')"
         >
           <div class="flex justify-between items-center">
@@ -61,7 +61,7 @@
     <tbody>
       <template v-for="purchase in purchases" :key="purchase.id">
         <tr
-          class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-gray-100/75 dark:hover:bg-neutral-900/[.5]"
+          class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]"
         >
           <td class="py-2 px-6">
             {{ purchase.dateCreated?.substring(0, 10) }}
@@ -85,7 +85,7 @@
                   },
                 })
               "
-              class="p-2.5 rounded-full hover:bg-gray-300/50 dark:hover:bg-neutral-700"
+              class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
             >
               <IconC
                 iconName="DocumentMagnifyingGlassIcon"

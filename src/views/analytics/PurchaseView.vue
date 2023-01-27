@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 dark:bg-neutral-800 min-h-screen px-4">
+  <div class="bg-neutral-200 dark:bg-neutral-800 min-h-screen px-4">
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getPurchases`"
       :chartData="$store.state.analyticsModule.purchases"

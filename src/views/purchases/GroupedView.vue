@@ -68,10 +68,13 @@
           </td>
           <template v-for="item in taxes" :key="item.settingsValue">
             <td class="py-2 px-6">
-              {{ getTaxValue(purchase.taxes, item.settingsAlias) }} €
+              {{ $parent.getTaxValue(purchase.taxes, item.settingsAlias) }} €
             </td>
             <td class="py-2 px-6">
-              {{ getTotalWOTaxValue(purchase.taxes, item.settingsAlias) }} €
+              {{
+                $parent.getTotalWOTaxValue(purchase.taxes, item.settingsAlias)
+              }}
+              €
             </td>
           </template>
           <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
@@ -110,17 +113,6 @@ export default {
     };
   },
   methods: {
-    getTaxValue(arr, alias) {
-      return (
-        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
-      );
-    },
-    getTotalWOTaxValue(arr, alias) {
-      return (
-        arr.find((x) => x.taxAlias === alias)?.totalWithoutTax ||
-        Number(0).toFixed(2)
-      );
-    },
     sort(col) {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";

@@ -241,7 +241,8 @@ export default {
       return this.$store.getters["purchaseModule/getPurchasesPagination"];
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      const taxes = this.$store.state.settingsModule.settingsType;
+      return taxes.reverse();
     },
     purchasesDispatch() {
       return this.detailedView
@@ -260,15 +261,21 @@ export default {
       this.getPurchases(this.currentPage);
     },
     getTaxValue(arr, alias) {
-      return (
-        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
-      );
+      const sum = arr.reduce((accumulator, object) => {
+        return (
+          accumulator + Number(object.taxAlias === alias ? object.taxValue : 0)
+        );
+      }, 0);
+      return sum.toFixed(2);
     },
     getTotalWOTaxValue(arr, alias) {
-      return (
-        arr.find((x) => x.taxAlias === alias)?.totalWithoutTax ||
-        Number(0).toFixed(2)
-      );
+      const sum = arr.reduce((accumulator, object) => {
+        return (
+          accumulator +
+          Number(object.taxAlias === alias ? object.totalWithoutTax : 0)
+        );
+      }, 0);
+      return sum.toFixed(2);
     },
     getMonth(v) {
       const month = String(v).padStart(2, "0");

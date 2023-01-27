@@ -393,16 +393,6 @@ export default {
       }, 0);
       return this.roundTo2(sum).toFixed(2);
     },
-    getTaxValue() {
-      return (arr, alias) =>
-        arr?.find((x) => x.taxAlias === alias)?.taxValue ||
-        Number(0).toFixed(2);
-    },
-    getTotalWOTaxValue() {
-      return (arr, alias) =>
-        arr?.find((x) => x.taxAlias === alias)?.totalWithoutTax ||
-        Number(0).toFixed(2);
-    },
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
@@ -419,6 +409,23 @@ export default {
       });
   },
   methods: {
+    getTaxValue(arr, alias) {
+      const sum = arr.reduce((accumulator, object) => {
+        return (
+          accumulator + Number(object.taxAlias === alias ? object.taxValue : 0)
+        );
+      }, 0);
+      return sum.toFixed(2);
+    },
+    getTotalWOTaxValue(arr, alias) {
+      const sum = arr.reduce((accumulator, object) => {
+        return (
+          accumulator +
+          Number(object.taxAlias === alias ? object.totalWithoutTax : 0)
+        );
+      }, 0);
+      return sum.toFixed(2);
+    },
     isRequired(value) {
       return value > 0 ? true : this.$t("isRequired");
     },

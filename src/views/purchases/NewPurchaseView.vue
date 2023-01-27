@@ -578,6 +578,9 @@ export default {
         JSON.stringify(this.$store.state.settingsModule.settingsType)
       );
       t.unshift({
+        settingsName: "0",
+        settingsAlias: "zero",
+        settingsType: "tax",
         settingsValue: 0,
       });
       return t;

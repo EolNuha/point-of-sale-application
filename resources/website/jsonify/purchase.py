@@ -10,6 +10,7 @@ def getPurchaseDict(item):
         "id": item.id,
         "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
         "subTotalAmount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
+        "totalTaxAmount": Decimal(item.total_amount - item.subtotal_amount).quantize(TWOPLACES),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
     }
@@ -21,6 +22,7 @@ def getDailyPurchaseDict(item):
         "id": item.id,
         "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
         "subTotalAmount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
+        "totalTaxAmount": Decimal(item.total_amount - item.subtotal_amount).quantize(TWOPLACES),
         "sellerName": item.seller_name,
         "sellerInvoiceNumber": item.seller_invoice_number,
         "sellerFiscalNumber": item.seller_fiscal_number,

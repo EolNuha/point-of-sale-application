@@ -129,11 +129,17 @@ def createPurchase():
                 date_modified=current_time,
             )
         db.session.add(purchase_item)
-    db.session.commit()
 
     subtotal, purchase_taxes = [], []
     taxes = Settings.query.filter_by(settings_type="tax").all()
-
+    taxes.append(Settings(
+        settings_name="0",
+        settings_alias="zero",
+        settings_type="tax",
+        settings_value="0",
+        date_created=datetime.now(),
+        date_modified=datetime.now(),
+    ))
     for item in purchase.purchase_items:
         subtotal.append(Decimal(item.product_purchased_price_wo_tax * Decimal(item.product_stock)).quantize(FOURPLACES))
         for tax in taxes:

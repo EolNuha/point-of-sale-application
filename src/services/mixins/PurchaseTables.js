@@ -20,9 +20,17 @@ export default {
         headTr.appendChild(totalWOTaxTh);
       }
 
+      let woTaxTh = document.createElement("th");
+      woTaxTh.innerHTML = this.$t("purchaseWithoutTax");
+      headTr.appendChild(woTaxTh);
+
       let totalTh = document.createElement("th");
       totalTh.innerHTML = this.$t("totalAmount");
       headTr.appendChild(totalTh);
+
+      let totalTaxTh = document.createElement("th");
+      totalTaxTh.innerHTML = this.$t("totalTaxAmount");
+      headTr.appendChild(totalTaxTh);
 
       for await (const element of this.allPurchases) {
         let bodyTr = document.createElement("tr");
@@ -43,9 +51,15 @@ export default {
           )}`;
           bodyTr.appendChild(totalWOTaxTd);
         }
+        let woTaxTd = document.createElement("td");
+        woTaxTd.innerHTML = `${this.getTotalWOTaxValue(element.taxes, "zero")}`;
+        bodyTr.appendChild(woTaxTd);
         let totalTd = document.createElement("td");
         totalTd.innerHTML = `${element.totalAmount}`;
         bodyTr.appendChild(totalTd);
+        let totalTaxTd = document.createElement("td");
+        totalTaxTd.innerHTML = `${element.totalTaxAmount}`;
+        bodyTr.appendChild(totalTaxTd);
         tbody.appendChild(bodyTr);
       }
 
@@ -66,9 +80,9 @@ export default {
       dateTh.innerHTML = this.$t("date");
       headTr.appendChild(dateTh);
 
-      let idTh = document.createElement("th");
-      idTh.innerHTML = "ID";
-      headTr.appendChild(idTh);
+      // let idTh = document.createElement("th");
+      // idTh.innerHTML = "ID";
+      // headTr.appendChild(idTh);
 
       let sellerNameTh = document.createElement("th");
       sellerNameTh.innerHTML = this.$t("sellerName");
@@ -95,18 +109,26 @@ export default {
         headTr.appendChild(totalWOTaxTh);
       }
 
+      let woTaxTh = document.createElement("th");
+      woTaxTh.innerHTML = this.$t("purchaseWithoutTax");
+      headTr.appendChild(woTaxTh);
+
       let totalTh = document.createElement("th");
       totalTh.innerHTML = this.$t("totalAmount");
       headTr.appendChild(totalTh);
+
+      let totalTaxTh = document.createElement("th");
+      totalTaxTh.innerHTML = this.$t("totalTaxAmount");
+      headTr.appendChild(totalTaxTh);
 
       for await (const element of this.allPurchases) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
         dateTd.innerHTML = element.dateCreated?.substring(0, 10);
         bodyTr.appendChild(dateTd);
-        let idTd = document.createElement("td");
-        idTd.innerHTML = element.id;
-        bodyTr.appendChild(idTd);
+        // let idTd = document.createElement("td");
+        // idTd.innerHTML = element.id;
+        // bodyTr.appendChild(idTd);
 
         let sellerNameTd = document.createElement("td");
         sellerNameTd.innerHTML = element.sellerName;
@@ -138,9 +160,15 @@ export default {
           )}`;
           bodyTr.appendChild(totalWOTaxTd);
         }
+        let woTaxTd = document.createElement("td");
+        woTaxTd.innerHTML = `${this.getTotalWOTaxValue(element.taxes, "zero")}`;
+        bodyTr.appendChild(woTaxTd);
         let totalTd = document.createElement("td");
         totalTd.innerHTML = `${element.totalAmount}`;
         bodyTr.appendChild(totalTd);
+        let totalTaxTd = document.createElement("td");
+        totalTaxTd.innerHTML = `${element.totalTaxAmount}`;
+        bodyTr.appendChild(totalTaxTd);
         tbody.appendChild(bodyTr);
       }
 

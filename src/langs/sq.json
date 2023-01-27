@@ -259,6 +259,8 @@
 	"detailedView": "Të detajuara",
 	"groupedView": "Të grupuara",
 	"withoutTax": "pa TVSH",
+	"purchaseWithoutTax": "Blerje pa TVSH",
+	"totalTaxAmount": "TVSH Total",
 	"withTax": "me TVSH",
 	"measure": "Nj. matëse",
 	"pcs": "Copë",

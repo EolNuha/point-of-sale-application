@@ -260,6 +260,8 @@
 	"groupedView": "Grouped View",
 	"purchasedPriceInfoMsg": "Purchased Price without tax",
 	"withoutTax": "without tax",
+	"purchaseWithoutTax": "Purchase without tax",
+	"totalTaxAmount": "Total Tax",
 	"withTax": "with tax",
 	"measure": "Measure",
 	"pcs": "Pcs",

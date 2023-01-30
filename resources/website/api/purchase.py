@@ -143,7 +143,7 @@ def createPurchase():
     for item in purchase.purchase_items:
         subtotal.append(Decimal(item.product_purchased_price_wo_tax * Decimal(item.product_stock)).quantize(FOURPLACES))
         for tax in taxes:
-            if item.product_tax == int(tax.settings_value):
+            if int(item.product_tax) == int(tax.settings_value):
                 total_tax_amount = Decimal(item.tax_amount * Decimal(item.product_stock).quantize(FOURPLACES)).quantize(FOURPLACES)
                 key_v = tax.settings_name + "+" + tax.settings_alias + "+" + str(Decimal(item.total_amount - total_tax_amount).quantize(FOURPLACES))
                 purchase_taxes.append({key_v: total_tax_amount})

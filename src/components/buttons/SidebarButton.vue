@@ -16,7 +16,9 @@
       />
       <span
         class="flex-1 ml-3 text-left whitespace-nowrap"
-        :class="isOpened ? 'font-medium text-black' : 'font-normal'"
+        :class="
+          isOpened ? 'font-medium text-black dark:text-white' : 'font-normal'
+        "
         sidebar-toggle-item=""
         >{{ $t(item.title) }}</span
       >

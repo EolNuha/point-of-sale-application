@@ -89,6 +89,8 @@ export default {
           );
           this.dateStart = `${year}-${month}-01`;
           this.dateEnd = `${year}-${month}-${days}`;
+          this.$emit("startDateChange", this.dateStart);
+          this.$emit("endDateChange", this.dateEnd);
           if (this.afterCreated)
             this.makeDispatchCall(this.dateStart, this.dateEnd);
         }

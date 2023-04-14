@@ -129,12 +129,12 @@
             step="1"
             v-model="seller.purchaseType"
             class="hidden"
-            :name="`${index}purchaseType`"
-            :id="`${index}purchaseType`"
+            :name="`purchaseType`"
+            :id="`purchaseType`"
           />
           <v-select
             class="block w-full default-input !p-[1px]"
-            :class="errors[`${index}purchaseType`] ? 'ring-2 ring-red-500' : ''"
+            :class="errors.purchaseType ? 'ring-2 ring-red-500' : ''"
             v-model="seller.purchaseType"
             :options="purchaseTypes"
             :reduce="(t) => t.settingsValue"
@@ -150,7 +150,7 @@
               {{ $t(option.settingsValue) }}
             </template>
           </v-select>
-          <span class="text-red-700">{{ errors[`${index}purchaseType`] }}</span>
+          <span class="text-red-700">{{ errors.purchaseType }}</span>
         </div>
       </div>
       <h2
@@ -511,6 +511,7 @@
         <button
           type="submit"
           class="theme-gradient-btn w-32 flex justify-center items-center"
+          :disabled="isLoading"
         >
           <div role="status" v-if="isLoading">
             <IconC
@@ -645,16 +646,6 @@ export default {
     removeProduct(productIdx) {
       this.products.splice(productIdx, 1);
     },
-    getProductsTotal() {
-      const products = this.products;
-      const sum = products.reduce((accumulator, object) => {
-        return (
-          accumulator +
-          this.roundTo4(Number(object.purchasedPrice) * Number(object.stock))
-        );
-      }, 0);
-      return sum;
-    },
     async searchSellers(search, loading) {
       this.seller.search = search;
       loading(true);
@@ -729,7 +720,6 @@ export default {
       const data = {
         products: this.products,
         seller: this.seller,
-        totalAmount: this.getProductsTotal(),
       };
       this.$store
         .dispatch("purchaseModule/createPurchase", data)

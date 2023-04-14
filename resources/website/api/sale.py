@@ -24,7 +24,8 @@ def createSale():
     ctx.rounding = decimal.ROUND_HALF_UP
 
     products = request.json["products"]
-    total_amount = request.json["totalAmount"]
+    multiply_prices = lambda product: Decimal(product["sellingPrice"]).quantize(FOURPLACES) * Decimal(product["quantity"]).quantize(FOURPLACES)
+    total_amount = Decimal(sum(map(multiply_prices, products))).quantize(FOURPLACES)
     customer_amount = request.json["customerAmount"]
     change_amount = request.json["changeAmount"]
     is_regular = request.json["isRegular"]

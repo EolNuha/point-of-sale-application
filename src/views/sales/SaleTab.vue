@@ -349,7 +349,6 @@ export default {
       this.isFinishSaleLoading = true;
       const data = {
         products: this.products,
-        totalAmount: this.total,
         customerAmount: parseFloat(e).toFixed(2),
         changeAmount: (parseFloat(e) - this.total).toFixed(2),
         isRegular: this.isRegular,

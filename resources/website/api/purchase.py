@@ -22,7 +22,8 @@ def createPurchase():
 
     products = request.json["products"]
     seller = request.json["seller"]
-    total_amount = request.json["totalAmount"]
+    multiply_prices = lambda product: Decimal(product["purchasedPrice"]).quantize(FOURPLACES) * Decimal(product["stock"]).quantize(FOURPLACES)
+    total_amount = Decimal(sum(map(multiply_prices, products))).quantize(FOURPLACES)
     current_user = currentUser(request)
 
     current_time = datetime.now()

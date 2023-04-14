@@ -174,7 +174,7 @@
 
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
-import HtmlToExcel from "@/services/mixins/HtmlToExcel";
+import { utils, writeFileXLSX } from "xlsx";
 import PurchaseTables from "@/services/mixins/PurchaseTables";
 import DetailedView from "./DetailedView.vue";
 import GroupedView from "./GroupedView.vue";
@@ -202,7 +202,7 @@ export default {
     DetailedView,
     GroupedView,
   },
-  mixins: [HtmlToExcel, PurchaseTables],
+  mixins: [PurchaseTables],
   watch: {
     searchQuery: {
       async handler() {
@@ -339,7 +339,8 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      this.tableToExcel(table, fileName);
+      const wb = utils.table_to_book(table);
+      await writeFileXLSX(wb, `${fileName}.xlsx`);
       this.isExcelLoading = false;
     },
     sort(col) {

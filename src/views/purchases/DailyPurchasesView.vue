@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import HtmlToExcel from "@/services/mixins/HtmlToExcel";
+import { utils, writeFileXLSX } from "xlsx";
 import PurchaseTables from "@/services/mixins/PurchaseTables";
 import DetailedView from "./DetailedView.vue";
 export default {
@@ -162,7 +162,7 @@ export default {
   components: {
     DetailedView,
   },
-  mixins: [HtmlToExcel, PurchaseTables],
+  mixins: [PurchaseTables],
   computed: {
     purchases() {
       return this.$store.getters["purchaseModule/getPurchasesList"];
@@ -263,7 +263,9 @@ export default {
       let table = await this.gridExcelView();
       let fileName =
         this.purchaseDate.replaceAll(".", "-") + `-${this.$t("purchases")}`;
-      this.tableToExcel(table, fileName);
+
+      const wb = utils.table_to_book(table);
+      await writeFileXLSX(wb, `${fileName}.xlsx`);
       this.isExcelLoading = false;
     },
     sort(col) {

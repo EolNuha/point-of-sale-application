@@ -431,7 +431,7 @@
 
 <script>
 import DeleteModal from "@/components/modals/DeleteModal.vue";
-import HtmlToExcel from "@/services/mixins/HtmlToExcel";
+import { utils, writeFileXLSX } from "xlsx";
 export default {
   data() {
     return {
@@ -449,7 +449,6 @@ export default {
   components: {
     DeleteModal,
   },
-  mixins: [HtmlToExcel],
   computed: {
     sales() {
       return this.$store.getters["saleModule/getSalesList"];
@@ -641,7 +640,9 @@ export default {
       table.appendChild(tbody);
       let fileName =
         this.saleDate.replaceAll(".", "-") + `-${this.$t("sales")}`;
-      this.tableToExcel(table, fileName);
+
+      const wb = utils.table_to_book(table);
+      await writeFileXLSX(wb, `${fileName}.xlsx`);
       this.isExcelLoading = false;
     },
     sort(col) {

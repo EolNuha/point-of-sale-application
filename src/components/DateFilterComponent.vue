@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      afterCreated: false,
       months: [
         { id: 0, value: "Custom" },
         { id: 1, value: this.$t("january") },
@@ -88,64 +89,62 @@ export default {
           );
           this.dateStart = `${year}-${month}-01`;
           this.dateEnd = `${year}-${month}-${days}`;
+          if (this.afterCreated)
+            this.makeDispatchCall(this.dateStart, this.dateEnd);
         }
       },
     },
     dateStart: {
       async handler(value) {
+        if (this.currentMonth !== 0) return;
         this.$emit("startDateChange", value);
-        this.$emit("isTableLoading", true);
         const idx = this.$checkIfMonth(value, this.dateEnd);
         if (idx !== -1) {
           this.currentMonth = idx + 1;
         } else {
           this.currentMonth = 0;
         }
-        this.$store
-          .dispatch(this.dispatchModule, {
-            startDate: value,
-            endDate: this.dateEnd,
-            page: 1,
-            search: this.searchQuery,
-          })
-          .then(() => {
-            this.$emit("isTableLoading", false);
-          })
-          .catch(() => {
-            this.$emit("isTableLoading", false);
-            this.$toast.error(this.$t("somethingWrong"));
-          });
+        this.makeDispatchCall(value, this.dateEnd);
       },
     },
     dateEnd: {
       async handler(value) {
+        if (this.currentMonth !== 0) return;
         this.$emit("endDateChange", value);
-        this.$emit("isTableLoading", true);
         const idx = this.$checkIfMonth(this.dateStart, value);
         if (idx !== -1) {
           this.currentMonth = idx + 1;
         } else {
           this.currentMonth = 0;
         }
-        this.$store
-          .dispatch(this.dispatchModule, {
-            startDate: this.dateStart,
-            endDate: value,
-            page: 1,
-            search: this.searchQuery,
-          })
-          .then(() => {
-            this.$emit("isTableLoading", false);
-          })
-          .catch(() => {
-            this.$emit("isTableLoading", false);
-            this.$toast.error(this.$t("somethingWrong"));
-          });
+        this.makeDispatchCall(this.dateStart, value);
       },
     },
   },
   created() {
     this.currentMonth = new Date().getMonth() + 1;
+  },
+  mounted() {
+    this.afterCreated = true;
+  },
+  methods: {
+    async makeDispatchCall(startDate, endDate) {
+      this.$emit("isTableLoading", true);
+      await this.$store
+        .dispatch(this.dispatchModule, {
+          startDate: startDate,
+          endDate: endDate,
+          page: 1,
+          search: this.searchQuery,
+        })
+        .then(() => {
+          this.$emit("isTableLoading", false);
+        })
+        .catch(() => {
+          this.$emit("isTableLoading", false);
+          this.$toast.error(this.$t("somethingWrong"));
+        });
+    },
   },
 };
 </script>

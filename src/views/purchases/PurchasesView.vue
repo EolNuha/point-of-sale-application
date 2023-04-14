@@ -181,7 +181,7 @@ import GroupedView from "./GroupedView.vue";
 export default {
   data() {
     return {
-      isTableLoading: false,
+      isTableLoading: true,
       isExcelLoading: false,
       currentPage: 1,
       searchQuery: "",

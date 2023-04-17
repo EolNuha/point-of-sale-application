@@ -19,12 +19,13 @@ FOURPLACES = Decimal(10) ** -4
 def createPurchase():
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
+    current_user = currentUser(request)
 
     products = request.json["products"]
     seller = request.json["seller"]
+
     multiply_prices = lambda product: Decimal(product["purchasedPrice"]).quantize(FOURPLACES) * Decimal(product["stock"]).quantize(FOURPLACES)
     total_amount = Decimal(sum(map(multiply_prices, products))).quantize(FOURPLACES)
-    current_user = currentUser(request)
 
     current_time = datetime.now()
     purchase_date_split = seller["purchaseDate"].split("-")
@@ -170,16 +171,11 @@ def createPurchase():
 
 @purchase.route('/purchases', methods=["GET"])
 def getPurchases():
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
+    custom_start_date = request.args.get('startDate', type=str).split("-")
+    custom_end_date = request.args.get('endDate', type=str).split("-")
     sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
-    type_filter = request.args.getlist('type_filter[]')
-    if not type_filter: type_filter = ['purchase', 'investment', 'expense']
-
-    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+    type_filter = request.args.getlist('type_filter[]') or ['purchase', 'investment', 'expense']
 
     date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
     date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
@@ -187,12 +183,11 @@ def getPurchases():
     per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
 
-    if '*' in search or '_' in search: 
-        looking_for = search.replace('_', '__')\
-            .replace('*', '%')\
-            .replace('?', '_')
-    else:
-        looking_for = '%{0}%'.format(search)
+    looking_for = (
+        search.replace("_", "__").replace("*", "%").replace("?", "_")
+        if "*" in search or "_" in search
+        else f"%{search}%"
+    )
         
     paginated_items = Purchase.query.filter(or_(
         Purchase.id.ilike(looking_for),
@@ -201,7 +196,7 @@ def getPurchases():
         Purchase.seller_fiscal_number.ilike(looking_for),
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
-        .order_by(sort)\
+        .order_by(asc(sort_column) if sort_dir == "asc" else desc(sort_column))\
         .filter(Purchase.date_created <= date_end)\
         .filter(Purchase.date_created >= date_start)\
         .filter(and_(Purchase.purchase_type.in_(type_filter)))\
@@ -209,6 +204,7 @@ def getPurchases():
             Purchase.id.label("id"), 
             Purchase.date_created.label("date_created"), 
             Purchase.date_modified.label("date_modified"),
+            Purchase.purchase_taxes.label("purchase_taxes"),
             sa.func.sum(Purchase.subtotal_amount).label("subtotal_amount"),
             sa.func.sum(Purchase.total_amount).label("total_amount"),
         )\
@@ -361,7 +357,21 @@ def getSellers():
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
-    return jsonify(getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404()))
+    tax_alias_sum = PurchaseTax.query.filter_by(purchase_id=purchaseId)\
+        .with_entities(
+            PurchaseTax.id.label("id"),
+            PurchaseTax.tax_name.label("tax_name"),
+            PurchaseTax.tax_alias.label("tax_alias"),
+            func.sum(PurchaseTax.tax_value).label('tax_value'),
+            func.sum(PurchaseTax.total_without_tax).label('total_without_tax')
+        )\
+        .group_by(PurchaseTax.tax_alias)\
+        .all()
+
+    purchase_details = getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404())
+    purchase_details["taxes"] = getTaxesList(tax_alias_sum)
+
+    return jsonify(purchase_details)
 
 @purchase.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):

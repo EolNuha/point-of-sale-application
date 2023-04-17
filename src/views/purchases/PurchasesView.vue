@@ -261,21 +261,21 @@ export default {
       this.getPurchases(this.currentPage);
     },
     getTaxValue(arr, alias) {
-      const sum = arr.reduce((accumulator, object) => {
+      const sum = arr?.reduce((accumulator, object) => {
         return (
           accumulator + Number(object.taxAlias === alias ? object.taxValue : 0)
         );
       }, 0);
-      return sum.toFixed(2);
+      return sum?.toFixed(2);
     },
     getTotalWOTaxValue(arr, alias) {
-      const sum = arr.reduce((accumulator, object) => {
+      const sum = arr?.reduce((accumulator, object) => {
         return (
           accumulator +
           Number(object.taxAlias === alias ? object.totalWithoutTax : 0)
         );
       }, 0);
-      return sum.toFixed(2);
+      return sum?.toFixed(2);
     },
     getMonth(v) {
       const month = String(v).padStart(2, "0");

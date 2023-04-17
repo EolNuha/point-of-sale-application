@@ -176,7 +176,7 @@
                   />
                   {{ $t("viewDocument") }}
                 </li>
-                <li
+                <!-- <li
                   class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 w-full"
                   @click="
                     $router.push({
@@ -195,7 +195,7 @@
                     iconClass="w-5 h-5 cursor-pointer"
                   />
                   {{ $t("edit") }}
-                </li>
+                </li> -->
                 <li
                   class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 w-full"
                   @click="deletePurchase(purchase)"

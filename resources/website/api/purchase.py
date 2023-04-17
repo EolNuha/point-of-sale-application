@@ -235,16 +235,11 @@ def getPurchases():
 
 @purchase.route('/purchases-detailed', methods=["GET"])
 def getPurchasesDetailed():
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
+    custom_start_date = request.args.get('startDate', type=str).split("-")
+    custom_end_date = request.args.get('endDate', type=str).split("-")
     sort_column = request.args.get('sort_column', "date_created", type=str)
     sort_dir = request.args.get('sort_dir', "desc", type=str)
-    type_filter = request.args.getlist('type_filter[]')
-    if not type_filter: type_filter = ['purchase', 'investment', 'expense']
-
-    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+    type_filter = request.args.getlist('type_filter[]') or ['purchase', 'investment', 'expense']
 
     date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
     date_end =  datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)
@@ -252,21 +247,21 @@ def getPurchasesDetailed():
     per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
 
-    if '*' in search or '_' in search: 
-        looking_for = search.replace('_', '__')\
-            .replace('*', '%')\
-            .replace('?', '_')
-    else:
-        looking_for = '%{0}%'.format(search)
+    looking_for = (
+        search.replace("_", "__").replace("*", "%").replace("?", "_")
+        if "*" in search or "_" in search
+        else f"%{search}%"
+    )
         
-    paginated_items = Purchase.query.filter(or_(
+    paginated_items = Purchase.query\
+        .filter(or_(
         Purchase.id.ilike(looking_for),
         Purchase.seller_name.ilike(looking_for),
         Purchase.seller_invoice_number.ilike(looking_for),
         Purchase.seller_fiscal_number.ilike(looking_for),
         Purchase.seller_tax_number.ilike(looking_for),
         ))\
-        .order_by(sort)\
+        .order_by(asc(sort_column) if sort_dir == "asc" else desc(sort_column))\
         .filter(Purchase.date_created <= date_end)\
         .filter(Purchase.date_created >= date_start)\
         .filter(and_(Purchase.purchase_type.in_(type_filter)))\
@@ -286,8 +281,6 @@ def getDailyPurchases():
     if sort_column == "tax":
         sort_column = func.lower(PurchaseTax.tax_value)
 
-    sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
-
     purchase_date_start = datetime.combine(date(year=int(purchase_date[2]), month=int(purchase_date[1]), day=int(purchase_date[0])), time.min)
     purchase_date_end = datetime.combine(date(year=int(purchase_date[2]), month=int(purchase_date[1]), day=int(purchase_date[0])), time.max)
     
@@ -295,12 +288,11 @@ def getDailyPurchases():
     per_page = request.args.get('per_page', 20, type=int)
     search = request.args.get('search', '*', type=str)
 
-    if '*' in search or '_' in search: 
-        looking_for = search.replace('_', '__')\
-            .replace('*', '%')\
-            .replace('?', '_')
-    else:
-        looking_for = '%{0}%'.format(search)
+    looking_for = (
+        search.replace("_", "__").replace("*", "%").replace("?", "_")
+        if "*" in search or "_" in search
+        else f"%{search}%"
+    )
         
     paginated_items = Purchase.query.filter(or_(
         Purchase.id.ilike(looking_for),
@@ -309,7 +301,7 @@ def getDailyPurchases():
         Purchase.total_amount.ilike(looking_for),
         Purchase.subtotal_amount.ilike(looking_for),
         ))\
-        .order_by(sort)\
+        .order_by(asc(sort_column) if sort_dir == "asc" else desc(sort_column))\
         .filter(Purchase.date_created <= purchase_date_end)\
         .filter(Purchase.date_created >= purchase_date_start)\
         .filter(and_(Purchase.purchase_type.in_(type_filter)))\

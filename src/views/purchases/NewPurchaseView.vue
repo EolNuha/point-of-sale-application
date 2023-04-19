@@ -389,7 +389,7 @@
                     role="tooltip"
                     class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
                   >
-                    {{ $t("purchasedPrice") }} {{ $t("withTax") }}
+                    {{ $t("purchasedPrice") }} {{ $t("withoutTax") }}
                   </div>
                 </label>
                 <Field
@@ -398,7 +398,7 @@
                   type="number"
                   step="0.01"
                   v-model="product.purchasedPrice"
-                  :placeholder="`${$t('purchasedPrice')} (${$t('withTax')})`"
+                  :placeholder="`${$t('purchasedPrice')} (${$t('withoutTax')})`"
                   class="default-input w-full"
                   :class="
                     errors[`${index}purchasedPrice`]
@@ -697,7 +697,7 @@ export default {
         this.products[idx].barcode = productInfo.barcode;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].sellingPrice = productInfo.sellingPrice;
-        this.products[idx].purchasedPrice = productInfo.purchasedPrice;
+        this.products[idx].purchasedPrice = productInfo.purchasedPriceWOTax;
         this.products[idx].expirationDate = productInfo.expirationDate;
         this.products[idx].measure = productInfo.measure;
       }
@@ -710,7 +710,7 @@ export default {
         this.products[idx].productName = productInfo.name;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].sellingPrice = productInfo.sellingPrice;
-        this.products[idx].purchasedPrice = productInfo.purchasedPrice;
+        this.products[idx].purchasedPrice = productInfo.purchasedPriceWOTax;
         this.products[idx].expirationDate = productInfo.expirationDate;
         this.products[idx].measure = productInfo.measure;
       }

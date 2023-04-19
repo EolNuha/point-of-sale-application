@@ -206,6 +206,8 @@ def getPurchases():
 
 @analytics.route('/analytics/purchases/<string:day>', methods=["GET"])
 def getPurchaseStats(day):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
     startdate = day.split("-")
 
     date_start = datetime.combine(date(year=int(startdate[0]), month=int(startdate[1]), day=int(startdate[2])), time.min)
@@ -227,7 +229,7 @@ def getPurchaseStats(day):
 
     for item in purchases:
         purchase_analytics["options"].append(item.date_created.strftime('%H:%M'))
-        curr_series.append(item.total_amount)
+        curr_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
 
     purchase_analytics["series"].append({"name": "purchase", "data": curr_series})
     purchase_analytics["info"].update({"chartName": f"{day}--purchase-revenue", "currTotal": sum(curr_series)})

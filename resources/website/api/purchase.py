@@ -24,7 +24,7 @@ def createPurchase():
     products = request.json["products"]
     seller = request.json["seller"]
 
-    multiply_prices = lambda product: Decimal(product["purchasedPrice"]).quantize(FOURPLACES) * Decimal(product["stock"]).quantize(FOURPLACES)
+    multiply_prices = lambda product: Decimal((Decimal(product["purchasedPrice"]) + (Decimal(product["purchasedPrice"]) * (Decimal(product["tax"]) / 100))) * Decimal(product["stock"])).quantize(FOURPLACES)
     total_amount = Decimal(sum(map(multiply_prices, products))).quantize(FOURPLACES)
 
     current_time = datetime.now()
@@ -47,10 +47,10 @@ def createPurchase():
 
     for product in products:
         product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-        product_purchased_price = Decimal(product["purchasedPrice"]).quantize(FOURPLACES)
+        product_purchased_price_wo_tax = Decimal(product["purchasedPrice"]).quantize(FOURPLACES)
         product_tax = Decimal(product["tax"]).quantize(FOURPLACES)
-        tax_amount = Decimal(Decimal(product_tax / 100).quantize(FOURPLACES) * product_purchased_price).quantize(FOURPLACES)
-        product_purchased_price_wo_tax = product_purchased_price - tax_amount
+        tax_amount = Decimal(product_purchased_price_wo_tax * (product_tax / 100)).quantize(FOURPLACES)
+        product_purchased_price = product_purchased_price_wo_tax + tax_amount
         if product["expirationDate"]:
             expiration_date = product["expirationDate"].split("-")
             expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)

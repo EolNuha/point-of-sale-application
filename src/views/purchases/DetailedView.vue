@@ -122,11 +122,19 @@
           <td class="py-2 px-6">{{ purchase.sellerInvoiceNumber }}</td>
           <template v-for="item in taxes" :key="item.settingsValue">
             <td class="py-2 px-6">
-              {{ $parent.getTaxValue(purchase.taxes, item.settingsAlias) }} €
+              {{
+                purchase.taxes
+                  ? purchase.taxes[item.settingsAlias]?.taxValue || "0.00"
+                  : "0.00"
+              }}
+              €
             </td>
             <td class="py-2 px-6">
               {{
-                $parent.getTotalWOTaxValue(purchase.taxes, item.settingsAlias)
+                purchase.taxes
+                  ? purchase.taxes[item.settingsAlias]?.totalWithoutTax ||
+                    "0.00"
+                  : "0.00"
               }}
               €
             </td>

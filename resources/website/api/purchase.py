@@ -204,7 +204,6 @@ def getPurchases():
             Purchase.id.label("id"), 
             Purchase.date_created.label("date_created"), 
             Purchase.date_modified.label("date_modified"),
-            Purchase.purchase_taxes.label("purchase_taxes"),
             sa.func.sum(Purchase.subtotal_amount).label("subtotal_amount"),
             sa.func.sum(Purchase.total_amount).label("total_amount"),
         )\
@@ -349,21 +348,7 @@ def getSellers():
 
 @purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
-    tax_alias_sum = PurchaseTax.query.filter_by(purchase_id=purchaseId)\
-        .with_entities(
-            PurchaseTax.id.label("id"),
-            PurchaseTax.tax_name.label("tax_name"),
-            PurchaseTax.tax_alias.label("tax_alias"),
-            func.sum(PurchaseTax.tax_value).label('tax_value'),
-            func.sum(PurchaseTax.total_without_tax).label('total_without_tax')
-        )\
-        .group_by(PurchaseTax.tax_alias)\
-        .all()
-
-    purchase_details = getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404())
-    purchase_details["taxes"] = getTaxesList(tax_alias_sum)
-
-    return jsonify(purchase_details)
+    return jsonify(getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404()))
 
 @purchase.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):

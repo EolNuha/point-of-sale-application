@@ -1,4 +1,5 @@
 import decimal
+from collections import defaultdict
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
 TWOPLACES = Decimal(10) ** -2
@@ -18,6 +19,7 @@ def getPurchaseDict(item):
 def getDailyPurchaseDict(item):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
+    getGroupedByAliasTaxes(item.purchase_taxes)
     return {
         "id": item.id,
         "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
@@ -27,8 +29,8 @@ def getDailyPurchaseDict(item):
         "sellerInvoiceNumber": item.seller_invoice_number,
         "sellerFiscalNumber": item.seller_fiscal_number,
         "sellerTaxNumber": item.seller_tax_number,
-        # "purchaseItems": getPurchaseItemsList(item.purchase_items),
-        "taxes": getTaxesList(item.purchase_taxes),
+        "purchaseItems": getPurchaseItemsList(item.purchase_items),
+        "taxes": getGroupedByAliasTaxes(item.purchase_taxes),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
     }
@@ -93,3 +95,17 @@ def getSellersList(sellers):
 
 def getTaxesList(items):
     return [getTaxDict(i) for i in items]
+
+def getGroupedByAliasTaxes(data):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    result = defaultdict(lambda: {'taxValue': Decimal(0), 'totalWithoutTax': Decimal(0)})
+
+    for item in data:
+        tax_alias = item.tax_alias
+        tax_value = Decimal(item.tax_value).quantize(TWOPLACES)
+        total_without_tax = Decimal(item.total_without_tax).quantize(TWOPLACES)
+        result[tax_alias]['taxValue'] += tax_value
+        result[tax_alias]['totalWithoutTax'] += total_without_tax
+
+    return result

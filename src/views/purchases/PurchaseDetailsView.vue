@@ -161,9 +161,10 @@
                     </td>
                     <td class="text-right py-2">
                       {{
-                        purchase.taxes?.find(
-                          (obj) => obj.taxAlias === item.settingsAlias
-                        )?.taxValue
+                        purchase.taxes
+                          ? purchase.taxes[item.settingsAlias]?.taxValue ||
+                            "0.00"
+                          : "0.00"
                       }}
                       €
                     </td>
@@ -174,9 +175,10 @@
                     </td>
                     <td class="text-right py-2">
                       {{
-                        purchase.taxes?.find(
-                          (obj) => obj.taxAlias === item.settingsAlias
-                        )?.totalWithoutTax
+                        purchase.taxes
+                          ? purchase.taxes[item.settingsAlias]
+                              ?.totalWithoutTax || "0.00"
+                          : "0.00"
                       }}
                       €
                     </td>

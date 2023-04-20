@@ -46,7 +46,7 @@ export default {
   },
   created() {
     defineRule("required", (value) => {
-      if (!value || !value.length) {
+      if (!value || typeof value !== "number" ? !value.length : false) {
         return this.$t("isRequired");
       }
       return true;

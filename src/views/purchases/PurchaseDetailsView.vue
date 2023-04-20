@@ -184,6 +184,10 @@
                     </td>
                   </tr>
                 </template>
+                <tr v-if="Number(purchase.rabatAmount) > 0">
+                  <td class="py-2">{{ $t("rabat") }}</td>
+                  <td class="text-right py-2">{{ purchase.rabatAmount }} €</td>
+                </tr>
                 <tr class="font-bold text-xl">
                   <td class="py-2">{{ $t("total") }}</td>
                   <td class="text-right py-2">{{ purchase.totalAmount }} €</td>

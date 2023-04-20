@@ -12,6 +12,7 @@ class Purchase(db.Model):
     purchase_type = db.Column(db.Enum("purchase", "investment", "expense"), default="purchase")
     total_amount = db.Column(db.Numeric(precision=10, scale=4))
     subtotal_amount = db.Column(db.Numeric(precision=10, scale=4))
+    rabat_amount = db.Column(db.Numeric(precision=10, scale=4))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
     purchase_taxes = db.relationship('PurchaseTax', backref='purchase', lazy=True)

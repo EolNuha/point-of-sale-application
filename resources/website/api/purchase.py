@@ -31,12 +31,14 @@ def createPurchase():
         stock = Decimal(product["stock"])
         price_before_tax = product_purchased_price_wo_tax - (product_purchased_price_wo_tax * rabat_percentage)
         price_after_tax = price_before_tax + (price_before_tax * tax_percentage)
+        rabat_price = product_purchased_price_wo_tax * rabat_percentage * stock
         subtotal_price = price_before_tax * stock
         total_price = price_after_tax * stock
-        return [total_price.quantize(FOURPLACES), subtotal_price.quantize(FOURPLACES)]
+        return [total_price.quantize(FOURPLACES), subtotal_price.quantize(FOURPLACES), rabat_price.quantize(FOURPLACES)]
 
     total_amount = sum(calculate_total_price(product)[0] for product in products).quantize(FOURPLACES)
     subtotal_amount = sum(calculate_total_price(product)[1] for product in products).quantize(FOURPLACES)
+    rabat_amount = sum(calculate_total_price(product)[2] for product in products).quantize(FOURPLACES)
 
     current_time = datetime.now()
     purchase_date_split = seller["purchaseDate"].split("-")
@@ -45,6 +47,7 @@ def createPurchase():
     purchase = Purchase(
         total_amount=total_amount,
         subtotal_amount=subtotal_amount,
+        rabat_amount=rabat_amount,
         seller_name=seller["sellerName"],
         seller_invoice_number=seller["invoiceNumber"],
         seller_fiscal_number=seller["fiscalNumber"],

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white dark:bg-neutral-900 rounded my-5 relative">
+  <div class="bg-white dark:bg-neutral-900 rounded relative">
     <div
       class="flex items-center rounded-t flex-row flex-wrap lg:flex-nowrap justify-between p-3 px-8 gap-2 bg-neutral-100 dark:bg-neutral-700/75"
     >

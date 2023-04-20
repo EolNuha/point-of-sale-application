@@ -1,26 +1,33 @@
 <template>
-  <div class="bg-neutral-200 dark:bg-neutral-800 min-h-screen px-4">
+  <div
+    class="bg-neutral-200 dark:bg-neutral-800 min-h-screen p-4 flex flex-col gap-5"
+  >
     <AreaChartMoney
       :dispatchModule="`analyticsModule/getProductsSoldbyAmount`"
       :chartData="$store.state.analyticsModule.productsSoldbyAmount"
       :titleContent="$t('topProducts')"
       :textContent="$t('topProductsMostRevenue')"
+      :chartType="'pie'"
     >
     </AreaChartMoney>
-    <AreaChartMoney
-      :dispatchModule="`analyticsModule/getProductsbyGrossProfit`"
-      :chartData="$store.state.analyticsModule.productsSoldbyGrossProfit"
-      :titleContent="`${$t('topProducts')} - ${$t('grossProfit')}`"
-      :textContent="$t('topProductsMostGrossProfit')"
-    >
-    </AreaChartMoney>
-    <AreaChartMoney
-      :dispatchModule="`analyticsModule/getProductsbyNetProfit`"
-      :chartData="$store.state.analyticsModule.productsSoldbyNetProfit"
-      :titleContent="`${$t('topProducts')} - ${$t('netProfit')}`"
-      :textContent="$t('topProductsMostNetProfit')"
-    >
-    </AreaChartMoney>
+    <div class="grid grid-cols-2 gap-4">
+      <AreaChartMoney
+        :dispatchModule="`analyticsModule/getProductsbyGrossProfit`"
+        :chartData="$store.state.analyticsModule.productsSoldbyGrossProfit"
+        :titleContent="`${$t('topProducts')} - ${$t('grossProfit')}`"
+        :textContent="$t('topProductsMostGrossProfit')"
+        :chartType="'pie'"
+      >
+      </AreaChartMoney>
+      <AreaChartMoney
+        :dispatchModule="`analyticsModule/getProductsbyNetProfit`"
+        :chartData="$store.state.analyticsModule.productsSoldbyNetProfit"
+        :titleContent="`${$t('topProducts')} - ${$t('netProfit')}`"
+        :textContent="$t('topProductsMostNetProfit')"
+        :chartType="'pie'"
+      >
+      </AreaChartMoney>
+    </div>
     <AreaChartMoney
       v-if="selectedProduct"
       :dispatchModule="`analyticsModule/getProductStats`"

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white dark:bg-neutral-900 rounded my-5 relative">
+  <div class="bg-white dark:bg-neutral-900 rounded relative">
     <div
       class="flex items-center rounded-t flex-row flex-wrap lg:flex-nowrap justify-between p-3 sm:px-8 gap-2 bg-neutral-100 dark:bg-neutral-700/75 relative"
     >
@@ -62,13 +62,21 @@
 
       <div class="relative min-h-[350px] mt-5">
         <OverlayC :minHeight="`min-h-[350px]`" v-if="isFetching" />
-        <AreaChart v-if="!isFetching" :chartData="chartData" />
+        <AreaChart
+          v-if="!isFetching && chartType === 'area'"
+          :chartData="chartData"
+        />
+        <PieChart
+          v-if="!isFetching && chartType === 'pie'"
+          :chartData="chartData"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import AreaChart from "@/components/AreaChart.vue";
+import PieChart from "@/components/PieChart.vue";
 import RangeDateFilter from "@/components/RangeDateFilterComponent.vue";
 export default {
   props: {
@@ -93,10 +101,16 @@ export default {
       type: String,
       required: true,
     },
+    chartType: {
+      type: String,
+      required: false,
+      default: "area",
+    },
   },
   components: {
     RangeDateFilter,
     AreaChart,
+    PieChart,
   },
   data() {
     return {

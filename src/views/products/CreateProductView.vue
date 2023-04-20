@@ -9,7 +9,7 @@
         >
         <Field
           name="product_name"
-          :rules="isRequired"
+          rules="required"
           v-model="product.name"
           type="text"
           id="product_name"
@@ -29,7 +29,7 @@
           >
           <Field
             name="product_barcode"
-            :rules="isRequired"
+            rules="required"
             v-model="product.barcode"
             type="number"
             id="product_barcode"
@@ -48,7 +48,7 @@
           >
           <Field
             name="product_stock"
-            :rules="isRequired"
+            rules="required"
             v-model="product.stock"
             type="number"
             id="product_stock"
@@ -69,7 +69,7 @@
           >
           <Field
             name="product_purchasedprice"
-            :rules="isRequired"
+            rules="required"
             v-model="product.purchasedPrice"
             type="number"
             step="0.01"
@@ -89,7 +89,7 @@
           >
           <Field
             name="product_sellingprice"
-            :rules="isRequired"
+            rules="required"
             v-model="product.sellingPrice"
             type="number"
             step="0.01"
@@ -237,9 +237,6 @@ export default {
     });
   },
   methods: {
-    isRequired(value) {
-      return value ? true : this.$t("isRequired");
-    },
     formatDate(date) {
       return (
         String(date.getFullYear()).padStart(2, "0") +

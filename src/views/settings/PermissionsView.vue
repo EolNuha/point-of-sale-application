@@ -207,7 +207,7 @@
                   {{ $t("subject") }}</label
                 >
                 <Field
-                  :rules="isRequired"
+                  rules="required"
                   v-model="permission.subject"
                   type="text"
                   name="subject"
@@ -228,7 +228,7 @@
                   {{ $t("action") }}</label
                 >
                 <Field
-                  :rules="isRequired"
+                  rules="required"
                   v-model="permission.action"
                   type="text"
                   name="action"

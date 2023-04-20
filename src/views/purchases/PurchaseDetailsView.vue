@@ -257,9 +257,6 @@ export default {
       });
   },
   methods: {
-    isRequired(value) {
-      return value > 0 ? true : this.$t("isRequired");
-    },
     removeClass(element, className) {
       element.classList.remove(...className);
       const children = element.children;

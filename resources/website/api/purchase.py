@@ -24,8 +24,19 @@ def createPurchase():
     products = request.json["products"]
     seller = request.json["seller"]
 
-    multiply_prices = lambda product: Decimal((Decimal(product["purchasedPrice"]) + (Decimal(product["purchasedPrice"]) * (Decimal(product["tax"]) / 100))) * Decimal(product["stock"])).quantize(FOURPLACES)
-    total_amount = Decimal(sum(map(multiply_prices, products))).quantize(FOURPLACES)
+    def calculate_total_price(product):
+        product_purchased_price_wo_tax = Decimal(product["purchasedPrice"])
+        rabat_percentage = Decimal(product["rabat"]) / 100
+        tax_percentage = Decimal(product["tax"]) / 100
+        stock = Decimal(product["stock"])
+        price_before_tax = product_purchased_price_wo_tax - (product_purchased_price_wo_tax * rabat_percentage)
+        price_after_tax = price_before_tax + (price_before_tax * tax_percentage)
+        subtotal_price = price_before_tax * stock
+        total_price = price_after_tax * stock
+        return [total_price.quantize(FOURPLACES), subtotal_price.quantize(FOURPLACES)]
+
+    total_amount = sum(calculate_total_price(product)[0] for product in products).quantize(FOURPLACES)
+    subtotal_amount = sum(calculate_total_price(product)[1] for product in products).quantize(FOURPLACES)
 
     current_time = datetime.now()
     purchase_date_split = seller["purchaseDate"].split("-")
@@ -33,6 +44,7 @@ def createPurchase():
 
     purchase = Purchase(
         total_amount=total_amount,
+        subtotal_amount=subtotal_amount,
         seller_name=seller["sellerName"],
         seller_invoice_number=seller["invoiceNumber"],
         seller_fiscal_number=seller["fiscalNumber"],
@@ -47,10 +59,12 @@ def createPurchase():
 
     for product in products:
         product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-        product_purchased_price_wo_tax = Decimal(product["purchasedPrice"]).quantize(FOURPLACES)
-        product_tax = Decimal(product["tax"]).quantize(FOURPLACES)
-        tax_amount = Decimal(product_purchased_price_wo_tax * (product_tax / 100)).quantize(FOURPLACES)
-        product_purchased_price = product_purchased_price_wo_tax + tax_amount
+        product_purchased_price_wo_tax = Decimal(product["purchasedPrice"])
+        tax_percentage = Decimal(product["tax"]) / 100
+        rabat_percentage = Decimal(product["rabat"]) / 100
+        price_before_tax = product_purchased_price_wo_tax - (product_purchased_price_wo_tax * rabat_percentage)
+        tax_amount = Decimal(price_before_tax * tax_percentage).quantize(FOURPLACES)
+        product_purchased_price = Decimal(price_before_tax + tax_amount).quantize(FOURPLACES)
         if product["expirationDate"]:
             expiration_date = product["expirationDate"].split("-")
             expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
@@ -77,6 +91,7 @@ def createPurchase():
                 product_barcode=product["barcode"],
                 product_name=product["productName"],
                 product_tax=product["tax"],
+                rabat=product["rabat"],
                 product_purchased_price_wo_tax=product_purchased_price_wo_tax,
                 product_purchased_price=product_purchased_price,
                 product_selling_price=product["sellingPrice"],
@@ -120,6 +135,7 @@ def createPurchase():
                 product_barcode=created_product.barcode,
                 product_name=created_product.name,
                 product_tax=created_product.tax,
+                rabat=product["rabat"], 
                 product_purchased_price_wo_tax=created_product.purchased_price_wo_tax,
                 product_purchased_price=created_product.purchased_price,
                 product_selling_price=created_product.selling_price,
@@ -132,7 +148,7 @@ def createPurchase():
             )
         db.session.add(purchase_item)
 
-    subtotal, purchase_taxes = [], []
+    purchase_taxes = []
     taxes = Settings.query.filter_by(settings_type="tax").all()
     taxes.append(Settings(
         settings_name="0",
@@ -143,14 +159,12 @@ def createPurchase():
         date_modified=datetime.now(),
     ))
     for item in purchase.purchase_items:
-        subtotal.append(Decimal(item.product_purchased_price_wo_tax * Decimal(item.product_stock)).quantize(FOURPLACES))
         for tax in taxes:
             if int(item.product_tax) == int(tax.settings_value):
                 total_tax_amount = Decimal(item.tax_amount * Decimal(item.product_stock).quantize(FOURPLACES)).quantize(FOURPLACES)
                 key_v = tax.settings_name + "+" + tax.settings_alias + "+" + str(Decimal(item.total_amount - total_tax_amount).quantize(FOURPLACES))
                 purchase_taxes.append({key_v: total_tax_amount})
     
-    purchase.subtotal_amount = sum(subtotal)
     purchase_taxes = sumListOfDicts(purchase_taxes)
     for key, value in purchase_taxes.items():
         split_key = key.split("+")

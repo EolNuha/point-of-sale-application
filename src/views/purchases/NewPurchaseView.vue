@@ -14,7 +14,7 @@
           >
           <Field
             required
-            :rules="isRequired"
+            rules="required"
             type="text"
             v-model="seller.sellerName"
             class="hidden"
@@ -46,7 +46,7 @@
           >
           <Field
             required
-            :rules="isRequired"
+            rules="required"
             type="number"
             step="1"
             v-model="seller.fiscalNumber"
@@ -67,7 +67,7 @@
           >
           <Field
             required
-            :rules="isRequired"
+            rules="required"
             type="number"
             step="1"
             v-model="seller.taxNumber"
@@ -86,7 +86,7 @@
           >
           <Field
             required
-            :rules="isRequired"
+            rules="required"
             type="text"
             v-model="seller.invoiceNumber"
             :placeholder="$t('invoiceNumber')"
@@ -106,7 +106,7 @@
           >
           <Field
             required
-            :rules="isRequired"
+            rules="required"
             type="date"
             v-model="seller.purchaseDate"
             :placeholder="$t('purchaseDate')"
@@ -124,7 +124,7 @@
           >
           <Field
             required
-            :rules="isRequired"
+            rules="required"
             type="number"
             step="1"
             v-model="seller.purchaseType"
@@ -171,7 +171,7 @@
                 >
                 <Field
                   required
-                  :rules="isRequired"
+                  rules="required"
                   type="number"
                   step="1"
                   v-model="product.barcode"
@@ -216,7 +216,7 @@
                 >
                 <Field
                   required
-                  :rules="isRequired"
+                  rules="required"
                   type="text"
                   v-model="product.productName"
                   :placeholder="$t('productName')"
@@ -317,7 +317,7 @@
                 <div class="flex items-center gap-2">
                   <Field
                     required
-                    :rules="isRequired"
+                    rules="required"
                     type="number"
                     v-model="product.stock"
                     :placeholder="$t('stock')"
@@ -330,6 +330,74 @@
                   />
                 </div>
                 <span class="text-red-700">{{ errors[`${index}stock`] }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("purchasedPrice") }}
+                  <button
+                    :id="`purchased-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `purchased-${index}-tooltip`,
+                        triggerEl: `purchased-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`purchased-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("purchasedPrice") }} {{ $t("withoutTax") }}
+                  </div>
+                </label>
+                <Field
+                  required
+                  rules="required"
+                  type="number"
+                  step="0.01"
+                  v-model="product.purchasedPrice"
+                  :placeholder="`${$t('purchasedPrice')} (${$t('withoutTax')})`"
+                  class="default-input w-full"
+                  :class="
+                    errors[`${index}purchasedPrice`]
+                      ? 'ring-2 ring-red-500'
+                      : ''
+                  "
+                  :name="`${index}purchasedPrice`"
+                  :id="`${index}purchasedPrice`"
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}purchasedPrice`]
+                }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("rabat") }} (%)
+                </label>
+                <Field
+                  required
+                  rules="required|minMax:0,100"
+                  type="number"
+                  step="0.01"
+                  v-model="product.rabat"
+                  :placeholder="$t('rabat')"
+                  class="default-input w-full"
+                  :class="errors[`${index}rabat`] ? 'ring-2 ring-red-500' : ''"
+                  :name="`${index}rabat`"
+                  :id="`${index}rabat`"
+                />
+                <span class="text-red-700">{{ errors[`${index}rabat`] }}</span>
               </div>
               <div>
                 <label
@@ -365,61 +433,12 @@
               </div>
               <div>
                 <label
-                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("purchasedPrice") }}
-                  <button
-                    :id="`purchased-${index}-tooltip-btn`"
-                    class="cursor-default"
-                    type="button"
-                    @mouseover="
-                      $showTooltip({
-                        targetEl: `purchased-${index}-tooltip`,
-                        triggerEl: `purchased-${index}-tooltip-btn`,
-                        placement: `right`,
-                      })
-                    "
-                  >
-                    <IconC
-                      iconName="InformationCircleIcon"
-                      iconClass="w-4 h-4"
-                    />
-                  </button>
-                  <div
-                    :id="`purchased-${index}-tooltip`"
-                    role="tooltip"
-                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
-                  >
-                    {{ $t("purchasedPrice") }} {{ $t("withoutTax") }}
-                  </div>
-                </label>
-                <Field
-                  required
-                  :rules="isRequired"
-                  type="number"
-                  step="0.01"
-                  v-model="product.purchasedPrice"
-                  :placeholder="`${$t('purchasedPrice')} (${$t('withoutTax')})`"
-                  class="default-input w-full"
-                  :class="
-                    errors[`${index}purchasedPrice`]
-                      ? 'ring-2 ring-red-500'
-                      : ''
-                  "
-                  :name="`${index}purchasedPrice`"
-                  :id="`${index}purchasedPrice`"
-                />
-                <span class="text-red-700">{{
-                  errors[`${index}purchasedPrice`]
-                }}</span>
-              </div>
-              <div>
-                <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >{{ $t("sellingPrice") }}</label
                 >
                 <Field
                   required
-                  :rules="isRequired"
+                  rules="required"
                   type="number"
                   step="0.01"
                   v-model="product.sellingPrice"
@@ -530,11 +549,13 @@
 
 <script>
 import { Field, Form } from "vee-validate";
+
 export default {
   components: {
     Field,
     Form,
   },
+  setup() {},
   data() {
     return {
       isLoading: false,
@@ -555,6 +576,7 @@ export default {
           productName: "",
           stock: null,
           tax: 0,
+          rabat: "0",
           purchasedPrice: null,
           sellingPrice: null,
           measure: "pcs",
@@ -586,13 +608,6 @@ export default {
       });
       return t;
     },
-    roundTo2() {
-      return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
-    },
-    roundTo4() {
-      return (num) =>
-        Math.round((Number(num) + Number.EPSILON) * 10000) / 10000;
-    },
   },
   async created() {
     this.seller.purchaseDate = this.minDate;
@@ -613,13 +628,10 @@ export default {
     await this.$store.dispatch("settingsModule/getSettingsType", {
       settingsType: "tax",
     });
-    this.getSellers("");
-    this.getProducts("");
+    await this.getSellers("");
+    await this.getProducts("");
   },
   methods: {
-    isRequired(value) {
-      return value ? true : this.$t("isRequired");
-    },
     formatDate(date) {
       return (
         String(date.getFullYear()).padStart(2, "0") +
@@ -635,6 +647,7 @@ export default {
         productName: "",
         stock: null,
         tax: 0,
+        rabat: "0",
         purchasedPrice: null,
         sellingPrice: null,
         measure: "pcs",

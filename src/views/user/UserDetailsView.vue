@@ -24,7 +24,7 @@
           >
           <Field
             v-model="user.email"
-            :rules="isRequired"
+            rules="required"
             type="email"
             name="email"
             id="email"
@@ -44,7 +44,7 @@
           >
           <Field
             v-model="user.firstName"
-            :rules="isRequired"
+            rules="required"
             type="text"
             name="firstName"
             id="firstName"
@@ -64,7 +64,7 @@
           >
           <Field
             v-model="user.lastName"
-            :rules="isRequired"
+            rules="required"
             type="text"
             name="lastName"
             id="lastName"
@@ -84,7 +84,7 @@
           >
           <Field
             v-model="user.username"
-            :rules="isRequired"
+            rules="required"
             type="text"
             name="username"
             id="username"
@@ -180,9 +180,6 @@ export default {
       });
   },
   methods: {
-    isRequired(value) {
-      return value ? true : this.$t("isRequired");
-    },
     update() {
       this.isLoading = true;
       this.$store

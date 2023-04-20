@@ -55,7 +55,7 @@
                 {{ $t("customerAmount") }}</label
               >
               <Field
-                :rules="isRequired"
+                rules="required"
                 v-model="customerAmount"
                 @focus="$event.target.select()"
                 type="number"
@@ -142,9 +142,6 @@ export default {
     },
   },
   methods: {
-    isRequired(value) {
-      return value ? true : this.$t("isRequired");
-    },
     isChangeAmountValid() {
       const value = this.customerAmount - this.total;
       if (value >= 0) {

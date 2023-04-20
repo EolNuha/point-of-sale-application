@@ -46,7 +46,7 @@
               >
               <Field
                 v-model="email"
-                :rules="isRequired"
+                rules="required"
                 type="email"
                 name="email"
                 id="email"
@@ -65,7 +65,7 @@
               >
               <Field
                 v-model="firstName"
-                :rules="isRequired"
+                rules="required"
                 type="text"
                 name="firstName"
                 id="firstName"
@@ -84,7 +84,7 @@
               >
               <Field
                 v-model="lastName"
-                :rules="isRequired"
+                rules="required"
                 type="text"
                 name="lastName"
                 id="lastName"
@@ -103,7 +103,7 @@
               >
               <Field
                 v-model="username"
-                :rules="isRequired"
+                rules="required"
                 type="text"
                 name="username"
                 id="username"
@@ -122,7 +122,7 @@
               >
               <Field
                 v-model="password"
-                :rules="isRequired"
+                rules="required"
                 type="password"
                 name="password"
                 id="password"
@@ -188,9 +188,6 @@ export default {
     document.getElementById("app").classList.add("sidebar-opened");
   },
   methods: {
-    isRequired(value) {
-      return value ? true : this.$t("isRequired");
-    },
     create() {
       this.isLoading = true;
       const data = {

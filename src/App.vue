@@ -21,6 +21,7 @@ import { logoutUser } from "@/router/auth/index";
 import moment from "moment";
 import "moment/locale/es";
 import UserData from "@/services/mixins/UserData";
+import { defineRule } from "vee-validate";
 
 export default {
   components: {
@@ -44,6 +45,26 @@ export default {
     };
   },
   created() {
+    defineRule("required", (value) => {
+      if (!value || !value.length) {
+        return this.$t("isRequired");
+      }
+      return true;
+    });
+
+    defineRule("minMax", (value, [min, max]) => {
+      if (!value || !value.length) {
+        return true;
+      }
+      const numericValue = Number(value);
+      if (numericValue < min) {
+        return this.$t("minValue", { min });
+      }
+      if (numericValue > max) {
+        return this.$t("maxValue", { max });
+      }
+      return true;
+    });
     this.$store.dispatch("userModule/getCurrentUser").catch(() => {
       logoutUser();
       this.$router.push({ name: "signin" });

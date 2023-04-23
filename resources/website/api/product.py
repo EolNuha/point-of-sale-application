@@ -7,9 +7,9 @@ from website import db
 from sqlalchemy import or_, asc, desc
 import random
 
-product = Blueprint('product', __name__)
+product_api = Blueprint('product_api', __name__)
 
-@product.route('/products', methods=["POST"])
+@product_api.route('/products', methods=["POST"])
 def createProduct():
     name = request.json["name"]
     barcode = request.json["barcode"]
@@ -55,7 +55,7 @@ def createProduct():
     }
     return jsonify(data), 200
 
-@product.route('/products', methods=["GET"])
+@product_api.route('/products', methods=["GET"])
 def getProducts():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
@@ -81,15 +81,15 @@ def getProducts():
 
     return jsonify(getPaginatedDict(getProductsList(paginated_items.items), paginated_items))
 
-@product.route('/products/<int:productId>', methods=["GET"])
+@product_api.route('/products/<int:productId>', methods=["GET"])
 def getProductDetails(productId):
     return jsonify(getProductsDict(Product.query.filter_by(id=productId).first_or_404()))
 
-@product.route('/products/barcode/<int:barcode>', methods=["GET"])
+@product_api.route('/products/barcode/<int:barcode>', methods=["GET"])
 def getProductDetailsByBarcode(barcode):
     return jsonify(getProductsDict(Product.query.filter_by(barcode=barcode).first_or_404()))
 
-@product.route('/products/<int:productId>', methods=["POST"])
+@product_api.route('/products/<int:productId>', methods=["POST"])
 def updateProductDetails(productId):
     name = request.json["name"]
     barcode = request.json["barcode"]
@@ -131,13 +131,13 @@ def updateProductDetails(productId):
     db.session.commit()
     return "Success", 200
 
-@product.route('/products/<int:productId>', methods=["DELETE"])
+@product_api.route('/products/<int:productId>', methods=["DELETE"])
 def deleteProductDetails(productId):
     Product.query.filter_by(id=productId).delete()
     db.session.commit()
     return "Success", 200
 
-@product.route('/products', methods=["DELETE"])
+@product_api.route('/products', methods=["DELETE"])
 def deleteProducts():
     products = request.json["products"]
     for item in products:
@@ -146,7 +146,7 @@ def deleteProducts():
     return "Success", 200
 
 
-@product.route('/products/demo', methods=["GET"])
+@product_api.route('/products/demo', methods=["GET"])
 def createDemoProducts():
     taxes = [8, 18]
     for i in range(2000, 5001):

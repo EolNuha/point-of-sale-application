@@ -10,9 +10,9 @@ from website.jsonify.user import getUsersList, getUserDict
 from website.token import token_required
 from sqlalchemy import or_, asc, desc, and_
 
-auth = Blueprint('auth', __name__)
+auth_api = Blueprint('auth_api', __name__)
 
-@auth.route('/signin', methods=['POST'])
+@auth_api.route('/signin', methods=['POST'])
 def signin():
     email = request.json["email"]
     password = request.json["password"]
@@ -51,7 +51,7 @@ def signin():
             {'WWW-Authenticate' : 'Basic realm ="User does not exist!"'}
         )
   
-@auth.route('/signup', methods=['POST'])
+@auth_api.route('/signup', methods=['POST'])
 def signup():
     email = request.json["email"]
     password = request.json["password"]
@@ -86,7 +86,7 @@ def signup():
 
 
 
-@auth.route('/users', methods=['GET'])
+@auth_api.route('/users', methods=['GET'])
 def users():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
@@ -118,12 +118,12 @@ def users():
 
     return jsonify(getPaginatedDict(getUsersList(paginated_items.items), paginated_items))
 
-@auth.route('/users/<int:id>', methods=['GET'])
+@auth_api.route('/users/<int:id>', methods=['GET'])
 @token_required
 def getUserDetails(id):
     return jsonify(getUserDict(User.query.filter_by(id=id).first()))
 
-@auth.route('/users/<int:id>', methods=['PUT'])
+@auth_api.route('/users/<int:id>', methods=['PUT'])
 @token_required
 def updateUserDetails(id):
     email = request.json["email"]
@@ -146,7 +146,7 @@ def updateUserDetails(id):
 
     return "Success", 200
 
-@auth.route('/users/<int:id>', methods=["DELETE"])
+@auth_api.route('/users/<int:id>', methods=["DELETE"])
 def deleteUser(id):
     user = User.query.filter_by(id=id).first()
     if user.sales or user.purchases:
@@ -155,12 +155,12 @@ def deleteUser(id):
     db.session.commit()
     return "Success", 200
 
-@auth.route('/verify-token', methods=['POST'])
+@auth_api.route('/verify-token', methods=['POST'])
 @token_required
 def verify_token():
     return jsonify({'success': True}), 200
 
-@auth.route('/current-user')
+@auth_api.route('/current-user')
 @token_required
 def currentUser():
     token = request.headers['x-access-token']
@@ -169,7 +169,7 @@ def currentUser():
         .filter_by(public_id = data['public_id'])\
         .first_or_404()))
 
-@auth.before_app_first_request
+@auth_api.before_app_first_request
 def createDemoUsers():
     if (User.query.count() > 0):
         return

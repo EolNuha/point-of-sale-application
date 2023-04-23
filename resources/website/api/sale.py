@@ -14,11 +14,11 @@ import decimal
 from website.token import currentUser
 from functools import reduce
 
-sale = Blueprint('sale', __name__)
+sale_api = Blueprint('sale_api', __name__)
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
 
-@sale.route('/sales', methods=["POST"])
+@sale_api.route('/sales', methods=["POST"])
 def createSale():
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -111,7 +111,7 @@ def createSale():
     
     return jsonify("success"), 200
 
-@sale.route('/sales', methods=["GET"])
+@sale_api.route('/sales', methods=["GET"])
 def getSales():
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -214,7 +214,7 @@ def getSales():
     
     return jsonify(paginated_dict)
 
-@sale.route('/sales-detailed', methods=["GET"])
+@sale_api.route('/sales-detailed', methods=["GET"])
 def getSalesDetailed():
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -294,7 +294,7 @@ def getSalesDetailed():
     return jsonify(paginated_dict)
 
 
-@sale.route('/sales/daily', methods=["GET"])
+@sale_api.route('/sales/daily', methods=["GET"])
 def getDailySales():
     sale_date = request.args.get('date', type=str)
     sale_date = sale_date.split(".")
@@ -364,11 +364,11 @@ def getDailySales():
 
     return jsonify(paginated_dict)
 
-@sale.route('/sales/<int:saleId>', methods=["GET"])
+@sale_api.route('/sales/<int:saleId>', methods=["GET"])
 def getSaleDetails(saleId):
     return jsonify(getDailySaleDict(Sale.query.filter_by(id=saleId).first_or_404()))
 
-@sale.route('/sales/<int:saleId>', methods=["PUT"])
+@sale_api.route('/sales/<int:saleId>', methods=["PUT"])
 def editSale(saleId):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -422,7 +422,7 @@ def editSale(saleId):
     db.session.commit()
     return "Success", 200
 
-@sale.route('/sales/<int:saleId>', methods=["DELETE"])
+@sale_api.route('/sales/<int:saleId>', methods=["DELETE"])
 def deleteSale(saleId):
     sale_query = Sale.query.filter_by(id=saleId).first_or_404()
 

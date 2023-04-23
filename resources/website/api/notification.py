@@ -8,9 +8,9 @@ from datetime import datetime, timedelta, date, time
 from website import db
 from sqlalchemy import asc, desc
 
-notification = Blueprint('notification', __name__)
+notification_api = Blueprint('notification_api', __name__)
 
-@notification.route('/notifications', methods=["GET"])
+@notification_api.route('/notifications', methods=["GET"])
 def getNotifications():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
@@ -30,7 +30,7 @@ def getNotifications():
     paginated_items = query.paginate(page=page, per_page=per_page)
     return jsonify(getPaginatedDict(getNotificationList(paginated_items.items), paginated_items))
 
-@notification.route('/notifications', methods=["POST"])
+@notification_api.route('/notifications', methods=["POST"])
 def updateNotifications():
     notifications = request.json["notifications"]
     for item in notifications:
@@ -40,13 +40,13 @@ def updateNotifications():
         db.session.commit()
     return "success", 200
 
-@notification.route('/notifications/<int:id>', methods=["DELETE"])
+@notification_api.route('/notifications/<int:id>', methods=["DELETE"])
 def deleteNotification(id):
     Notification.query.filter_by(id=id).delete()
     db.session.commit()
     return "success", 200
 
-@notification.route('/notifications', methods=["DELETE"])
+@notification_api.route('/notifications', methods=["DELETE"])
 def deleteNotifications():
     notifications = request.json["notifications"]
     for item in notifications:
@@ -54,7 +54,7 @@ def deleteNotifications():
         db.session.commit()
     return "success", 200
 
-@notification.route('/notifications/<int:id>', methods=["POST"])
+@notification_api.route('/notifications/<int:id>', methods=["POST"])
 def updateNotification(id):
     read = request.json["read"]
     star = request.json["star"]
@@ -66,7 +66,7 @@ def updateNotification(id):
     db.session.commit()
     return "Success", 200
 
-@notification.before_app_first_request
+@notification_api.before_app_first_request
 def checkProductExpireNotification():
     storage = Settings.query.filter_by(settings_type="notification").filter_by(settings_name="storage").first().settings_value
     if Notification.query.count() >= int(storage):

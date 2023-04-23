@@ -4,9 +4,9 @@ from website.jsonify.settings import getSettingsList
 from datetime import datetime
 from website import db
 
-settings = Blueprint('settings', __name__)
+settings_api = Blueprint('settings_api', __name__)
 
-@settings.route('/settings', methods=["POST"])
+@settings_api.route('/settings', methods=["POST"])
 def createSettings():
     settings_name = request.json["settingsName"]
     settings_alias = request.json["settingsAlias"]
@@ -29,19 +29,19 @@ def createSettings():
     }
     return jsonify(data), 200
 
-@settings.route('/settings/<string:settings_type>', methods=["GET"])
+@settings_api.route('/settings/<string:settings_type>', methods=["GET"])
 def getSettings(settings_type):
     items = Settings.query.filter_by(settings_type=settings_type).all()
     return jsonify(getSettingsList(items))
 
-@settings.route('/settings/delete/<int:id>', methods=["GET"])
+@settings_api.route('/settings/delete/<int:id>', methods=["GET"])
 def deleteSettings(id):
     Settings.query.filter_by(id=id).delete()
     db.session.commit()
     
     return "success",200
 
-@settings.before_app_first_request
+@settings_api.before_app_first_request
 def createDemoSettings():
     if(Settings.query.count() > 0):
         return

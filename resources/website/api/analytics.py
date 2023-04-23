@@ -9,11 +9,11 @@ from website.helpers import get_percentage_change, get_curr_prev_chart, get_curr
 from website.token import currentUser
 import decimal
 
-analytics = Blueprint('analytics', __name__)
+analytics_api = Blueprint('analytics_api', __name__)
 Decimal = decimal.Decimal
 TWOPLACES = Decimal(10) ** -2
 
-@analytics.route('/analytics/sales', methods=["GET"])
+@analytics_api.route('/analytics/sales', methods=["GET"])
 def getSales():
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -63,7 +63,7 @@ def getSales():
     })
     return jsonify(sale_analytics)
 
-@analytics.route('/analytics/sales-gross-profit', methods=["GET"])
+@analytics_api.route('/analytics/sales-gross-profit', methods=["GET"])
 def getSalesGrossProfit():
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -114,7 +114,7 @@ def getSalesGrossProfit():
     return jsonify(sale_analytics)
 
 
-@analytics.route('/analytics/sales/<string:day>', methods=["GET"])
+@analytics_api.route('/analytics/sales/<string:day>', methods=["GET"])
 def getSaleStats(day):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -154,7 +154,7 @@ def getSaleStats(day):
     return jsonify(sale_analytics)
 
 
-@analytics.route('/analytics/purchases', methods=["GET"])
+@analytics_api.route('/analytics/purchases', methods=["GET"])
 def getPurchases():
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -204,7 +204,7 @@ def getPurchases():
     })
     return jsonify(purchases_analytics)
 
-@analytics.route('/analytics/purchases/<string:day>', methods=["GET"])
+@analytics_api.route('/analytics/purchases/<string:day>', methods=["GET"])
 def getPurchaseStats(day):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -235,7 +235,7 @@ def getPurchaseStats(day):
     purchase_analytics["info"].update({"chartName": f"{day}--purchase-revenue", "currTotal": sum(curr_series)})
     return jsonify(purchase_analytics)
 
-@analytics.route('/analytics/sellers/<string:name>', methods=["GET"])
+@analytics_api.route('/analytics/sellers/<string:name>', methods=["GET"])
 def getSellerStats(name):
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -293,7 +293,7 @@ def getSellerStats(name):
     })
     return jsonify(seller_analytics)
 
-@analytics.route('/analytics/products-sold-by-amount', methods=["GET"])
+@analytics_api.route('/analytics/products-sold-by-amount', methods=["GET"])
 def getTopProducts():
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -324,7 +324,7 @@ def getTopProducts():
     return jsonify(products_analytics)
 
 
-@analytics.route('/analytics/products-sold-by-gross-profit', methods=["GET"])
+@analytics_api.route('/analytics/products-sold-by-gross-profit', methods=["GET"])
 def getTopProductsByGrossProfit():
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -352,7 +352,7 @@ def getTopProductsByGrossProfit():
     products_analytics["info"].update({"chartName": "top-products-revenue", "currTotal": sum(curr_series)})
     return jsonify(products_analytics)
 
-@analytics.route('/analytics/products-sold-by-net-profit', methods=["GET"])
+@analytics_api.route('/analytics/products-sold-by-net-profit', methods=["GET"])
 def getTopProductsByNetProfit():
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -380,7 +380,7 @@ def getTopProductsByNetProfit():
     products_analytics["info"].update({"chartName": "top-products-revenue", "currTotal": sum(curr_series)})
     return jsonify(products_analytics)
 
-@analytics.route('/analytics/products/<int:id>', methods=["GET"])
+@analytics_api.route('/analytics/products/<int:id>', methods=["GET"])
 def getProductStats(id):
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -439,7 +439,7 @@ def getProductStats(id):
     return jsonify(products_analytics)
 
 
-@analytics.route('/analytics/users-revenue', methods=["GET"])
+@analytics_api.route('/analytics/users-revenue', methods=["GET"])
 def getTopUsers():
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]
@@ -468,7 +468,7 @@ def getTopUsers():
     users_analytics["info"].update({"chartName": "top-users-revenue", "currTotal": sum(curr_series)})
     return jsonify(users_analytics)
 
-@analytics.route('/analytics/users/<int:id>', methods=["GET"])
+@analytics_api.route('/analytics/users/<int:id>', methods=["GET"])
 def getUserStats(id):
     request_dates = get_curr_prev_dates(request)
     date_start = request_dates["date_start"]

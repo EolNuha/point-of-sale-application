@@ -5,9 +5,9 @@ from datetime import datetime
 from website import db
 from website.token import currentUser
 
-permissions = Blueprint('permissions', __name__)
+permissions_api = Blueprint('permissions_api', __name__)
 
-@permissions.route('/permissions', methods=["POST"])
+@permissions_api.route('/permissions', methods=["POST"])
 def createPermission():
     user_role = request.json["user_role"]
     subject = request.json["subject"]
@@ -29,13 +29,13 @@ def createPermission():
     }
     return jsonify(data), 200
 
-@permissions.route('/permissions', methods=["GET"])
+@permissions_api.route('/permissions', methods=["GET"])
 def getUserPermissions():
     current_user = currentUser(request)
     return jsonify(getPermissionsList(Permissions.query.filter_by(user_role=current_user.user_role).all()))
 
 
-@permissions.route('/permissions/all', methods=["GET"])
+@permissions_api.route('/permissions/all', methods=["GET"])
 def getPermissionsAll():
     p = Permissions.query.with_entities(
             Permissions.id.label("id"), 
@@ -48,12 +48,12 @@ def getPermissionsAll():
         .group_by(Permissions.subject, Permissions.action).all()
     return jsonify(getPermissionsList(p))
 
-@permissions.route('/permissions/<string:user_role>', methods=["GET"])
+@permissions_api.route('/permissions/<string:user_role>', methods=["GET"])
 def getUserRolePermissions(user_role):
     return jsonify(getPermissionsList(Permissions.query.filter_by(user_role=user_role).all()))
 
 
-@permissions.route('/permissions', methods=["PUT"])
+@permissions_api.route('/permissions', methods=["PUT"])
 def updatePermission():
     user_role = request.json["user_role"]
     key = request.json["key"]
@@ -70,7 +70,7 @@ def updatePermission():
         db.session.commit()
     return "success", 200
 
-@permissions.before_app_first_request
+@permissions_api.before_app_first_request
 def createDemoSettings():
     if(Permissions.query.count() > 0):
         return

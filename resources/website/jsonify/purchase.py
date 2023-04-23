@@ -9,9 +9,9 @@ def getPurchaseDict(item):
     ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
-        "subTotalAmount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
-        "rabatAmount": Decimal(item.rabat_amount).quantize(TWOPLACES),
+        "totalAmount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
+        "subTotalAmount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
+        "rabatAmount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
         "totalTaxAmount": Decimal(item.total_amount - item.subtotal_amount).quantize(TWOPLACES),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
@@ -20,12 +20,11 @@ def getPurchaseDict(item):
 def getDailyPurchaseDict(item):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
-    getGroupedByAliasTaxes(item.purchase_taxes)
     return {
         "id": item.id,
-        "totalAmount": Decimal(item.total_amount).quantize(TWOPLACES),
-        "subTotalAmount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
-        "rabatAmount": Decimal(item.rabat_amount).quantize(TWOPLACES),
+        "totalAmount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
+        "subTotalAmount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
+        "rabatAmount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
         "totalTaxAmount": Decimal(item.total_amount - item.subtotal_amount).quantize(TWOPLACES),
         "sellerName": item.seller_name,
         "sellerInvoiceNumber": item.seller_invoice_number,
@@ -48,13 +47,13 @@ def getPurchaseItemDict(item):
             "barcode": item.product_barcode,
             "stock": Decimal(item.product_stock).quantize(TWOPLACES),
             "tax": item.product_tax,
-            "purchasedPriceWOTax": Decimal(item.product_purchased_price_wo_tax).quantize(TWOPLACES),
-            "purchasedPrice": Decimal(item.product_purchased_price).quantize(TWOPLACES),
+            "purchasedPriceWOTax": Decimal(item.product_purchased_price_wo_tax or 0).quantize(TWOPLACES),
+            "purchasedPrice": Decimal(item.product_purchased_price or 0).quantize(TWOPLACES),
             "measure": item.product_measure,
-            "sellingPrice": Decimal(item.product_selling_price).quantize(TWOPLACES),
+            "sellingPrice": Decimal(item.product_selling_price or 0).quantize(TWOPLACES),
         },
         "taxAmount": Decimal(item.tax_amount * item.product_stock).quantize(TWOPLACES),
-        "totalAmount":  Decimal(item.total_amount).quantize(TWOPLACES),
+        "totalAmount":  Decimal(item.total_amount or 0).quantize(TWOPLACES),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
         "dateModified": item.date_modified.strftime('%d.%m.%Y, %H:%M:%S'),
     }
@@ -79,8 +78,8 @@ def getTaxDict(item):
         "id": item.id,
         "taxName": item.tax_name,
         "taxAlias": item.tax_alias,
-        "taxValue": Decimal(item.tax_value).quantize(TWOPLACES),
-        "totalWithoutTax": Decimal(item.total_without_tax).quantize(TWOPLACES),
+        "taxValue": Decimal(item.tax_value or 0).quantize(TWOPLACES),
+        "totalWithoutTax": Decimal(item.total_without_tax or 0).quantize(TWOPLACES),
     }
 
 def getPurchaseItemsList(items):
@@ -102,11 +101,10 @@ def getGroupedByAliasTaxes(data):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
     result = defaultdict(lambda: {'taxValue': Decimal(0), 'totalWithoutTax': Decimal(0)})
-
     for item in data:
         tax_alias = item.tax_alias
-        tax_value = Decimal(item.tax_value).quantize(TWOPLACES)
-        total_without_tax = Decimal(item.total_without_tax).quantize(TWOPLACES)
+        tax_value = Decimal(item.tax_value or 0).quantize(TWOPLACES)
+        total_without_tax = Decimal(item.total_without_tax or 0).quantize(TWOPLACES)
         result[tax_alias]['taxValue'] += tax_value
         result[tax_alias]['totalWithoutTax'] += total_without_tax
 

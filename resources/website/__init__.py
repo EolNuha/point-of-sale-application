@@ -18,7 +18,7 @@ def create_app():
 
     from website.api.product import product
     from website.api.sale import sale
-    from website.api.purchase import purchase
+    from website.api.purchase import purchase_api
     from website.api.auth import auth
     from website.api.analytics import analytics
     from website.api.settings import settings
@@ -27,7 +27,7 @@ def create_app():
 
     app.register_blueprint(product, url_prefix='/api/')
     app.register_blueprint(sale, url_prefix='/api/')
-    app.register_blueprint(purchase, url_prefix='/api/')
+    app.register_blueprint(purchase_api, url_prefix='/api/')
     app.register_blueprint(analytics, url_prefix='/api/')
     app.register_blueprint(settings, url_prefix='/api/')
     app.register_blueprint(notification, url_prefix='/api/')

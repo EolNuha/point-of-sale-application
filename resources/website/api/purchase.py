@@ -11,11 +11,11 @@ from datetime import datetime, date, time
 from website.token import currentUser
 import sqlalchemy as sa
 
-purchase = Blueprint('purchase', __name__)
+purchase_api = Blueprint('purchase_api', __name__)
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
 
-@purchase.route('/purchases', methods=["POST"])
+@purchase_api.route('/purchases', methods=["POST"])
 def createPurchase():
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -68,6 +68,7 @@ def createPurchase():
         price_before_tax = product_purchased_price_wo_tax - (product_purchased_price_wo_tax * rabat_percentage)
         tax_amount = Decimal(price_before_tax * tax_percentage).quantize(FOURPLACES)
         product_purchased_price = Decimal(price_before_tax + tax_amount).quantize(FOURPLACES)
+        product_total_amount = Decimal(product_purchased_price * product_stock).quantize(FOURPLACES)
         if product["expirationDate"]:
             expiration_date = product["expirationDate"].split("-")
             expiration_date = datetime.combine(date(year=int(expiration_date[0]), month=int(expiration_date[1]), day=int(expiration_date[2])), time.min)
@@ -101,7 +102,7 @@ def createPurchase():
                 product_stock=product_stock,
                 product_measure=measure,
                 tax_amount=tax_amount,
-                total_amount=Decimal(product_purchased_price * product_stock).quantize(FOURPLACES),
+                total_amount=product_total_amount,
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -145,48 +146,41 @@ def createPurchase():
                 product_stock=created_product.stock,
                 product_measure=measure,
                 tax_amount=tax_amount,
-                total_amount=Decimal(product_purchased_price * product_stock).quantize(FOURPLACES),
+                total_amount=product_total_amount,
                 date_created=current_time,
                 date_modified=current_time,
             )
-        db.session.add(purchase_item)
-
-    purchase_taxes = []
-    taxes = Settings.query.filter_by(settings_type="tax").all()
-    taxes.append(Settings(
-        settings_name="0",
-        settings_alias="zero",
-        settings_type="tax",
-        settings_value="0",
-        date_created=datetime.now(),
-        date_modified=datetime.now(),
-    ))
-    for item in purchase.purchase_items:
-        for tax in taxes:
-            if int(item.product_tax) == int(tax.settings_value):
-                total_tax_amount = Decimal(item.tax_amount * Decimal(item.product_stock).quantize(FOURPLACES)).quantize(FOURPLACES)
-                key_v = tax.settings_name + "+" + tax.settings_alias + "+" + str(Decimal(item.total_amount - total_tax_amount).quantize(FOURPLACES))
-                purchase_taxes.append({key_v: total_tax_amount})
-    
-    purchase_taxes = sumListOfDicts(purchase_taxes)
-    for key, value in purchase_taxes.items():
-        split_key = key.split("+")
+        if(int(product["tax"]) == 0):
+            tax_query = Settings(
+                settings_name="0",
+                settings_alias="zero",
+                settings_type="tax",
+                settings_value="0",
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
+            )
+        else:
+            tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()
+        
+        tax_value = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
+        total_wo_tax_value = product_total_amount - tax_value
         db.session.add(
             PurchaseTax(
                 purchase=purchase, 
-                tax_name=str(split_key[0]), 
-                tax_alias=str(split_key[1]), 
-                tax_value=value,
-                total_without_tax=Decimal(split_key[2]),
+                tax_name=tax_query.settings_name, 
+                tax_alias=tax_query.settings_alias, 
+                tax_value=tax_value,
+                total_without_tax=total_wo_tax_value,
                 date_created=current_time,
                 date_modified=current_time,
             )
         )
+        db.session.add(purchase_item)
     db.session.commit()
     
     return jsonify("Success"), 200
 
-@purchase.route('/purchases', methods=["GET"])
+@purchase_api.route('/purchases', methods=["GET"])
 def getPurchases():
     custom_start_date = request.args.get('startDate', type=str).split("-")
     custom_end_date = request.args.get('endDate', type=str).split("-")
@@ -221,6 +215,7 @@ def getPurchases():
             Purchase.id.label("id"), 
             Purchase.date_created.label("date_created"), 
             Purchase.date_modified.label("date_modified"),
+            sa.func.sum(Purchase.rabat_amount).label("rabat_amount"),
             sa.func.sum(Purchase.subtotal_amount).label("subtotal_amount"),
             sa.func.sum(Purchase.total_amount).label("total_amount"),
         )\
@@ -249,7 +244,7 @@ def getPurchases():
 
     return jsonify(getPaginatedDict(join_purchase_items, paginated_items))
 
-@purchase.route('/purchases-detailed', methods=["GET"])
+@purchase_api.route('/purchases-detailed', methods=["GET"])
 def getPurchasesDetailed():
     custom_start_date = request.args.get('startDate', type=str).split("-")
     custom_end_date = request.args.get('endDate', type=str).split("-")
@@ -285,7 +280,7 @@ def getPurchasesDetailed():
 
     return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))
 
-@purchase.route('/purchases/daily', methods=["GET"])
+@purchase_api.route('/purchases/daily', methods=["GET"])
 def getDailyPurchases():
     purchase_date = request.args.get('date', type=str)
     purchase_date = purchase_date.split(".")
@@ -325,7 +320,7 @@ def getDailyPurchases():
 
     return jsonify(getPaginatedDict(getDailyPurchasesList(paginated_items.items), paginated_items))
 
-@purchase.route('/sellers', methods=["GET"])
+@purchase_api.route('/sellers', methods=["GET"])
 def getSellers():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
@@ -363,16 +358,16 @@ def getSellers():
 
     return jsonify(getPaginatedDict(getSellersList(paginated_items.items), paginated_items))
 
-@purchase.route('/purchases/<int:purchaseId>', methods=["GET"])
+@purchase_api.route('/purchases/<int:purchaseId>', methods=["GET"])
 def getPurchaseDetails(purchaseId):
     return jsonify(getDailyPurchaseDict(Purchase.query.filter_by(id=purchaseId).first_or_404()))
 
-@purchase.route('/sellers/<string:name>', methods=["GET"])
+@purchase_api.route('/sellers/<string:name>', methods=["GET"])
 def getSellerDetails(name):
     purchase = Purchase.query.filter_by(seller_name=name).first_or_404()
     return jsonify(getSellerDict(purchase))
 
-@purchase.route('/purchases/<int:purchaseId>', methods=["PUT"])
+@purchase_api.route('/purchases/<int:purchaseId>', methods=["PUT"])
 def editPurchase(purchaseId):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -436,7 +431,7 @@ def editPurchase(purchaseId):
     db.session.commit()
     return "Success", 200
 
-@purchase.route('/purchases/<int:purchaseId>', methods=["DELETE"])
+@purchase_api.route('/purchases/<int:purchaseId>', methods=["DELETE"])
 def deletePurchase(purchaseId):
     purchase_query = Purchase.query.filter_by(id=purchaseId).first_or_404()
 

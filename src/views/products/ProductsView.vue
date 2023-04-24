@@ -105,7 +105,7 @@
                         areAllSelected
                           ? (selectedProducts = [])
                           : (selectedProducts = JSON.parse(
-                              JSON.stringify(products)
+                              JSON.stringify(products.map((obj) => obj.id))
                             ))
                     "
                     class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
@@ -279,21 +279,21 @@
                 <tr
                   class="border-b dark:border-gray-700"
                   :class="
-                    selectedProducts.some((obj) => obj?.id === product.id)
+                    selectedProducts.some((obj) => obj === product.id)
                       ? 'bg-theme-100 dark:bg-theme-400 dark:text-black font-bold'
                       : 'bg-white dark:bg-neutral-900 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]'
                   "
                 >
                   <td class="py-2 px-6" v-if="$can('execute', 'products')">
                     <button
-                      @click="toggleSelectProduct(product)"
+                      @click="toggleSelectProduct(product.id)"
                       class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
                     >
                       <input
                         type="checkbox"
                         class="rounded cursor-pointer text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
                         :checked="
-                          selectedProducts.some((obj) => obj?.id === product.id)
+                          selectedProducts.some((obj) => obj === product.id)
                         "
                       />
                     </button>
@@ -465,15 +465,16 @@ export default {
       return this.$store.getters["productModule/getProductsPagination"];
     },
     areAllSelected() {
-      const productsCopy = JSON.parse(JSON.stringify(this.products));
+      const productsCopy = JSON.parse(
+        JSON.stringify(this.products.map((obj) => obj.id))
+      );
       const selectedItemsCopy = JSON.parse(
         JSON.stringify(this.selectedProducts)
       );
       return (
-        JSON.stringify(productsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))) ===
-          JSON.stringify(
-            selectedItemsCopy.sort((a, b) => (a.id > b.id ? 1 : -1))
-          ) && this.products?.length !== 0
+        JSON.stringify(productsCopy.sort((a, b) => (a > b ? 1 : -1))) ===
+          JSON.stringify(selectedItemsCopy.sort((a, b) => (a > b ? 1 : -1))) &&
+        this.products?.length !== 0
       );
     },
   },
@@ -490,7 +491,7 @@ export default {
   },
   methods: {
     toggleSelectProduct(product) {
-      const idx = this.selectedProducts.findIndex((x) => x?.id === product.id);
+      const idx = this.selectedProducts.findIndex((x) => x === product);
       if (idx !== -1) this.selectedProducts.splice(idx, 1);
       if (idx === -1) this.selectedProducts.push(product);
     },

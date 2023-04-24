@@ -140,9 +140,8 @@ def deleteProductDetails(productId):
 @product_api.route('/products', methods=["DELETE"])
 def deleteProducts():
     products = request.json["products"]
-    for item in products:
-        Product.query.filter_by(id=item["id"]).delete()
-        db.session.commit()
+    Product.query.filter(Product.id.in_(products)).delete()
+    db.session.commit()
     return "Success", 200
 
 

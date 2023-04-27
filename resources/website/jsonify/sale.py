@@ -1,5 +1,6 @@
 from .user import getUserDict
 from .settings import getTaxesList
+from collections import defaultdict
 import decimal
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
@@ -32,7 +33,7 @@ def getDailySaleDict(item):
         "customerAmount": Decimal(item.customer_amount).quantize(TWOPLACES),
         "changeAmount": Decimal(item.change_amount).quantize(TWOPLACES),
         "isRegular": item.is_regular,
-        "taxes": getTaxesList(item.sale_taxes),
+        "taxes": getGroupedByAliasTaxes(item.sale_taxes),
         "saleItems": getSaleItemsList(item.sale_items),
         "user": getUserDict(item.user),
         "dateCreated": item.date_created.strftime('%d.%m.%Y, %H:%M:%S'),
@@ -68,3 +69,14 @@ def getSalesList(sales):
 
 def getDailySalesList(sales):
     return [getDailySaleDict(i) for i in sales]
+
+def getGroupedByAliasTaxes(data):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    result = defaultdict(lambda: {'taxValue': Decimal(0)})
+    for item in data:
+        tax_alias = item.tax_alias
+        tax_value = Decimal(item.tax_value or 0).quantize(TWOPLACES)
+        result[tax_alias]['taxValue'] += tax_value
+
+    return result

@@ -150,7 +150,12 @@
             {{ sale.isRegular ? $t("regular") : $t("irregular") }}
           </td>
           <td class="py-2 px-6" v-for="item in taxes" :key="item.settingsValue">
-            {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+            {{
+              sale.taxes
+                ? sale.taxes[item.settingsAlias]?.taxValue || "0.00"
+                : "0.00"
+            }}
+            €
           </td>
           <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
           <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
@@ -200,7 +205,7 @@
                   />
                   {{ $t("viewDocument") }}
                 </li>
-                <li
+                <!-- <li
                   class="inline-flex text-theme-700 dark:text-theme-600 flex-row gap-2 items-center py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 w-full"
                   @click="
                     $router.push({
@@ -219,7 +224,7 @@
                     iconClass="w-5 h-5 cursor-pointer"
                   />
                   {{ $t("edit") }}
-                </li>
+                </li> -->
                 <li
                   class="inline-flex text-red-700 dark:text-red-600 flex-row gap-2 items-center py-2 px-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 w-full"
                   @click="deleteSale(sale)"
@@ -248,7 +253,7 @@
           v-for="item in pagination.taxes"
           :key="item.settingsValue"
         >
-          {{ Number(item.taxValue).toFixed(2) }} €
+          {{ item.taxValue }} €
         </td>
         <td class="py-4 px-6">{{ pagination.salesSubTotalAmount }} €</td>
         <td class="py-4 px-6">{{ pagination.salesTotalAmount }} €</td>
@@ -283,11 +288,6 @@ export default {
     DeleteModal,
   },
   methods: {
-    getTaxValue(arr, alias) {
-      return (
-        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
-      );
-    },
     sort(col) {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";

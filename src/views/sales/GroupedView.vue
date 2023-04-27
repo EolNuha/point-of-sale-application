@@ -112,7 +112,13 @@
             {{ sale.dateCreated?.substring(0, 10) }}
           </td>
           <td class="py-2 px-6" v-for="item in taxes" :key="item.settingsValue">
-            {{ getTaxValue(sale.taxes, item.settingsAlias) }} €
+            {{
+              Array.isArray(sale.taxes)
+                ? sale.taxes?.find((obj) => obj.taxAlias === item.settingsAlias)
+                    ?.taxValue || "0.00"
+                : "0.00"
+            }}
+            €
           </td>
           <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
           <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
@@ -170,11 +176,6 @@ export default {
     };
   },
   methods: {
-    getTaxValue(arr, alias) {
-      return (
-        arr.find((x) => x.taxAlias === alias)?.taxValue || Number(0).toFixed(2)
-      );
-    },
     sort(col) {
       this.sortColumn = col;
       this.sortDir = this.sortDir === "desc" ? "asc" : "desc";

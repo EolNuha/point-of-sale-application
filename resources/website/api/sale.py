@@ -17,6 +17,7 @@ from functools import reduce
 sale_api = Blueprint('sale_api', __name__)
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
+TWOPLACES = Decimal(10) ** -2
 
 @sale_api.route('/sales', methods=["POST"])
 def createSale():
@@ -24,8 +25,35 @@ def createSale():
     ctx.rounding = decimal.ROUND_HALF_UP
 
     products = request.json["products"]
-    multiply_prices = lambda product: Decimal(product["sellingPrice"]).quantize(FOURPLACES) * Decimal(product["quantity"]).quantize(FOURPLACES)
-    total_amount = Decimal(sum(map(multiply_prices, products))).quantize(FOURPLACES)
+
+    def calculate_totals(product):
+        product_selling_price = Decimal(product["sellingPrice"])
+        product_purchased_price = Decimal(product["purchasedPrice"])
+        tax_percentage = Decimal(product["tax"]) / 100
+        quantity = Decimal(product["quantity"])
+        tax_amount = Decimal(tax_percentage * product_selling_price)
+        total_tax_amount = tax_amount * quantity
+        selling_price_wo_tax = product_selling_price - tax_amount
+        gross_total = product_purchased_price * quantity
+        subtotal_price = selling_price_wo_tax * quantity
+        total_price = product_selling_price * quantity
+        gross_profit = total_price - gross_total
+        net_profit = gross_profit - total_tax_amount
+        return {
+            "total_amount": total_price.quantize(FOURPLACES), 
+            "subtotal_amount": subtotal_price.quantize(FOURPLACES), 
+            "gross_profit": gross_profit.quantize(FOURPLACES), 
+            "net_profit": net_profit.quantize(FOURPLACES),
+            "tax_amount": tax_amount.quantize(FOURPLACES),
+            "total_tax_amount": total_tax_amount.quantize(FOURPLACES),
+            "selling_price_wo_tax": selling_price_wo_tax.quantize(FOURPLACES)
+        }
+
+    total_amount = sum(calculate_totals(product)["total_amount"] for product in products).quantize(FOURPLACES)
+    subtotal_amount = sum(calculate_totals(product)["subtotal_amount"] for product in products).quantize(FOURPLACES)
+    gross_amount = sum(calculate_totals(product)["gross_profit"] for product in products).quantize(FOURPLACES)
+    net_amount = sum(calculate_totals(product)["net_profit"] for product in products).quantize(FOURPLACES)
+
     customer_amount = request.json["customerAmount"]
     change_amount = request.json["changeAmount"]
     is_regular = request.json["isRegular"]
@@ -35,6 +63,9 @@ def createSale():
 
     sale = Sale(
         total_amount=total_amount,
+        subtotal_amount=subtotal_amount,
+        gross_profit_amount=gross_amount,
+        net_profit_amount=net_amount,
         customer_amount=customer_amount,
         change_amount=change_amount,
         user=current_user,
@@ -46,12 +77,8 @@ def createSale():
     db.session.add(sale)
 
     for product in products:
+        product_totals = calculate_totals(product)
         product_quantity = Decimal(product["quantity"]).quantize(FOURPLACES)
-        decimal_price = Decimal(product["sellingPrice"]).quantize(FOURPLACES)
-        decimal_tax = Decimal(product["tax"]).quantize(FOURPLACES)
-        
-        tax_amount = Decimal(Decimal(decimal_tax / 100).quantize(FOURPLACES) * decimal_price).quantize(FOURPLACES)
-        price_without_tax = decimal_price - tax_amount
 
         product_query = Product.query.filter_by(id=product["id"]).one()
         sale_item = SaleItem(
@@ -64,11 +91,11 @@ def createSale():
             product_selling_price=product_query.selling_price,
             product_measure=product_query.measure,
             product_quantity=product_quantity,
-            price_without_tax=price_without_tax,
-            tax_amount=tax_amount,
-            total_amount=Decimal(product_query.selling_price * product_quantity).quantize(FOURPLACES),
-            gross_profit_amount=Decimal(product_query.selling_price * product_quantity).quantize(FOURPLACES),
-            net_profit_amount=Decimal(product_query.purchased_price * product_quantity).quantize(FOURPLACES) - tax_amount,
+            price_without_tax=product_totals["selling_price_wo_tax"],
+            tax_amount=product_totals["tax_amount"],
+            total_amount=product_totals["total_amount"],
+            gross_profit_amount=product_totals["gross_profit"],
+            net_profit_amount=product_totals["net_profit"],
             date_created=current_time,
             date_modified=current_time,
         )
@@ -80,29 +107,13 @@ def createSale():
         
         db.session.add(sale_item)
 
-    subtotal, sale_taxes, grosstotal = [], [], []
-    taxes = Settings.query.filter_by(settings_type="tax").all()
-
-    for item in sale.sale_items:
-        subtotal.append(Decimal(item.price_without_tax * Decimal(item.product_quantity).quantize(FOURPLACES)).quantize(FOURPLACES))
-        grosstotal.append(Decimal(item.product_purchased_price * Decimal(item.product_quantity).quantize(FOURPLACES)).quantize(FOURPLACES))
-        for tax in taxes:
-            if item.product_tax == int(tax.settings_value):
-                key_v = tax.settings_name + "+" + tax.settings_alias
-                sale_taxes.append({key_v: Decimal(item.tax_amount).quantize(FOURPLACES) * Decimal(item.product_quantity).quantize(FOURPLACES)})
-    
-    sale.subtotal_amount = sum(subtotal)
-    sale.gross_profit_amount = Decimal(total_amount).quantize(FOURPLACES) - sum(grosstotal)
-    sale_taxes = sumListOfDicts(sale_taxes)
-    sale.net_profit_amount = Decimal(sale.gross_profit_amount - sum(sale_taxes.values())).quantize(FOURPLACES)
-    for key, value in sale_taxes.items():
-        split_key = key.split("+")
+        tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()
         db.session.add(
             SaleTax(
                 sale=sale, 
-                tax_name=str(split_key[0]), 
-                tax_alias=str(split_key[1]), 
-                tax_value=value,
+                tax_name=tax_query.settings_name, 
+                tax_alias=tax_query.settings_alias, 
+                tax_value=product_totals["total_tax_amount"],
                 date_created=current_time,
                 date_modified=current_time,
             )
@@ -274,21 +285,23 @@ def getSalesDetailed():
     gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], sale_items, 0)
     net_total = reduce(lambda x, y: x + y['netProfitAmount'], sale_items, 0)
 
-    taxes_total = []
-    for settings in Settings.query.filter_by(settings_type="tax").all():
-        total_tax_value = sum(Decimal(tax['taxValue']) for item in sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
-        taxes_total.append(
-            {
-                "taxAlias": settings.settings_alias, 
-                "taxName": settings.settings_name, 
-                "taxValue": total_tax_value
-            }
-        )
+
+    taxes_total = [
+        {
+            "taxAlias": settings.settings_alias,
+            "taxName": settings.settings_name,
+            "taxValue": sum(
+                Decimal(item["taxes"][settings.settings_alias]["taxValue"])
+                for item in sale_items
+            ),
+        }
+        for settings in Settings.query.filter_by(settings_type="tax")
+    ]
     
-    paginated_dict["pagination"]["salesTotalAmount"] = total
-    paginated_dict["pagination"]["salesSubTotalAmount"] = subtotal
-    paginated_dict["pagination"]["salesTotalGrossProfit"] = gross_total
-    paginated_dict["pagination"]["salesTotalNetProfit"] = net_total
+    paginated_dict["pagination"]["salesTotalAmount"] = Decimal(total).quantize(TWOPLACES)
+    paginated_dict["pagination"]["salesSubTotalAmount"] = Decimal(subtotal).quantize(TWOPLACES)
+    paginated_dict["pagination"]["salesTotalGrossProfit"] = Decimal(gross_total).quantize(TWOPLACES)
+    paginated_dict["pagination"]["salesTotalNetProfit"] = Decimal(net_total).quantize(TWOPLACES)
     paginated_dict["pagination"]["taxes"] = taxes_total
 
     return jsonify(paginated_dict)
@@ -345,21 +358,22 @@ def getDailySales():
     gross_total = reduce(lambda x, y: x + y['grossProfitAmount'], sale_items, 0)
     net_total = reduce(lambda x, y: x + y['netProfitAmount'], sale_items, 0)
 
-    taxes_total = []
-    for settings in Settings.query.filter_by(settings_type="tax").all():
-        total_tax_value = sum(Decimal(tax['taxValue']) for item in sale_items for tax in item['taxes'] if tax['taxAlias'] == settings.settings_alias)
-        taxes_total.append(
-            {
-                "taxAlias": settings.settings_alias, 
-                "taxName": settings.settings_name, 
-                "taxValue": total_tax_value
-            }
-        )
+    taxes_total = [
+        {
+            "taxAlias": settings.settings_alias,
+            "taxName": settings.settings_name,
+            "taxValue": sum(
+                Decimal(item["taxes"][settings.settings_alias]["taxValue"])
+                for item in sale_items
+            ),
+        }
+        for settings in Settings.query.filter_by(settings_type="tax")
+    ]
     
-    paginated_dict["pagination"]["salesTotalAmount"] = total
-    paginated_dict["pagination"]["salesSubTotalAmount"] = subtotal
-    paginated_dict["pagination"]["salesTotalGrossProfit"] = gross_total
-    paginated_dict["pagination"]["salesTotalNetProfit"] = net_total
+    paginated_dict["pagination"]["salesTotalAmount"] = Decimal(total).quantize(TWOPLACES)
+    paginated_dict["pagination"]["salesSubTotalAmount"] = Decimal(subtotal).quantize(TWOPLACES)
+    paginated_dict["pagination"]["salesTotalGrossProfit"] = Decimal(gross_total).quantize(TWOPLACES)
+    paginated_dict["pagination"]["salesTotalNetProfit"] = Decimal(net_total).quantize(TWOPLACES)
     paginated_dict["pagination"]["taxes"] = taxes_total
 
     return jsonify(paginated_dict)

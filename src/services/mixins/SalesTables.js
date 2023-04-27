@@ -1,5 +1,19 @@
 export default {
   methods: {
+    getTableTaxValue(taxArr, taxAlias, taxProp) {
+      console.log(taxArr);
+      const arr = JSON.parse(JSON.stringify(taxArr));
+      const obj = Array.isArray(arr)
+        ? arr?.find((obj) => obj.taxAlias === taxAlias)
+        : 0;
+      return typeof obj === "object" ? obj[taxProp] : 0;
+    },
+    getGridTaxValue(taxArr, taxAlias, taxProp) {
+      console.log(taxArr);
+      const arr = JSON.parse(JSON.stringify(taxArr));
+      const obj = arr ? arr[taxAlias] : 0;
+      return typeof obj === "object" ? obj[taxProp] : 0;
+    },
     async tableExcelView() {
       let table = document.createElement("table");
       let thead = document.createElement("thead");
@@ -34,9 +48,10 @@ export default {
         bodyTr.appendChild(dateTd);
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
-          taxTd.innerHTML = `${this.getTaxValue(
+          taxTd.innerHTML = `${this.getTableTaxValue(
             element.taxes,
-            tax.settingsAlias
+            tax.settingsAlias,
+            "taxValue"
           )}`;
           bodyTr.appendChild(taxTd);
         }
@@ -140,9 +155,10 @@ export default {
 
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
-          taxTd.innerHTML = `${this.getTaxValue(
+          taxTd.innerHTML = `${this.getGridTaxValue(
             element.taxes,
-            tax.settingsAlias
+            tax.settingsAlias,
+            "taxValue"
           )}`;
           bodyTr.appendChild(taxTd);
         }

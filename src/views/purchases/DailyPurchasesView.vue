@@ -205,23 +205,6 @@ export default {
     await this.getPurchases(this.currentPage);
   },
   methods: {
-    getTaxValue(arr, alias) {
-      const sum = arr?.reduce((accumulator, object) => {
-        return (
-          accumulator + Number(object.taxAlias === alias ? object.taxValue : 0)
-        );
-      }, 0);
-      return sum?.toFixed(2);
-    },
-    getTotalWOTaxValue(arr, alias) {
-      const sum = arr?.reduce((accumulator, object) => {
-        return (
-          accumulator +
-          Number(object.taxAlias === alias ? object.totalWithoutTax : 0)
-        );
-      }, 0);
-      return sum?.toFixed(2);
-    },
     async getPurchases(page) {
       this.isTableLoading = true;
       await this.$store

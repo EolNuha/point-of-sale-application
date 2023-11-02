@@ -549,10 +549,10 @@ export default {
   async created() {
     this.$store
       .dispatch("settingsModule/getSettingsType", {
-        settingsType: "notification",
+        settings_type: "notification",
       })
       .then((response) => {
-        this.storage = Number(response.data[0]?.settingsValue);
+        this.storage = Number(response.data[0]?.settings_value);
       });
     this.getNotifications(this.currentPage);
   },

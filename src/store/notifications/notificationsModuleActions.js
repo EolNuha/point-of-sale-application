@@ -20,7 +20,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios({
         url: `/api/notifications`,
-        method: "POST",
+        method: "PUT",
         data,
       })
         .then(async (response) => {
@@ -66,7 +66,7 @@ export default {
         .get(`/api/notifications`, { params: data })
         .then(async (response) => {
           commit("SET_NOTIFICATIONS_LIST", response.data.data);
-          commit("SET_PAGINATION", response.data.pagination);
+          commit("SET_PAGINATION", response.data);
           resolve(response);
         })
         .catch((error) => {
@@ -78,7 +78,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios({
         url: `/api/notifications/${data.id}`,
-        method: "POST",
+        method: "PUT",
         data,
       })
         .then(async (response) => {

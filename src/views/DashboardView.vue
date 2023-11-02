@@ -299,7 +299,7 @@ export default {
       "-" +
       String(new Date().getDate()).padStart(2, "0");
 
-    const data = { startDate: startDate, endDate: endDate };
+    const data = { start_date: startDate, end_date: endDate };
     this.$store.dispatch("analyticsModule/getSales", data).then(() => {
       this.isFetchingSales = false;
     });

@@ -9,7 +9,7 @@ export default {
         .get(`/api/products`, { params: data })
         .then(async (response) => {
           commit("SET_PRODUCTS", response.data.data);
-          commit("SET_PAGINATION", response.data.pagination);
+          commit("SET_PAGINATION", response.data);
           resolve(response);
         })
         .catch((error) => {
@@ -61,7 +61,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios({
         url: `/api/products/${data.id}`,
-        method: "POST",
+        method: "PUT",
         data,
       })
         .then(async (response) => {

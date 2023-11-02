@@ -6,12 +6,12 @@ class Product {
     this.measure = "pcs";
     this.stock = null;
     this.tax = 0;
-    this.purchasedPriceWOTax = null;
-    this.purchasedPrice = null;
-    this.sellingPrice = null;
-    this.expirationDate = null;
-    this.dateCreated = null;
-    this.dateModified = null;
+    this.purchased_price_wo_tax = null;
+    this.purchased_price = null;
+    this.selling_price = null;
+    this.expiration_date = null;
+    this.date_created = null;
+    this.date_modified = null;
   }
   fromData(data) {
     this.id = data.id || null;
@@ -20,12 +20,12 @@ class Product {
     this.measure = data.measure || "pcs";
     this.stock = data.stock || null;
     this.tax = data.tax || 0;
-    this.purchasedPriceWOTax = data.purchasedPriceWOTax || null;
-    this.purchasedPrice = data.purchasedPrice || null;
-    this.sellingPrice = data.sellingPrice || null;
-    this.expirationDate = data.expirationDate || null;
-    this.dateCreated = data.dateCreated || null;
-    this.dateModified = data.dateModified || null;
+    this.purchased_price_wo_tax = data.purchased_price_wo_tax || null;
+    this.purchased_price = data.purchased_price || null;
+    this.selling_price = data.selling_price || null;
+    this.expiration_date = data.expiration_date.substring(0, 10) || null;
+    this.date_created = data.date_created || null;
+    this.date_modified = data.date_modified || null;
   }
 }
 

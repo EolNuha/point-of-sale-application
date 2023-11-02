@@ -1,3 +1,5 @@
+import Product from "@/models/product";
+
 export default {
   SET_PRODUCTS(state, data) {
     state.products = data;
@@ -6,6 +8,8 @@ export default {
     state.pagination = data;
   },
   SET_PRODUCT(state, data) {
-    state.product = data;
+    const product = new Product();
+    product.fromData(data);
+    state.product = product;
   },
 };

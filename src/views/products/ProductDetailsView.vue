@@ -70,16 +70,16 @@
             v-model="product.measure"
             :clearable="false"
             :options="measures"
-            :reduce="(t) => t.settingsValue"
-            :label="`settingsValue`"
+            :reduce="(t) => t.settings_value"
+            :label="`settings_value`"
             type="text"
             :placeholder="$t('measure')"
           >
             <template v-slot:option="option">
-              {{ $t(option.settingsValue) }}
+              {{ $t(option.settings_value) }}
             </template>
             <template v-slot:selected-option="option">
-              {{ $t(option.settingsValue) }}
+              {{ $t(option.settings_value) }}
             </template>
           </v-select>
           <span class="text-red-700">{{ errors.product_measure }}</span>
@@ -114,7 +114,7 @@
           <Field
             name="product_purchased_price_wo_tax"
             rules="required"
-            v-model="product.purchasedPriceWOTax"
+            v-model="product.purchased_price_wo_tax"
             type="number"
             id="product_purchased_price_wo_tax"
             :class="
@@ -137,7 +137,7 @@
           <Field
             name="product_purchasedprice"
             rules="required"
-            v-model="product.purchasedPrice"
+            v-model="product.purchased_price"
             type="number"
             step="0.01"
             id="product_purchasedprice"
@@ -158,7 +158,7 @@
           <Field
             name="product_sellingprice"
             rules="required"
-            v-model="product.sellingPrice"
+            v-model="product.selling_price"
             type="number"
             step="0.01"
             id="product_sellingprice"
@@ -187,16 +187,16 @@
             v-model="product.tax"
             :clearable="false"
             :options="taxes"
-            :reduce="(t) => t.settingsValue"
-            :label="`settingsValue`"
+            :reduce="(t) => t.settings_value"
+            :label="`settings_value`"
             type="text"
             :placeholder="$t('tax')"
           >
             <template v-slot:option="option">
-              {{ option.settingsValue }}%
+              {{ option.settings_value }}%
             </template>
             <template v-slot:selected-option="option">
-              {{ option.settingsValue }}%
+              {{ option.settings_value }}%
             </template>
           </v-select>
           <span class="text-red-700">{{ errors.product_tax }}</span>
@@ -232,7 +232,7 @@
           </label>
           <Field
             name="product_expire"
-            v-model="product.expirationDate"
+            v-model="product.expiration_date"
             :min="minDate"
             type="date"
             id="product_expire"
@@ -251,7 +251,7 @@
           >
           <input
             name="product_price"
-            v-model="product.dateCreated"
+            v-model="product.date_created"
             type="text"
             id="dateCreated"
             class="default-input w-full"
@@ -269,7 +269,7 @@
           >
           <input
             name="dateModified"
-            v-model="product.dateModified"
+            v-model="product.date_modified"
             type="text"
             id="dateModified"
             class="default-input w-full"
@@ -343,7 +343,7 @@ export default {
         JSON.stringify(this.$store.state.settingsModule.settingsType)
       );
       t.unshift({
-        settingsValue: 0,
+        settings_value: 0,
       });
       return t;
     },
@@ -362,13 +362,13 @@ export default {
       this.isDataLoading = true;
       await this.$store
         .dispatch("settingsModule/getSettingsType", {
-          settingsType: "measure",
+          settings_type: "measure",
         })
         .then((response) => {
           this.measures = response.data;
         });
       await this.$store.dispatch("settingsModule/getSettingsType", {
-        settingsType: "tax",
+        settings_type: "tax",
       });
       if (this.$route.params.productId) {
         this.isAdd = false;
@@ -405,7 +405,7 @@ export default {
         .catch((error) => {
           this.isUpdateLoading = false;
           this.$toast.error(
-            this.$t(error.response.data) || this.$t("somethingWrong")
+            this.$t(error.response.data.message) || this.$t("somethingWrong")
           );
         });
     },
@@ -422,8 +422,9 @@ export default {
         })
         .catch((error) => {
           this.isUpdateLoading = false;
+          console.error(error);
           this.$toast.error(
-            this.$t(error.response.data) || this.$t("somethingWrong")
+            this.$t(error.response.data.message) || this.$t("somethingWrong")
           );
         });
     },

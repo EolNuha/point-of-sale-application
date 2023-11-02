@@ -63,43 +63,43 @@
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">
           <label
-            for="product_purchasedprice"
+            for="product_purchased_price"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchasedPrice") }}</label
+            >{{ $t("_p") }}</label
           >
           <Field
-            name="product_purchasedprice"
+            name="product_purchased_price"
             rules="required"
-            v-model="product.purchasedPrice"
+            v-model="product.purchased_price"
             type="number"
             step="0.01"
-            id="product_purchasedprice"
-            :class="errors.product_purchasedprice ? 'ring-2 ring-red-500' : ''"
+            id="product_purchased_price"
+            :class="errors.product_purchased_price ? 'ring-2 ring-red-500' : ''"
             class="default-input w-full"
             placeholder="Enter product price"
             required
           />
-          <span class="text-red-700">{{ errors.product_purchasedprice }}</span>
+          <span class="text-red-700">{{ errors.product_purchased_price }}</span>
         </div>
         <div class="basis-1/2">
           <label
-            for="product_sellingprice"
+            for="product_selling_price"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("sellingPrice") }}</label
+            >{{ $t("selling_price") }}</label
           >
           <Field
-            name="product_sellingprice"
+            name="product_selling_price"
             rules="required"
-            v-model="product.sellingPrice"
+            v-model="product.selling_price"
             type="number"
             step="0.01"
-            id="product_sellingprice"
-            :class="errors.product_sellingprice ? 'ring-2 ring-red-500' : ''"
+            id="product_selling_price"
+            :class="errors.product_selling_price ? 'ring-2 ring-red-500' : ''"
             class="default-input w-full"
             placeholder="Enter product price"
             required
           />
-          <span class="text-red-700">{{ errors.product_sellingprice }}</span>
+          <span class="text-red-700">{{ errors.product_selling_price }}</span>
         </div>
       </div>
       <div class="mb-6 flex gap-4">
@@ -122,8 +122,8 @@
             v-model="product.tax"
             :clearable="false"
             :options="taxes"
-            :reduce="(t) => t.settingsValue"
-            :label="`settingsValue`"
+            :reduce="(t) => t.settings_value"
+            :label="`settings_value`"
             type="text"
             :placeholder="$t('tax')"
           >
@@ -140,7 +140,7 @@
           <label
             for="product_expire"
             class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("expirationDate") }}
+            >{{ $t("expiration_date") }}
             <button
               :id="`product-exp-tooltip-btn`"
               class="cursor-default"
@@ -165,7 +165,7 @@
           </label>
           <Field
             name="product_expire"
-            v-model="product.expirationDate"
+            v-model="product.expiration_date"
             :min="minDate"
             type="date"
             id="product_expire"
@@ -207,15 +207,6 @@ export default {
   },
   data() {
     return {
-      product: {
-        name: "",
-        barcode: "",
-        stock: "",
-        expirationDate: "",
-        tax: 0,
-        purchasedPrice: "",
-        sellingPrice: "",
-      },
       isLoading: false,
     };
   },
@@ -230,10 +221,18 @@ export default {
     minDate() {
       return this.formatDate(new Date());
     },
+    product: {
+      get() {
+        return this.$store.state.productModule.product;
+      },
+      set(v) {
+        this.$store.state.productModule.product = v;
+      },
+    },
   },
   async created() {
     await this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
   },
   methods: {

@@ -32,7 +32,7 @@ export default {
   getSaleStats({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/analytics/sales/${data.startDate}`)
+        .get(`/api/analytics/sales/${data.start_date}`)
         .then(async (response) => {
           commit("SET_SALE_STATS", response.data);
           resolve(response);
@@ -58,7 +58,7 @@ export default {
   getPurchaseStats({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/analytics/purchases/${data.startDate}`)
+        .get(`/api/analytics/purchases/${data.start_date}`)
         .then(async (response) => {
           commit("SET_PURCHASE_STATS", response.data);
           resolve(response);

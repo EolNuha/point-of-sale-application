@@ -119,8 +119,8 @@ export default {
     async getData() {
       this.isFetching = true;
       const data = {
-        startDate: this.startDate,
-        endDate: this.endDate,
+        start_date: this.startDate,
+        end_date: this.endDate,
         id: this.id,
       };
       await this.$store.dispatch(this.dispatchModule, data).then(() => {

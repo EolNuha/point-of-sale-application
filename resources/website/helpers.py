@@ -37,9 +37,10 @@ def get_percentage_change(current, previous):
     if current == previous:
         return 0
     try:
-        return format(((current - previous) / previous) * Decimal(100.00), ".2f")
+        percentage = ((current - previous) / previous) * Decimal(100.00)
+        return format(percentage, ".2f") if percentage else 0
     except ZeroDivisionError:
-        return ""
+        return 0
 
 def get_curr_prev_chart(date_start, date_end, curr, prev):
     ctx = decimal.getcontext()
@@ -57,12 +58,12 @@ def get_curr_prev_chart(date_start, date_end, curr, prev):
 
     for item in curr:
         curr_options.append(item.date_created.strftime('%d/%m/%Y'))
-        curr_incomp_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
+        curr_incomp_series.append(Decimal(item.total_amount).quantize(TWOPLACES) if item.total_amount else 0)
 
     for item in prev:
         option_date = item.date_created + timedelta(date_diff)
         prev_options.append(option_date.strftime('%d/%m/%Y'))
-        prev_incomp_series.append(Decimal(item.total_amount).quantize(TWOPLACES))
+        prev_incomp_series.append(Decimal(item.total_amount).quantize(TWOPLACES) if item.total_amount else 0)
     
     for index, d in enumerate(date_ranges):
         if d in curr_options:
@@ -78,11 +79,9 @@ def get_curr_prev_chart(date_start, date_end, curr, prev):
         "options": date_ranges
     }
 
-def get_curr_prev_dates(request):
-    custom_start_date = request.args.get('startDate', type=str)
-    custom_end_date = request.args.get('endDate', type=str)
-    custom_start_date = custom_start_date.split("-")
-    custom_end_date = custom_end_date.split("-")
+def get_curr_prev_dates(start_date=None, end_date=None):
+    custom_start_date = start_date.split("-")
+    custom_end_date = end_date.split("-")
 
     date_start = datetime.combine(date(year=int(custom_start_date[0]), month=int(custom_start_date[1]), day=int(custom_start_date[2])), time.min)
     date_end = datetime.combine(date(year=int(custom_end_date[0]), month=int(custom_end_date[1]), day=int(custom_end_date[2])), time.max)

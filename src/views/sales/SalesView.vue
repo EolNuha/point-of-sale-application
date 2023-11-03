@@ -219,7 +219,7 @@ export default {
       return this.$store.getters["saleModule/getSalesPagination"];
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      return this.$store.state.settingsModule.settings_type;
     },
     typeFilters: {
       get() {
@@ -242,7 +242,7 @@ export default {
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.currentMonth = new Date().getMonth() + 1;

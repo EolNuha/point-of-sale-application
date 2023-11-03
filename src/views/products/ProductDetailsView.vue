@@ -340,7 +340,7 @@ export default {
     },
     taxes() {
       const t = JSON.parse(
-        JSON.stringify(this.$store.state.settingsModule.settingsType)
+        JSON.stringify(this.$store.state.settingsModule.settings_type)
       );
       t.unshift({
         settings_value: 0,

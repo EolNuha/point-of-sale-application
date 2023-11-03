@@ -34,16 +34,16 @@
                 v-model="typeFilters"
                 :placeholder="$t('type')"
                 :options="purchaseTypes"
-                :reduce="(t) => t.settingsValue"
-                :label="`settingsValue`"
+                :reduce="(t) => t.settings_value"
+                :label="`settings_value`"
                 :clearable="false"
                 :multiple="true"
               >
                 <template v-slot:option="option">
-                  {{ $t(option.settingsValue) }}
+                  {{ $t(option.settings_value) }}
                 </template>
                 <template v-slot:selected-option="option">
-                  {{ $t(option.settingsValue) }}
+                  {{ $t(option.settings_value) }}
                 </template></v-select
               >
             </div>
@@ -220,13 +220,13 @@ export default {
   async created() {
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
-        settingsType: "purchasetype",
+        settings_type: "purchasetype",
       })
       .then((response) => {
         this.purchaseTypes = response.data;
       });
-    this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+    this.$store.dispatch("settingsModule/get_t", {
+      settings_type: "tax",
     });
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.startDate = currentMonth.startDate;
@@ -241,7 +241,7 @@ export default {
       return this.$store.getters["purchaseModule/getPurchasesPagination"];
     },
     taxes() {
-      const taxes = this.$store.state.settingsModule.settingsType;
+      const taxes = this.$store.state.settingsModule.settings_type;
       return taxes.reverse();
     },
     purchasesDispatch() {

@@ -1,3 +1,3 @@
 export default {
-  settingsType: [],
+  settings_type: [],
 };

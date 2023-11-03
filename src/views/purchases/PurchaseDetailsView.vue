@@ -157,12 +157,12 @@
                 <template v-for="item in taxes" :key="item.id">
                   <tr>
                     <td class="py-2 uppercase">
-                      {{ $t("tax") }} ({{ item.settingsValue }}%)
+                      {{ $t("tax") }} ({{ item.settings_value }}%)
                     </td>
                     <td class="text-right py-2">
                       {{
                         purchase.taxes
-                          ? purchase.taxes[item.settingsAlias]?.taxValue ||
+                          ? purchase.taxes[item.settings_alias]?.taxValue ||
                             "0.00"
                           : "0.00"
                       }}
@@ -171,12 +171,12 @@
                   </tr>
                   <tr>
                     <td class="py-2 uppercase">
-                      {{ $t("subTotal") }} ({{ item.settingsValue }}%)
+                      {{ $t("subTotal") }} ({{ item.settings_value }}%)
                     </td>
                     <td class="text-right py-2">
                       {{
                         purchase.taxes
-                          ? purchase.taxes[item.settingsAlias]
+                          ? purchase.taxes[item.settings_alias]
                               ?.totalWithoutTax || "0.00"
                           : "0.00"
                       }}
@@ -243,12 +243,12 @@ export default {
       return this.$store.state.purchaseModule.purchase;
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      return this.$store.state.settingsModule.settings_type;
     },
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
     await this.$store
       .dispatch(

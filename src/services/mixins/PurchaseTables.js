@@ -25,10 +25,10 @@ export default {
 
       for await (const tax of this.taxes) {
         let taxTh = document.createElement("th");
-        taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
+        taxTh.innerHTML = `${this.$t("tax")} ${tax.settings_name}%`;
         headTr.appendChild(taxTh);
         let totalWOTaxTh = document.createElement("th");
-        totalWOTaxTh.innerHTML = `${this.$t("subTotal")} ${tax.settingsName}%`;
+        totalWOTaxTh.innerHTML = `${this.$t("subTotal")} ${tax.settings_name}%`;
         headTr.appendChild(totalWOTaxTh);
       }
 
@@ -53,14 +53,14 @@ export default {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${this.getTableTaxValue(
             element.taxes,
-            tax.settingsAlias,
+            tax.settings_alias,
             "taxValue"
           )}`;
           bodyTr.appendChild(taxTd);
           let totalWOTaxTd = document.createElement("td");
           totalWOTaxTd.innerHTML = `${this.getTableTaxValue(
             element.taxes,
-            tax.settingsAlias,
+            tax.settings_alias,
             "totalWithoutTax"
           )}`;
           bodyTr.appendChild(totalWOTaxTd);
@@ -120,10 +120,10 @@ export default {
 
       for await (const tax of this.taxes) {
         let taxTh = document.createElement("th");
-        taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
+        taxTh.innerHTML = `${this.$t("tax")} ${tax.settings_name}%`;
         headTr.appendChild(taxTh);
         let totalWOTaxTh = document.createElement("th");
-        totalWOTaxTh.innerHTML = `${this.$t("subTotal")} ${tax.settingsName}%`;
+        totalWOTaxTh.innerHTML = `${this.$t("subTotal")} ${tax.settings_name}%`;
         headTr.appendChild(totalWOTaxTh);
       }
 
@@ -168,14 +168,14 @@ export default {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${this.getGridTaxValue(
             element.taxes,
-            tax.settingsAlias,
+            tax.settings_alias,
             "taxValue"
           )}`;
           bodyTr.appendChild(taxTd);
           let totalWOTaxTd = document.createElement("td");
           totalWOTaxTd.innerHTML = `${this.getGridTaxValue(
             element.taxes,
-            tax.settingsAlias,
+            tax.settings_alias,
             "totalWithoutTax"
           )}`;
           bodyTr.appendChild(totalWOTaxTd);

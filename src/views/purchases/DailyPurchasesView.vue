@@ -37,16 +37,16 @@
                   v-model="typeFilters"
                   :placeholder="$t('type')"
                   :options="purchaseTypes"
-                  :reduce="(t) => t.settingsValue"
-                  :label="`settingsValue`"
+                  :reduce="(t) => t.settings_value"
+                  :label="`settings_value`"
                   :clearable="false"
                   :multiple="true"
                 >
                   <template v-slot:option="option">
-                    {{ $t(option.settingsValue) }}
+                    {{ $t(option.settings_value) }}
                   </template>
                   <template v-slot:selected-option="option">
-                    {{ $t(option.settingsValue) }}
+                    {{ $t(option.settings_value) }}
                   </template></v-select
                 >
               </div>
@@ -174,7 +174,7 @@ export default {
       return this.$route.query.purchaseDate;
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      return this.$store.state.settingsModule.settings_type;
     },
   },
   watch: {
@@ -194,13 +194,13 @@ export default {
   async created() {
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
-        settingsType: "purchasetype",
+        settings_type: "purchasetype",
       })
       .then((response) => {
         this.purchaseTypes = response.data;
       });
     this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
     await this.getPurchases(this.currentPage);
   },

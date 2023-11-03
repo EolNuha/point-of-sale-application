@@ -192,9 +192,9 @@
                   scope="col"
                   class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
                   v-for="item in taxes"
-                  :key="item.settingsValue"
+                  :key="item.settings_value"
                 >
-                  {{ item.settingsName }}%
+                  {{ item.settings_name }}%
                 </th>
                 <th
                   scope="col"
@@ -298,11 +298,11 @@
                   <td
                     class="py-2 px-6"
                     v-for="item in taxes"
-                    :key="item.settingsValue"
+                    :key="item.settings_value"
                   >
                     {{
                       sale.taxes
-                        ? sale.taxes[item.settingsAlias]?.taxValue || "0.00"
+                        ? sale.taxes[item.settings_alias]?.taxValue || "0.00"
                         : "0.00"
                     }}
                     €
@@ -397,7 +397,7 @@
                 <td
                   class="py-2 px-6"
                   v-for="item in pagination.taxes"
-                  :key="item.settingsValue"
+                  :key="item.settings_value"
                 >
                   {{ item.taxValue }} €
                 </td>
@@ -465,7 +465,7 @@ export default {
       return this.$route.query.saleDate;
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      return this.$store.state.settingsModule.settings_type;
     },
     typeFilters: {
       get() {
@@ -492,7 +492,7 @@ export default {
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
     await this.getSales(this.currentPage);
   },
@@ -556,7 +556,7 @@ export default {
 
       for await (const tax of this.taxes) {
         let taxTh = document.createElement("th");
-        taxTh.innerHTML = `${this.$t("tax")} ${tax.settingsName}%`;
+        taxTh.innerHTML = `${this.$t("tax")} ${tax.settings_name}%`;
         headTr.appendChild(taxTh);
       }
       for await (const item of [
@@ -589,7 +589,7 @@ export default {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${
             element.taxes
-              ? element.taxes[tax.settingsAlias]?.taxValue || "0.00"
+              ? element.taxes[tax.settings_alias]?.taxValue || "0.00"
               : "0.00"
           } €`;
           bodyTr.appendChild(taxTd);

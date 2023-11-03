@@ -62,9 +62,9 @@
           scope="col"
           class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
           v-for="item in taxes"
-          :key="item.settingsValue"
+          :key="item.settings_value"
         >
-          {{ item.settingsName }}%
+          {{ item.settings_name }}%
         </th>
         <th
           scope="col"
@@ -149,10 +149,14 @@
           <td class="py-2 px-6">
             {{ sale.isRegular ? $t("regular") : $t("irregular") }}
           </td>
-          <td class="py-2 px-6" v-for="item in taxes" :key="item.settingsValue">
+          <td
+            class="py-2 px-6"
+            v-for="item in taxes"
+            :key="item.settings_value"
+          >
             {{
               sale.taxes
-                ? sale.taxes[item.settingsAlias]?.taxValue || "0.00"
+                ? sale.taxes[item.settings_alias]?.taxValue || "0.00"
                 : "0.00"
             }}
             €
@@ -251,7 +255,7 @@
         <td
           class="py-2 px-6"
           v-for="item in pagination.taxes"
-          :key="item.settingsValue"
+          :key="item.settings_value"
         >
           {{ item.taxValue }} €
         </td>

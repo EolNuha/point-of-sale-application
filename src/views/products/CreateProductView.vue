@@ -128,10 +128,10 @@
             :placeholder="$t('tax')"
           >
             <template v-slot:option="option">
-              {{ option.settingsValue }}%
+              {{ option.settings_value }}%
             </template>
             <template v-slot:selected-option="option">
-              {{ option.settingsValue }}%
+              {{ option.settings_value }}%
             </template>
           </v-select>
           <span class="text-red-700">{{ errors.product_tax }}</span>
@@ -212,9 +212,9 @@ export default {
   },
   computed: {
     taxes() {
-      const t = this.$store.state.settingsModule.settingsType;
+      const t = this.$store.state.settingsModule.settings_type;
       t.unshift({
-        settingsValue: 0,
+        settings_value: 0,
       });
       return t;
     },

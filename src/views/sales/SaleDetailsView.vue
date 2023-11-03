@@ -116,14 +116,14 @@
                   <td class="py-2 uppercase">{{ $t("subTotal") }}</td>
                   <td class="text-right py-2">{{ sale.subTotalAmount }} €</td>
                 </tr>
-                <tr v-for="item in taxes" :key="item.settingsValue">
+                <tr v-for="item in taxes" :key="item.settings_value">
                   <td class="py-2 uppercase">
-                    {{ $t("tax") }} ({{ item.settingsValue }}%)
+                    {{ $t("tax") }} ({{ item.settings_value }}%)
                   </td>
                   <td class="text-right py-2">
                     {{
                       sale.taxes
-                        ? sale.taxes[item.settingsAlias]?.taxValue || "0.00"
+                        ? sale.taxes[item.settings_alias]?.taxValue || "0.00"
                         : "0.00"
                     }}
                     €
@@ -185,7 +185,7 @@ export default {
       return this.$store.state.saleModule.sale;
     },
     taxes() {
-      return this.$store.state.settingsModule.settingsType;
+      return this.$store.state.settingsModule.settings_type;
     },
     roundTo2() {
       return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
@@ -214,7 +214,7 @@ export default {
   },
   async created() {
     this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
     await this.$store
       .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)

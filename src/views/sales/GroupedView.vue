@@ -28,9 +28,9 @@
           scope="col"
           class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
           v-for="item in taxes"
-          :key="item.settingsValue"
+          :key="item.settings_value"
         >
-          {{ $t("tax") }} {{ item.settingsName }}%
+          {{ $t("tax") }} {{ item.settings_name }}%
         </th>
         <th
           scope="col"
@@ -111,11 +111,16 @@
           <td class="py-2 px-6">
             {{ sale.dateCreated?.substring(0, 10) }}
           </td>
-          <td class="py-2 px-6" v-for="item in taxes" :key="item.settingsValue">
+          <td
+            class="py-2 px-6"
+            v-for="item in taxes"
+            :key="item.settings_value"
+          >
             {{
               Array.isArray(sale.taxes)
-                ? sale.taxes?.find((obj) => obj.taxAlias === item.settingsAlias)
-                    ?.taxValue || "0.00"
+                ? sale.taxes?.find(
+                    (obj) => obj.taxAlias === item.settings_alias
+                  )?.taxValue || "0.00"
                 : "0.00"
             }}
             €
@@ -152,7 +157,7 @@
         <td
           class="py-2 px-6"
           v-for="item in pagination.taxes"
-          :key="item.settingsValue"
+          :key="item.settings_value"
         >
           {{ Number(item.taxValue).toFixed(2) }} €
         </td>

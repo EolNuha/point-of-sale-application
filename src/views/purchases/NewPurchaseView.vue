@@ -137,17 +137,17 @@
             :class="errors.purchaseType ? 'ring-2 ring-red-500' : ''"
             v-model="seller.purchaseType"
             :options="purchaseTypes"
-            :reduce="(t) => t.settingsValue"
-            :label="`settingsValue`"
+            :reduce="(t) => t.settings_value"
+            :label="`settings_value`"
             :clearable="false"
             type="text"
             :placeholder="$t('purchaseType')"
           >
             <template v-slot:option="option">
-              {{ $t(option.settingsValue) }}
+              {{ $t(option.settings_value) }}
             </template>
             <template v-slot:selected-option="option">
-              {{ $t(option.settingsValue) }}
+              {{ $t(option.settings_value) }}
             </template>
           </v-select>
           <span class="text-red-700">{{ errors.purchaseType }}</span>
@@ -269,16 +269,16 @@
                   v-model="product.measure"
                   :clearable="false"
                   :options="measures"
-                  :reduce="(t) => t.settingsValue"
-                  :label="`settingsValue`"
+                  :reduce="(t) => t.settings_value"
+                  :label="`settings_value`"
                   type="text"
                   :placeholder="$t('measure')"
                 >
                   <template v-slot:option="option">
-                    {{ $t(option.settingsValue) }}
+                    {{ $t(option.settings_value) }}
                   </template>
                   <template v-slot:selected-option="option">
-                    {{ $t(option.settingsValue) }}
+                    {{ $t(option.settings_value) }}
                   </template>
                 </v-select>
                 <span class="text-red-700">{{
@@ -417,16 +417,16 @@
                   v-model="product.tax"
                   :clearable="false"
                   :options="taxes"
-                  :reduce="(t) => t.settingsValue"
-                  :label="`settingsValue`"
+                  :reduce="(t) => t.settings_value"
+                  :label="`settings_value`"
                   type="text"
                   :placeholder="$t('tax')"
                 >
                   <template v-slot:option="option">
-                    {{ option.settingsValue }}%
+                    {{ option.settings_value }}%
                   </template>
                   <template v-slot:selected-option="option">
-                    {{ option.settingsValue }}%
+                    {{ option.settings_value }}%
                   </template>
                 </v-select>
                 <span class="text-red-700">{{ errors[`${index}tax`] }}</span>
@@ -598,13 +598,13 @@ export default {
     },
     taxes() {
       const t = JSON.parse(
-        JSON.stringify(this.$store.state.settingsModule.settingsType)
+        JSON.stringify(this.$store.state.settingsModule.settings_type)
       );
       t.unshift({
-        settingsName: "0",
-        settingsAlias: "zero",
-        settingsType: "tax",
-        settingsValue: 0,
+        settings_name: "0",
+        settings_alias: "zero",
+        settings_type: "tax",
+        settings_value: 0,
       });
       return t;
     },
@@ -613,20 +613,20 @@ export default {
     this.seller.purchaseDate = this.minDate;
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
-        settingsType: "measure",
+        settings_type: "measure",
       })
       .then((response) => {
         this.measures = response.data;
       });
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
-        settingsType: "purchasetype",
+        settings_type: "purchasetype",
       })
       .then((response) => {
         this.purchaseTypes = response.data;
       });
     await this.$store.dispatch("settingsModule/getSettingsType", {
-      settingsType: "tax",
+      settings_type: "tax",
     });
     await this.getSellers("");
     await this.getProducts("");

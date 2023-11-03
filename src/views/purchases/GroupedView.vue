@@ -24,18 +24,18 @@
             </template>
           </div>
         </th>
-        <template v-for="item in taxes" :key="item.settingsValue">
+        <template v-for="item in taxes" :key="item.settings_value">
           <th
             scope="col"
             class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
           >
-            {{ item.settingsName }}%
+            {{ item.settings_name }}%
           </th>
           <th
             scope="col"
             class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
           >
-            {{ $t("subTotal") }} {{ item.settingsName }}%
+            {{ $t("subTotal") }} {{ item.settings_name }}%
           </th>
         </template>
         <th
@@ -66,12 +66,12 @@
           <td class="py-2 px-6">
             {{ purchase.dateCreated?.substring(0, 10) }}
           </td>
-          <template v-for="item in taxes" :key="item.settingsValue">
+          <template v-for="item in taxes" :key="item.settings_value">
             <td class="py-2 px-6">
               {{
                 Array.isArray(purchase.taxes)
                   ? purchase.taxes?.find(
-                      (obj) => obj.taxAlias === item.settingsAlias
+                      (obj) => obj.taxAlias === item.settings_alias
                     )?.taxValue || "0.00"
                   : "0.00"
               }}
@@ -81,7 +81,7 @@
               {{
                 Array.isArray(purchase.taxes)
                   ? purchase.taxes?.find(
-                      (obj) => obj.taxAlias === item.settingsAlias
+                      (obj) => obj.taxAlias === item.settings_alias
                     )?.totalWithoutTax || "0.00"
                   : "0.00"
               }}

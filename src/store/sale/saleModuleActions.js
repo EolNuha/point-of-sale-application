@@ -21,7 +21,7 @@ export default {
   getSales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales`, { params: data })
+        .get(`/api/sales/grouped`, { params: data })
         .then(async (response) => {
           commit("SET_SALES", response.data.data);
           commit("SET_PAGINATION", response.data.pagination);
@@ -35,7 +35,7 @@ export default {
   getSalesDetailed({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales-detailed`, { params: data })
+        .get(`/api/sales/detailed`, { params: data })
         .then(async (response) => {
           commit("SET_SALES", response.data.data);
           commit("SET_PAGINATION", response.data.pagination);
@@ -49,7 +49,7 @@ export default {
   getAllSales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales`, { params: data })
+        .get(`/api/sales/grouped`, { params: data })
         .then(async (response) => {
           resolve(response);
         })
@@ -61,7 +61,7 @@ export default {
   getAllSalesDetailed({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales-detailed`, { params: data })
+        .get(`/api/sales/detailed`, { params: data })
         .then(async (response) => {
           resolve(response);
         })

@@ -134,8 +134,8 @@ export default {
       this.$emit("isTableLoading", true);
       await this.$store
         .dispatch(this.dispatchModule, {
-          startDate: startDate,
-          endDate: endDate,
+          start_date: startDate,
+          end_date: endDate,
           page: 1,
           search: this.searchQuery,
         })

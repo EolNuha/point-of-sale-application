@@ -11,7 +11,7 @@ def getTaxDict(item):
         "id": item.id,
         "taxName": item.tax_name,
         "taxAlias": item.tax_alias,
-        "taxValue": Decimal(item.tax_value).quantize(TWOPLACES),
+        "taxValue": float(Decimal(item.tax_value).quantize(TWOPLACES)),
     }
 
 

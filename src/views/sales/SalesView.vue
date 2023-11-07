@@ -270,8 +270,8 @@ export default {
       await this.$store
         .dispatch(this.salesDispatch, {
           page: page,
-          startDate: this.startDate,
-          endDate: this.endDate,
+          start_date: this.startDate,
+          end_date: this.endDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,

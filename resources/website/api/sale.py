@@ -480,7 +480,7 @@ class GetDailySales(Resource):
         type_filter = args["type_filter[]"]
 
         sale_date = sale_date.split(".")
-        type_filter = [x == "true" for x in type_filter]
+        type_filter = [x == "true" or x == True for x in type_filter]
         if not type_filter:
             type_filter = [True, False]
 

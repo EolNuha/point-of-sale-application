@@ -154,12 +154,15 @@
         class="text-md uppercase font-bold bg-white border-b dark:bg-neutral-900 dark:border-gray-700"
       >
         <td class="py-4 px-6">{{ $t("total") }}</td>
-        <td
-          class="py-2 px-6"
-          v-for="item in pagination.taxes"
-          :key="item.settings_value"
-        >
-          {{ Number(item.taxValue).toFixed(2) }} €
+        <td class="py-2 px-6" v-for="item in taxes" :key="item.settings_value">
+          {{
+            Array.isArray(pagination.taxes)
+              ? pagination.taxes?.find(
+                  (obj) => obj.taxAlias === item.settings_alias
+                )?.taxValue || "0.00"
+              : "0.00"
+          }}
+          €
         </td>
         <td class="py-4 px-6">{{ pagination.salesSubTotalAmount }} €</td>
         <td class="py-4 px-6">{{ pagination.salesTotalAmount }} €</td>

@@ -340,7 +340,7 @@ export default {
     },
     taxes() {
       const t = JSON.parse(
-        JSON.stringify(this.$store.state.settingsModule.settings_type)
+        JSON.stringify(this.$store.state.settingsModule.settings_type.tax)
       );
       t.unshift({
         settings_value: 0,
@@ -367,9 +367,6 @@ export default {
         .then((response) => {
           this.measures = response.data;
         });
-      await this.$store.dispatch("settingsModule/getSettingsType", {
-        settings_type: "tax",
-      });
       if (this.$route.params.productId) {
         this.isAdd = false;
         await this.$store

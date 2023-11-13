@@ -8,7 +8,10 @@ export default {
       axios
         .get(`/api/settings/${data.settings_type}`)
         .then(async (response) => {
-          commit("SET_SETTINGS_TYPE", response.data);
+          commit("SET_SETTINGS_TYPE", {
+            data: response.data,
+            settingsType: data.settings_type,
+          });
           resolve(response);
         })
         .catch((error) => {

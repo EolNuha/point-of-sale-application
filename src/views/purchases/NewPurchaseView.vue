@@ -598,7 +598,7 @@ export default {
     },
     taxes() {
       const t = JSON.parse(
-        JSON.stringify(this.$store.state.settingsModule.settings_type)
+        JSON.stringify(this.$store.state.settingsModule.settings_type.tax)
       );
       t.unshift({
         settings_name: "0",
@@ -625,9 +625,6 @@ export default {
       .then((response) => {
         this.purchaseTypes = response.data;
       });
-    await this.$store.dispatch("settingsModule/getSettingsType", {
-      settings_type: "tax",
-    });
     await this.getSellers("");
     await this.getProducts("");
   },

@@ -241,7 +241,7 @@ export default {
       return this.$store.getters["purchaseModule/getPurchasesPagination"];
     },
     taxes() {
-      const taxes = this.$store.state.settingsModule.settings_type;
+      const taxes = this.$store.state.settingsModule.settings_type.tax;
       return taxes.reverse();
     },
     purchasesDispatch() {

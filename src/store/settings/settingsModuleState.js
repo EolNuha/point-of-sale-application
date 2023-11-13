@@ -1,3 +1,6 @@
 export default {
-  settings_type: [],
+  settings_type: {
+    tax: [],
+    notification: [],
+  },
 };

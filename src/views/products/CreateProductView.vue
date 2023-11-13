@@ -212,7 +212,7 @@ export default {
   },
   computed: {
     taxes() {
-      const t = this.$store.state.settingsModule.settings_type;
+      const t = this.$store.state.settingsModule.settings_type.tax;
       t.unshift({
         settings_value: 0,
       });
@@ -229,11 +229,6 @@ export default {
         this.$store.state.productModule.product = v;
       },
     },
-  },
-  async created() {
-    await this.$store.dispatch("settingsModule/getSettingsType", {
-      settings_type: "tax",
-    });
   },
   methods: {
     formatDate(date) {

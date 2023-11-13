@@ -79,6 +79,11 @@ export default {
     this.setUserData();
     // this.$tours["dashboardTour"].start();
   },
+  mounted() {
+    this.$store.dispatch("settingsModule/getSettingsType", {
+      settings_type: "tax",
+    });
+  },
   methods: {
     setTheme(theme) {
       localStorage.setItem("theme-preference", theme);

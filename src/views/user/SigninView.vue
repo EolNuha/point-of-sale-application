@@ -15,12 +15,12 @@
           <span
             class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
           >
-            Egzoni
+            QuickSell
           </span>
           <span
             class="text-sm font-semibold whitespace-nowrap dark:text-gray-300"
           >
-            Market
+            POS
           </span>
         </div>
       </div>

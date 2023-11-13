@@ -174,7 +174,7 @@ export default {
       return this.$route.query.purchaseDate;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type;
+      return this.$store.state.settingsModule.settings_type.tax;
     },
   },
   watch: {
@@ -199,9 +199,6 @@ export default {
       .then((response) => {
         this.purchaseTypes = response.data;
       });
-    this.$store.dispatch("settingsModule/getSettingsType", {
-      settings_type: "tax",
-    });
     await this.getPurchases(this.currentPage);
   },
   methods: {

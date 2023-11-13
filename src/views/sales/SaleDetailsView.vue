@@ -185,7 +185,7 @@ export default {
       return this.$store.state.saleModule.sale;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type;
+      return this.$store.state.settingsModule.settings_type.tax;
     },
     roundTo2() {
       return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
@@ -213,9 +213,6 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch("settingsModule/getSettingsType", {
-      settings_type: "tax",
-    });
     await this.$store
       .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)
       .then(() => {

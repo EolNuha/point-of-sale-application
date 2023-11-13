@@ -465,7 +465,7 @@ export default {
       return this.$route.query.saleDate;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type;
+      return this.$store.state.settingsModule.settings_type.tax;
     },
     typeFilters: {
       get() {
@@ -491,9 +491,6 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch("settingsModule/getSettingsType", {
-      settings_type: "tax",
-    });
     await this.getSales(this.currentPage);
   },
   methods: {

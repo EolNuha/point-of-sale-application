@@ -67,7 +67,7 @@
             {{ localizedMessage(item.message) }}
           </div>
           <div class="text-xs text-theme-600 dark:text-theme-500">
-            {{ dateSince(item.dateCreated) }}
+            {{ dateSince(item.date_created) }}
           </div>
         </div>
       </router-link>

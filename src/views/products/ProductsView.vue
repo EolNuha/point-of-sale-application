@@ -189,7 +189,7 @@
                   @click="sort('purchased_price')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("purchasedPrice") }}
+                    {{ $t("purchased_price") }}
                     <template v-if="sortColumn === 'purchased_price'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -210,7 +210,7 @@
                   @click="sort('selling_price')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("sellingPrice") }}
+                    {{ $t("selling_price") }}
                     <template v-if="sortColumn === 'selling_price'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -304,10 +304,10 @@
                   <td class="py-2 px-6">{{ product.name }}</td>
                   <td class="py-2 px-6">{{ product.barcode }}</td>
                   <td class="py-2 px-6 max-w-xs">
-                    {{ product.purchasedPrice }} €
+                    {{ product.purchased_price }} €
                   </td>
                   <td class="py-2 px-6 max-w-xs">
-                    {{ product.sellingPrice }} €
+                    {{ product.selling_price }} €
                   </td>
                   <td class="py-2 px-6">
                     <div
@@ -577,13 +577,13 @@ export default {
       barcodeTh.innerHTML = this.$t("barcode");
       headTr.appendChild(barcodeTh);
 
-      let purchasedPriceTh = document.createElement("th");
-      purchasedPriceTh.innerHTML = this.$t("purchasedPrice");
-      headTr.appendChild(purchasedPriceTh);
+      let purchased_priceTh = document.createElement("th");
+      purchased_priceTh.innerHTML = this.$t("purchased_price");
+      headTr.appendChild(purchased_priceTh);
 
-      let sellingPriceTh = document.createElement("th");
-      sellingPriceTh.innerHTML = this.$t("sellingPrice");
-      headTr.appendChild(sellingPriceTh);
+      let selling_priceTh = document.createElement("th");
+      selling_priceTh.innerHTML = this.$t("selling_price");
+      headTr.appendChild(selling_priceTh);
 
       let stockTh = document.createElement("th");
       stockTh.innerHTML = this.$t("stock");
@@ -608,13 +608,13 @@ export default {
         barcodeTd.innerHTML = element.barcode;
         bodyTr.appendChild(barcodeTd);
 
-        let purchasedPriceTd = document.createElement("td");
-        purchasedPriceTd.innerHTML = `${element.purchasedPrice} €`;
-        bodyTr.appendChild(purchasedPriceTd);
+        let purchased_priceTd = document.createElement("td");
+        purchased_priceTd.innerHTML = `${element.purchased_price} €`;
+        bodyTr.appendChild(purchased_priceTd);
 
-        let sellingPriceTd = document.createElement("td");
-        sellingPriceTd.innerHTML = `${element.sellingPrice} €`;
-        bodyTr.appendChild(sellingPriceTd);
+        let selling_priceTd = document.createElement("td");
+        selling_priceTd.innerHTML = `${element.selling_price} €`;
+        bodyTr.appendChild(selling_priceTd);
 
         let stockTd = document.createElement("td");
         stockTd.innerHTML = element.stock;

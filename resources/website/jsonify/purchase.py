@@ -11,14 +11,14 @@ def getPurchaseDict(item):
     ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "totalAmount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
-        "subTotalAmount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
-        "rabatAmount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
-        "totalTaxAmount": Decimal(item.total_amount - item.subtotal_amount).quantize(
+        "total_amount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
+        "subtotal_amount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
+        "rabat_amount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
+        "total_tax_amount": Decimal(item.total_amount - item.subtotal_amount).quantize(
             TWOPLACES
         ),
-        "dateCreated": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
-        "dateModified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
+        "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
+        "date_modified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
     }
 
 
@@ -27,20 +27,20 @@ def getDailyPurchaseDict(item):
     ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "totalAmount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
-        "subTotalAmount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
-        "rabatAmount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
-        "totalTaxAmount": Decimal(item.total_amount - item.subtotal_amount).quantize(
+        "total_amount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
+        "subtotal_amount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
+        "rabat_amount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
+        "total_tax_amount": Decimal(item.total_amount - item.subtotal_amount).quantize(
             TWOPLACES
         ),
-        "sellerName": item.seller_name,
-        "sellerInvoiceNumber": item.seller_invoice_number,
-        "sellerFiscalNumber": item.seller_fiscal_number,
-        "sellerTaxNumber": item.seller_tax_number,
-        "purchaseItems": getPurchaseItemsList(item.purchase_items),
+        "seller_name": item.seller_name,
+        "seller_invoice_number": item.seller_invoice_number,
+        "seller_fiscal_number": item.seller_fiscal_number,
+        "seller_tax_number": item.seller_tax_number,
+        "purchase_items": getPurchaseItemsList(item.purchase_items),
         "taxes": getGroupedByAliasTaxes(item.purchase_taxes),
-        "dateCreated": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
-        "dateModified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
+        "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
+        "date_modified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
     }
 
 
@@ -55,23 +55,23 @@ def getPurchaseItemDict(item):
             "barcode": item.product_barcode,
             "stock": str(Decimal(item.product_stock).quantize(TWOPLACES)),
             "tax": item.product_tax,
-            "purchasedPriceWOTax": str(
+            "purchased_price_wo_tax": str(
                 Decimal(item.product_purchased_price_wo_tax or 0).quantize(TWOPLACES)
             ),
-            "purchasedPrice": str(
+            "purchased_price": str(
                 Decimal(item.product_purchased_price or 0).quantize(TWOPLACES)
             ),
             "measure": item.product_measure,
-            "sellingPrice": str(
+            "selling_price": str(
                 Decimal(item.product_selling_price or 0).quantize(TWOPLACES)
             ),
         },
-        "taxAmount": str(
+        "tax_amount": str(
             Decimal(item.tax_amount * item.product_stock).quantize(TWOPLACES)
         ),
-        "totalAmount": str(Decimal(item.total_amount or 0).quantize(TWOPLACES)),
-        "dateCreated": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
-        "dateModified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
+        "total_amount": str(Decimal(item.total_amount or 0).quantize(TWOPLACES)),
+        "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
+        "date_modified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
     }
 
 
@@ -80,12 +80,12 @@ def getSellerDict(item):
     ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "sellerName": item.seller_name,
-        "sellerInvoiceNumber": item.seller_invoice_number,
-        "sellerFiscalNumber": item.seller_fiscal_number,
-        "sellerTaxNumber": item.seller_tax_number,
-        "dateCreated": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
-        "dateModified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
+        "seller_name": item.seller_name,
+        "seller_invoice_number": item.seller_invoice_number,
+        "seller_fiscal_number": item.seller_fiscal_number,
+        "seller_tax_number": item.seller_tax_number,
+        "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
+        "date_modified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
     }
 
 
@@ -94,10 +94,10 @@ def getTaxDict(item):
     ctx.rounding = decimal.ROUND_HALF_UP
     return {
         "id": item.id,
-        "taxName": item.tax_name,
-        "taxAlias": item.tax_alias,
-        "taxValue": Decimal(item.tax_value or 0).quantize(TWOPLACES),
-        "totalWithoutTax": Decimal(item.total_without_tax or 0).quantize(TWOPLACES),
+        "tax_name": item.tax_name,
+        "tax_alias": item.tax_alias,
+        "tax_value": Decimal(item.tax_value or 0).quantize(TWOPLACES),
+        "total_without_tax": Decimal(item.total_without_tax or 0).quantize(TWOPLACES),
     }
 
 
@@ -124,14 +124,14 @@ def getTaxesList(items):
 def getGroupedByAliasTaxes(data):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
-    result = defaultdict(lambda: {"taxValue": 0, "totalWithoutTax": 0})
+    result = defaultdict(lambda: {"tax_value": 0, "total_without_tax": 0})
     for item in data:
         tax_alias = item.tax_alias
         tax_value = float(Decimal(item.tax_value or 0).quantize(TWOPLACES))
         total_without_tax = float(
             Decimal(item.total_without_tax or 0).quantize(TWOPLACES)
         )
-        result[tax_alias]["taxValue"] += tax_value
-        result[tax_alias]["totalWithoutTax"] += total_without_tax
+        result[tax_alias]["tax_value"] += tax_value
+        result[tax_alias]["total_without_tax"] += total_without_tax
 
     return result

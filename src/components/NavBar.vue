@@ -90,7 +90,7 @@
         type="button"
       >
         <span class="hidden sm:inline"
-          >{{ user.firstName }} {{ user.lastName }}</span
+          >{{ user.first_name }} {{ user.last_name }}</span
         >
         <span class="sr-only">Open user menu</span>
         <IconC iconType="solid" iconName="UserCircleIcon" iconClass="w-7 h-7" />
@@ -101,7 +101,7 @@
         style="inset: 0px auto auto -10px !important"
       >
         <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
-          <div>{{ user.firstName }} {{ user.lastName }}</div>
+          <div>{{ user.first_name }} {{ user.last_name }}</div>
           <div class="font-medium truncate text-gray-500 dark:text-gray-300">
             @{{ user.username }}
           </div>

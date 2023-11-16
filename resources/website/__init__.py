@@ -24,7 +24,7 @@ def create_app():
     from website.api.before_app_requests import before_app_requests_api
     from website.api.product import product_rest
     from website.api.sale import sale_rest
-    from website.api.purchase import purchase_api
+    from website.api.purchase import purchase_rest
     from website.api.auth import auth_api, auth_rest
     from website.api.analytics import analytics_rest
     from website.api.settings import settings_rest
@@ -32,7 +32,6 @@ def create_app():
     from website.api.permissions import permissions_rest
 
     app.register_blueprint(before_app_requests_api, url_prefix="/api/")
-    app.register_blueprint(purchase_api, url_prefix="/api/")
     app.register_blueprint(auth_api, url_prefix="/")
     swagger.add_namespace(auth_rest, path="/")
     swagger.add_namespace(settings_rest, path="/api/")
@@ -41,6 +40,7 @@ def create_app():
     swagger.add_namespace(product_rest, path="/api/")
     swagger.add_namespace(analytics_rest, path="/api/")
     swagger.add_namespace(sale_rest, path="/api/")
+    swagger.add_namespace(purchase_rest, path="/api/")
 
     create_database(app)
 

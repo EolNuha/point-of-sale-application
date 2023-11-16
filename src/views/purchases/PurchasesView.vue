@@ -225,9 +225,6 @@ export default {
       .then((response) => {
         this.purchaseTypes = response.data;
       });
-    this.$store.dispatch("settingsModule/get_t", {
-      settings_type: "tax",
-    });
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.startDate = currentMonth.startDate;
     this.endDate = currentMonth.endDate;
@@ -275,8 +272,8 @@ export default {
       await this.$store
         .dispatch(this.purchasesDispatch, {
           page: page,
-          startDate: this.startDate,
-          endDate: this.endDate,
+          start_date: this.startDate,
+          end_date: this.endDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
@@ -296,8 +293,8 @@ export default {
         .dispatch(this.allPurchasesDispatch, {
           page: 1,
           per_page: this.pagination.total,
-          startDate: this.startDate,
-          endDate: this.endDate,
+          start_date: this.startDate,
+          end_date: this.endDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,

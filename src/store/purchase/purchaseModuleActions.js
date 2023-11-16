@@ -21,7 +21,7 @@ export default {
   getPurchases({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/purchases`, { params: data })
+        .get(`/api/purchases-grouped`, { params: data })
         .then(async (response) => {
           commit("SET_PURCHASES", response.data.data);
           commit("SET_PAGINATION", response.data.pagination);

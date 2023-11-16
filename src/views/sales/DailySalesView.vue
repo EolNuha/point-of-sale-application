@@ -202,7 +202,7 @@
                   @click="sort('subtotal_amount')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("subtotalAmount") }}
+                    {{ $t("subtotal_amount") }}
                     <template v-if="sortColumn === 'subtotal_amount'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -223,7 +223,7 @@
                   @click="sort('total_amount')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("totalAmount") }}
+                    {{ $t("total_amount") }}
                     <template v-if="sortColumn === 'total_amount'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -290,10 +290,10 @@
                 >
                   <td class="py-2 px-6">{{ sale.id }}</td>
                   <td class="py-2 px-6">
-                    {{ sale.user?.firstName }} {{ sale.user?.lastName }}
+                    {{ sale.user?.first_name }} {{ sale.user?.last_name }}
                   </td>
                   <td class="py-2 px-6">
-                    {{ sale.isRegular ? $t("regular") : $t("irregular") }}
+                    {{ sale.is_regular ? $t("regular") : $t("irregular") }}
                   </td>
                   <td
                     class="py-2 px-6"
@@ -302,15 +302,15 @@
                   >
                     {{
                       sale.taxes
-                        ? sale.taxes[item.settings_alias]?.taxValue || "0.00"
+                        ? sale.taxes[item.settings_alias]?.tax_value || "0.00"
                         : "0.00"
                     }}
                     €
                   </td>
-                  <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
-                  <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
-                  <td class="py-2 px-6">{{ sale.grossProfitAmount }} €</td>
-                  <td class="py-2 px-6">{{ sale.netProfitAmount }} €</td>
+                  <td class="py-2 px-6">{{ sale.subtotal_amount }} €</td>
+                  <td class="py-2 px-6">{{ sale.total_amount }} €</td>
+                  <td class="py-2 px-6">{{ sale.gross_profit_amount }} €</td>
+                  <td class="py-2 px-6">{{ sale.net_profit_amount }} €</td>
                   <td class="py-2 px-6 w-1.5" v-if="$can('read', 'sales')">
                     <button
                       class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
@@ -399,7 +399,7 @@
                   v-for="item in pagination.taxes"
                   :key="item.settings_value"
                 >
-                  {{ item.taxValue }} €
+                  {{ item.tax_value }} €
                 </td>
                 <td class="py-4 px-6">
                   {{ pagination.salesSubTotalAmount }} €
@@ -557,8 +557,8 @@ export default {
         headTr.appendChild(taxTh);
       }
       for await (const item of [
-        "subtotalAmount",
-        "totalAmount",
+        "subtotal_amount",
+        "total_amount",
         "grossProfit",
         "netProfit",
       ]) {
@@ -574,10 +574,10 @@ export default {
         idTd.innerHTML = element.id;
         bodyTr.appendChild(idTd);
         let employeeTd = document.createElement("td");
-        employeeTd.innerHTML = `${element.user.firstName} ${element.user.lastName}`;
+        employeeTd.innerHTML = `${element.user.first_name} ${element.user.last_name}`;
         bodyTr.appendChild(employeeTd);
         let typeTd = document.createElement("td");
-        typeTd.innerHTML = element.isRegular
+        typeTd.innerHTML = element.is_regular
           ? this.$t("regular")
           : this.$t("irregular");
         bodyTr.appendChild(typeTd);
@@ -586,17 +586,17 @@ export default {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${
             element.taxes
-              ? element.taxes[tax.settings_alias]?.taxValue || "0.00"
+              ? element.taxes[tax.settings_alias]?.tax_value || "0.00"
               : "0.00"
           } €`;
           bodyTr.appendChild(taxTd);
         }
 
         for await (const item of [
-          "subTotalAmount",
-          "totalAmount",
-          "grossProfitAmount",
-          "netProfitAmount",
+          "subtotal_amount",
+          "total_amount",
+          "gross_profit_amount",
+          "net_profit_amount",
         ]) {
           let itemTd = document.createElement("td");
           itemTd.innerHTML = `${element[item]} €`;
@@ -617,7 +617,7 @@ export default {
       totalTr.appendChild(empty1Td);
       for await (const tax of this.allSales.pagination.taxes) {
         let taxTd = document.createElement("th");
-        taxTd.innerHTML = `${tax.taxValue} €`;
+        taxTd.innerHTML = `${tax.tax_value} €`;
         totalTr.appendChild(taxTd);
       }
       for await (const item of [

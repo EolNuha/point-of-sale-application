@@ -118,7 +118,7 @@
                   @click="sort('first_name')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("firstName") }}
+                    {{ $t("first_name") }}
                     <template v-if="sortColumn === 'first_name'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -139,7 +139,7 @@
                   @click="sort('last_name')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("lastName") }}
+                    {{ $t("last_name") }}
                     <template v-if="sortColumn === 'last_name'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -256,11 +256,11 @@
                   >
                     {{ user.id }}
                   </th>
-                  <td class="py-2 px-6">{{ user.firstName }}</td>
-                  <td class="py-2 px-6">{{ user.lastName }}</td>
+                  <td class="py-2 px-6">{{ user.first_name }}</td>
+                  <td class="py-2 px-6">{{ user.last_name }}</td>
                   <td class="py-2 px-6 max-w-xs">{{ user.username }}</td>
                   <td class="py-2 px-6 max-w-xs">{{ user.email }}</td>
-                  <td class="py-2 px-6 max-w-xs">{{ $t(user.userRole) }}</td>
+                  <td class="py-2 px-6 max-w-xs">{{ $t(user.user_role) }}</td>
                   <td class="py-2 px-6 max-w-xs">
                     <div
                       class="py-1.5 px-2.5 rounded inline text-white"

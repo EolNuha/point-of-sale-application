@@ -50,13 +50,13 @@ class Sales(Resource):
         ctx.rounding = decimal.ROUND_HALF_UP
 
         products = sale_rest.payload["products"]
-        customer_amount = sale_rest.payload["customerAmount"]
-        change_amount = sale_rest.payload["changeAmount"]
-        is_regular = sale_rest.payload["isRegular"]
+        customer_amount = sale_rest.payload["customer_amount"]
+        change_amount = sale_rest.payload["change_amount"]
+        is_regular = sale_rest.payload["is_regular"]
 
         def calculate_totals(product):
-            product_selling_price = Decimal(product["sellingPrice"])
-            product_purchased_price = Decimal(product["purchasedPrice"])
+            product_selling_price = Decimal(product["selling_price"])
+            product_purchased_price = Decimal(product["purchased_price"])
             tax_percentage = Decimal(product["tax"]) / 100
             quantity = Decimal(product["quantity"])
             tax_amount = Decimal(tax_percentage * product_selling_price)
@@ -254,10 +254,10 @@ class GroupedSales(Resource):
         sales = paginated_items.items
 
         totals = {
-            "totalAmount": 0,
-            "subTotalAmount": 0,
-            "grossProfitAmount": 0,
-            "netProfitAmount": 0,
+            "total_amount": 0,
+            "subtotal_amount": 0,
+            "gross_profit_amount": 0,
+            "net_profit_amount": 0,
             "taxes": [],
         }
         sale_data_list = []
@@ -288,37 +288,37 @@ class GroupedSales(Resource):
             sale_data["taxes"] = taxes_list
             sale_data_list.append(sale_data)
 
-            totals["totalAmount"] += sale.total_amount
-            totals["subTotalAmount"] += sale.subtotal_amount
-            totals["grossProfitAmount"] += sale.gross_profit_amount
-            totals["netProfitAmount"] += sale.net_profit_amount
+            totals["total_amount"] += sale.total_amount
+            totals["subtotal_amount"] += sale.subtotal_amount
+            totals["gross_profit_amount"] += sale.gross_profit_amount
+            totals["net_profit_amount"] += sale.net_profit_amount
 
             for tax in getTaxesList(taxes):
                 found = next(
                     (
                         item
                         for item in totals["taxes"]
-                        if item["taxAlias"] == tax["taxAlias"]
+                        if item["tax_alias"] == tax["tax_alias"]
                     ),
                     None,
                 )
                 if found:
-                    found["taxValue"] += tax["taxValue"]
+                    found["tax_value"] += tax["tax_value"]
                 else:
                     totals["taxes"].append(tax)
 
         paginated_dict = getPaginatedDict(sale_data_list, paginated_items)
         paginated_dict["pagination"]["salesTotalAmount"] = Decimal(
-            totals["totalAmount"]
+            totals["total_amount"]
         ).quantize(TWOPLACES)
         paginated_dict["pagination"]["salesSubTotalAmount"] = Decimal(
-            totals["subTotalAmount"]
+            totals["subtotal_amount"]
         ).quantize(TWOPLACES)
         paginated_dict["pagination"]["salesTotalGrossProfit"] = Decimal(
-            totals["grossProfitAmount"]
+            totals["gross_profit_amount"]
         ).quantize(TWOPLACES)
         paginated_dict["pagination"]["salesTotalNetProfit"] = Decimal(
-            totals["netProfitAmount"]
+            totals["net_profit_amount"]
         ).quantize(TWOPLACES)
         paginated_dict["pagination"]["taxes"] = totals["taxes"]
 
@@ -413,19 +413,19 @@ class GetSalesDetailed(Resource):
         sale_items = getDailySalesList(paginated_items.items)
         paginated_dict = getPaginatedDict(sale_items, paginated_items)
 
-        total = reduce(lambda x, y: x + y["totalAmount"], sale_items, 0)
-        subtotal = reduce(lambda x, y: x + y["subTotalAmount"], sale_items, 0)
-        gross_total = reduce(lambda x, y: x + y["grossProfitAmount"], sale_items, 0)
-        net_total = reduce(lambda x, y: x + y["netProfitAmount"], sale_items, 0)
+        total = reduce(lambda x, y: x + y["total_amount"], sale_items, 0)
+        subtotal = reduce(lambda x, y: x + y["subtotal_amount"], sale_items, 0)
+        gross_total = reduce(lambda x, y: x + y["gross_profit_amount"], sale_items, 0)
+        net_total = reduce(lambda x, y: x + y["net_profit_amount"], sale_items, 0)
 
         taxes_total = [
             {
-                "taxAlias": settings.settings_alias,
-                "taxName": settings.settings_name,
-                "taxValue": Decimal(
+                "tax_alias": settings.settings_alias,
+                "tax_name": settings.settings_name,
+                "tax_value": Decimal(
                     sum(
                         Decimal(
-                            item["taxes"][settings.settings_alias]["taxValue"]
+                            item["taxes"][settings.settings_alias]["tax_value"]
                         ).quantize(TWOPLACES)
                         for item in sale_items
                     )
@@ -532,18 +532,18 @@ class GetDailySales(Resource):
             getDailySalesList(paginated_items.items), paginated_items
         )
 
-        total = reduce(lambda x, y: x + y["totalAmount"], sale_items, 0)
-        subtotal = reduce(lambda x, y: x + y["subTotalAmount"], sale_items, 0)
-        gross_total = reduce(lambda x, y: x + y["grossProfitAmount"], sale_items, 0)
-        net_total = reduce(lambda x, y: x + y["netProfitAmount"], sale_items, 0)
+        total = reduce(lambda x, y: x + y["total_amount"], sale_items, 0)
+        subtotal = reduce(lambda x, y: x + y["subtotal_amount"], sale_items, 0)
+        gross_total = reduce(lambda x, y: x + y["gross_profit_amount"], sale_items, 0)
+        net_total = reduce(lambda x, y: x + y["net_profit_amount"], sale_items, 0)
 
         taxes_total = [
             {
-                "taxAlias": settings.settings_alias,
-                "taxName": settings.settings_name,
-                "taxValue": sum(
+                "tax_alias": settings.settings_alias,
+                "tax_name": settings.settings_name,
+                "tax_value": sum(
                     Decimal(
-                        item["taxes"][settings.settings_alias]["taxValue"]
+                        item["taxes"][settings.settings_alias]["tax_value"]
                     ).quantize(TWOPLACES)
                     for item in sale_items
                 ),
@@ -595,7 +595,7 @@ class SaleDetails(Resource):
         ctx.rounding = decimal.ROUND_HALF_UP
 
         deleted_items = sale_rest.payload["deleted_items"]
-        saleItems = sale_rest.payload["sale_items"]
+        sale_items = sale_rest.payload["sale_items"]
 
         sale_query = Sale.query.filter_by(id=saleId).first_or_404()
         subtotal, sale_taxes, grosstotal = [], [], []
@@ -611,18 +611,18 @@ class SaleDetails(Resource):
             ).delete()
             db.session.commit()
 
-        for item in saleItems:
+        for item in sale_items:
             item_quantity = Decimal(item["quantity"]).quantize(FOURPLACES)
 
             subtotal.append(
                 Decimal(
-                    Decimal(item["priceWithoutTax"]).quantize(FOURPLACES)
+                    Decimal(item["price_without_tax"]).quantize(FOURPLACES)
                     * item_quantity
                 ).quantize(FOURPLACES)
             )
             grosstotal.append(
                 Decimal(
-                    Decimal(item["product"]["purchasedPrice"]) * item_quantity
+                    Decimal(item["product"]["purchased_price"]) * item_quantity
                 ).quantize(FOURPLACES)
             )
             for tax in taxes:
@@ -631,7 +631,7 @@ class SaleDetails(Resource):
                     sale_taxes.append(
                         {
                             key_v: Decimal(
-                                Decimal(item["taxAmount"]).quantize(FOURPLACES)
+                                Decimal(item["tax_amount"]).quantize(FOURPLACES)
                                 * item_quantity
                             ).quantize(FOURPLACES)
                         }

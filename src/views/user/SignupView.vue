@@ -59,41 +59,41 @@
             </div>
             <div>
               <label
-                for="firstName"
+                for="first_name"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Your First Name</label
               >
               <Field
-                v-model="firstName"
+                v-model="first_name"
                 rules="required"
                 type="text"
-                name="firstName"
-                id="firstName"
-                :class="errors.firstName ? 'ring-2 ring-red-500' : ''"
+                name="first_name"
+                id="first_name"
+                :class="errors.first_name ? 'ring-2 ring-red-500' : ''"
                 class="bg-neutral-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                 placeholder="John"
                 required=""
               />
-              <span class="text-red-700">{{ errors.firstName }}</span>
+              <span class="text-red-700">{{ errors.first_name }}</span>
             </div>
             <div>
               <label
-                for="lastName"
+                for="last_name"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Your Last Name</label
               >
               <Field
-                v-model="lastName"
+                v-model="last_name"
                 rules="required"
                 type="text"
-                name="lastName"
-                id="lastName"
-                :class="errors.lastName ? 'ring-2 ring-red-500' : ''"
+                name="last_name"
+                id="last_name"
+                :class="errors.last_name ? 'ring-2 ring-red-500' : ''"
                 class="bg-neutral-50 border border-gray-300 text-gray-900 sm:text-sm rounded focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-500 dark:focus:border-theme-500"
                 placeholder="Doe"
                 required=""
               />
-              <span class="text-red-700">{{ errors.lastName }}</span>
+              <span class="text-red-700">{{ errors.last_name }}</span>
             </div>
             <div>
               <label
@@ -175,8 +175,8 @@ export default {
     return {
       email: "",
       password: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       username: "",
       isLoading: false,
     };
@@ -193,10 +193,10 @@ export default {
       const data = {
         email: this.email,
         password: this.password,
-        firstName: this.firstName,
-        lastName: this.lastName,
+        first_name: this.first_name,
+        last_name: this.last_name,
         username: this.username,
-        userRole: null,
+        user_role: null,
       };
       this.$store
         .dispatch("userModule/createUser", data)

@@ -1,15 +1,15 @@
 export default {
   methods: {
-    getTableTaxValue(taxArr, taxAlias, taxProp) {
+    getTableTaxValue(taxArr, tax_alias, taxProp) {
       const arr = JSON.parse(JSON.stringify(taxArr));
       const obj = Array.isArray(arr)
-        ? arr?.find((obj) => obj.taxAlias === taxAlias)
+        ? arr?.find((obj) => obj.tax_alias === tax_alias)
         : 0;
       return typeof obj === "object" ? obj[taxProp] : 0;
     },
-    getGridTaxValue(taxArr, taxAlias, taxProp) {
+    getGridTaxValue(taxArr, tax_alias, taxProp) {
       const arr = JSON.parse(JSON.stringify(taxArr));
-      const obj = arr ? arr[taxAlias] : 0;
+      const obj = arr ? arr[tax_alias] : 0;
       return typeof obj === "object" ? obj[taxProp] : 0;
     },
     async tableExcelView() {
@@ -37,31 +37,31 @@ export default {
       headTr.appendChild(woTaxTh);
 
       let totalTh = document.createElement("th");
-      totalTh.innerHTML = this.$t("totalAmount");
+      totalTh.innerHTML = this.$t("total_amount");
       headTr.appendChild(totalTh);
 
       let totalTaxTh = document.createElement("th");
-      totalTaxTh.innerHTML = this.$t("totalTaxAmount");
+      totalTaxTh.innerHTML = this.$t("total_tax_amount");
       headTr.appendChild(totalTaxTh);
 
       for await (const element of this.allPurchases) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
+        dateTd.innerHTML = element.date_created?.substring(0, 10);
         bodyTr.appendChild(dateTd);
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${this.getTableTaxValue(
             element.taxes,
             tax.settings_alias,
-            "taxValue"
+            "tax_value"
           )}`;
           bodyTr.appendChild(taxTd);
           let totalWOTaxTd = document.createElement("td");
           totalWOTaxTd.innerHTML = `${this.getTableTaxValue(
             element.taxes,
             tax.settings_alias,
-            "totalWithoutTax"
+            "total_without_tax"
           )}`;
           bodyTr.appendChild(totalWOTaxTd);
         }
@@ -69,14 +69,14 @@ export default {
         woTaxTd.innerHTML = `${this.getTableTaxValue(
           element.taxes,
           "zero",
-          "totalWithoutTax"
+          "total_without_tax"
         )}`;
         bodyTr.appendChild(woTaxTd);
         let totalTd = document.createElement("td");
-        totalTd.innerHTML = `${element.totalAmount}`;
+        totalTd.innerHTML = `${element.total_amount}`;
         bodyTr.appendChild(totalTd);
         let totalTaxTd = document.createElement("td");
-        totalTaxTd.innerHTML = `${element.totalTaxAmount}`;
+        totalTaxTd.innerHTML = `${element.total_tax_amount}`;
         bodyTr.appendChild(totalTaxTd);
         tbody.appendChild(bodyTr);
       }
@@ -102,9 +102,9 @@ export default {
       // idTh.innerHTML = "ID";
       // headTr.appendChild(idTh);
 
-      let sellerNameTh = document.createElement("th");
-      sellerNameTh.innerHTML = this.$t("sellerName");
-      headTr.appendChild(sellerNameTh);
+      let seller_nameTh = document.createElement("th");
+      seller_nameTh.innerHTML = this.$t("seller_name");
+      headTr.appendChild(seller_nameTh);
 
       let invoiceTh = document.createElement("th");
       invoiceTh.innerHTML = this.$t("invoiceNumber");
@@ -132,36 +132,36 @@ export default {
       headTr.appendChild(woTaxTh);
 
       let totalTh = document.createElement("th");
-      totalTh.innerHTML = this.$t("totalAmount");
+      totalTh.innerHTML = this.$t("total_amount");
       headTr.appendChild(totalTh);
 
       let totalTaxTh = document.createElement("th");
-      totalTaxTh.innerHTML = this.$t("totalTaxAmount");
+      totalTaxTh.innerHTML = this.$t("total_tax_amount");
       headTr.appendChild(totalTaxTh);
 
       for await (const element of this.allPurchases) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
+        dateTd.innerHTML = element.date_created?.substring(0, 10);
         bodyTr.appendChild(dateTd);
         // let idTd = document.createElement("td");
         // idTd.innerHTML = element.id;
         // bodyTr.appendChild(idTd);
 
-        let sellerNameTd = document.createElement("td");
-        sellerNameTd.innerHTML = element.sellerName;
-        bodyTr.appendChild(sellerNameTd);
+        let seller_nameTd = document.createElement("td");
+        seller_nameTd.innerHTML = element.seller_name;
+        bodyTr.appendChild(seller_nameTd);
 
         let invoiceTd = document.createElement("td");
-        invoiceTd.innerHTML = element.sellerInvoiceNumber;
+        invoiceTd.innerHTML = element.seller_invoice_number;
         bodyTr.appendChild(invoiceTd);
 
         let fiscalTd = document.createElement("td");
-        fiscalTd.innerHTML = element.sellerFiscalNumber;
+        fiscalTd.innerHTML = element.seller_fiscal_number;
         bodyTr.appendChild(fiscalTd);
 
         let taxTd = document.createElement("td");
-        taxTd.innerHTML = element.sellerTaxNumber;
+        taxTd.innerHTML = element.seller_tax_number;
         bodyTr.appendChild(taxTd);
 
         for await (const tax of this.taxes) {
@@ -169,14 +169,14 @@ export default {
           taxTd.innerHTML = `${this.getGridTaxValue(
             element.taxes,
             tax.settings_alias,
-            "taxValue"
+            "tax_value"
           )}`;
           bodyTr.appendChild(taxTd);
           let totalWOTaxTd = document.createElement("td");
           totalWOTaxTd.innerHTML = `${this.getGridTaxValue(
             element.taxes,
             tax.settings_alias,
-            "totalWithoutTax"
+            "total_without_tax"
           )}`;
           bodyTr.appendChild(totalWOTaxTd);
         }
@@ -184,14 +184,14 @@ export default {
         woTaxTd.innerHTML = `${this.getGridTaxValue(
           element.taxes,
           "zero",
-          "totalWithoutTax"
+          "total_without_tax"
         )}`;
         bodyTr.appendChild(woTaxTd);
         let totalTd = document.createElement("td");
-        totalTd.innerHTML = `${element.totalAmount}`;
+        totalTd.innerHTML = `${element.total_amount}`;
         bodyTr.appendChild(totalTd);
         let totalTaxTd = document.createElement("td");
-        totalTaxTd.innerHTML = `${element.totalTaxAmount}`;
+        totalTaxTd.innerHTML = `${element.total_tax_amount}`;
         bodyTr.appendChild(totalTaxTd);
         tbody.appendChild(bodyTr);
       }

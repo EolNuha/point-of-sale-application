@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       isFetching: true,
-      totalAmountSold: "",
+      total_amountSold: "",
       startDate: "",
     };
   },
@@ -126,7 +126,7 @@ export default {
       await this.$store.dispatch(this.dispatchModule, data).then(() => {
         this.isFetching = false;
       });
-      this.totalAmountSold = parseFloat(
+      this.total_amountSold = parseFloat(
         this.chartData.series[0].data.reduce(
           (a, b) => parseFloat(a) + parseFloat(b),
           0

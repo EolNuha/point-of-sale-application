@@ -60,10 +60,10 @@ def signin():
 def signup():
     email = request.json["email"]
     password = request.json["password"]
-    first_name = request.json["firstName"]
-    last_name = request.json["lastName"]
+    first_name = request.json["first_name"]
+    last_name = request.json["last_name"]
     username = request.json["username"]
-    user_role = request.json["userRole"]
+    user_role = request.json["user_role"]
 
     user = User.query.filter_by(email=email).first()
 
@@ -136,10 +136,10 @@ def getUserDetails(id):
 @token_required
 def updateUserDetails(id):
     email = request.json["email"]
-    first_name = request.json["firstName"]
-    last_name = request.json["lastName"]
+    first_name = request.json["first_name"]
+    last_name = request.json["last_name"]
     username = request.json["username"]
-    user_role = request.json["userRole"]
+    user_role = request.json["user_role"]
     active = request.json["active"]
     user = User.query.filter_by(id=id).first()
 

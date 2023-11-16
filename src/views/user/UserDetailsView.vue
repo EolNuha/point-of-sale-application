@@ -8,7 +8,7 @@
         <h2
           class="capitalize font-extrabold text-2xl md:text-4xl text-gray-700 dark:text-gray-300"
         >
-          {{ user.firstName }} {{ user.lastName }}
+          {{ user.first_name }} {{ user.last_name }}
         </h2>
       </div>
       <Form
@@ -38,43 +38,43 @@
         </div>
         <div>
           <label
-            for="firstName"
+            for="first_name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >{{ $t("firstName") }}</label
+            >{{ $t("first_name") }}</label
           >
           <Field
-            v-model="user.firstName"
+            v-model="user.first_name"
             rules="required"
             type="text"
-            name="firstName"
-            id="firstName"
-            :class="errors.firstName ? 'ring-2 ring-red-500' : ''"
+            name="first_name"
+            id="first_name"
+            :class="errors.first_name ? 'ring-2 ring-red-500' : ''"
             class="default-input w-full"
             placeholder="John"
             required=""
             :disabled="isDisabled()"
           />
-          <span class="text-red-700">{{ errors.firstName }}</span>
+          <span class="text-red-700">{{ errors.first_name }}</span>
         </div>
         <div>
           <label
-            for="lastName"
+            for="last_name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >{{ $t("lastName") }}</label
+            >{{ $t("last_name") }}</label
           >
           <Field
-            v-model="user.lastName"
+            v-model="user.last_name"
             rules="required"
             type="text"
-            name="lastName"
-            id="lastName"
-            :class="errors.lastName ? 'ring-2 ring-red-500' : ''"
+            name="last_name"
+            id="last_name"
+            :class="errors.last_name ? 'ring-2 ring-red-500' : ''"
             class="default-input w-full"
             placeholder="Doe"
             required=""
             :disabled="isDisabled()"
           />
-          <span class="text-red-700">{{ errors.lastName }}</span>
+          <span class="text-red-700">{{ errors.last_name }}</span>
         </div>
         <div>
           <label
@@ -98,23 +98,23 @@
         </div>
         <div>
           <label
-            for="userRole"
+            for="user_role"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >{{ $t("userRole") }}</label
+            >{{ $t("user_role") }}</label
           >
           <v-select
             class="block w-full default-input !p-1"
-            v-model="user.userRole"
+            v-model="user.user_role"
             :clearable="false"
             :options="
-              currentUser.userRole === 'superadmin'
+              currentUser.user_role === 'superadmin'
                 ? ['staff', 'manager', 'owner', 'superadmin']
                 : ['staff', 'manager', 'owner']
             "
             type="text"
-            name="userRole"
-            id="userRole"
-            :placeholder="$t('userRole')"
+            name="user_role"
+            id="user_role"
+            :placeholder="$t('user_role')"
             :disabled="isDisabled() || !$can('execute', 'users')"
             required
             label="option"
@@ -173,7 +173,7 @@ export default {
       .dispatch("userModule/getUserDetails", this.$route.params.userId)
       .then(() => {
         this.isDataLoading = false;
-        document.title = `${this.user.firstName} ${this.user.lastName}`;
+        document.title = `${this.user.first_name} ${this.user.last_name}`;
       })
       .catch(() => {
         this.isDataLoading = false;

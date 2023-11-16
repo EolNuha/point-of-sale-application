@@ -44,7 +44,7 @@
                   </th>
                   <td class="py-2 px-6">{{ product.name }}</td>
                   <td class="py-2 px-6">{{ product.barcode }}</td>
-                  <td class="py-2 px-6">{{ product.sellingPrice }} €</td>
+                  <td class="py-2 px-6">{{ product.selling_price }} €</td>
                 </tr>
               </template>
             </tbody>
@@ -56,7 +56,7 @@
           id="regular-sale"
           type="checkbox"
           class="rounded text-theme-600 border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600"
-          v-model="isRegular"
+          v-model="is_regular"
         />
         <label for="regular-sale" class="flex items-center gap-2">
           {{ $t("regular") }}
@@ -79,7 +79,7 @@
             <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>
-            <th scope="col" class="py-3 px-6">{{ $t("sellingPrice") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("selling_price") }}</th>
             <!-- <th scope="col" class="py-3 px-6"></th> -->
           </tr>
         </thead>
@@ -128,7 +128,7 @@
                   @focus="$event.target.select()"
                 />
               </td>
-              <td class="py-2 px-6 max-w-xs">{{ product.sellingPrice }} €</td>
+              <td class="py-2 px-6 max-w-xs">{{ product.selling_price }} €</td>
             </tr>
           </template>
         </tbody>
@@ -213,7 +213,7 @@ export default {
       searchedProducts: [],
       searchedProductsIndex: 0,
       lastSearchedProduct: {},
-      isRegular: false,
+      is_regular: false,
     };
   },
   watch: {
@@ -262,7 +262,7 @@ export default {
     total() {
       const products = this.products;
       const sum = products?.reduce((accumulator, object) => {
-        return accumulator + object.sellingPrice * object.quantity;
+        return accumulator + object.selling_price * object.quantity;
       }, 0);
       return sum?.toFixed(2);
     },
@@ -349,9 +349,9 @@ export default {
       this.isFinishSaleLoading = true;
       const data = {
         products: this.products,
-        customerAmount: parseFloat(e).toFixed(2),
-        changeAmount: (parseFloat(e) - this.total).toFixed(2),
-        isRegular: this.isRegular,
+        customer_amount: parseFloat(e).toFixed(2),
+        change_amount: (parseFloat(e) - this.total).toFixed(2),
+        is_regular: this.is_regular,
       };
       this.$store
         .dispatch("saleModule/createSale", data)

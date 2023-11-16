@@ -72,7 +72,7 @@
           @click="sort('subtotal_amount')"
         >
           <div class="flex justify-between items-center">
-            {{ $t("subtotalAmount") }}
+            {{ $t("subtotal_amount") }}
             <template v-if="sortColumn === 'subtotal_amount'">
               <IconC
                 iconName="ArrowLongDownIcon"
@@ -89,7 +89,7 @@
           @click="sort('total_amount')"
         >
           <div class="flex justify-between items-center">
-            {{ $t("totalAmount") }}
+            {{ $t("total_amount") }}
             <template v-if="sortColumn === 'total_amount'">
               <IconC
                 iconName="ArrowLongDownIcon"
@@ -142,12 +142,12 @@
         <tr
           class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]"
         >
-          <td class="py-2 px-6">{{ sale.dateCreated?.substring(0, 10) }}</td>
+          <td class="py-2 px-6">{{ sale.date_created?.substring(0, 10) }}</td>
           <td class="py-2 px-6">
-            {{ sale.user?.firstName }} {{ sale.user?.lastName }}
+            {{ sale.user?.first_name }} {{ sale.user?.last_name }}
           </td>
           <td class="py-2 px-6">
-            {{ sale.isRegular ? $t("regular") : $t("irregular") }}
+            {{ sale.is_regular ? $t("regular") : $t("irregular") }}
           </td>
           <td
             class="py-2 px-6"
@@ -156,15 +156,15 @@
           >
             {{
               sale.taxes
-                ? sale.taxes[item.settings_alias]?.taxValue || "0.00"
+                ? sale.taxes[item.settings_alias]?.tax_value || "0.00"
                 : "0.00"
             }}
             €
           </td>
-          <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
-          <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
-          <td class="py-2 px-6">{{ sale.grossProfitAmount }} €</td>
-          <td class="py-2 px-6">{{ sale.netProfitAmount }} €</td>
+          <td class="py-2 px-6">{{ sale.subtotal_amount }} €</td>
+          <td class="py-2 px-6">{{ sale.total_amount }} €</td>
+          <td class="py-2 px-6">{{ sale.gross_profit_amount }} €</td>
+          <td class="py-2 px-6">{{ sale.net_profit_amount }} €</td>
           <td class="py-2 px-6 w-1.5" v-if="$can('read', 'sales')">
             <button
               class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"
@@ -198,7 +198,7 @@
                       name: 'sale-view',
                       params: { saleId: sale.id },
                       query: {
-                        saleDate: sale.dateCreated?.substring(0, 10),
+                        saleDate: sale.date_created?.substring(0, 10),
                       },
                     })
                   "
@@ -216,7 +216,7 @@
                       name: 'sale-edit',
                       params: { saleId: sale.id },
                       query: {
-                        saleDate: sale.dateCreated?.substring(0, 10),
+                        saleDate: sale.date_created?.substring(0, 10),
                       },
                     })
                   "
@@ -257,7 +257,7 @@
           v-for="item in pagination.taxes"
           :key="item.settings_value"
         >
-          {{ item.taxValue }} €
+          {{ item.tax_value }} €
         </td>
         <td class="py-4 px-6">{{ pagination.salesSubTotalAmount }} €</td>
         <td class="py-4 px-6">{{ pagination.salesTotalAmount }} €</td>

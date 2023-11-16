@@ -1,17 +1,17 @@
 export default {
   methods: {
-    getTableTaxValue(taxArr, taxAlias, taxProp) {
+    getTableTaxValue(taxArr, tax_alias, taxProp) {
       console.log(taxArr);
       const arr = JSON.parse(JSON.stringify(taxArr));
       const obj = Array.isArray(arr)
-        ? arr?.find((obj) => obj.taxAlias === taxAlias)
+        ? arr?.find((obj) => obj.tax_alias === tax_alias)
         : 0;
       return typeof obj === "object" ? obj[taxProp] : 0;
     },
-    getGridTaxValue(taxArr, taxAlias, taxProp) {
+    getGridTaxValue(taxArr, tax_alias, taxProp) {
       console.log(taxArr);
       const arr = JSON.parse(JSON.stringify(taxArr));
-      const obj = arr ? arr[taxAlias] : 0;
+      const obj = arr ? arr[tax_alias] : 0;
       return typeof obj === "object" ? obj[taxProp] : 0;
     },
     async tableExcelView() {
@@ -31,8 +31,8 @@ export default {
         headTr.appendChild(taxTh);
       }
       for await (const item of [
-        "subtotalAmount",
-        "totalAmount",
+        "subtotal_amount",
+        "total_amount",
         "grossProfit",
         "netProfit",
       ]) {
@@ -44,22 +44,22 @@ export default {
       for await (const element of this.allSales.data) {
         let bodyTr = document.createElement("tr");
         let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
+        dateTd.innerHTML = element.date_created?.substring(0, 10);
         bodyTr.appendChild(dateTd);
         for await (const tax of this.taxes) {
           let taxTd = document.createElement("td");
           taxTd.innerHTML = `${this.getTableTaxValue(
             element.taxes,
             tax.settings_alias,
-            "taxValue"
+            "tax_value"
           )}`;
           bodyTr.appendChild(taxTd);
         }
         for await (const item of [
-          "subTotalAmount",
-          "totalAmount",
-          "grossProfitAmount",
-          "netProfitAmount",
+          "subtotal_amount",
+          "total_amount",
+          "gross_profit_amount",
+          "net_profit_amount",
         ]) {
           let itemTd = document.createElement("td");
           itemTd.innerHTML = `${element[item]}`;
@@ -74,7 +74,7 @@ export default {
       totalTr.appendChild(bottomTd);
       for await (const tax of this.allSales.pagination.taxes) {
         let taxTd = document.createElement("th");
-        taxTd.innerHTML = `${tax.taxValue}`;
+        taxTd.innerHTML = `${tax.tax_value}`;
         totalTr.appendChild(taxTd);
       }
       for await (const item of [
@@ -125,8 +125,8 @@ export default {
         headTr.appendChild(taxTh);
       }
       for await (const item of [
-        "subtotalAmount",
-        "totalAmount",
+        "subtotal_amount",
+        "total_amount",
         "grossProfit",
         "netProfit",
       ]) {
@@ -139,16 +139,16 @@ export default {
         let bodyTr = document.createElement("tr");
 
         let dateTd = document.createElement("td");
-        dateTd.innerHTML = element.dateCreated?.substring(0, 10);
+        dateTd.innerHTML = element.date_created?.substring(0, 10);
         bodyTr.appendChild(dateTd);
         let idTd = document.createElement("td");
         idTd.innerHTML = element.id;
         bodyTr.appendChild(idTd);
         let employeeTd = document.createElement("td");
-        employeeTd.innerHTML = `${element.user.firstName} ${element.user.lastName}`;
+        employeeTd.innerHTML = `${element.user.first_name} ${element.user.last_name}`;
         bodyTr.appendChild(employeeTd);
         let typeTd = document.createElement("td");
-        typeTd.innerHTML = element.isRegular
+        typeTd.innerHTML = element.is_regular
           ? this.$t("regular")
           : this.$t("irregular");
         bodyTr.appendChild(typeTd);
@@ -158,16 +158,16 @@ export default {
           taxTd.innerHTML = `${this.getGridTaxValue(
             element.taxes,
             tax.settings_alias,
-            "taxValue"
+            "tax_value"
           )}`;
           bodyTr.appendChild(taxTd);
         }
 
         for await (const item of [
-          "subTotalAmount",
-          "totalAmount",
-          "grossProfitAmount",
-          "netProfitAmount",
+          "subtotal_amount",
+          "total_amount",
+          "gross_profit_amount",
+          "net_profit_amount",
         ]) {
           let itemTd = document.createElement("td");
           itemTd.innerHTML = `${element[item]}`;
@@ -191,7 +191,7 @@ export default {
       totalTr.appendChild(empty2Td);
       for await (const tax of this.allSales.pagination.taxes) {
         let taxTd = document.createElement("th");
-        taxTd.innerHTML = `${tax.taxValue}`;
+        taxTd.innerHTML = `${tax.tax_value}`;
         totalTr.appendChild(taxTd);
       }
       for await (const item of [

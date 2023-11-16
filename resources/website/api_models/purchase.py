@@ -6,23 +6,23 @@ taxes = swagger.model(
     "Taxes",
     {
         "id": fields.Integer,
-        "taxAlias": fields.String,
-        "taxName": fields.String,
-        "taxValue": fields.Float,
-        "totalWithoutTax": fields.Float,
+        "tax_alias": fields.String,
+        "tax_name": fields.String,
+        "tax_value": fields.Float,
+        "total_without_tax": fields.Float,
     },
 )
 
 grouped_purchases = swagger.model(
     "GroupedPurchases",
     {
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
         "id": fields.Integer,
-        "rabatAmount": fields.Float,
-        "subTotalAmount": fields.Float,
-        "totalAmount": fields.Float,
-        "totalTaxAmount": fields.Float,
+        "rabat_amount": fields.Float,
+        "subtotal_amount": fields.Float,
+        "total_amount": fields.Float,
+        "total_tax_amount": fields.Float,
         "taxes": fields.List(fields.Nested(taxes)),
     },
 )
@@ -55,11 +55,11 @@ grouped_purchases_data = swagger.model(
 purchases_item = swagger.model(
     "PurchasesItem",
     {
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
         "id": fields.Integer,
-        "taxAmount": fields.Float,
-        "totalAmount": fields.Float,
+        "tax_amount": fields.Float,
+        "total_amount": fields.Float,
         "product": fields.Raw,
     },
 )
@@ -68,18 +68,18 @@ purchases_item = swagger.model(
 detailed_purchases = swagger.model(
     "DetailedPurchases",
     {
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
         "id": fields.Integer,
-        "rabatAmount": fields.Float,
-        "subTotalAmount": fields.Float,
-        "totalAmount": fields.Float,
-        "totalTaxAmount": fields.Float,
-        "sellerFiscalNumber": fields.Integer,
-        "sellerTaxNumber": fields.Integer,
-        "sellerInvoiceNumber": fields.String,
-        "sellerName": fields.String,
-        "purchaseItems": fields.List(fields.Nested(purchases_item)),
+        "rabat_amount": fields.Float,
+        "subtotal_amount": fields.Float,
+        "total_amount": fields.Float,
+        "total_tax_amount": fields.Float,
+        "seller_fiscal_number": fields.Integer,
+        "seller_tax_number": fields.Integer,
+        "seller_invoice_number": fields.String,
+        "seller_name": fields.String,
+        "purchase_items": fields.List(fields.Nested(purchases_item)),
         "taxes": fields.Raw,
     },
 )
@@ -97,13 +97,13 @@ detailed_purchases_data = swagger.model(
 sellers = swagger.model(
     "Sellers",
     {
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
         "id": fields.Integer,
-        "sellerFiscalNumber": fields.Integer,
-        "sellerTaxNumber": fields.Integer,
-        "sellerInvoiceNumber": fields.String,
-        "sellerName": fields.String,
+        "seller_fiscal_number": fields.Integer,
+        "seller_tax_number": fields.Integer,
+        "seller_invoice_number": fields.String,
+        "seller_name": fields.String,
     },
 )
 
@@ -120,7 +120,7 @@ purchase_edit = swagger.model(
     "PurchaseEdit",
     {
         "deletedItems": fields.List(fields.Raw),
-        "purchaseItems": fields.List(fields.Raw),
+        "purchase_items": fields.List(fields.Raw),
     },
 )
 

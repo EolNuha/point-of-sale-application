@@ -13,8 +13,8 @@
       :dispatchModule="`analyticsModule/getUserStats`"
       :id="selectedUser.id"
       :chartData="$store.state.analyticsModule.userStats"
-      :titleContent="`${$t('user')}: ${selectedUser.firstName} ${
-        selectedUser.lastName
+      :titleContent="`${$t('user')}: ${selectedUser.first_name} ${
+        selectedUser.last_name
       }`"
       :textContent="$t('revenueMade')"
     >
@@ -31,13 +31,13 @@
           :clearable="false"
           :filterable="false"
           :reduce="(users) => users"
-          label="firstName"
+          label="first_name"
         >
-          <template #selected-option="{ firstName, lastName }">
-            {{ firstName }} {{ lastName }}
+          <template #selected-option="{ first_name, last_name }">
+            {{ first_name }} {{ last_name }}
           </template>
-          <template #option="{ firstName, lastName }">
-            {{ firstName }} {{ lastName }}
+          <template #option="{ first_name, last_name }">
+            {{ first_name }} {{ last_name }}
           </template>
         </v-select>
       </div>

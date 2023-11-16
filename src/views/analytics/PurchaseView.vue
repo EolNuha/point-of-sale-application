@@ -19,9 +19,9 @@
     <AreaChartMoney
       v-if="selectedSeller"
       :dispatchModule="`analyticsModule/getSellerStats`"
-      :id="selectedSeller.sellerName"
+      :id="selectedSeller.seller_name"
       :chartData="$store.state.analyticsModule.sellerStats"
-      :titleContent="`${$t('sellerName')}: ${selectedSeller.sellerName}`"
+      :titleContent="`${$t('seller_name')}: ${selectedSeller.seller_name}`"
       :textContent="$t('purchasesMade')"
     >
       <div
@@ -37,7 +37,7 @@
           :clearable="false"
           :filterable="false"
           :reduce="(sellers) => sellers"
-          label="sellerName"
+          label="seller_name"
         ></v-select>
       </div>
     </AreaChartMoney>

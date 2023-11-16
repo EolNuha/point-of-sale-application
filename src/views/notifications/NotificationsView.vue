@@ -454,7 +454,7 @@
                       </div>
                     </button>
                     <span class="group-hover:hidden">{{
-                      dateSince(item.dateCreated)
+                      dateSince(item.date_created)
                     }}</span>
                   </div>
                 </td>

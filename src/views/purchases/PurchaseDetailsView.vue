@@ -55,7 +55,7 @@
             {{ $t("purchase") }} #{{ $route.params.purchaseId }}
           </h2>
           <p class="text-gray-700 dark:text-gray-300 mr-2">
-            {{ $t("date") }}: {{ purchase.dateCreated?.substring(0, 10) }}
+            {{ $t("date") }}: {{ purchase.date_created?.substring(0, 10) }}
           </p>
         </div>
         <div class="flex flex-row pt-5">
@@ -63,25 +63,25 @@
             <table class="text-gray-700 dark:text-gray-400 text-sm w-full">
               <tbody>
                 <tr>
-                  <td class="py-2">{{ $t("sellerName") }}</td>
-                  <td class="text-right py-2">{{ purchase.sellerName }}</td>
+                  <td class="py-2">{{ $t("seller_name") }}</td>
+                  <td class="text-right py-2">{{ purchase.seller_name }}</td>
                 </tr>
                 <tr>
                   <td class="py-2">{{ $t("invoiceNumber") }}</td>
                   <td class="text-right py-2">
-                    {{ purchase.sellerInvoiceNumber }}
+                    {{ purchase.seller_invoice_number }}
                   </td>
                 </tr>
                 <tr>
                   <td class="py-2">{{ $t("fiscalNumber") }}</td>
                   <td class="text-right py-2">
-                    {{ purchase.sellerFiscalNumber }}
+                    {{ purchase.seller_fiscal_number }}
                   </td>
                 </tr>
                 <tr>
                   <td class="py-2">{{ $t("taxNumber") }}</td>
                   <td class="text-right py-2">
-                    {{ purchase.sellerTaxNumber }}
+                    {{ purchase.seller_tax_number }}
                   </td>
                 </tr>
               </tbody>
@@ -101,13 +101,13 @@
                 <th scope="col" class="py-3 px-3">{{ $t("measure") }}</th>
                 <th scope="col" class="py-3 px-3">{{ $t("stock") }}</th>
                 <th scope="col" class="py-3 px-3">
-                  {{ $t("purchasedPriceWOTax") }}
+                  {{ $t("purchased_price_wo_tax") }}
                 </th>
                 <th scope="col" class="py-3 px-3">
-                  {{ $t("purchasedPrice") }}
+                  {{ $t("purchased_price") }}
                 </th>
                 <!-- <th scope="col" class="py-3 px-3">
-                    {{ $t("sellingPrice") }}
+                    {{ $t("selling_price") }}
                   </th> -->
                 <th scope="col" class="py-3 px-3">{{ $t("tax") }}</th>
                 <th scope="col" class="py-3 px-3 text-right">
@@ -116,7 +116,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-for="item in purchase.purchaseItems" :key="item.id">
+              <template v-for="item in purchase.purchase_items" :key="item.id">
                 <tr class="bg-white dark:bg-neutral-900">
                   <td class="py-3 px-3">
                     {{ item.product.name }}
@@ -131,17 +131,17 @@
                     <div>x {{ item.product.stock }}</div>
                   </td>
                   <td class="py-3 px-3">
-                    <div>{{ item.product.purchasedPriceWOTax }} €</div>
+                    <div>{{ item.product.purchased_price_wo_tax }} €</div>
                   </td>
                   <td class="py-3 px-3">
-                    <div>{{ item.product.purchasedPrice }} €</div>
+                    <div>{{ item.product.purchased_price }} €</div>
                   </td>
                   <td class="py-3 px-3">
-                    {{ item.taxAmount }}
+                    {{ item.tax_amount }}
                     € ({{ item.product.tax }}%)
                   </td>
                   <td class="py-3 px-3 text-right">
-                    {{ item.totalAmount }}
+                    {{ item.total_amount }}
                     €
                   </td>
                 </tr>
@@ -162,7 +162,7 @@
                     <td class="text-right py-2">
                       {{
                         purchase.taxes
-                          ? purchase.taxes[item.settings_alias]?.taxValue ||
+                          ? purchase.taxes[item.settings_alias]?.tax_value ||
                             "0.00"
                           : "0.00"
                       }}
@@ -177,20 +177,20 @@
                       {{
                         purchase.taxes
                           ? purchase.taxes[item.settings_alias]
-                              ?.totalWithoutTax || "0.00"
+                              ?.total_without_tax || "0.00"
                           : "0.00"
                       }}
                       €
                     </td>
                   </tr>
                 </template>
-                <tr v-if="Number(purchase.rabatAmount) > 0">
+                <tr v-if="Number(purchase.rabat_amount) > 0">
                   <td class="py-2">{{ $t("rabat") }}</td>
-                  <td class="text-right py-2">{{ purchase.rabatAmount }} €</td>
+                  <td class="text-right py-2">{{ purchase.rabat_amount }} €</td>
                 </tr>
                 <tr class="font-bold text-xl">
                   <td class="py-2">{{ $t("total") }}</td>
-                  <td class="text-right py-2">{{ purchase.totalAmount }} €</td>
+                  <td class="text-right py-2">{{ purchase.total_amount }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -311,8 +311,8 @@ export default {
       this.isPdfLoading = false;
     },
     deletePurchaseItem(index) {
-      this.deletedItems.push(this.purchase.purchaseItems[index]);
-      this.purchase.purchaseItems.splice(index, 1);
+      this.deletedItems.push(this.purchase.purchase_items[index]);
+      this.purchase.purchase_items.splice(index, 1);
     },
     updatePurchase() {
       this.isUpdateLoading = true;
@@ -320,7 +320,7 @@ export default {
         .dispatch("purchaseModule/updatePurchase", {
           id: this.$route.params.purchaseId,
           deletedItems: this.deletedItems,
-          purchaseItems: this.purchase.purchaseItems,
+          purchase_items: this.purchase.purchase_items,
         })
         .then(() => {
           this.$toast.success(

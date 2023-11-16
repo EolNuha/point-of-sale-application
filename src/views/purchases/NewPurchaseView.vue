@@ -10,34 +10,34 @@
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("sellerName") }}</label
+            >{{ $t("seller_name") }}</label
           >
           <Field
             required
             rules="required"
             type="text"
-            v-model="seller.sellerName"
+            v-model="seller.seller_name"
             class="hidden"
-            name="sellerName"
-            id="sellerName"
+            name="seller_name"
+            id="seller_name"
           />
           <v-select
             class="block w-full default-input !p-[1px]"
-            :class="errors.sellerName ? 'ring-2 ring-red-500' : ''"
-            v-model="seller.sellerName"
+            :class="errors.seller_name ? 'ring-2 ring-red-500' : ''"
+            v-model="seller.seller_name"
             @search="($event, loading) => searchSellers($event, loading)"
             @close="seller.search ? getSellerDetails(seller.search) : ''"
             :clearable="true"
             :filterable="false"
             :options="sellers"
-            :reduce="(sellers) => sellers.sellerName"
-            label="sellerName"
+            :reduce="(sellers) => sellers.seller_name"
+            label="seller_name"
             type="text"
-            :placeholder="$t('sellerName')"
+            :placeholder="$t('seller_name')"
             :taggable="true"
             @option:selected="getSellerDetails($event)"
           />
-          <span class="text-red-700">{{ errors.sellerName }}</span>
+          <span class="text-red-700">{{ errors.seller_name }}</span>
         </div>
         <div class="basis-1/2">
           <label
@@ -334,7 +334,7 @@
               <div>
                 <label
                   class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("purchasedPrice") }}
+                  >{{ $t("purchased_price") }}
                   <button
                     :id="`purchased-${index}-tooltip-btn`"
                     class="cursor-default"
@@ -357,7 +357,7 @@
                     role="tooltip"
                     class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
                   >
-                    {{ $t("purchasedPrice") }} {{ $t("withoutTax") }}
+                    {{ $t("purchased_price") }} {{ $t("withoutTax") }}
                   </div>
                 </label>
                 <Field
@@ -365,19 +365,21 @@
                   rules="required"
                   type="number"
                   step="0.01"
-                  v-model="product.purchasedPrice"
-                  :placeholder="`${$t('purchasedPrice')} (${$t('withoutTax')})`"
+                  v-model="product.purchased_price"
+                  :placeholder="`${$t('purchased_price')} (${$t(
+                    'withoutTax'
+                  )})`"
                   class="default-input w-full"
                   :class="
-                    errors[`${index}purchasedPrice`]
+                    errors[`${index}purchased_price`]
                       ? 'ring-2 ring-red-500'
                       : ''
                   "
-                  :name="`${index}purchasedPrice`"
-                  :id="`${index}purchasedPrice`"
+                  :name="`${index}purchased_price`"
+                  :id="`${index}purchased_price`"
                 />
                 <span class="text-red-700">{{
-                  errors[`${index}purchasedPrice`]
+                  errors[`${index}purchased_price`]
                 }}</span>
               </div>
               <div>
@@ -434,30 +436,30 @@
               <div>
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("sellingPrice") }}</label
+                  >{{ $t("selling_price") }}</label
                 >
                 <Field
                   required
                   rules="required"
                   type="number"
                   step="0.01"
-                  v-model="product.sellingPrice"
-                  :placeholder="$t('sellingPrice')"
+                  v-model="product.selling_price"
+                  :placeholder="$t('selling_price')"
                   class="default-input w-full"
                   :class="
-                    errors[`${index}sellingPrice`] ? 'ring-2 ring-red-500' : ''
+                    errors[`${index}selling_price`] ? 'ring-2 ring-red-500' : ''
                   "
-                  :name="`${index}sellingPrice`"
-                  :id="`${index}sellingPrice`"
+                  :name="`${index}selling_price`"
+                  :id="`${index}selling_price`"
                 />
                 <span class="text-red-700">{{
-                  errors[`${index}sellingPrice`]
+                  errors[`${index}selling_price`]
                 }}</span>
               </div>
               <div>
                 <label
                   class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("expirationDate") }}
+                  >{{ $t("expiration_date") }}
                   <button
                     :id="`product-exp-${index}-tooltip-btn`"
                     class="cursor-default"
@@ -486,7 +488,7 @@
                 <Field
                   :name="`${index}product_expire`"
                   :id="`${index}product_expire`"
-                  v-model="product.expirationDate"
+                  v-model="product.expiration_date"
                   :min="minDate"
                   type="date"
                   :class="
@@ -495,7 +497,7 @@
                       : ''
                   "
                   class="default-input w-full"
-                  :placeholder="$t('expirationDate')"
+                  :placeholder="$t('expiration_date')"
                   required
                 />
                 <span class="text-red-700">{{
@@ -562,7 +564,7 @@ export default {
       measures: [],
       purchaseTypes: [],
       seller: {
-        sellerName: "",
+        seller_name: "",
         invoiceNumber: "",
         fiscalNumber: "",
         taxNumber: "",
@@ -577,10 +579,10 @@ export default {
           stock: null,
           tax: 0,
           rabat: "0",
-          purchasedPrice: null,
-          sellingPrice: null,
+          purchased_price: null,
+          selling_price: null,
           measure: "pcs",
-          expirationDate: "",
+          expiration_date: "",
           search: "",
         },
       ],
@@ -645,10 +647,10 @@ export default {
         stock: null,
         tax: 0,
         rabat: "0",
-        purchasedPrice: null,
-        sellingPrice: null,
+        purchased_price: null,
+        selling_price: null,
         measure: "pcs",
-        expirationDate: "",
+        expiration_date: "",
         search: "",
       };
       this.products.push(product);
@@ -672,14 +674,14 @@ export default {
       });
     },
     getSellerDetails(e) {
-      const sellerName = e.sellerName ? e.sellerName : e;
-      this.seller.sellerName = sellerName;
+      const seller_name = e.seller_name ? e.seller_name : e;
+      this.seller.seller_name = seller_name;
       const sellerInfo = this.sellers.find(
-        (x) => x.sellerName.toLowerCase() === sellerName.toLowerCase()
+        (x) => x.seller_name.toLowerCase() === seller_name.toLowerCase()
       );
       if (sellerInfo) {
-        this.seller.fiscalNumber = sellerInfo?.sellerFiscalNumber;
-        this.seller.taxNumber = sellerInfo?.sellerTaxNumber;
+        this.seller.fiscalNumber = sellerInfo?.seller_fiscal_number;
+        this.seller.taxNumber = sellerInfo?.seller_tax_number;
       }
     },
     async searchProducts(search, loading, idx, type = "barcode") {
@@ -706,9 +708,9 @@ export default {
       if (productInfo) {
         this.products[idx].barcode = productInfo.barcode;
         this.products[idx].tax = productInfo.tax;
-        this.products[idx].sellingPrice = productInfo.sellingPrice;
-        this.products[idx].purchasedPrice = productInfo.purchasedPriceWOTax;
-        this.products[idx].expirationDate = productInfo.expirationDate;
+        this.products[idx].selling_price = productInfo.selling_price;
+        this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;
+        this.products[idx].expiration_date = productInfo.expiration_date;
         this.products[idx].measure = productInfo.measure;
       }
     },
@@ -719,9 +721,9 @@ export default {
       if (productInfo) {
         this.products[idx].productName = productInfo.name;
         this.products[idx].tax = productInfo.tax;
-        this.products[idx].sellingPrice = productInfo.sellingPrice;
-        this.products[idx].purchasedPrice = productInfo.purchasedPriceWOTax;
-        this.products[idx].expirationDate = productInfo.expirationDate;
+        this.products[idx].selling_price = productInfo.selling_price;
+        this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;
+        this.products[idx].expiration_date = productInfo.expiration_date;
         this.products[idx].measure = productInfo.measure;
       }
     },

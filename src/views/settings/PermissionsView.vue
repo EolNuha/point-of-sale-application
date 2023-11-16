@@ -15,7 +15,7 @@
       <button
         class="theme-gradient-btn flex items-center text-center"
         type="button"
-        v-if="$store.state.userModule.currentUser.userRole === 'superadmin'"
+        v-if="$store.state.userModule.currentUser.user_role === 'superadmin'"
         @click="$openModal(createRef)"
       >
         <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
@@ -103,7 +103,7 @@
         <li
           class="mr-2"
           @click="() => (activeTab = 'superadmin')"
-          v-if="$store.state.userModule.currentUser.userRole === 'superadmin'"
+          v-if="$store.state.userModule.currentUser.user_role === 'superadmin'"
         >
           <p
             :class="
@@ -373,7 +373,7 @@ export default {
     },
     createFunc() {
       const data = {
-        user_role: this.$store.state.userModule.currentUser.userRole,
+        user_role: this.$store.state.userModule.currentUser.user_role,
         ...this.permission,
       };
       this.isLoading = true;

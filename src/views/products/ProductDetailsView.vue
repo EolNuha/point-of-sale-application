@@ -109,7 +109,7 @@
           <label
             for="product_purchased_price_wo_tax"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchasedPriceWOTax") }}</label
+            >{{ $t("purchased_price_wo_tax") }}</label
           >
           <Field
             name="product_purchased_price_wo_tax"
@@ -132,7 +132,7 @@
           <label
             for="product_purchasedprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchasedPrice") }}</label
+            >{{ $t("purchased_price") }}</label
           >
           <Field
             name="product_purchasedprice"
@@ -153,7 +153,7 @@
           <label
             for="product_sellingprice"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("sellingPrice") }}</label
+            >{{ $t("selling_price") }}</label
           >
           <Field
             name="product_sellingprice"
@@ -207,7 +207,7 @@
           <label
             for="product_expire"
             class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("expirationDate") }}
+            >{{ $t("expiration_date") }}
             <button
               :id="`product-exp-tooltip-btn`"
               class="cursor-default"
@@ -238,22 +238,22 @@
             id="product_expire"
             :class="errors.product_expire ? 'ring-2 ring-red-500' : ''"
             class="default-input w-full"
-            :placeholder="$t('expirationDate')"
+            :placeholder="$t('expiration_date')"
             required
           />
           <span class="text-red-700">{{ errors.product_expire }}</span>
         </div>
         <div class="basis-1/2" v-if="!isAdd">
           <label
-            for="dateCreated"
+            for="date_created"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("dateCreated") }}</label
+            >{{ $t("date_created") }}</label
           >
           <input
             name="product_price"
             v-model="product.date_created"
             type="text"
-            id="dateCreated"
+            id="date_created"
             class="default-input w-full"
             placeholder="Enter product price"
             disabled
@@ -263,15 +263,15 @@
       <div class="mb-6 flex gap-4" v-if="!isAdd">
         <div class="basis-1/2">
           <label
-            for="dateModified"
+            for="date_modified"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("dateModified") }}</label
+            >{{ $t("date_modified") }}</label
           >
           <input
-            name="dateModified"
+            name="date_modified"
             v-model="product.date_modified"
             type="text"
-            id="dateModified"
+            id="date_modified"
             class="default-input w-full"
             disabled
           />

@@ -122,10 +122,10 @@ export default {
         });
     });
   },
-  getSellerDetails({ commit }, sellerName) {
+  getSellerDetails({ commit }, seller_name) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sellers/${sellerName}`)
+        .get(`/api/sellers/${seller_name}`)
         .then(async (response) => {
           resolve(response);
         })

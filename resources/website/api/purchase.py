@@ -253,7 +253,7 @@ class CreatePurchase(Resource):
         return getDailyPurchaseDict(purchase)
 
 
-@purchase_rest.route("purchases-grouped")
+@purchase_rest.route("purchases/grouped")
 class GetGroupedPurchases(Resource):
     @purchase_rest.doc(
         params={
@@ -354,7 +354,7 @@ class GetGroupedPurchases(Resource):
         return getPaginatedDict(items, paginated_items)
 
 
-@purchase_rest.route("purchases-detailed")
+@purchase_rest.route("purchases/detailed")
 class GetDetailedPurchases(Resource):
     @purchase_rest.doc(
         params={

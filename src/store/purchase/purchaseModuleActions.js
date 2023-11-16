@@ -21,7 +21,7 @@ export default {
   getPurchases({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/purchases-grouped`, { params: data })
+        .get(`/api/purchases/grouped`, { params: data })
         .then(async (response) => {
           commit("SET_PURCHASES", response.data.data);
           commit("SET_PAGINATION", response.data.pagination);
@@ -35,7 +35,7 @@ export default {
   getPurchasesDetailed({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/purchases-detailed`, { params: data })
+        .get(`/api/purchases/detailed`, { params: data })
         .then(async (response) => {
           commit("SET_PURCHASES", response.data.data);
           commit("SET_PAGINATION", response.data.pagination);
@@ -61,7 +61,7 @@ export default {
   getAllPurchasesDetailed({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/purchases-detailed`, { params: data })
+        .get(`/api/purchases/detailed`, { params: data })
         .then(async (response) => {
           resolve(response);
         })

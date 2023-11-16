@@ -38,7 +38,7 @@
           @click="sort('subtotal_amount')"
         >
           <div class="flex justify-between items-center">
-            {{ $t("subtotalAmount") }}
+            {{ $t("subtotal_amount") }}
             <template v-if="sortColumn === 'subtotal_amount'">
               <IconC
                 iconName="ArrowLongDownIcon"
@@ -55,7 +55,7 @@
           @click="sort('total_amount')"
         >
           <div class="flex justify-between items-center">
-            {{ $t("totalAmount") }}
+            {{ $t("total_amount") }}
             <template v-if="sortColumn === 'total_amount'">
               <IconC
                 iconName="ArrowLongDownIcon"
@@ -109,7 +109,7 @@
           class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]"
         >
           <td class="py-2 px-6">
-            {{ sale.dateCreated?.substring(0, 10) }}
+            {{ sale.date_created?.substring(0, 10) }}
           </td>
           <td
             class="py-2 px-6"
@@ -119,23 +119,23 @@
             {{
               Array.isArray(sale.taxes)
                 ? sale.taxes?.find(
-                    (obj) => obj.taxAlias === item.settings_alias
-                  )?.taxValue || "0.00"
+                    (obj) => obj.tax_alias === item.settings_alias
+                  )?.tax_value || "0.00"
                 : "0.00"
             }}
             €
           </td>
-          <td class="py-2 px-6">{{ sale.subTotalAmount }} €</td>
-          <td class="py-2 px-6">{{ sale.totalAmount }} €</td>
-          <td class="py-2 px-6">{{ sale.grossProfitAmount }} €</td>
-          <td class="py-2 px-6">{{ sale.netProfitAmount }} €</td>
+          <td class="py-2 px-6">{{ sale.subtotal_amount }} €</td>
+          <td class="py-2 px-6">{{ sale.total_amount }} €</td>
+          <td class="py-2 px-6">{{ sale.gross_profit_amount }} €</td>
+          <td class="py-2 px-6">{{ sale.net_profit_amount }} €</td>
           <td class="py-2 px-6">
             <button
               @click="
                 $router.push({
                   name: 'daily-sales',
                   query: {
-                    saleDate: sale.dateCreated?.substring(0, 10),
+                    saleDate: sale.date_created?.substring(0, 10),
                   },
                 })
               "
@@ -158,8 +158,8 @@
           {{
             Array.isArray(pagination.taxes)
               ? pagination.taxes?.find(
-                  (obj) => obj.taxAlias === item.settings_alias
-                )?.taxValue || "0.00"
+                  (obj) => obj.tax_alias === item.settings_alias
+                )?.tax_value || "0.00"
               : "0.00"
           }}
           €

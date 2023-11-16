@@ -53,7 +53,7 @@
             {{ $t("sale") }} #{{ $route.params.saleId }}
           </h2>
           <p class="text-gray-700 dark:text-gray-300 mr-3">
-            {{ $t("date") }}: {{ sale.dateCreated?.substring(0, 10) }}
+            {{ $t("date") }}: {{ sale.date_created?.substring(0, 10) }}
           </p>
         </div>
         <div class="overflow-x-auto sm:rounded my-5 scrollbar-style">
@@ -76,7 +76,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-for="item in sale.saleItems" :key="item.id">
+              <template v-for="item in sale.sale_items" :key="item.id">
                 <tr class="bg-white dark:bg-neutral-900">
                   <td class="py-3 px-6">
                     {{ item.product.name }}
@@ -86,14 +86,14 @@
                   <td class="py-3 px-6">
                     <div>x {{ item.quantity }}</div>
                   </td>
-                  <td class="py-3 px-6">{{ item.product.sellingPrice }} €</td>
+                  <td class="py-3 px-6">{{ item.product.selling_price }} €</td>
                   <td class="py-3 px-6">
-                    {{ item.taxAmount }} € ({{ item.product.tax }}%)
+                    {{ item.tax_amount }} € ({{ item.product.tax }}%)
                   </td>
                   <td class="py-3 px-6 text-right">
                     {{
                       roundTo2(
-                        item.product.sellingPrice * item.quantity
+                        item.product.selling_price * item.quantity
                       ).toFixed(2)
                     }}
                     €
@@ -109,12 +109,12 @@
             <table class="text-gray-700 dark:text-gray-300 w-full">
               <tbody>
                 <tr>
-                  <td class="py-2 uppercase">{{ $t("customerAmount") }}</td>
-                  <td class="text-right py-2">{{ sale.customerAmount }} €</td>
+                  <td class="py-2 uppercase">{{ $t("customer_amount") }}</td>
+                  <td class="text-right py-2">{{ sale.customer_amount }} €</td>
                 </tr>
                 <tr>
                   <td class="py-2 uppercase">{{ $t("subTotal") }}</td>
-                  <td class="text-right py-2">{{ sale.subTotalAmount }} €</td>
+                  <td class="text-right py-2">{{ sale.subtotal_amount }} €</td>
                 </tr>
                 <tr v-for="item in taxes" :key="item.settings_value">
                   <td class="py-2 uppercase">
@@ -123,7 +123,7 @@
                   <td class="text-right py-2">
                     {{
                       sale.taxes
-                        ? sale.taxes[item.settings_alias]?.taxValue || "0.00"
+                        ? sale.taxes[item.settings_alias]?.tax_value || "0.00"
                         : "0.00"
                     }}
                     €
@@ -131,7 +131,7 @@
                 </tr>
                 <tr class="font-bold text-xl">
                   <td class="py-2 uppercase">{{ $t("total") }}</td>
-                  <td class="text-right py-2">{{ sale.totalAmount }} €</td>
+                  <td class="text-right py-2">{{ sale.total_amount }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -191,22 +191,23 @@ export default {
       return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;
     },
     getProductsTotal() {
-      const products = this.sale.saleItems;
+      const products = this.sale.sale_items;
       const sum = products?.reduce((accumulator, object) => {
         return (
           this.roundTo2(accumulator) +
-          this.roundTo2(object.product.sellingPrice) *
+          this.roundTo2(object.product.selling_price) *
             this.roundTo2(object.quantity)
         );
       }, 0);
       return this.roundTo2(sum).toFixed(2);
     },
     getTotalWithoutTax() {
-      const products = this.sale.saleItems;
+      const products = this.sale.sale_items;
       const sum = products?.reduce((accumulator, object) => {
         return (
           this.roundTo2(accumulator) +
-          this.roundTo2(object.priceWithoutTax) * this.roundTo2(object.quantity)
+          this.roundTo2(object.price_without_tax) *
+            this.roundTo2(object.quantity)
         );
       }, 0);
       return this.roundTo2(sum).toFixed(2);

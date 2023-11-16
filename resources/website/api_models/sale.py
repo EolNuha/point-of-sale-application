@@ -6,16 +6,16 @@ from .. import swagger
 sale_item = swagger.model(
     "SaleItem",
     {
-        "changeAmount": fields.Float,
-        "customerAmount": fields.Float,
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
-        "grossProfitAmount": fields.Float,
+        "change_amount": fields.Float,
+        "customer_amount": fields.Float,
+        "date_created": fields.String,
+        "date_modified": fields.String,
+        "gross_profit_amount": fields.Float,
         "id": fields.Integer,
-        "isRegular": fields.Boolean,
-        "netProfitAmount": fields.Float,
-        "subTotalAmount": fields.Float,
-        "totalAmount": fields.Float,
+        "is_regular": fields.Boolean,
+        "net_profit_amount": fields.Float,
+        "subtotal_amount": fields.Float,
+        "total_amount": fields.Float,
         "taxes": fields.List(fields.Raw),
     },
 )
@@ -44,9 +44,9 @@ sale_pagination = swagger.model(
                     "TaxItem",
                     {
                         "id": fields.Integer,
-                        "taxAlias": fields.String,
-                        "taxName": fields.String,
-                        "taxValue": fields.Float,
+                        "tax_alias": fields.String,
+                        "tax_name": fields.String,
+                        "tax_value": fields.Float,
                     },
                 )
             ),
@@ -72,8 +72,8 @@ product_model = swagger.model(
         "id": fields.Integer,
         "measure": fields.String,
         "name": fields.String,
-        "purchasedPrice": fields.Float,
-        "sellingPrice": fields.Float,
+        "purchased_price": fields.Float,
+        "selling_price": fields.Float,
         "tax": fields.Integer,
     },
 )
@@ -82,13 +82,13 @@ product_model = swagger.model(
 sale_item_model = swagger.model(
     "SaleItem",
     {
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
         "id": fields.Integer,
-        "priceWithoutTax": fields.Float,
+        "price_without_tax": fields.Float,
         "product": fields.Nested(product_model),  # Nest the Product model
         "quantity": fields.Float,
-        "taxAmount": fields.Float,
+        "tax_amount": fields.Float,
     },
 )
 
@@ -97,13 +97,13 @@ user_model = swagger.model(
     "User",
     {
         "active": fields.Boolean,
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
         "email": fields.String,
-        "firstName": fields.String,
+        "first_name": fields.String,
         "id": fields.Integer,
-        "lastName": fields.String,
-        "userRole": fields.String,
+        "last_name": fields.String,
+        "user_role": fields.String,
         "username": fields.String,
     },
 )
@@ -112,20 +112,20 @@ user_model = swagger.model(
 sale_model = swagger.model(
     "Sale",
     {
-        "changeAmount": fields.Float,
-        "customerAmount": fields.Float,
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
-        "grossProfitAmount": fields.Float,
+        "change_amount": fields.Float,
+        "customer_amount": fields.Float,
+        "date_created": fields.String,
+        "date_modified": fields.String,
+        "gross_profit_amount": fields.Float,
         "id": fields.Integer,
-        "isRegular": fields.Boolean,
-        "netProfitAmount": fields.Float,
-        "saleItems": fields.List(
+        "is_regular": fields.Boolean,
+        "net_profit_amount": fields.Float,
+        "sale_items": fields.List(
             fields.Nested(sale_item_model)
         ),  # Nest the SaleItem model
-        "subTotalAmount": fields.Float,
+        "subtotal_amount": fields.Float,
         "taxes": fields.Raw,  # This will be further defined in the SalePagination model
-        "totalAmount": fields.Float,
+        "total_amount": fields.Float,
         "user": fields.Nested(user_model),  # Nest the User model
     },
 )
@@ -134,9 +134,9 @@ sale_model = swagger.model(
 tax_model = swagger.model(
     "Tax",
     {
-        "taxAlias": fields.String,
-        "taxName": fields.String,
-        "taxValue": fields.Float,
+        "tax_alias": fields.String,
+        "tax_name": fields.String,
+        "tax_value": fields.Float,
     },
 )
 
@@ -177,18 +177,18 @@ sale_details_model = swagger.model(
     "SaleDetails",
     {
         "id": fields.Integer,
-        "totalAmount": fields.Float,
-        "grossProfitAmount": fields.Float,
-        "netProfitAmount": fields.Float,
-        "subTotalAmount": fields.Float,
-        "customerAmount": fields.Float,
-        "changeAmount": fields.Float,
-        "isRegular": fields.Boolean,
+        "total_amount": fields.Float,
+        "gross_profit_amount": fields.Float,
+        "net_profit_amount": fields.Float,
+        "subtotal_amount": fields.Float,
+        "customer_amount": fields.Float,
+        "change_amount": fields.Float,
+        "is_regular": fields.Boolean,
         "taxes": fields.Raw,
-        "saleItems": fields.List(fields.Raw),
+        "sale_items": fields.List(fields.Raw),
         "user": fields.Raw,
-        "dateCreated": fields.String,
-        "dateModified": fields.String,
+        "date_created": fields.String,
+        "date_modified": fields.String,
     },
 )
 
@@ -204,8 +204,8 @@ sale_create_model = swagger.model(
     "SaleCreate",
     {
         "products": fields.List(fields.Raw),
-        "customerAmount": fields.Float,
-        "changeAmount": fields.Float,
-        "isRegular": fields.Boolean,
+        "customer_amount": fields.Float,
+        "change_amount": fields.Float,
+        "is_regular": fields.Boolean,
     },
 )

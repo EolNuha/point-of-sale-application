@@ -44,7 +44,7 @@
           @click="sort('total_amount')"
         >
           <div class="flex justify-between items-center">
-            {{ $t("totalAmount") }}
+            {{ $t("total_amount") }}
             <template v-if="sortColumn === 'total_amount'">
               <IconC
                 iconName="ArrowLongDownIcon"
@@ -64,15 +64,15 @@
           class="bg-white border-b dark:bg-neutral-900 dark:border-gray-700 hover:bg-neutral-100/75 dark:hover:bg-neutral-900/[.5]"
         >
           <td class="py-2 px-6">
-            {{ purchase.dateCreated?.substring(0, 10) }}
+            {{ purchase.date_created?.substring(0, 10) }}
           </td>
           <template v-for="item in taxes" :key="item.settings_value">
             <td class="py-2 px-6">
               {{
                 Array.isArray(purchase.taxes)
                   ? purchase.taxes?.find(
-                      (obj) => obj.taxAlias === item.settings_alias
-                    )?.taxValue || "0.00"
+                      (obj) => obj.tax_alias === item.settings_alias
+                    )?.tax_value || "0.00"
                   : "0.00"
               }}
               €
@@ -81,21 +81,21 @@
               {{
                 Array.isArray(purchase.taxes)
                   ? purchase.taxes?.find(
-                      (obj) => obj.taxAlias === item.settings_alias
-                    )?.totalWithoutTax || "0.00"
+                      (obj) => obj.tax_alias === item.settings_alias
+                    )?.total_without_tax || "0.00"
                   : "0.00"
               }}
               €
             </td>
           </template>
-          <td class="py-2 px-6">{{ purchase.totalAmount }} €</td>
+          <td class="py-2 px-6">{{ purchase.total_amount }} €</td>
           <td class="py-2 px-6">
             <button
               @click="
                 $router.push({
                   name: 'daily-purchases',
                   query: {
-                    purchaseDate: purchase.dateCreated?.substring(0, 10),
+                    purchaseDate: purchase.date_created?.substring(0, 10),
                   },
                 })
               "

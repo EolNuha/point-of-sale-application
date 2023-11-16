@@ -26,7 +26,7 @@
         <div class="pb-6 pt-3 px-6">
           <Form
             v-slot="{ errors }"
-            @submit="$emit('submit', customerAmount)"
+            @submit="$emit('submit', customer_amount)"
             class="space-y-6"
           >
             <div>
@@ -52,11 +52,11 @@
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                {{ $t("customerAmount") }}</label
+                {{ $t("customer_amount") }}</label
               >
               <Field
                 rules="required"
-                v-model="customerAmount"
+                v-model="customer_amount"
                 @focus="$event.target.select()"
                 type="number"
                 name="customer_amount"
@@ -64,7 +64,7 @@
                 :ref="modalRef + '_customer_amount'"
                 step="0.01"
                 class="bg-neutral-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-theme-500 focus:border-theme-500 block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                :placeholder="$t('customerAmount')"
+                :placeholder="$t('customer_amount')"
                 required
                 :disabled="isLoading"
               />
@@ -75,16 +75,16 @@
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                {{ $t("changeAmount") }}</label
+                {{ $t("change_amount") }}</label
               >
               <Field
                 :rules="isChangeAmountValid"
-                v-model="changeAmount"
+                v-model="change_amount"
                 type="number"
                 name="change_amount"
                 id="change_amount"
                 class="bg-neutral-50 border border-gray-300 text-gray-900 text-sm rounded block w-full p-2.5 dark:bg-neutral-600 dark:border-gray-500 dark:text-white"
-                :placeholder="$t('changeAmount')"
+                :placeholder="$t('change_amount')"
                 disabled
               />
               <span class="text-red-700">{{ errors.change_amount }}</span>
@@ -125,29 +125,29 @@ export default {
   },
   data() {
     return {
-      customerAmount: "0.00",
-      changeAmount: "0.00",
+      customer_amount: "0.00",
+      change_amount: "0.00",
     };
   },
   watch: {
     total: {
       async handler(value) {
-        this.customerAmount = value;
+        this.customer_amount = value;
       },
     },
-    customerAmount: {
+    customer_amount: {
       async handler(value) {
-        this.changeAmount = (value - this.total).toFixed(2);
+        this.change_amount = (value - this.total).toFixed(2);
       },
     },
   },
   methods: {
     isChangeAmountValid() {
-      const value = this.customerAmount - this.total;
+      const value = this.customer_amount - this.total;
       if (value >= 0) {
         return true;
       } else {
-        return this.$t("changeAmountLessThanZero");
+        return this.$t("change_amountLessThanZero");
       }
     },
   },

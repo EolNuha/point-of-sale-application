@@ -67,7 +67,7 @@ class CreatePurchase(Resource):
         seller = purchase_rest.payload["seller"]
 
         def calculate_total_price(product):
-            product_purchased_price_wo_tax = Decimal(product["purchasedPrice"])
+            product_purchased_price_wo_tax = Decimal(product["purchased_price"])
             rabat_percentage = Decimal(product["rabat"]) / 100
             tax_percentage = Decimal(product["tax"]) / 100
             stock = Decimal(product["stock"])
@@ -109,7 +109,7 @@ class CreatePurchase(Resource):
             total_amount=total_amount,
             subtotal_amount=subtotal_amount,
             rabat_amount=rabat_amount,
-            seller_name=seller["sellerName"],
+            seller_name=seller["seller_name"],
             seller_invoice_number=seller["invoiceNumber"],
             seller_fiscal_number=seller["fiscalNumber"],
             seller_tax_number=seller["taxNumber"],
@@ -123,7 +123,7 @@ class CreatePurchase(Resource):
 
         for product in products:
             product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-            product_purchased_price_wo_tax = Decimal(product["purchasedPrice"])
+            product_purchased_price_wo_tax = Decimal(product["purchased_price"])
             tax_percentage = Decimal(product["tax"]) / 100
             rabat_percentage = Decimal(product["rabat"]) / 100
             price_before_tax = product_purchased_price_wo_tax - (
@@ -136,8 +136,8 @@ class CreatePurchase(Resource):
             product_total_amount = Decimal(
                 product_purchased_price * product_stock
             ).quantize(FOURPLACES)
-            if product["expirationDate"]:
-                expiration_date = product["expirationDate"].split("-")
+            if product["expiration_date"]:
+                expiration_date = product["expiration_date"].split("-")
                 expiration_date = datetime.combine(
                     date(
                         year=int(expiration_date[0]),
@@ -168,7 +168,7 @@ class CreatePurchase(Resource):
                     rabat=product["rabat"],
                     product_purchased_price_wo_tax=product_purchased_price_wo_tax,
                     product_purchased_price=product_purchased_price,
-                    product_selling_price=product["sellingPrice"],
+                    product_selling_price=product["selling_price"],
                     product_stock=product_stock,
                     product_measure=measure,
                     tax_amount=tax_amount,
@@ -182,7 +182,7 @@ class CreatePurchase(Resource):
                 product_query.tax = product["tax"]
                 product_query.purchased_price_wo_tax = product_purchased_price_wo_tax
                 product_query.purchased_price = product_purchased_price
-                product_query.selling_price = product["sellingPrice"]
+                product_query.selling_price = product["selling_price"]
                 product_query.measure = measure
                 product_query.stock += product_stock
                 product_query.expiration_date = expiration_date
@@ -194,7 +194,7 @@ class CreatePurchase(Resource):
                     tax=product["tax"],
                     purchased_price_wo_tax=product_purchased_price_wo_tax,
                     purchased_price=product_purchased_price,
-                    selling_price=product["sellingPrice"],
+                    selling_price=product["selling_price"],
                     measure=measure,
                     expiration_date=expiration_date,
                     date_created=current_time,
@@ -329,7 +329,7 @@ class GetGroupedPurchases(Resource):
 
         for item in items:
             item_date = datetime.strptime(
-                item["dateCreated"], "%d.%m.%Y, %H:%M:%S"
+                item["date_created"], "%d.%m.%Y, %H:%M:%S"
             ).date()
 
             taxes = (
@@ -569,7 +569,7 @@ class PurchaseDetails(Resource):
         ctx.rounding = decimal.ROUND_HALF_UP
 
         deleted_items = purchase_rest.payload["deletedItems"]
-        purchaseItems = purchase_rest.payload["purchaseItems"]
+        purchase_items = purchase_rest.payload["purchase_items"]
 
         purchase_query = Purchase.query.filter_by(id=purchaseId).first_or_404()
         subtotal, purchase_taxes = [], []
@@ -587,9 +587,9 @@ class PurchaseDetails(Resource):
             ).delete()
             db.session.commit()
 
-        for item in purchaseItems:
+        for item in purchase_items:
             item_stock = Decimal(item["product"]["stock"]).quantize(FOURPLACES)
-            item_purchased_price = Decimal(item["product"]["purchasedPrice"]).quantize(
+            item_purchased_price = Decimal(item["product"]["purchased_price"]).quantize(
                 FOURPLACES
             )
             item_tax = Decimal(item["product"]["tax"]).quantize(FOURPLACES)

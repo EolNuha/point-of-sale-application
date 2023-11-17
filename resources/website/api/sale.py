@@ -213,10 +213,11 @@ class GroupedSales(Resource):
             time.max,
         )
 
-        if "*" in search or "_" in search:
-            looking_for = search.replace("_", "__").replace("*", "%").replace("?", "_")
-        else:
-            looking_for = "%{0}%".format(search)
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
 
         # Add pagination
         paginated_items = (
@@ -387,10 +388,11 @@ class GetSalesDetailed(Resource):
             time.max,
         )
 
-        if "*" in search or "_" in search:
-            looking_for = search.replace("_", "__").replace("*", "%").replace("?", "_")
-        else:
-            looking_for = "%{0}%".format(search)
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
 
         paginated_items = (
             Sale.query.join(User)
@@ -504,10 +506,11 @@ class GetDailySales(Resource):
             time.max,
         )
 
-        if "*" in search or "_" in search:
-            looking_for = search.replace("_", "__").replace("*", "%").replace("?", "_")
-        else:
-            looking_for = "%{0}%".format(search)
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
 
         paginated_items = (
             Sale.query.join(User)

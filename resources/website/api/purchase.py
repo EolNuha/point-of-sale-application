@@ -286,9 +286,9 @@ class GetGroupedPurchases(Resource):
         date_end = datetime.combine(date(*map(int, custom_end_date)), time.max)
 
         looking_for = (
-            search.replace("_", "__").replace("*", "%").replace("?", "_")
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
             if "*" in search or "_" in search
-            else f"%{search}%"
+            else f"%{search.strip()}%"
         )
 
         purchase_query = (
@@ -387,9 +387,9 @@ class GetDetailedPurchases(Resource):
         date_end = datetime.combine(date(*map(int, custom_end_date)), time.max)
 
         looking_for = (
-            search.replace("_", "__").replace("*", "%").replace("?", "_")
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
             if "*" in search or "_" in search
-            else f"%{search}%"
+            else f"%{search.strip()}%"
         )
 
         paginated_items = (
@@ -449,9 +449,9 @@ class GetDailyPurchases(Resource):
             sort_column = func.lower(PurchaseTax.tax_value)
 
         looking_for = (
-            search.replace("_", "__").replace("*", "%").replace("?", "_")
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
             if "*" in search or "_" in search
-            else f"%{search}%"
+            else f"%{search.strip()}%"
         )
 
         paginated_items = (
@@ -501,9 +501,9 @@ class GetSellers(Resource):
         sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
 
         looking_for = (
-            search.replace("_", "__").replace("*", "%").replace("?", "_")
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
             if "*" in search or "_" in search
-            else f"%{search}%"
+            else f"%{search.strip()}%"
         )
 
         paginated_items = (

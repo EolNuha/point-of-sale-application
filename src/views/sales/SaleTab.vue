@@ -76,7 +76,7 @@
           <tr>
             <th scope="col" class="py-3 px-6"></th>
             <th scope="col" class="py-3 px-6">ID</th>
-            <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
+            <th scope="col" class="py-3 px-6">{{ $t("product_name") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>
             <th scope="col" class="py-3 px-6">{{ $t("selling_price") }}</th>

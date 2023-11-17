@@ -67,19 +67,19 @@
                   <td class="text-right py-2">{{ purchase.seller_name }}</td>
                 </tr>
                 <tr>
-                  <td class="py-2">{{ $t("invoiceNumber") }}</td>
+                  <td class="py-2">{{ $t("invoice_number") }}</td>
                   <td class="text-right py-2">
                     {{ purchase.seller_invoice_number }}
                   </td>
                 </tr>
                 <tr>
-                  <td class="py-2">{{ $t("fiscalNumber") }}</td>
+                  <td class="py-2">{{ $t("fiscal_number") }}</td>
                   <td class="text-right py-2">
                     {{ purchase.seller_fiscal_number }}
                   </td>
                 </tr>
                 <tr>
-                  <td class="py-2">{{ $t("taxNumber") }}</td>
+                  <td class="py-2">{{ $t("tax_number") }}</td>
                   <td class="text-right py-2">
                     {{ purchase.seller_tax_number }}
                   </td>
@@ -96,7 +96,7 @@
               class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400"
             >
               <tr>
-                <th scope="col" class="py-3 px-3">{{ $t("productName") }}</th>
+                <th scope="col" class="py-3 px-3">{{ $t("product_name") }}</th>
                 <th scope="col" class="py-3 px-3">{{ $t("barcode") }}</th>
                 <th scope="col" class="py-3 px-3">{{ $t("measure") }}</th>
                 <th scope="col" class="py-3 px-3">{{ $t("stock") }}</th>

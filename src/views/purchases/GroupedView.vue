@@ -95,7 +95,7 @@
                 $router.push({
                   name: 'daily-purchases',
                   query: {
-                    purchaseDate: purchase.date_created?.substring(0, 10),
+                    purchase_date: purchase.date_created?.substring(0, 10),
                   },
                 })
               "

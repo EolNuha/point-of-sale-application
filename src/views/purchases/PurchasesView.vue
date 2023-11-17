@@ -33,7 +33,7 @@
                 class="min-w-[8rem] w-fit default-input"
                 v-model="typeFilters"
                 :placeholder="$t('type')"
-                :options="purchaseTypes"
+                :options="purchase_types"
                 :reduce="(t) => t.settings_value"
                 :label="`settings_value`"
                 :clearable="false"
@@ -194,7 +194,7 @@ export default {
       detailedView: true,
       showFilters: false,
       typeFilters: [],
-      purchaseTypes: [],
+      purchase_types: [],
     };
   },
   components: {
@@ -223,7 +223,7 @@ export default {
         settings_type: "purchasetype",
       })
       .then((response) => {
-        this.purchaseTypes = response.data;
+        this.purchase_types = response.data;
       });
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.startDate = currentMonth.startDate;

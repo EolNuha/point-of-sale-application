@@ -2,7 +2,7 @@
 	"dashboard": "Dashboard",
 	"products": "Products",
 	"product": "Product",
-	"productName": "Product name",
+	"product_name": "Product name",
 	"newProduct": "New Product",
 	"productList": "Products List",
 	"manageProducts": "Manage Products",
@@ -123,9 +123,9 @@
 	"sellerInfo": "Seller information",
 	"seller_name": "Seller Name",
 	"seller": "Seller",
-	"fiscalNumber": "Fiscal Number",
-	"invoiceNumber": "Invoice Number",
-	"taxNumber": "Tax Number",
+	"fiscal_number": "Fiscal Number",
+	"invoice_number": "Invoice Number",
+	"tax_number": "Tax Number",
 	"purchasedProducts": "Purchased Products",
 	"createUserAccount": "Create user account",
 	"email": "Email",
@@ -270,8 +270,8 @@
 	"pcs": "Pcs",
 	"kg": "Kg",
 	"liter": "Liter",
-	"purchaseDate": "Purchase Date",
+	"purchase_date": "Purchase Date",
 	"investment": "Investment",
 	"expense": "Expense",
-	"purchaseType": "Purchase type"
+	"purchase_type": "Purchase type"
 }

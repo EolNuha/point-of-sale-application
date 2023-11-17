@@ -64,7 +64,7 @@
               class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400"
             >
               <tr>
-                <th scope="col" class="py-3 px-6">{{ $t("productName") }}</th>
+                <th scope="col" class="py-3 px-6">{{ $t("product_name") }}</th>
                 <th scope="col" class="py-3 px-6">{{ $t("barcode") }}</th>
                 <th scope="col" class="py-3 px-6">{{ $t("measure") }}</th>
                 <th scope="col" class="py-3 px-6">{{ $t("quantity") }}</th>

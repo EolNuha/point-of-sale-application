@@ -2,7 +2,7 @@
 	"dashboard": "Shtepia",
 	"products": "Produktet",
 	"product": "Produkt",
-	"productName": "Emri i produktit",
+	"product_name": "Emri i produktit",
 	"newProduct": "Produkt i ri",
 	"productList": "Lista e produkteve",
 	"manageProducts": "Menaxho produktet",
@@ -123,9 +123,9 @@
 	"sellerInfo": "Informatat e shitësit",
 	"seller_name": "Emri i shitësit",
 	"seller": "Shitësi",
-	"fiscalNumber": "NUI",
-	"invoiceNumber": "Numri i faturës",
-	"taxNumber": "Numri i TVSH",
+	"fiscal_number": "NUI",
+	"invoice_number": "Numri i faturës",
+	"tax_number": "Numri i TVSH",
 	"purchasedProducts": "Produktet e blera",
 	"createUserAccount": "Krijo llogari të përdoruesit",
 	"email": "Email",
@@ -269,8 +269,8 @@
 	"pcs": "Copë",
 	"kg": "Kg",
 	"liter": "Litër",
-	"purchaseDate": "Date e blerjes",
+	"purchase_date": "Date e blerjes",
 	"investment": "Investim",
 	"expense": "Shpenzim",
-	"purchaseType": "Lloji i blerjes"
+	"purchase_type": "Lloji i blerjes"
 }

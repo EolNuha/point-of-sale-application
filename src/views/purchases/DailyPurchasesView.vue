@@ -36,7 +36,7 @@
                   class="min-w-[8rem] w-fit default-input"
                   v-model="typeFilters"
                   :placeholder="$t('type')"
-                  :options="purchaseTypes"
+                  :options="purchase_types"
                   :reduce="(t) => t.settings_value"
                   :label="`settings_value`"
                   :clearable="false"
@@ -110,7 +110,7 @@
         </div>
       </div>
       <h2 class="text-gray-700 dark:text-gray-300 text-2xl font-extrabold my-3">
-        {{ $t("date") }}: {{ purchaseDate?.substring(0, 10) }}
+        {{ $t("date") }}: {{ purchase_date?.substring(0, 10) }}
       </h2>
       <div class="overflow-hidden rounded mb-5 flex grow relative">
         <div class="overflow-x-auto overflow-y-hidden scrollbar-style grow">
@@ -156,7 +156,7 @@ export default {
       selectedPurchase: [],
       showFilters: false,
       typeFilters: [],
-      purchaseTypes: [],
+      purchase_types: [],
     };
   },
   components: {
@@ -170,8 +170,8 @@ export default {
     pagination() {
       return this.$store.getters["purchaseModule/getPurchasesPagination"];
     },
-    purchaseDate() {
-      return this.$route.query.purchaseDate;
+    purchase_date() {
+      return this.$route.query.purchase_date;
     },
     taxes() {
       return this.$store.state.settingsModule.settings_type.tax;
@@ -197,7 +197,7 @@ export default {
         settings_type: "purchasetype",
       })
       .then((response) => {
-        this.purchaseTypes = response.data;
+        this.purchase_types = response.data;
       });
     await this.getPurchases(this.currentPage);
   },
@@ -207,7 +207,7 @@ export default {
       await this.$store
         .dispatch("purchaseModule/getDailyPurchases", {
           page: page,
-          date: this.purchaseDate,
+          date: this.purchase_date,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
@@ -227,7 +227,7 @@ export default {
         .dispatch("purchaseModule/getAllDailyPurchases", {
           page: 1,
           per_page: this.pagination.total,
-          date: this.purchaseDate,
+          date: this.purchase_date,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
@@ -242,7 +242,7 @@ export default {
 
       let table = await this.gridExcelView();
       let fileName =
-        this.purchaseDate.replaceAll(".", "-") + `-${this.$t("purchases")}`;
+        this.purchase_date.replaceAll(".", "-") + `-${this.$t("purchases")}`;
 
       const wb = utils.table_to_book(table);
       await writeFileXLSX(wb, `${fileName}.xlsx`);

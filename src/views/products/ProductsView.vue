@@ -147,7 +147,7 @@
                   @click="sort('name')"
                 >
                   <div class="flex justify-between items-center">
-                    {{ $t("productName") }}
+                    {{ $t("product_name") }}
                     <template v-if="sortColumn === 'name'">
                       <IconC
                         iconName="ArrowLongDownIcon"
@@ -570,7 +570,7 @@ export default {
       headTr.appendChild(idTh);
 
       let nameTh = document.createElement("th");
-      nameTh.innerHTML = this.$t("productName");
+      nameTh.innerHTML = this.$t("product_name");
       headTr.appendChild(nameTh);
 
       let barcodeTh = document.createElement("th");

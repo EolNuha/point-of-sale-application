@@ -64,7 +64,7 @@
           @click="sort('seller_invoice_number')"
         >
           <div class="flex justify-between items-center">
-            {{ $t("invoiceNumber") }}
+            {{ $t("invoice_number") }}
             <template v-if="sortColumn === 'seller_invoice_number'">
               <IconC
                 iconName="ArrowLongDownIcon"
@@ -173,7 +173,7 @@
                       name: 'purchase-view',
                       params: { purchaseId: purchase.id },
                       query: {
-                        purchaseDate: purchase.date_created?.substring(0, 10),
+                        purchase_date: purchase.date_created?.substring(0, 10),
                       },
                     })
                   "
@@ -191,7 +191,7 @@
                       name: 'purchase-edit',
                       params: { purchaseId: purchase.id },
                       query: {
-                        purchaseDate: purchase.date_created?.substring(0, 10),
+                        purchase_date: purchase.date_created?.substring(0, 10),
                       },
                     })
                   "

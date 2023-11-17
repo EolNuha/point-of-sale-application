@@ -42,106 +42,106 @@
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("fiscalNumber") }}:</label
+            >{{ $t("fiscal_number") }}:</label
           >
           <Field
             required
             rules="required"
             type="number"
             step="1"
-            v-model="seller.fiscalNumber"
-            :placeholder="$t('fiscalNumber')"
+            v-model="seller.fiscal_number"
+            :placeholder="$t('fiscal_number')"
             class="default-input w-full"
-            :class="errors.fiscalNumber ? 'ring-2 ring-red-500' : ''"
-            name="fiscalNumber"
-            id="fiscalNumber"
+            :class="errors.fiscal_number ? 'ring-2 ring-red-500' : ''"
+            name="fiscal_number"
+            id="fiscal_number"
           />
-          <span class="text-red-700">{{ errors.fiscalNumber }}</span>
+          <span class="text-red-700">{{ errors.fiscal_number }}</span>
         </div>
       </div>
       <div class="mb-3 flex gap-2">
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("taxNumber") }}</label
+            >{{ $t("tax_number") }}</label
           >
           <Field
             required
             rules="required"
             type="number"
             step="1"
-            v-model="seller.taxNumber"
-            :placeholder="$t('taxNumber')"
+            v-model="seller.tax_number"
+            :placeholder="$t('tax_number')"
             class="default-input w-full"
-            :class="errors.taxNumber ? 'ring-2 ring-red-500' : ''"
-            name="taxNumber"
-            id="taxNumber"
+            :class="errors.tax_number ? 'ring-2 ring-red-500' : ''"
+            name="tax_number"
+            id="tax_number"
           />
-          <span class="text-red-700">{{ errors.taxNumber }}</span>
+          <span class="text-red-700">{{ errors.tax_number }}</span>
         </div>
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("invoiceNumber") }}</label
+            >{{ $t("invoice_number") }}</label
           >
           <Field
             required
             rules="required"
             type="text"
-            v-model="seller.invoiceNumber"
-            :placeholder="$t('invoiceNumber')"
+            v-model="seller.invoice_number"
+            :placeholder="$t('invoice_number')"
             class="default-input w-full"
-            :class="errors.invoiceNumber ? 'ring-2 ring-red-500' : ''"
-            name="invoiceNumber"
-            id="invoiceNumber"
+            :class="errors.invoice_number ? 'ring-2 ring-red-500' : ''"
+            name="invoice_number"
+            id="invoice_number"
           />
-          <span class="text-red-700">{{ errors.invoiceNumber }}</span>
+          <span class="text-red-700">{{ errors.invoice_number }}</span>
         </div>
       </div>
       <div class="mb-3 flex gap-2">
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchaseDate") }}</label
+            >{{ $t("purchase_date") }}</label
           >
           <Field
             required
             rules="required"
             type="date"
-            v-model="seller.purchaseDate"
-            :placeholder="$t('purchaseDate')"
+            v-model="seller.purchase_date"
+            :placeholder="$t('purchase_date')"
             class="default-input w-full"
-            :class="errors.purchaseDate ? 'ring-2 ring-red-500' : ''"
-            name="purchaseDate"
-            id="purchaseDate"
+            :class="errors.purchase_date ? 'ring-2 ring-red-500' : ''"
+            name="purchase_date"
+            id="purchase_date"
           />
-          <span class="text-red-700">{{ errors.purchaseDate }}</span>
+          <span class="text-red-700">{{ errors.purchase_date }}</span>
         </div>
         <div class="basis-1/2">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("purchaseType") }}</label
+            >{{ $t("purchase_type") }}</label
           >
           <Field
             required
             rules="required"
             type="number"
             step="1"
-            v-model="seller.purchaseType"
+            v-model="seller.purchase_type"
             class="hidden"
-            :name="`purchaseType`"
-            :id="`purchaseType`"
+            :name="`purchase_type`"
+            :id="`purchase_type`"
           />
           <v-select
             class="block w-full default-input !p-[1px]"
-            :class="errors.purchaseType ? 'ring-2 ring-red-500' : ''"
-            v-model="seller.purchaseType"
-            :options="purchaseTypes"
+            :class="errors.purchase_type ? 'ring-2 ring-red-500' : ''"
+            v-model="seller.purchase_type"
+            :options="purchase_types"
             :reduce="(t) => t.settings_value"
             :label="`settings_value`"
             :clearable="false"
             type="text"
-            :placeholder="$t('purchaseType')"
+            :placeholder="$t('purchase_type')"
           >
             <template v-slot:option="option">
               {{ $t(option.settings_value) }}
@@ -150,7 +150,7 @@
               {{ $t(option.settings_value) }}
             </template>
           </v-select>
-          <span class="text-red-700">{{ errors.purchaseType }}</span>
+          <span class="text-red-700">{{ errors.purchase_type }}</span>
         </div>
       </div>
       <h2
@@ -212,14 +212,14 @@
               <div>
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("productName") }}</label
+                  >{{ $t("product_name") }}</label
                 >
                 <Field
                   required
                   rules="required"
                   type="text"
-                  v-model="product.productName"
-                  :placeholder="$t('productName')"
+                  v-model="product.product_name"
+                  :placeholder="$t('product_name')"
                   class="hidden"
                   :name="`${index}name`"
                   :id="`${index}name`"
@@ -227,7 +227,7 @@
                 <v-select
                   class="block w-full default-input !p-[1px]"
                   :class="errors[`${index}name`] ? 'ring-2 ring-red-500' : ''"
-                  v-model="product.productName"
+                  v-model="product.product_name"
                   @search="
                     ($event, loading) =>
                       searchProducts($event, loading, index, 'name')
@@ -243,7 +243,7 @@
                   :reduce="(productsList) => productsList.name"
                   label="name"
                   type="text"
-                  :placeholder="$t('productName')"
+                  :placeholder="$t('product_name')"
                   :taggable="true"
                   @option:selected="getProductDetails($event, index)"
                 />
@@ -562,20 +562,20 @@ export default {
     return {
       isLoading: false,
       measures: [],
-      purchaseTypes: [],
+      purchase_types: [],
       seller: {
         seller_name: "",
-        invoiceNumber: "",
-        fiscalNumber: "",
-        taxNumber: "",
-        purchaseDate: new Date(),
-        purchaseType: "purchase",
+        invoice_number: "",
+        fiscal_number: "",
+        tax_number: "",
+        purchase_date: new Date(),
+        purchase_type: "purchase",
         search: "",
       },
       products: [
         {
           barcode: null,
-          productName: "",
+          product_name: "",
           stock: null,
           tax: 0,
           rabat: "0",
@@ -612,7 +612,7 @@ export default {
     },
   },
   async created() {
-    this.seller.purchaseDate = this.minDate;
+    this.seller.purchase_date = this.minDate;
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
         settings_type: "measure",
@@ -625,7 +625,7 @@ export default {
         settings_type: "purchasetype",
       })
       .then((response) => {
-        this.purchaseTypes = response.data;
+        this.purchase_types = response.data;
       });
     await this.getSellers("");
     await this.getProducts("");
@@ -643,7 +643,7 @@ export default {
     addProduct() {
       const product = {
         barcode: null,
-        productName: "",
+        product_name: "",
         stock: null,
         tax: 0,
         rabat: "0",
@@ -680,8 +680,8 @@ export default {
         (x) => x.seller_name.toLowerCase() === seller_name.toLowerCase()
       );
       if (sellerInfo) {
-        this.seller.fiscalNumber = sellerInfo?.seller_fiscal_number;
-        this.seller.taxNumber = sellerInfo?.seller_tax_number;
+        this.seller.fiscal_number = sellerInfo?.seller_fiscal_number;
+        this.seller.tax_number = sellerInfo?.seller_tax_number;
       }
     },
     async searchProducts(search, loading, idx, type = "barcode") {
@@ -700,10 +700,10 @@ export default {
       });
     },
     getProductDetails(e, idx) {
-      const productName = e.name ? e.name : e;
-      this.products[idx].productName = productName;
+      const product_name = e.name ? e.name : e;
+      this.products[idx].product_name = product_name;
       const productInfo = this.productsList.find(
-        (x) => x.name?.toLowerCase() === productName.toLowerCase()
+        (x) => x.name?.toLowerCase() === product_name.toLowerCase()
       );
       if (productInfo) {
         this.products[idx].barcode = productInfo.barcode;
@@ -719,7 +719,7 @@ export default {
       this.products[idx].barcode = barcode;
       const productInfo = this.productsList.find((x) => x.barcode === barcode);
       if (productInfo) {
-        this.products[idx].productName = productInfo.name;
+        this.products[idx].product_name = productInfo.name;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].selling_price = productInfo.selling_price;
         this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;

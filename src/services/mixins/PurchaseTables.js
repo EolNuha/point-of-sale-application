@@ -107,15 +107,15 @@ export default {
       headTr.appendChild(seller_nameTh);
 
       let invoiceTh = document.createElement("th");
-      invoiceTh.innerHTML = this.$t("invoiceNumber");
+      invoiceTh.innerHTML = this.$t("invoice_number");
       headTr.appendChild(invoiceTh);
 
       let fiscalTh = document.createElement("th");
-      fiscalTh.innerHTML = this.$t("fiscalNumber");
+      fiscalTh.innerHTML = this.$t("fiscal_number");
       headTr.appendChild(fiscalTh);
 
       let taxTh = document.createElement("th");
-      taxTh.innerHTML = this.$t("taxNumber");
+      taxTh.innerHTML = this.$t("tax_number");
       headTr.appendChild(taxTh);
 
       for await (const tax of this.taxes) {

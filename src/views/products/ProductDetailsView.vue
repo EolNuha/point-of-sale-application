@@ -16,7 +16,7 @@
           <label
             for="product_name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >{{ $t("productName") }}</label
+            >{{ $t("product_name") }}</label
           >
           <Field
             name="product_name"
@@ -350,9 +350,6 @@ export default {
     minDate() {
       return this.formatDate(new Date());
     },
-  },
-  async created() {
-    await this.reload();
   },
   unmounted() {
     this.$store.state.productModule.product = new Product();

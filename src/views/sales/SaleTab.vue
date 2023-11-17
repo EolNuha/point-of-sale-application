@@ -135,7 +135,8 @@
       </table>
     </div>
     <div
-      class="absolute bottom-0 left-0 right-0 flex items-center justify-between h-28 bg-neutral-100 dark:bg-neutral-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
+      :class="$root.sidebar ? 'left-[16rem]' : 'left-0'"
+      class="fixed bottom-0 right-0 flex items-center justify-between h-28 bg-neutral-100 dark:bg-neutral-700 px-2 overflow-x-auto overflow-y-hidden scrollbar-style"
     >
       <div class="flex flex-row items-center">
         <button

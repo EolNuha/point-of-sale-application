@@ -8,7 +8,7 @@ module.exports = defineConfig({
           icon: "./src/assets/images/icon.svg",
         },
         extraResources: [{ from: "./resources/dist/app", to: "./" }],
-        productName: "Egzoni Market",
+        productName: "QuickSell POS",
       },
     },
   },

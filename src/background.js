@@ -47,7 +47,7 @@ async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     // icon: `./public/icon.png`,
-    title: "Egzoni Market",
+    title: "QuickSell POS",
     width: 800,
     height: 600,
     webPreferences: {

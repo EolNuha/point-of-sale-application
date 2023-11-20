@@ -38,6 +38,81 @@ def createDemoUsers():
 
 
 @before_app_requests_api.before_app_first_request
+def createDemoSettings():
+    if Permissions.query.count() > 0:
+        return
+    demo = [
+        ["superadmin", "dashboard", "dashboard.read", "read"],
+        ["superadmin", "dashboard", "dashboard.write", "write"],
+        ["superadmin", "dashboard", "dashboard.execute", "execute"],
+        ["superadmin", "products", "products.read", "read"],
+        ["superadmin", "products", "products.write", "write"],
+        ["superadmin", "products", "products.execute", "execute"],
+        ["superadmin", "sales", "sales.read", "read"],
+        ["superadmin", "sales", "sales.write", "write"],
+        ["superadmin", "sales", "sales.execute", "execute"],
+        ["superadmin", "purchases", "purchases.read", "read"],
+        ["superadmin", "purchases", "purchases.write", "write"],
+        ["superadmin", "purchases", "purchases.execute", "execute"],
+        ["superadmin", "users", "users.read", "read"],
+        ["superadmin", "users", "users.write", "write"],
+        ["superadmin", "users", "users.execute", "execute"],
+        ["superadmin", "analytics", "analytics.read", "read"],
+        ["superadmin", "analytics", "analytics.write", "write"],
+        ["superadmin", "analytics", "analytics.execute", "execute"],
+        ["superadmin", "notifications", "notifications.read", "read"],
+        ["superadmin", "notifications", "notifications.write", "write"],
+        ["superadmin", "notifications", "notifications.execute", "execute"],
+        ["superadmin", "permissions", "permissions.read", "read"],
+        ["superadmin", "permissions", "permissions.write", "write"],
+        ["superadmin", "permissions", "permissions.execute", "execute"],
+    ]
+    for i in demo:
+        db.session.add(
+            Permissions(
+                user_role=i[0],
+                subject=i[1],
+                action=i[3],
+                key=i[2],
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
+            )
+        )
+        db.session.commit()
+    return "success", 200
+
+
+@before_app_requests_api.before_app_first_request
+def createDemoSettings():
+    if Settings.query.count() > 0:
+        return
+    demo = [
+        ["storage", "storage", "notification", 1500],
+        ["pcs", "pcs", "measure", "pcs"],
+        ["kg", "kg", "measure", "kg"],
+        ["liter", "liter", "measure", "liter"],
+        ["purchase", "purchase", "purchasetype", "purchase"],
+        ["investment", "investment", "purchasetype", "investment"],
+        ["expense", "expense", "purchasetype", "expense"],
+        ["8", "eight", "tax", 8],
+        ["18", "eighteen", "tax", 18],
+    ]
+    for i in demo:
+        db.session.add(
+            Settings(
+                settings_name=i[0],
+                settings_alias=i[1],
+                settings_type=i[2],
+                settings_value=i[3],
+                date_created=datetime.now(),
+                date_modified=datetime.now(),
+            )
+        )
+        db.session.commit()
+    return "success", 200
+
+
+@before_app_requests_api.before_app_first_request
 def checkProductExpireNotification():
     storage = (
         Settings.query.filter_by(settings_type="notification")
@@ -114,79 +189,4 @@ def checkProductExpireNotification():
                 )
             )
             db.session.commit()
-    return "success", 200
-
-
-@before_app_requests_api.before_app_first_request
-def createDemoSettings():
-    if Permissions.query.count() > 0:
-        return
-    demo = [
-        ["superadmin", "dashboard", "dashboard.read", "read"],
-        ["superadmin", "dashboard", "dashboard.write", "write"],
-        ["superadmin", "dashboard", "dashboard.execute", "execute"],
-        ["superadmin", "products", "products.read", "read"],
-        ["superadmin", "products", "products.write", "write"],
-        ["superadmin", "products", "products.execute", "execute"],
-        ["superadmin", "sales", "sales.read", "read"],
-        ["superadmin", "sales", "sales.write", "write"],
-        ["superadmin", "sales", "sales.execute", "execute"],
-        ["superadmin", "purchases", "purchases.read", "read"],
-        ["superadmin", "purchases", "purchases.write", "write"],
-        ["superadmin", "purchases", "purchases.execute", "execute"],
-        ["superadmin", "users", "users.read", "read"],
-        ["superadmin", "users", "users.write", "write"],
-        ["superadmin", "users", "users.execute", "execute"],
-        ["superadmin", "analytics", "analytics.read", "read"],
-        ["superadmin", "analytics", "analytics.write", "write"],
-        ["superadmin", "analytics", "analytics.execute", "execute"],
-        ["superadmin", "notifications", "notifications.read", "read"],
-        ["superadmin", "notifications", "notifications.write", "write"],
-        ["superadmin", "notifications", "notifications.execute", "execute"],
-        ["superadmin", "permissions", "permissions.read", "read"],
-        ["superadmin", "permissions", "permissions.write", "write"],
-        ["superadmin", "permissions", "permissions.execute", "execute"],
-    ]
-    for i in demo:
-        db.session.add(
-            Permissions(
-                user_role=i[0],
-                subject=i[1],
-                action=i[3],
-                key=i[2],
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
-            )
-        )
-        db.session.commit()
-    return "success", 200
-
-
-@before_app_requests_api.before_app_first_request
-def createDemoSettings():
-    if Settings.query.count() > 0:
-        return
-    demo = [
-        ["storage", "storage", "notification", 1500],
-        ["pcs", "pcs", "measure", "pcs"],
-        ["kg", "kg", "measure", "kg"],
-        ["liter", "liter", "measure", "liter"],
-        ["purchase", "purchase", "purchasetype", "purchase"],
-        ["investment", "investment", "purchasetype", "investment"],
-        ["expense", "expense", "purchasetype", "expense"],
-        ["8", "eight", "tax", 8],
-        ["18", "eighteen", "tax", 18],
-    ]
-    for i in demo:
-        db.session.add(
-            Settings(
-                settings_name=i[0],
-                settings_alias=i[1],
-                settings_type=i[2],
-                settings_value=i[3],
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
-            )
-        )
-        db.session.commit()
     return "success", 200

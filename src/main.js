@@ -8,7 +8,7 @@ import "vue-toastification/dist/index.css";
 import "./index.css";
 import "flowbite";
 import { useToast } from "vue-toastification";
-import VueSweetalert2 from "vue-sweetalert2";
+// import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "vue-select/dist/vue-select.css";
 import VueApexCharts from "vue3-apexcharts";
@@ -55,7 +55,7 @@ app
   .use(router)
   .use(Toast, options)
   .use(i18n)
-  .use(VueSweetalert2)
+  // .use(VueSweetalert2)
   // .use(Vue3Tour)
   .use(VueApexCharts)
   .use(abilitiesPlugin, ability, {

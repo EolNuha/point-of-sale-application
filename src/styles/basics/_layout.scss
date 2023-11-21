@@ -1,16 +1,16 @@
 .min-h-screen {
-	min-height: calc(100vh - 40px) !important;
+	min-height: calc(100vh - 60px) !important;
 }
-@media (min-width: 640px) { 
-  .min-h-screen {
-    min-height: calc(100vh - 45px) !important;
-  }
-}
-@media (min-width: 768px) { 
-  .min-h-screen {
-    min-height: calc(100vh - 60px) !important;
-  }
-}
+// @media (min-width: 640px) { 
+//   .min-h-screen {
+//     min-height: calc(100vh - 60px) !important;
+//   }
+// }
+// @media (min-width: 768px) { 
+//   .min-h-screen {
+//     min-height: calc(100vh - 60px) !important;
+//   }
+// }
 
 .min-h-10 {
 	min-height: 10vh !important;

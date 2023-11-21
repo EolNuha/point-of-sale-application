@@ -272,5 +272,6 @@
 	"purchase_date": "Date e blerjes",
 	"investment": "Investim",
 	"expense": "Shpenzim",
-	"purchase_type": "Lloji i blerjes"
+	"purchase_type": "Lloji i blerjes",
+	"noNotifications": "Nuk është shtuar ende asnjë njoftim..."
 }

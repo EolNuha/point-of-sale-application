@@ -275,7 +275,7 @@
         >
           <IconC iconName="NoSymbolIcon" iconClass="w-12 h-12" />
           <h2 class="text-gray-700 dark:text-gray-300 text-2xl my-4">
-            {{ `No notifications have been added yet...` }}
+            {{ $t("noNotifications") }}
           </h2>
         </div>
         <table class="w-full text-sm text-left">

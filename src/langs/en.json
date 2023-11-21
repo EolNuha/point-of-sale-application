@@ -273,5 +273,6 @@
 	"purchase_date": "Purchase Date",
 	"investment": "Investment",
 	"expense": "Expense",
-	"purchase_type": "Purchase type"
+	"purchase_type": "Purchase type",
+	"noNotifications": "No notifications have been added yet..."
 }

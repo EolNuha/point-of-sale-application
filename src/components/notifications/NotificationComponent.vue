@@ -71,6 +71,12 @@
           </div>
         </div>
       </router-link>
+      <div
+        v-if="notifications.length === 0"
+        class="p-2 text-gray-900 dark:text-gray-200 text-center"
+      >
+        {{ $t("noNotifications") }}
+      </div>
     </div>
     <router-link
       :to="{ name: 'notifications' }"

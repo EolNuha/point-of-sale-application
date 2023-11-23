@@ -188,7 +188,6 @@ class CreatePurchase(Resource):
                 tax_amount,
                 product_total_amount,
                 measure,
-                expiration_date,
                 product_stock,
             )
 

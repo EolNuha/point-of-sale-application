@@ -14,8 +14,14 @@
             />
           </div>
           <input
+            :ref="`sale-tab-${id}-input`"
             @keydown="keyEvent"
-            v-model="searchQuery"
+            @input="
+              $debounce(() => {
+                searchQuery = $event.target.value;
+              })
+            "
+            :value="searchQuery"
             type="text"
             class="default-input w-full pl-10"
             :placeholder="$t('search')"
@@ -190,6 +196,7 @@
 </template>
 
 <script>
+import ScannerDetector from "js-scanner-detection";
 import RemoveModal from "@/components/modals/RemoveModal.vue";
 import FinishSaleModal from "@/components/modals/FinishSaleModal.vue";
 export default {
@@ -215,11 +222,14 @@ export default {
       searchedProductsIndex: 0,
       lastSearchedProduct: {},
       is_regular: false,
+      isQrCode: false,
+      scannerDetector: null,
     };
   },
   watch: {
     searchQuery: {
       async handler(value) {
+        if (this.isQrCode) return;
         if (value === "") {
           this.searchedProductsIndex = 0;
           this.searchedProducts = [];
@@ -269,6 +279,11 @@ export default {
     },
   },
   created() {
+    let options = {
+      minLength: 4,
+      onComplete: this.onComplete,
+    };
+    this.scannerDetector = new ScannerDetector(options);
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete" && this.id === this.$parent.activeTab) {
         const isEmpty = this.selectedProducts?.length === 0;
@@ -290,7 +305,27 @@ export default {
       }
     });
   },
+  unmounted() {
+    this.scannerDetector.stopScanning();
+  },
   methods: {
+    async onComplete(barcode) {
+      this.isQrCode = true;
+      await this.$store
+        .dispatch("productModule/getProducts", {
+          page: 1,
+          per_page: 10,
+          search: barcode,
+          sort_column: "name",
+          sort_dir: "asc",
+        })
+        .then((res) => {
+          this.isQrCode = false;
+          const searchInput = this.$refs[`sale-tab-${this.id}-input`];
+          if (res.data.data[0]) this.onSearchedProductClick(res.data.data[0]);
+          else searchInput.select();
+        });
+    },
     keyEvent(e) {
       if (
         e.key === "ArrowDown" &&

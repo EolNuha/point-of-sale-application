@@ -1,5 +1,6 @@
 import decimal
 from collections import defaultdict
+import json
 
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
@@ -121,17 +122,22 @@ def getTaxesList(items):
     return [getTaxDict(i) for i in items]
 
 
+def decimal_default(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError("Object of type {} is not JSON serializable".format(type(obj)))
+
+
 def getGroupedByAliasTaxes(data):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
     result = defaultdict(lambda: {"tax_value": 0, "total_without_tax": 0})
+
     for item in data:
         tax_alias = item.tax_alias
-        tax_value = float(Decimal(item.tax_value or 0).quantize(TWOPLACES))
-        total_without_tax = float(
-            Decimal(item.total_without_tax or 0).quantize(TWOPLACES)
-        )
+        tax_value = Decimal(item.tax_value or 0).quantize(TWOPLACES)
+        total_without_tax = Decimal(item.total_without_tax or 0).quantize(TWOPLACES)
         result[tax_alias]["tax_value"] += tax_value
         result[tax_alias]["total_without_tax"] += total_without_tax
 
-    return result
+    return json.loads(json.dumps(result, default=decimal_default))

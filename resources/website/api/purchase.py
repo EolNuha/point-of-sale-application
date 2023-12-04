@@ -151,7 +151,8 @@ class CreatePurchase(Resource):
 
         found_with_barcode = Product.query.filter_by(barcode=product["barcode"]).first()
         if found_with_barcode and found_with_barcode.name != product["product_name"]:
-            raise IntegrityError("barcodeExistsDetailed")
+            if product_query and product_query.barcode != found_with_barcode.barcode:
+                raise IntegrityError("barcodeExistsDetailed")
 
         if product_query:
             purchase_item = self.create_purchase_item(
@@ -174,6 +175,27 @@ class CreatePurchase(Resource):
             product_query.measure = measure
             product_query.stock += product_stock
             product_query.expiration_date = expiration_date
+        elif found_with_barcode:
+            purchase_item = self.create_purchase_item(
+                purchase,
+                found_with_barcode,
+                product,
+                current_time,
+                product_purchased_price,
+                tax_amount,
+                product_total_amount,
+                measure,
+                product_stock,
+            )
+            found_with_barcode.name = product["product_name"]
+            found_with_barcode.barcode = product["barcode"]
+            found_with_barcode.tax = product["tax"]
+            found_with_barcode.purchased_price_wo_tax = product_purchased_price_wo_tax
+            found_with_barcode.purchased_price = product_purchased_price
+            found_with_barcode.selling_price = product["selling_price"]
+            found_with_barcode.measure = measure
+            found_with_barcode.stock += product_stock
+            found_with_barcode.expiration_date = expiration_date
         else:
             created_product = self.create_product(
                 product, current_time, measure, expiration_date, product_stock

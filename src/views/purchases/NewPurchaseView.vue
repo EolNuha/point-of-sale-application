@@ -25,7 +25,10 @@
             class="block w-full default-input !p-[1px]"
             :class="errors.seller_name ? 'ring-2 ring-red-500' : ''"
             v-model="seller.seller_name"
-            @search="($event, loading) => searchSellers($event, loading)"
+            @search="
+              ($event, loading) =>
+                $debounce(() => searchSellers($event, loading))
+            "
             @close="seller.search ? getSellerDetails(seller.search) : ''"
             :clearable="true"
             :filterable="false"
@@ -185,15 +188,16 @@
                   :class="
                     errors[`${index}barcode`] ? 'ring-2 ring-red-500' : ''
                   "
+                  @click="activeIdx = index"
                   v-model="product.barcode"
                   @search="
                     ($event, loading) =>
-                      searchProducts($event, loading, index, 'barcode')
+                      $debounce(() =>
+                        searchProducts($event, loading, index, 'barcode')
+                      )
                   "
                   @close="
-                    product.search
-                      ? getProductDetailsBarcode(product.search, index)
-                      : ''
+                    product.search ? saveBarcode(product.search, index) : ''
                   "
                   :clearable="true"
                   :filterable="false"
@@ -230,7 +234,9 @@
                   v-model="product.product_name"
                   @search="
                     ($event, loading) =>
-                      searchProducts($event, loading, index, 'name')
+                      $debounce(() =>
+                        searchProducts($event, loading, index, 'name')
+                      )
                   "
                   @close="
                     product.search
@@ -550,6 +556,7 @@
 </template>
 
 <script>
+import ScannerDetector from "js-scanner-detection";
 import { Field, Form } from "vee-validate";
 
 export default {
@@ -563,6 +570,8 @@ export default {
       isLoading: false,
       measures: [],
       purchase_types: [],
+      isQrCode: false,
+      activeIdx: 0,
       seller: {
         seller_name: "",
         invoice_number: "",
@@ -612,6 +621,12 @@ export default {
     },
   },
   async created() {
+    let options = {
+      minLength: 4,
+      endChar: [9, 13],
+      onComplete: this.onComplete,
+    };
+    this.scannerDetector = new ScannerDetector(options);
     this.seller.purchase_date = this.minDate;
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
@@ -631,6 +646,15 @@ export default {
     await this.getProducts("");
   },
   methods: {
+    async onComplete(barcode) {
+      this.isQrCode = true;
+      await this.$store
+        .dispatch("productModule/getProductDetailsByBarcode", barcode)
+        .then((res) => {
+          this.isQrCode = false;
+          this.updateProductDetails(res.data, this.activeIdx);
+        });
+    },
     formatDate(date) {
       return (
         String(date.getFullYear()).padStart(2, "0") +
@@ -685,7 +709,9 @@ export default {
       }
     },
     async searchProducts(search, loading, idx, type = "barcode") {
+      if (this.isQrCode) return;
       this.products[idx].search = search;
+      this.activeIdx = idx;
       loading(true);
       await this.getProducts(search, type);
       loading(false);
@@ -715,17 +741,21 @@ export default {
       }
     },
     getProductDetailsBarcode(e, idx) {
-      const barcode = e.barcode ? e.barcode : e;
+      if (this.isQrCode) return;
+      const barcode = e.barcode ? Number(e.barcode) : Number(e);
       this.products[idx].barcode = barcode;
       const productInfo = this.productsList.find((x) => x.barcode === barcode);
       if (productInfo) {
-        this.products[idx].product_name = productInfo.name;
-        this.products[idx].tax = productInfo.tax;
-        this.products[idx].selling_price = productInfo.selling_price;
-        this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;
-        this.products[idx].expiration_date = productInfo.expiration_date;
-        this.products[idx].measure = productInfo.measure;
+        this.updateProductDetails(productInfo, idx);
       }
+    },
+    updateProductDetails(productInfo, idx) {
+      this.products[idx].product_name = productInfo.name;
+      this.products[idx].tax = productInfo.tax;
+      this.products[idx].selling_price = productInfo.selling_price;
+      this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;
+      this.products[idx].expiration_date = productInfo.expiration_date;
+      this.products[idx].measure = productInfo.measure;
     },
     submit() {
       this.isLoading = true;
@@ -750,6 +780,9 @@ export default {
             }) || this.$t("somethingWrong")
           );
         });
+    },
+    saveBarcode(barcode, idx) {
+      this.products[idx].barcode = barcode;
     },
   },
 };

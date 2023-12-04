@@ -199,6 +199,8 @@
 import ScannerDetector from "js-scanner-detection";
 import RemoveModal from "@/components/modals/RemoveModal.vue";
 import FinishSaleModal from "@/components/modals/FinishSaleModal.vue";
+
+let lastInputTime = 0;
 export default {
   props: {
     id: {
@@ -311,22 +313,22 @@ export default {
   methods: {
     async onComplete(barcode) {
       this.isQrCode = true;
+      const searchInput = this.$refs[`sale-tab-${this.id}-input`];
       await this.$store
-        .dispatch("productModule/getProducts", {
-          page: 1,
-          per_page: 10,
-          search: barcode,
-          sort_column: "name",
-          sort_dir: "asc",
-        })
+        .dispatch("productModule/getProductDetailsByBarcode", barcode)
         .then((res) => {
           this.isQrCode = false;
-          const searchInput = this.$refs[`sale-tab-${this.id}-input`];
-          if (res.data.data[0]) this.onSearchedProductClick(res.data.data[0]);
+          if (res.data) this.onSearchedProductClick(res.data);
           else searchInput.select();
-        });
+        })
+        .catch(() => searchInput.select());
     },
     keyEvent(e) {
+      const currentTime = new Date().getTime();
+      const timeSinceLastInput = currentTime - lastInputTime;
+
+      const inputSpeedThreshold = 100;
+
       if (
         e.key === "ArrowDown" &&
         this.searchedProductsIndex < this.searchedProducts?.length - 1
@@ -337,17 +339,23 @@ export default {
         e.preventDefault();
         this.searchedProductsIndex--;
       }
-      if (e.key === "Enter" && !this.searchQuery) {
+      if (
+        e.key === "Enter" &&
+        !this.searchQuery &&
+        !(timeSinceLastInput < inputSpeedThreshold)
+      ) {
         const productId = this.lastSearchedProduct.id;
         this.$putOnFocus(`product-${productId}-quantity`);
       }
-      if (e.key === "Enter" && this.searchQuery) {
+      if (e.key === "Enter" && this.searchQuery && !this.isQrCode) {
         const selectedPr = this.searchedProducts[this.searchedProductsIndex];
         if (!selectedPr) e.target.select();
         else this.onSearchedProductClick(selectedPr);
       }
+      lastInputTime = currentTime;
     },
     onSearchedProductClick(product) {
+      console.log(product);
       this.lastSearchedProduct = product;
       product.quantity = 1;
       const objectIdx = this.products?.findIndex(

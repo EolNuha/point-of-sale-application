@@ -173,7 +173,7 @@
         <div
           class="min-w-[8rem] md:min-w-64 max-w-[12rem] md:max-w-md h-24 ml-3 flex items-center justify-center p-2.5 bg-neutral-200 dark:bg-neutral-800 rounded"
         >
-          <span>{{ total }}</span
+          <span class="text-ellipsis overflow-hidden">{{ total }}</span
           >€
         </div>
       </div>

@@ -70,6 +70,18 @@ export default {
         });
     });
   },
+  getSalesDetailedExcel({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/sales/detailed/excel`, { params: data })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getDailySales({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

@@ -17,6 +17,7 @@ def create_app():
     app.config["SECRET_KEY"] = "D2GECauenaubK6eA1JWwJ7Lpo7C2Ta4P"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_NAME}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["JSON_SORT_KEYS"] = False
     db.init_app(app)
     swagger.init_app(app)
     migrate.init_app(app, db)

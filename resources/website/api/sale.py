@@ -1,5 +1,5 @@
 from datetime import datetime, date, time
-from flask import request
+from flask import request, jsonify
 from website.models.settings import Settings
 from website.models.product import Product
 from website.models.sale import Sale, SaleItem, SaleTax
@@ -10,6 +10,7 @@ from website.jsonify.sale import (
     getDailySalesList,
     getDailySaleDict,
     getSaleDict,
+    getDetailedExcelList,
 )
 from website import db
 from sqlalchemy import or_, and_, asc, desc, func
@@ -455,6 +456,92 @@ class GetSalesDetailed(Resource):
         paginated_dict["pagination"]["taxes"] = taxes_total
 
         return paginated_dict
+
+
+@sale_rest.route("sales/detailed/excel")
+class GetSalesDetailedExcel(Resource):
+    @sale_rest.doc(
+        params={
+            "start_date": "",
+            "end_date": "",
+            "sort_column": "",
+            "sort_dir": "",
+            "search": "",
+            "type_filter[]": "",
+        }
+    )
+    def get(self):
+        args = parser.parse_args()
+        search = args["search"]
+        sort_column = args["sort_column"]
+        sort_dir = args["sort_dir"]
+        custom_start_date = args["start_date"]
+        custom_end_date = args["end_date"]
+        type_filter = args["type_filter[]"]
+
+        ctx = decimal.getcontext()
+        ctx.rounding = decimal.ROUND_HALF_UP
+
+        if not type_filter:
+            type_filter = [True, False]
+        type_filter = [x == "true" or x == True for x in type_filter]
+
+        if sort_column == "user":
+            sort_column = func.lower(User.first_name)
+        elif sort_column == "tax":
+            sort_column = func.lower(SaleTax.tax_value)
+        elif sort_column == "date_created":
+            sort_column = Sale.date_created
+
+        sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+
+        custom_start_date = custom_start_date.split("-")
+        custom_end_date = custom_end_date.split("-")
+
+        date_start = datetime.combine(
+            date(
+                year=int(custom_start_date[0]),
+                month=int(custom_start_date[1]),
+                day=int(custom_start_date[2]),
+            ),
+            time.min,
+        )
+        date_end = datetime.combine(
+            date(
+                year=int(custom_end_date[0]),
+                month=int(custom_end_date[1]),
+                day=int(custom_end_date[2]),
+            ),
+            time.max,
+        )
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        items = (
+            Sale.query.join(User)
+            .filter(
+                or_(
+                    Sale.id.ilike(looking_for),
+                    Sale.total_amount.ilike(looking_for),
+                    Sale.subtotal_amount.ilike(looking_for),
+                    User.first_name.ilike(looking_for),
+                    User.last_name.ilike(looking_for),
+                )
+            )
+            .filter(Sale.date_created <= date_end)
+            .filter(Sale.date_created >= date_start)
+            .filter(and_(Sale.is_regular.in_(type_filter)))
+            .order_by(sort)
+            .all()
+        )
+
+        sale_items = getDetailedExcelList(items)
+
+        return jsonify(sale_items)
 
 
 @sale_rest.route("sales/daily")

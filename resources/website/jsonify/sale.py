@@ -44,6 +44,24 @@ def getDailySaleDict(item):
     }
 
 
+def getDetailedExcelDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    data = {
+        "date": item.date_created.strftime("%d.%m.%Y"),
+        "id": item.id,
+        "type": "regular" if item.is_regular else "irregular",
+        "employee": item.user.first_name,
+        "subtotal_amount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
+        "total_amount": Decimal(item.total_amount).quantize(TWOPLACES),
+        "gross_profit_amount": Decimal(item.gross_profit_amount).quantize(TWOPLACES),
+        "net_profit_amount": Decimal(item.net_profit_amount).quantize(TWOPLACES),
+    }
+    for tax in item.sale_taxes:
+        data[f"{tax.tax_name}%"] = tax.tax_value
+    return data
+
+
 def getSaleItemDict(item):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -82,6 +100,10 @@ def getSalesList(sales):
 
 def getDailySalesList(sales):
     return [getDailySaleDict(i) for i in sales]
+
+
+def getDetailedExcelList(sales):
+    return [getDetailedExcelDict(i) for i in sales]
 
 
 def getGroupedByAliasTaxes(data):

@@ -174,7 +174,8 @@ import DateFilter from "@/components/DateFilterComponent.vue";
 import SalesTables from "@/services/mixins/SalesTables";
 import DetailedView from "./DetailedView.vue";
 import GroupedView from "./GroupedView.vue";
-import { utils, writeFileXLSX } from "xlsx";
+import { utils, writeFile } from "xlsx";
+
 export default {
   data() {
     return {
@@ -236,7 +237,7 @@ export default {
     },
     allSalesDispatch() {
       return this.detailedView
-        ? "saleModule/getAllSalesDetailed"
+        ? "saleModule/getSalesDetailedExcel"
         : "saleModule/getAllSales";
     },
   },
@@ -288,8 +289,8 @@ export default {
         .dispatch(this.allSalesDispatch, {
           page: 1,
           per_page: this.pagination.total,
-          startDate: this.startDate,
-          endDate: this.endDate,
+          start_date: this.startDate,
+          end_date: this.endDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
@@ -299,14 +300,25 @@ export default {
           this.allSales = response.data;
         });
     },
+    translateObjectKeys(obj) {
+      const translatedObject = {};
+
+      for (const key in obj) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (obj.hasOwnProperty(key)) {
+          translatedObject[this.$t(key)] = obj[key]; // Assuming obj[key] is the translation key
+        }
+      }
+
+      return translatedObject;
+    },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllSales();
-
-      const table = this.detailedView
-        ? await this.gridExcelView()
-        : await this.tableExcelView();
-
+      const workbook = utils.book_new();
+      const all_sales = this.allSales;
+      const translatedArray = all_sales.map(this.translateObjectKeys);
+      console.log(translatedArray);
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
@@ -316,8 +328,15 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      const wb = utils.table_to_book(table);
-      await writeFileXLSX(wb, `${fileName}.xlsx`);
+
+      // Convert the JSON data to a worksheet
+      const worksheet = utils.json_to_sheet(translatedArray);
+
+      // Add the worksheet to the workbook
+      utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      // Write the workbook to a file
+      await writeFile(workbook, `${fileName}.xlsx`);
       this.isExcelLoading = false;
     },
     sort(col) {

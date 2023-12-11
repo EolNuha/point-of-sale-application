@@ -11,6 +11,7 @@ from website.jsonify.sale import (
     getDailySaleDict,
     getSaleDict,
     getDetailedExcelList,
+    getGroupedExcelDict,
 )
 from website import db
 from sqlalchemy import or_, and_, asc, desc, func
@@ -325,6 +326,130 @@ class GroupedSales(Resource):
         paginated_dict["pagination"]["taxes"] = totals["taxes"]
 
         return paginated_dict
+
+
+@sale_rest.route("sales/grouped/excel")
+class GetGroupedSalesExcel(Resource):
+    @sale_rest.doc(
+        params={
+            "start_date": "",
+            "end_date": "",
+            "sort_column": "",
+            "sort_dir": "",
+            "search": "",
+            "type_filter[]": "",
+        }
+    )
+    def get(self):
+        args = parser.parse_args()
+        search = args["search"]
+        sort_column = args["sort_column"]
+        sort_dir = args["sort_dir"]
+        custom_start_date = args["start_date"]
+        custom_end_date = args["end_date"]
+        type_filter = args["type_filter[]"]
+
+        ctx = decimal.getcontext()
+        ctx.rounding = decimal.ROUND_HALF_UP
+
+        if not type_filter:
+            type_filter = [True, False]
+        type_filter = [x == "true" or x == True for x in type_filter]
+
+        sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+
+        custom_start_date = custom_start_date.split("-")
+        custom_end_date = custom_end_date.split("-")
+
+        date_start = datetime.combine(
+            date(
+                year=int(custom_start_date[0]),
+                month=int(custom_start_date[1]),
+                day=int(custom_start_date[2]),
+            ),
+            time.min,
+        )
+        date_end = datetime.combine(
+            date(
+                year=int(custom_end_date[0]),
+                month=int(custom_end_date[1]),
+                day=int(custom_end_date[2]),
+            ),
+            time.max,
+        )
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        # Add pagination
+        paginated_items = (
+            Sale.query.join(User)
+            .filter(
+                or_(
+                    Sale.id.ilike(looking_for),
+                    Sale.total_amount.ilike(looking_for),
+                    Sale.subtotal_amount.ilike(looking_for),
+                    User.first_name.ilike(looking_for),
+                    User.last_name.ilike(looking_for),
+                )
+            )
+            .filter(Sale.date_created <= date_end)
+            .filter(Sale.date_created >= date_start)
+            .filter(and_(Sale.is_regular.in_(type_filter)))
+            .order_by(sort)
+            .with_entities(
+                Sale.id.label("id"),
+                Sale.date_created.label("date_created"),
+                Sale.date_modified.label("date_modified"),
+                Sale.is_regular.label("is_regular"),
+                sa.func.sum(Sale.subtotal_amount).label("subtotal_amount"),
+                sa.func.sum(Sale.total_amount).label("total_amount"),
+                sa.func.sum(Sale.gross_profit_amount).label("gross_profit_amount"),
+                sa.func.sum(Sale.net_profit_amount).label("net_profit_amount"),
+                sa.func.sum(Sale.change_amount).label("change_amount"),
+                sa.func.sum(Sale.customer_amount).label("customer_amount"),
+            )
+            .group_by(sa.func.strftime("%Y-%m-%d", Sale.date_created))
+            .all()
+        )
+
+        # Fetch sales with their taxes using joinedload
+        sales = paginated_items
+
+        sale_data_list = []
+        for sale in sales:
+            date_split = sale.date_created.strftime("%d.%m.%Y").split(".")
+            item_date = date(
+                year=int(date_split[2]),
+                month=int(date_split[1]),
+                day=int(date_split[0]),
+            )
+            taxes = (
+                SaleTax.query.filter(
+                    SaleTax.date_created <= datetime.combine(item_date, time.max)
+                )
+                .filter(SaleTax.date_created >= datetime.combine(item_date, time.min))
+                .order_by(SaleTax.tax_name.desc())
+                .with_entities(
+                    SaleTax.id.label("id"),
+                    SaleTax.tax_name.label("tax_name"),
+                    SaleTax.tax_alias.label("tax_alias"),
+                    sa.func.sum(SaleTax.tax_value).label("tax_value"),
+                )
+                .group_by(SaleTax.tax_name)
+                .all()
+            )
+            sale_data = getGroupedExcelDict(sale)
+
+            for tax in taxes:
+                sale_data[f"{tax.tax_name}%"] = tax.tax_value
+
+            sale_data_list.append(sale_data)
+
+        return jsonify(sale_data_list)
 
 
 @sale_rest.route("sales/detailed")
@@ -656,6 +781,79 @@ class GetDailySales(Resource):
         paginated_dict["pagination"]["taxes"] = taxes_total
 
         return paginated_dict
+
+
+@sale_rest.route("sales/daily/excel")
+class GetDailySalesExcel(Resource):
+    @sale_rest.doc(
+        params={
+            "date": "",
+            "sort_column": "",
+            "sort_dir": "",
+            "search": "",
+            "type_filter[]": "",
+        }
+    )
+    def get(self):
+        args = parser.parse_args()
+        search = args["search"]
+        sort_column = args["sort_column"]
+        sort_dir = args["sort_dir"]
+        sale_date = args["date"]
+        type_filter = args["type_filter[]"]
+
+        sale_date = sale_date.split(".")
+        type_filter = [x == "true" or x == True for x in type_filter]
+        if not type_filter:
+            type_filter = [True, False]
+
+        if sort_column == "user":
+            sort_column = func.lower(User.first_name)
+        elif sort_column == "tax":
+            sort_column = func.lower(SaleTax.tax_value)
+
+        sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+
+        sale_date_start = datetime.combine(
+            date(
+                year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])
+            ),
+            time.min,
+        )
+        sale_date_end = datetime.combine(
+            date(
+                year=int(sale_date[2]), month=int(sale_date[1]), day=int(sale_date[0])
+            ),
+            time.max,
+        )
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        sale_items = (
+            Sale.query.join(User)
+            .filter(
+                or_(
+                    Sale.id.ilike(looking_for),
+                    Sale.total_amount.ilike(looking_for),
+                    Sale.subtotal_amount.ilike(looking_for),
+                    User.first_name.ilike(looking_for),
+                    User.last_name.ilike(looking_for),
+                )
+            )
+            .filter(and_(Sale.is_regular.in_(type_filter)))
+            .order_by(sort)
+            .filter(Sale.date_created <= sale_date_end)
+            .filter(Sale.date_created >= sale_date_start)
+            .all()
+        )
+
+        sale_items = getDetailedExcelList(sale_items)
+
+        return jsonify(sale_items)
 
 
 @sale_rest.route("sales/<int:saleId>")

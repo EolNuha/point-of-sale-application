@@ -171,10 +171,9 @@
 
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
-import SalesTables from "@/services/mixins/SalesTables";
+import JsonToExcel from "@/services/mixins/JsonToExcel";
 import DetailedView from "./DetailedView.vue";
 import GroupedView from "./GroupedView.vue";
-import { utils, writeFile } from "xlsx";
 
 export default {
   data() {
@@ -197,7 +196,7 @@ export default {
     DetailedView,
     GroupedView,
   },
-  mixins: [SalesTables],
+  mixins: [JsonToExcel],
   watch: {
     searchQuery: {
       async handler() {
@@ -238,7 +237,7 @@ export default {
     allSalesDispatch() {
       return this.detailedView
         ? "saleModule/getSalesDetailedExcel"
-        : "saleModule/getAllSales";
+        : "saleModule/getSalesGroupedExcel";
     },
   },
   async created() {
@@ -300,25 +299,10 @@ export default {
           this.allSales = response.data;
         });
     },
-    translateObjectKeys(obj) {
-      const translatedObject = {};
-
-      for (const key in obj) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (obj.hasOwnProperty(key)) {
-          translatedObject[this.$t(key)] = obj[key]; // Assuming obj[key] is the translation key
-        }
-      }
-
-      return translatedObject;
-    },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllSales();
-      const workbook = utils.book_new();
-      const all_sales = this.allSales;
-      const translatedArray = all_sales.map(this.translateObjectKeys);
-      console.log(translatedArray);
+
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
       if (idx !== -1) {
@@ -328,15 +312,7 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-
-      // Convert the JSON data to a worksheet
-      const worksheet = utils.json_to_sheet(translatedArray);
-
-      // Add the worksheet to the workbook
-      utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-      // Write the workbook to a file
-      await writeFile(workbook, `${fileName}.xlsx`);
+      await this.jsonToExcel(this.allSales, fileName);
       this.isExcelLoading = false;
     },
     sort(col) {

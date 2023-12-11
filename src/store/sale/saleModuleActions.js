@@ -58,10 +58,10 @@ export default {
         });
     });
   },
-  getAllSalesDetailed({ commit }, data) {
+  getSalesDetailedExcel({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales/detailed`, { params: data })
+        .get(`/api/sales/detailed/excel`, { params: data })
         .then(async (response) => {
           resolve(response);
         })
@@ -70,10 +70,22 @@ export default {
         });
     });
   },
-  getSalesDetailedExcel({ commit }, data) {
+  getSalesGroupedExcel({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales/detailed/excel`, { params: data })
+        .get(`/api/sales/grouped/excel`, { params: data })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getSalesDailyExcel({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/sales/daily/excel`, { params: data })
         .then(async (response) => {
           resolve(response);
         })

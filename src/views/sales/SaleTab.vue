@@ -355,7 +355,6 @@ export default {
       lastInputTime = currentTime;
     },
     onSearchedProductClick(product) {
-      console.log(product);
       this.lastSearchedProduct = product;
       product.quantity = 1;
       const objectIdx = this.products?.findIndex(

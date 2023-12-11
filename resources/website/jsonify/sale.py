@@ -24,6 +24,19 @@ def getSaleDict(item):
     }
 
 
+def getGroupedExcelDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    return {
+        "date": item.date_created.strftime("%d.%m.%Y"),
+        "id": item.id,
+        "subtotal_amount": Decimal(item.subtotal_amount).quantize(TWOPLACES),
+        "total_amount": Decimal(item.total_amount).quantize(TWOPLACES),
+        "gross_profit_amount": Decimal(item.gross_profit_amount).quantize(TWOPLACES),
+        "net_profit_amount": Decimal(item.net_profit_amount).quantize(TWOPLACES),
+    }
+
+
 def getDailySaleDict(item):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP

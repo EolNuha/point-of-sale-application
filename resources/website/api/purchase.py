@@ -135,16 +135,18 @@ class CreatePurchase(Resource):
         product_purchased_price_wo_tax = Decimal(product["purchased_price"])
         tax_percentage = Decimal(product["tax"]) / 100
         rabat_percentage = Decimal(product["rabat"]) / 100
-        price_before_tax = product_purchased_price_wo_tax - (
+        price_wo_rabat = product_purchased_price_wo_tax - (
             product_purchased_price_wo_tax * rabat_percentage
         )
-        tax_amount = Decimal(price_before_tax * tax_percentage).quantize(FOURPLACES)
-        product_purchased_price = Decimal(price_before_tax + tax_amount).quantize(
+        tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
+        product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(
             FOURPLACES
         )
         product_total_amount = Decimal(
             product_purchased_price * product_stock
         ).quantize(FOURPLACES)
+
+        total_tax_amount = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
 
         expiration_date = self.get_expiration_date(product)
 
@@ -163,7 +165,7 @@ class CreatePurchase(Resource):
                 product,
                 current_time,
                 product_purchased_price,
-                tax_amount,
+                total_tax_amount,
                 product_total_amount,
                 measure,
                 product_stock,
@@ -184,7 +186,7 @@ class CreatePurchase(Resource):
                 product,
                 current_time,
                 product_purchased_price,
-                tax_amount,
+                total_tax_amount,
                 product_total_amount,
                 measure,
                 product_stock,
@@ -209,7 +211,7 @@ class CreatePurchase(Resource):
                 product,
                 current_time,
                 product_purchased_price,
-                tax_amount,
+                total_tax_amount,
                 product_total_amount,
                 measure,
                 product_stock,

@@ -174,8 +174,8 @@
 
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
-import { utils, writeFileXLSX } from "xlsx";
 import PurchaseTables from "@/services/mixins/PurchaseTables";
+import JsonToExcel from "@/services/mixins/JsonToExcel";
 import DetailedView from "./DetailedView.vue";
 import GroupedView from "./GroupedView.vue";
 export default {
@@ -202,7 +202,7 @@ export default {
     DetailedView,
     GroupedView,
   },
-  mixins: [PurchaseTables],
+  mixins: [PurchaseTables, JsonToExcel],
   watch: {
     searchQuery: {
       async handler() {
@@ -248,8 +248,8 @@ export default {
     },
     allPurchasesDispatch() {
       return this.detailedView
-        ? "purchaseModule/getAllPurchasesDetailed"
-        : "purchaseModule/getAllPurchases";
+        ? "purchaseModule/getPurchasesDetailedExcel"
+        : "purchaseModule/getPurchasesGroupedExcel";
     },
   },
   methods: {
@@ -291,8 +291,6 @@ export default {
     async getAllPurchases() {
       await this.$store
         .dispatch(this.allPurchasesDispatch, {
-          page: 1,
-          per_page: this.pagination.total,
           start_date: this.startDate,
           end_date: this.endDate,
           search: this.searchQuery,
@@ -300,15 +298,12 @@ export default {
           sort_dir: this.sortDir,
         })
         .then((response) => {
-          this.allPurchases = response.data.data;
+          this.allPurchases = response.data;
         });
     },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllPurchases();
-      const table = this.detailedView
-        ? await this.gridExcelView()
-        : await this.tableExcelView();
 
       let fileName;
       const idx = this.$checkIfMonth(this.startDate, this.endDate);
@@ -319,8 +314,7 @@ export default {
       } else {
         fileName = `${this.startDate}-TO-${this.endDate}`;
       }
-      const wb = utils.table_to_book(table);
-      await writeFileXLSX(wb, `${fileName}.xlsx`);
+      await this.jsonToExcel(this.allPurchases, fileName);
       this.isExcelLoading = false;
     },
     sort(col) {

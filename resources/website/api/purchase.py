@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 from sqlalchemy.exc import IntegrityError
 from website.models.settings import Settings
 from website.models.purchase import Purchase, PurchaseItem, PurchaseTax
@@ -11,6 +11,8 @@ from website.jsonify.purchase import (
     getDailyPurchaseDict,
     getSellersList,
     getSellerDict,
+    getDailyPurchasesListExcel,
+    getPurchasesListExcel,
 )
 from website import db
 from sqlalchemy import or_, asc, desc, func, and_
@@ -413,6 +415,101 @@ class GetGroupedPurchases(Resource):
         return getPaginatedDict(items, paginated_items)
 
 
+@purchase_rest.route("purchases/grouped/excel")
+class GetGroupedPurchasesExcel(Resource):
+    @purchase_rest.doc(
+        params={
+            "start_date": "",
+            "end_date": "",
+            "sort_column": "",
+            "sort_dir": "",
+            "search": "",
+            "type_filter[]": "",
+        }
+    )
+    def get(self):
+        args = parser.parse_args()
+        search, sort_column, sort_dir = (
+            args["search"],
+            args["sort_column"],
+            args["sort_dir"],
+        )
+        type_filter = args["type_filter[]"] or ["purchase", "investment", "expense"]
+
+        custom_start_date = args["start_date"].split("-")
+        custom_end_date = args["end_date"].split("-")
+
+        date_start = datetime.combine(date(*map(int, custom_start_date)), time.min)
+        date_end = datetime.combine(date(*map(int, custom_end_date)), time.max)
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        purchase_query = (
+            Purchase.query.filter(
+                or_(
+                    Purchase.id.ilike(looking_for),
+                    Purchase.seller_name.ilike(looking_for),
+                    Purchase.seller_invoice_number.ilike(looking_for),
+                    Purchase.seller_fiscal_number.ilike(looking_for),
+                    Purchase.seller_tax_number.ilike(looking_for),
+                )
+            )
+            .filter(Purchase.date_created <= date_end)
+            .filter(Purchase.date_created >= date_start)
+        )
+
+        purchase_query = purchase_query.filter(
+            and_(Purchase.purchase_type.in_(type_filter))
+        )
+
+        query_items = (
+            purchase_query.order_by(
+                asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+            )
+            .with_entities(
+                Purchase.id.label("id"),
+                Purchase.date_created.label("date_created"),
+                Purchase.date_modified.label("date_modified"),
+                func.sum(Purchase.rabat_amount).label("rabat_amount"),
+                func.sum(Purchase.subtotal_amount).label("subtotal_amount"),
+                func.sum(Purchase.total_amount).label("total_amount"),
+            )
+            .group_by(func.strftime("%Y-%m-%d", Purchase.date_created))
+            .all()
+        )
+
+        items = getPurchasesListExcel(query_items)
+
+        for item in items:
+            item_date = datetime.strptime(item["date"], "%d.%m.%Y").date()
+
+            taxes = (
+                PurchaseTax.query.filter(
+                    PurchaseTax.date_created <= datetime.combine(item_date, time.max),
+                    PurchaseTax.date_created >= datetime.combine(item_date, time.min),
+                )
+                .order_by(PurchaseTax.tax_name.desc())
+                .with_entities(
+                    PurchaseTax.id.label("id"),
+                    PurchaseTax.tax_name.label("tax_name"),
+                    PurchaseTax.tax_alias.label("tax_alias"),
+                    func.sum(PurchaseTax.tax_value).label("tax_value"),
+                    func.sum(PurchaseTax.total_without_tax).label("total_without_tax"),
+                )
+                .group_by(PurchaseTax.tax_name)
+                .all()
+            )
+
+            for tax in taxes:
+                item[f"{tax.tax_name}%"] = tax.tax_value
+
+        return jsonify(items)
+
+
 @purchase_rest.route("purchases/detailed")
 class GetDetailedPurchases(Resource):
     @purchase_rest.doc(
@@ -471,6 +568,114 @@ class GetDetailedPurchases(Resource):
         return getPaginatedDict(
             getDailyPurchasesList(paginated_items.items), paginated_items
         )
+
+
+@purchase_rest.route("purchases/detailed/excel")
+class GetDetailedPurchasesExcel(Resource):
+    @purchase_rest.doc(
+        params={
+            "start_date": "",
+            "end_date": "",
+            "sort_column": "",
+            "sort_dir": "",
+            "search": "",
+            "type_filter[]": "",
+        }
+    )
+    def get(self):
+        args = parser.parse_args()
+        search, sort_column, sort_dir = (
+            args["search"],
+            args["sort_column"],
+            args["sort_dir"],
+        )
+        type_filter = args["type_filter[]"] or ["purchase", "investment", "expense"]
+
+        custom_start_date = args["start_date"].split("-")
+        custom_end_date = args["end_date"].split("-")
+
+        date_start = datetime.combine(date(*map(int, custom_start_date)), time.min)
+        date_end = datetime.combine(date(*map(int, custom_end_date)), time.max)
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        query_items = (
+            Purchase.query.filter(
+                or_(
+                    Purchase.id.ilike(looking_for),
+                    Purchase.seller_name.ilike(looking_for),
+                    Purchase.seller_invoice_number.ilike(looking_for),
+                    Purchase.seller_fiscal_number.ilike(looking_for),
+                    Purchase.seller_tax_number.ilike(looking_for),
+                )
+            )
+            .order_by(asc(sort_column) if sort_dir == "asc" else desc(sort_column))
+            .filter(Purchase.date_created <= date_end)
+            .filter(Purchase.date_created >= date_start)
+            .filter(and_(Purchase.purchase_type.in_(type_filter)))
+            .all()
+        )
+
+        return jsonify(getDailyPurchasesListExcel(query_items))
+
+
+@purchase_rest.route("purchases/daily/excel")
+class GetDailyPurchasesExcel(Resource):
+    @purchase_rest.doc(
+        params={
+            "date": "",
+            "sort_column": "",
+            "sort_dir": "",
+            "search": "",
+            "type_filter[]": "",
+        }
+    )
+    def get(self):
+        args = parser.parse_args()
+        search, sort_column, sort_dir = (
+            args["search"],
+            args["sort_column"],
+            args["sort_dir"],
+        )
+        type_filter = args["type_filter[]"] or ["purchase", "investment", "expense"]
+
+        purchase_date = args["date"].split(".")
+        purchase_date.reverse()
+
+        purchase_date_start = datetime.combine(date(*map(int, purchase_date)), time.min)
+        purchase_date_end = datetime.combine(date(*map(int, purchase_date)), time.max)
+
+        if sort_column == "tax":
+            sort_column = func.lower(PurchaseTax.tax_value)
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        paginated_items = (
+            Purchase.query.filter(
+                or_(
+                    Purchase.id.ilike(looking_for),
+                    Purchase.seller_name.ilike(looking_for),
+                    Purchase.seller_invoice_number.ilike(looking_for),
+                    Purchase.total_amount.ilike(looking_for),
+                    Purchase.subtotal_amount.ilike(looking_for),
+                )
+            )
+            .order_by(asc(sort_column) if sort_dir == "asc" else desc(sort_column))
+            .filter(Purchase.date_created <= purchase_date_end)
+            .filter(Purchase.date_created >= purchase_date_start)
+            .filter(and_(Purchase.purchase_type.in_(type_filter)))
+            .all()
+        )
+
+        return jsonify(getDailyPurchasesListExcel(paginated_items))
 
 
 @purchase_rest.route("purchases/daily")

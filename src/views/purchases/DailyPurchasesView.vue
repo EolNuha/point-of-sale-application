@@ -140,8 +140,7 @@
 </template>
 
 <script>
-import { utils, writeFileXLSX } from "xlsx";
-import PurchaseTables from "@/services/mixins/PurchaseTables";
+import JsonToExcel from "@/services/mixins/JsonToExcel";
 import DetailedView from "./DetailedView.vue";
 export default {
   data() {
@@ -162,7 +161,7 @@ export default {
   components: {
     DetailedView,
   },
-  mixins: [PurchaseTables],
+  mixins: [JsonToExcel],
   computed: {
     purchases() {
       return this.$store.getters["purchaseModule/getPurchasesList"];
@@ -224,28 +223,24 @@ export default {
     },
     async getAllPurchases() {
       await this.$store
-        .dispatch("purchaseModule/getAllDailyPurchases", {
-          page: 1,
-          per_page: this.pagination.total,
+        .dispatch("purchaseModule/getDailyPurchasesExcel", {
           date: this.purchase_date,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
         .then((response) => {
-          this.allPurchases = response.data.data;
+          this.allPurchases = response.data;
         });
     },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllPurchases();
 
-      let table = await this.gridExcelView();
       let fileName =
         this.purchase_date.replaceAll(".", "-") + `-${this.$t("purchases")}`;
 
-      const wb = utils.table_to_book(table);
-      await writeFileXLSX(wb, `${fileName}.xlsx`);
+      await this.jsonToExcel(this.allPurchases, fileName);
       this.isExcelLoading = false;
     },
     sort(col) {

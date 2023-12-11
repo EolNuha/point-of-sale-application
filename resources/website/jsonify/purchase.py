@@ -23,6 +23,21 @@ def getPurchaseDict(item):
     }
 
 
+def getPurchaseDictExcel(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    return {
+        "date": item.date_created.strftime("%d.%m.%Y"),
+        "id": item.id,
+        "rabat_amount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
+        "subtotal_amount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
+        "total_amount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
+        "total_tax_amount": Decimal(item.total_amount - item.subtotal_amount).quantize(
+            TWOPLACES
+        ),
+    }
+
+
 def getDailyPurchaseDict(item):
     ctx = decimal.getcontext()
     ctx.rounding = decimal.ROUND_HALF_UP
@@ -43,6 +58,28 @@ def getDailyPurchaseDict(item):
         "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
         "date_modified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),
     }
+
+
+def getDailyPurchaseDictExcel(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    data = {
+        "date": item.date_created.strftime("%d.%m.%Y"),
+        "id": item.id,
+        "seller_name": item.seller_name,
+        "seller_invoice_number": item.seller_invoice_number,
+        "seller_fiscal_number": item.seller_fiscal_number,
+        "seller_tax_number": item.seller_tax_number,
+        "rabat_amount": Decimal(item.rabat_amount or 0).quantize(TWOPLACES),
+        "subtotal_amount": Decimal(item.subtotal_amount or 0).quantize(TWOPLACES),
+        "total_amount": Decimal(item.total_amount or 0).quantize(TWOPLACES),
+        "total_tax_amount": Decimal(item.total_amount - item.subtotal_amount).quantize(
+            TWOPLACES
+        ),
+    }
+    for tax in item.purchase_taxes:
+        data[f"{tax.tax_name}%"] = tax.tax_value
+    return data
 
 
 def getPurchaseItemDict(item):
@@ -110,8 +147,16 @@ def getDailyPurchasesList(items):
     return [getDailyPurchaseDict(i) for i in items]
 
 
+def getDailyPurchasesListExcel(items):
+    return [getDailyPurchaseDictExcel(i) for i in items]
+
+
 def getPurchasesList(purchases):
     return [getPurchaseDict(i) for i in purchases]
+
+
+def getPurchasesListExcel(purchases):
+    return [getPurchaseDictExcel(i) for i in purchases]
 
 
 def getSellersList(sellers):

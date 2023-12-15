@@ -586,7 +586,7 @@ export default {
           barcode: null,
           product_name: "",
           stock: null,
-          tax: 0,
+          tax: "18",
           rabat: "0",
           purchased_price: null,
           selling_price: null,
@@ -608,16 +608,7 @@ export default {
       return this.formatDate(new Date());
     },
     taxes() {
-      const t = JSON.parse(
-        JSON.stringify(this.$store.state.settingsModule.settings_type.tax)
-      );
-      t.unshift({
-        settings_name: "0",
-        settings_alias: "zero",
-        settings_type: "tax",
-        settings_value: 0,
-      });
-      return t;
+      return this.$store.state.settingsModule.settings_type.tax;
     },
   },
   async created() {
@@ -669,7 +660,7 @@ export default {
         barcode: null,
         product_name: "",
         stock: null,
-        tax: 0,
+        tax: "18",
         rabat: "0",
         purchased_price: null,
         selling_price: null,

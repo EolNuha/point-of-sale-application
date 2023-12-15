@@ -243,7 +243,9 @@ export default {
       return this.$store.state.purchaseModule.purchase;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type.tax;
+      return this.$store.state.settingsModule.settings_type.tax?.filter(
+        (item) => item.settings_alias !== "zero"
+      );
     },
   },
   async created() {

@@ -239,7 +239,7 @@ export default {
     },
     taxes() {
       const taxes = this.$store.state.settingsModule.settings_type.tax;
-      return taxes.reverse();
+      return taxes?.filter((item) => item.settings_alias !== "zero").reverse();
     },
     purchasesDispatch() {
       return this.detailedView

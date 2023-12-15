@@ -185,7 +185,9 @@ export default {
       return this.$store.state.saleModule.sale;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type.tax;
+      return this.$store.state.settingsModule.settings_type.tax?.filter(
+        (item) => item.settings_alias !== "zero"
+      );
     },
     roundTo2() {
       return (num) => Math.round((Number(num) + Number.EPSILON) * 100) / 100;

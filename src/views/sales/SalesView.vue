@@ -219,7 +219,9 @@ export default {
       return this.$store.getters["saleModule/getSalesPagination"];
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type.tax;
+      return this.$store.state.settingsModule.settings_type.tax?.filter(
+        (item) => item.settings_alias !== "zero"
+      );
     },
     typeFilters: {
       get() {

@@ -297,6 +297,8 @@ class GroupedSales(Resource):
             totals["net_profit_amount"] += sale.net_profit_amount
 
             for tax in getTaxesList(taxes):
+                if tax["tax_alias"] == "zero":
+                    continue
                 found = next(
                     (
                         item
@@ -560,6 +562,7 @@ class GetSalesDetailed(Resource):
                 ).quantize(TWOPLACES),
             }
             for settings in Settings.query.filter_by(settings_type="tax")
+            if settings.settings_alias != "zero"
         ]
 
         paginated_dict["pagination"]["salesTotalAmount"] = Decimal(total).quantize(

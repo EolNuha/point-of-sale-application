@@ -396,7 +396,9 @@
                 <td class="py-4 px-6">-</td>
                 <td
                   class="py-2 px-6"
-                  v-for="item in pagination.taxes"
+                  v-for="item in pagination.taxes?.filter(
+                    (item) => item.tax_alias !== 'zero'
+                  )"
                   :key="item.settings_value"
                 >
                   {{ item.tax_value }} €
@@ -467,7 +469,9 @@ export default {
       return this.$route.query.saleDate;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type.tax;
+      return this.$store.state.settingsModule.settings_type.tax?.filter(
+        (item) => item.settings_alias !== "zero"
+      );
     },
     typeFilters: {
       get() {

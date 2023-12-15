@@ -302,18 +302,7 @@ class CreatePurchase(Resource):
         return created_product
 
     def get_or_create_tax_query(self, tax_value):
-        if int(tax_value) == 0:
-            tax_query = Settings(
-                settings_name="0",
-                settings_alias="zero",
-                settings_type="tax",
-                settings_value="0",
-                date_created=datetime.now(),
-                date_modified=datetime.now(),
-            )
-        else:
-            tax_query = Settings.query.filter_by(settings_value=int(tax_value)).one()
-        return tax_query
+        return Settings.query.filter_by(settings_value=int(tax_value)).one()
 
 
 @purchase_rest.route("purchases/grouped")

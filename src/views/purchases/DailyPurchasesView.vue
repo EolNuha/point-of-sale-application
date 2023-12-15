@@ -173,7 +173,9 @@ export default {
       return this.$route.query.purchase_date;
     },
     taxes() {
-      return this.$store.state.settingsModule.settings_type.tax;
+      return this.$store.state.settingsModule.settings_type.tax?.filter(
+        (item) => item.settings_alias !== "zero"
+      );
     },
   },
   watch: {

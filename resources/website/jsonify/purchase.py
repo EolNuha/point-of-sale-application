@@ -104,9 +104,7 @@ def getPurchaseItemDict(item):
                 Decimal(item.product_selling_price or 0).quantize(TWOPLACES)
             ),
         },
-        "tax_amount": str(
-            Decimal(item.tax_amount * item.product_stock).quantize(TWOPLACES)
-        ),
+        "tax_amount": str(Decimal(item.tax_amount).quantize(TWOPLACES)),
         "total_amount": str(Decimal(item.total_amount or 0).quantize(TWOPLACES)),
         "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
         "date_modified": item.date_modified.strftime("%d.%m.%Y, %H:%M:%S"),

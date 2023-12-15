@@ -5,7 +5,7 @@ class Product {
     this.barcode = false;
     this.measure = "pcs";
     this.stock = null;
-    this.tax = 0;
+    this.tax = "18";
     this.purchased_price_wo_tax = null;
     this.purchased_price = null;
     this.selling_price = null;
@@ -19,7 +19,7 @@ class Product {
     this.barcode = data.barcode || false;
     this.measure = data.measure || "pcs";
     this.stock = data.stock || null;
-    this.tax = data.tax || 0;
+    this.tax = data.tax || "18";
     this.purchased_price_wo_tax = data.purchased_price_wo_tax || null;
     this.purchased_price = data.purchased_price || null;
     this.selling_price = data.selling_price || null;

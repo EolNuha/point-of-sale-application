@@ -94,6 +94,7 @@ def createDemoSettings():
         ["purchase", "purchase", "purchasetype", "purchase"],
         ["investment", "investment", "purchasetype", "investment"],
         ["expense", "expense", "purchasetype", "expense"],
+        ["0", "zero", "tax", 0],
         ["8", "eight", "tax", 8],
         ["18", "eighteen", "tax", 18],
     ]

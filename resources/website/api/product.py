@@ -1,5 +1,5 @@
 from website.models.product import Product
-from website.jsonify.product import getProductsList
+from website.jsonify.product import getProductsList, getProductsExcelList
 from website.helpers import get_page_range
 from datetime import datetime, date, time
 from website import db
@@ -8,6 +8,7 @@ from website.api_models.product import (
     product_model,
     product_create_model,
     products_delete_model,
+    product_excel_model,
 )
 from website.api_models.pagination import pagination
 from flask_restx import Namespace, Resource, reqparse
@@ -136,6 +137,45 @@ class ProductsClass(Resource):
         Product.query.filter(Product.id.in_(products)).delete()
         db.session.commit()
         return "Success", 200
+
+
+@product_rest.route("products/excel")
+class GetProductsExcel(Resource):
+    @product_rest.doc(
+        params={
+            "search": "",
+            "sort_column": "",
+            "sort_dir": "",
+        }
+    )
+    @product_rest.marshal_with(product_excel_model)
+    def get(self):
+        args = parser.parse_args()
+        search = args["search"]
+        sort_column = args["sort_column"]
+        sort_dir = args["sort_dir"]
+
+        sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
+
+        looking_for = (
+            search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
+            if "*" in search or "_" in search
+            else f"%{search.strip()}%"
+        )
+
+        items = (
+            Product.query.filter(
+                or_(
+                    Product.name.ilike(looking_for),
+                    Product.id.ilike(looking_for),
+                    Product.barcode.ilike(looking_for),
+                )
+            )
+            .order_by(sort)
+            .all()
+        )
+
+        return getProductsExcelList(items), 200
 
 
 @product_rest.route("products/<int:productId>")

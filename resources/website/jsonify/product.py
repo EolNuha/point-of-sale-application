@@ -28,5 +28,27 @@ def getProductsDict(item):
     }
 
 
+def getProductsExcelDict(item):
+    ctx = decimal.getcontext()
+    ctx.rounding = decimal.ROUND_HALF_UP
+    return {
+        "id": item.id,
+        "name": item.name,
+        "barcode": item.barcode,
+        "measure": item.measure,
+        "stock": float(Decimal(item.stock).quantize(TWOPLACES)),
+        "tax": f"{item.tax}%",
+        "purchased_price_wo_tax": float(
+            Decimal(item.purchased_price_wo_tax).quantize(TWOPLACES)
+        ),
+        "purchased_price": float(Decimal(item.purchased_price).quantize(TWOPLACES)),
+        "selling_price": float(Decimal(item.selling_price).quantize(TWOPLACES)),
+    }
+
+
 def getProductsList(products):
     return [getProductsDict(i) for i in products]
+
+
+def getProductsExcelList(products):
+    return [getProductsExcelDict(i) for i in products]

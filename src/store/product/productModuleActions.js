@@ -20,7 +20,7 @@ export default {
   getAllProducts({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/products`, { params: data })
+        .get(`/api/products/excel`, { params: data })
         .then(async (response) => {
           resolve(response);
         })

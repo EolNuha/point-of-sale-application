@@ -431,7 +431,7 @@
 
 <script>
 import DeleteModal from "@/components/modals/DeleteModal.vue";
-import { utils, writeFileXLSX } from "xlsx";
+import JsonToExcel from "@/services/mixins/JsonToExcel";
 export default {
   components: {
     DeleteModal,
@@ -449,6 +449,7 @@ export default {
       allProducts: [],
     };
   },
+  mixins: [JsonToExcel],
   watch: {
     searchQuery: {
       async handler() {
@@ -525,14 +526,12 @@ export default {
     async getAllProducts() {
       await this.$store
         .dispatch("productModule/getAllProducts", {
-          page: 1,
-          per_page: this.pagination.total,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
         })
         .then((res) => {
-          this.allProducts = res.data.data;
+          this.allProducts = res.data;
         });
     },
     stockStatus(v) {
@@ -559,80 +558,7 @@ export default {
       this.isExcelLoading = true;
       await this.getAllProducts();
 
-      let table = document.createElement("table");
-      let thead = document.createElement("thead");
-      let tbody = document.createElement("tbody");
-
-      let headTr = document.createElement("tr");
-
-      let idTh = document.createElement("th");
-      idTh.innerHTML = "ID";
-      headTr.appendChild(idTh);
-
-      let nameTh = document.createElement("th");
-      nameTh.innerHTML = this.$t("product_name");
-      headTr.appendChild(nameTh);
-
-      let barcodeTh = document.createElement("th");
-      barcodeTh.innerHTML = this.$t("barcode");
-      headTr.appendChild(barcodeTh);
-
-      let purchased_priceTh = document.createElement("th");
-      purchased_priceTh.innerHTML = this.$t("purchased_price");
-      headTr.appendChild(purchased_priceTh);
-
-      let selling_priceTh = document.createElement("th");
-      selling_priceTh.innerHTML = this.$t("selling_price");
-      headTr.appendChild(selling_priceTh);
-
-      let stockTh = document.createElement("th");
-      stockTh.innerHTML = this.$t("stock");
-      headTr.appendChild(stockTh);
-
-      let taxTh = document.createElement("th");
-      taxTh.innerHTML = this.$t("tax");
-      headTr.appendChild(taxTh);
-
-      for await (const element of this.allProducts) {
-        let bodyTr = document.createElement("tr");
-
-        let idTd = document.createElement("td");
-        idTd.innerHTML = element.id;
-        bodyTr.appendChild(idTd);
-
-        let nameTd = document.createElement("td");
-        nameTd.innerHTML = element.name;
-        bodyTr.appendChild(nameTd);
-
-        let barcodeTd = document.createElement("td");
-        barcodeTd.innerHTML = element.barcode;
-        bodyTr.appendChild(barcodeTd);
-
-        let purchased_priceTd = document.createElement("td");
-        purchased_priceTd.innerHTML = `${element.purchased_price} €`;
-        bodyTr.appendChild(purchased_priceTd);
-
-        let selling_priceTd = document.createElement("td");
-        selling_priceTd.innerHTML = `${element.selling_price} €`;
-        bodyTr.appendChild(selling_priceTd);
-
-        let stockTd = document.createElement("td");
-        stockTd.innerHTML = element.stock;
-        bodyTr.appendChild(stockTd);
-
-        let taxTd = document.createElement("td");
-        taxTd.innerHTML = `${element.tax}%`;
-        bodyTr.appendChild(taxTd);
-
-        tbody.appendChild(bodyTr);
-      }
-
-      thead.appendChild(headTr);
-      table.appendChild(thead);
-      table.appendChild(tbody);
-
-      const wb = utils.table_to_book(table);
-      await writeFileXLSX(wb, `${this.$t("products")}.xlsx`);
+      await this.jsonToExcel(this.allProducts, this.$t("products"));
       this.isExcelLoading = false;
     },
   },

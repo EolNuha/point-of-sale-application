@@ -174,7 +174,6 @@
 
 <script>
 import DateFilter from "@/components/DateFilterComponent.vue";
-import PurchaseTables from "@/services/mixins/PurchaseTables";
 import JsonToExcel from "@/services/mixins/JsonToExcel";
 import DetailedView from "./DetailedView.vue";
 import GroupedView from "./GroupedView.vue";
@@ -202,7 +201,7 @@ export default {
     DetailedView,
     GroupedView,
   },
-  mixins: [PurchaseTables, JsonToExcel],
+  mixins: [JsonToExcel],
   watch: {
     searchQuery: {
       async handler() {

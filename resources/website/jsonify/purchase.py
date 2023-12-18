@@ -78,6 +78,8 @@ def getDailyPurchaseDictExcel(item):
         ),
     }
     for tax in item.purchase_taxes:
+        if tax.tax_alias == "zero":
+            continue
         data[f"{tax.tax_name}%"] = tax.tax_value
     return data
 

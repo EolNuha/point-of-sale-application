@@ -71,6 +71,8 @@ def getDetailedExcelDict(item):
         "net_profit_amount": Decimal(item.net_profit_amount).quantize(TWOPLACES),
     }
     for tax in item.sale_taxes:
+        if tax.tax_alias == "zero":
+            continue
         data[f"{tax.tax_name}%"] = tax.tax_value
     return data
 

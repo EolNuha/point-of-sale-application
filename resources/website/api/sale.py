@@ -447,6 +447,8 @@ class GetGroupedSalesExcel(Resource):
             sale_data = getGroupedExcelDict(sale)
 
             for tax in taxes:
+                if tax.tax_alias == "zero":
+                    continue
                 sale_data[f"{tax.tax_name}%"] = tax.tax_value
 
             sale_data_list.append(sale_data)

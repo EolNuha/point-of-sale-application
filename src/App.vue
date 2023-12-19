@@ -65,10 +65,18 @@ export default {
       }
       return true;
     });
-    this.$store.dispatch("userModule/getCurrentUser").catch(() => {
-      logoutUser();
-      this.$router.push({ name: "signin" });
-    });
+    this.$store
+      .dispatch("userModule/getCurrentUser")
+      .then(() => {
+        this.setUserData();
+        this.$store.dispatch("settingsModule/getSettingsType", {
+          settings_type: "tax",
+        });
+      })
+      .catch(() => {
+        logoutUser();
+        this.$router.push({ name: "signin" });
+      });
     const initUserTheme =
       this.getTheme("theme-preference") || this.getMediaPreference();
     const initTextTheme = this.getTheme("text-theme") || this.textTheme;
@@ -76,13 +84,7 @@ export default {
     this.setTextTheme(initTextTheme);
     const initUserLang = this.getLang();
     this.setLang(initUserLang || "sq");
-    this.setUserData();
     // this.$tours["dashboardTour"].start();
-  },
-  mounted() {
-    this.$store.dispatch("settingsModule/getSettingsType", {
-      settings_type: "tax",
-    });
   },
   methods: {
     setTheme(theme) {

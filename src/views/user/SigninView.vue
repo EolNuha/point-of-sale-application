@@ -148,6 +148,9 @@ export default {
           localStorage.setItem("token", res.data.token);
           await this.$store.dispatch("userModule/getCurrentUser");
           this.setUserData();
+          await this.$store.dispatch("settingsModule/getSettingsType", {
+            settings_type: "tax",
+          });
           this.$router.push({
             name: "dashboard",
           });

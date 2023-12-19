@@ -147,7 +147,7 @@ def checkProductExpireNotification():
             return
 
         time_diff = product.expiration_date - datetime.now()
-        message = f'Product "{product.name}" expires in {time_diff.days + 1} days"'
+        message = f'Product "{product.name}" expires in {time_diff.days + 1} days'
         notification_exists = (
             Notification.query.filter_by(notification_message=message)
             .filter(Notification.date_created <= today_end)

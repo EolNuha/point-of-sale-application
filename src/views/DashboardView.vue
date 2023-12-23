@@ -263,7 +263,7 @@
 </template>
 
 <script>
-import AreaChart from "@/components/AreaChart.vue";
+import AreaChart from "@/components/charts/AreaChart.vue";
 export default {
   components: { AreaChart },
   data() {

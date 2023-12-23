@@ -75,8 +75,8 @@
   </div>
 </template>
 <script>
-import AreaChart from "@/components/AreaChart.vue";
-import PieChart from "@/components/PieChart.vue";
+import AreaChart from "@/components/charts/AreaChart.vue";
+import PieChart from "@/components/charts/PieChart.vue";
 import RangeDateFilter from "@/components/RangeDateFilterComponent.vue";
 export default {
   props: {

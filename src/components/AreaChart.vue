@@ -75,13 +75,16 @@ export default {
   },
   methods: {
     getColors() {
-      const theme500 = getComputedStyle(document.body)
-        .getPropertyValue("--color-theme-700")
+      const theme900 = getComputedStyle(document.body)
+        .getPropertyValue("--color-theme-900")
+        .replaceAll(" ", "");
+      const theme600 = getComputedStyle(document.body)
+        .getPropertyValue("--color-theme-600")
         .replaceAll(" ", "");
       const theme300 = getComputedStyle(document.body)
         .getPropertyValue("--color-theme-300")
         .replaceAll(" ", "");
-      const theme = [theme500, theme300];
+      const theme = [theme900, theme600, theme300];
 
       const colors = [
         "#1d4ed8",

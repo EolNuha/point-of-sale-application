@@ -809,28 +809,53 @@ class GetUserStats(Resource):
         return user_analytics
 
 
-@analytics_rest.route("pandas-test")
-class PandasTest(Resource):
+@analytics_rest.route("analytics/products/all")
+class ProductsAnalyticsAll(Resource):
+    date_start = None
+    date_end = None
+
+    @analytics_rest.doc(params={"start_date": "", "end_date": ""})
     def get(self):
+        args = parser.parse_args()
+        start_date = args["start_date"]
+        end_date = args["end_date"]
+        request_dates = get_curr_prev_dates(start_date, end_date)
+        self.date_start = request_dates["date_start"]
+        self.date_end = request_dates["date_end"]
         data = self.main()
         return data
 
+    def format_data_for_chart(self, json_data):
+        categories = [item["product_name"] for item in json_data]
+        quantity_sold = [item["quantity_sold"] for item in json_data]
+        total_amount = [item["total_amount"] for item in json_data]
+        gross_profit_amount = [item["gross_profit_amount"] for item in json_data]
+
+        formatted_data = {
+            "categories": categories,
+            "series": [
+                {"name": "quantity", "data": quantity_sold},
+                {"name": "total_amount", "data": total_amount},
+                {"name": "gross_profit_amount", "data": gross_profit_amount},
+            ],
+            "total_products": len(json_data),
+        }
+
+        return formatted_data
+
     def extract_data(self):
-        # Adjust this query to join with the Sale table and extract additional data
         query = (
             db.session.query(
                 SaleItem.product_id,
                 SaleItem.product_name,
                 SaleItem.date_created.label("date_sold"),
                 db.func.sum(SaleItem.product_quantity).label("quantity_sold"),
-                db.func.sum(Sale.total_amount).label(
-                    "total_amount"
-                ),  # Assuming total_amount is in the Sale table
-                db.func.sum(Sale.gross_profit_amount).label(
-                    "gross_profit_amount"
-                ),  # Assuming gross_profit_amount is in the Sale table
+                db.func.sum(Sale.total_amount).label("total_amount"),
+                db.func.sum(Sale.gross_profit_amount).label("gross_profit_amount"),
             )
             .join(Sale, Sale.id == SaleItem.sale_id)  # Join with the Sale table
+            .filter(SaleItem.date_created >= self.date_start)  # Filter for start date
+            .filter(SaleItem.date_created <= self.date_end)  # Filter for end date
             .group_by(SaleItem.product_id)
             .order_by(SaleItem.date_created)
             .all()
@@ -870,11 +895,9 @@ class PandasTest(Resource):
         return df
 
     def main(self):
-        # Extract data from the database
         df = self.extract_data()
 
-        # Process the extracted data
         processed_df = self.process_data(df)
         df_sorted = processed_df.sort_values(by="combined_rank", ascending=True)
-        print(df_sorted.head(10))
-        return jsonify(df_sorted.head(10).to_dict(orient="records"))
+        data = df_sorted.head(10).to_dict(orient="records")
+        return jsonify(self.format_data_for_chart(data))

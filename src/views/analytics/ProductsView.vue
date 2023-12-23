@@ -2,14 +2,20 @@
   <div
     class="bg-neutral-200 dark:bg-neutral-800 min-h-screen p-4 flex flex-col gap-4"
   >
-    <AreaChartMoney
+    <BarChartVue
+      :dispatchModule="`analyticsModule/getProductsStatsAll`"
+      :chartData="$store.state.analyticsModule.allProductStats"
+      :titleContent="$t('topProducts')"
+      :textContent="$t('topProductsAllStats')"
+    />
+    <!-- <AreaChartMoney
       :dispatchModule="`analyticsModule/getProductsSoldbyAmount`"
       :chartData="$store.state.analyticsModule.productsSoldbyAmount"
       :titleContent="$t('topProducts')"
       :textContent="$t('topProductsMostRevenue')"
       :chartType="'pie'"
     >
-    </AreaChartMoney>
+    </AreaChartMoney> -->
     <div class="grid grid-cols-2 gap-4">
       <AreaChartMoney
         :dispatchModule="`analyticsModule/getProductsbyGrossProfit`"
@@ -57,9 +63,11 @@
 </template>
 <script>
 import AreaChartMoney from "@/components/analytics/AreaChartMoney.vue";
+import BarChartVue from "@/components/charts/BarChart.vue";
 export default {
   components: {
     AreaChartMoney,
+    BarChartVue,
   },
   data() {
     return {
@@ -76,7 +84,7 @@ export default {
     },
   },
   async created() {
-    this.getProducts(this.search).then(() => {
+    await this.getProducts(this.search).then(() => {
       this.selectedProduct = this.products[0];
     });
   },

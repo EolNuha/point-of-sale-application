@@ -35,4 +35,7 @@ export default {
   SET_SELLER_STATS(state, data) {
     state.sellerStats = data;
   },
+  SET_PRODUCTS_STATS(state, data) {
+    state.allProductStats = data;
+  },
 };

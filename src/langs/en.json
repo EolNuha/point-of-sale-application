@@ -13,6 +13,7 @@
 	"productUpdatedSuccessfully": "Product updated successfully!",
 	"topProducts": "Top Products",
 	"topProductsMostRevenue": "Top products that made the most revenue",
+	"topProductsAllStats": "Top products based on quantity sold, total amounts, and gross profit amounts",
 	"topProductsMostGrossProfit": "Top products that made the most gross profit",
 	"topProductsMostNetProfit": "Top products that made the most net profit",
 	"productDetails": "Product Details",

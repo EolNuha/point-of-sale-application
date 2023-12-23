@@ -120,6 +120,19 @@ export default {
         });
     });
   },
+  getProductsStatsAll({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/analytics/products/all`, { params: data })
+        .then(async (response) => {
+          commit("SET_PRODUCTS_STATS", response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   getUsersSaleRevenue({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios

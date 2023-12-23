@@ -11,4 +11,5 @@ export default {
   usersRevenue: [],
   userStats: [],
   sellerStats: [],
+  allProductStats: [],
 };

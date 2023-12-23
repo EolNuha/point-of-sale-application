@@ -55,18 +55,25 @@ export default {
             return value + "€";
           },
           title: {
-            formatter: (seriesName) => this.$t(seriesName) + ":",
+            formatter: (seriesName) => seriesName + ":",
           },
         },
       },
       legend: {
-        formatter: (value) => this.$t(value),
+        formatter: (value) => this.truncateString(value),
       },
     };
     const series = this.chartData.series[0]?.data?.map((item) => Number(item));
     this.series = series;
   },
   methods: {
+    truncateString(str, num = 25) {
+      if (str.length > num) {
+        return str.substring(0, num) + "...";
+      } else {
+        return str;
+      }
+    },
     getColors() {
       const theme500 = getComputedStyle(document.body)
         .getPropertyValue("--color-theme-700")

@@ -10,6 +10,7 @@
     >
     </AreaChartMoney>
     <AreaChartMoney
+      v-if="selectedUser.id"
       :dispatchModule="`analyticsModule/getUserStats`"
       :id="selectedUser.id"
       :chartData="$store.state.analyticsModule.userStats"
@@ -69,8 +70,8 @@ export default {
       return this.$store.getters["userModule/getUsersList"];
     },
   },
-  created() {
-    this.getUsers(this.search).then(() => {
+  async created() {
+    await this.getUsers(this.search).then(() => {
       this.selectedUser = this.users[0];
     });
   },

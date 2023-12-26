@@ -808,12 +808,13 @@ class PurchaseDetails(Resource):
 
         for item in purchase_query.purchase_items:
             product = Product.query.filter_by(id=item.product_id).first()
+            if not product:
+                product = Product.query.filter_by(barcode=item.product_barcode).first()
             if product:
                 product.stock -= Decimal(item.product_stock)
-            PurchaseItem.query.filter_by(id=item.id).delete()
-            db.session.commit()
 
-        PurchaseTax.query.filter_by(purchase_id=purchase_query.id).delete()
+        PurchaseItem.query.filter_by(purchase_id=purchaseId).delete()
+        PurchaseTax.query.filter_by(purchase_id=purchaseId).delete()
         Purchase.query.filter_by(id=purchaseId).delete()
         db.session.commit()
         return "Success", 200

@@ -850,10 +850,9 @@ class ProductsAnalyticsAll(Resource):
                 SaleItem.product_name,
                 SaleItem.date_created.label("date_sold"),
                 db.func.sum(SaleItem.product_quantity).label("quantity_sold"),
-                db.func.sum(Sale.total_amount).label("total_amount"),
-                db.func.sum(Sale.gross_profit_amount).label("gross_profit_amount"),
+                db.func.sum(SaleItem.total_amount).label("total_amount"),
+                db.func.sum(SaleItem.gross_profit_amount).label("gross_profit_amount"),
             )
-            .join(Sale, Sale.id == SaleItem.sale_id)  # Join with the Sale table
             .filter(SaleItem.date_created >= self.date_start)  # Filter for start date
             .filter(SaleItem.date_created <= self.date_end)  # Filter for end date
             .group_by(SaleItem.product_id)

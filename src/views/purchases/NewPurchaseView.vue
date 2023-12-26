@@ -165,7 +165,7 @@
         <div v-for="(product, index) in products" :key="index" class="py-5">
           <div class="flex flex-row gap-2">
             <div
-              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full"
+              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 w-full"
             >
               <div>
                 <label
@@ -340,6 +340,54 @@
               <div>
                 <label
                   class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("expiration_date") }}
+                  <button
+                    :id="`product-exp-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `product-exp-${index}-tooltip`,
+                        triggerEl: `product-exp-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`product-exp-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("expirationFieldEmptyMsg") }}
+                  </div>
+                </label>
+                <Field
+                  :name="`${index}product_expire`"
+                  :id="`${index}product_expire`"
+                  v-model="product.expiration_date"
+                  :min="minDate"
+                  type="date"
+                  :class="
+                    errors[`${index}product_expire`]
+                      ? 'ring-2 ring-red-500'
+                      : ''
+                  "
+                  class="default-input w-full"
+                  :placeholder="$t('expiration_date')"
+                  required
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}product_expire`]
+                }}</span>
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >{{ $t("purchased_price") }}
                   <button
                     :id="`purchased-${index}-tooltip-btn`"
@@ -367,26 +415,17 @@
                   </div>
                 </label>
                 <Field
-                  required
-                  rules="required"
                   type="number"
                   step="0.01"
-                  v-model="product.purchased_price"
+                  v-model="product.purchased_price_wo_tax"
                   :placeholder="`${$t('purchased_price')} (${$t(
                     'withoutTax'
                   )})`"
                   class="default-input w-full"
-                  :class="
-                    errors[`${index}purchased_price`]
-                      ? 'ring-2 ring-red-500'
-                      : ''
-                  "
                   :name="`${index}purchased_price`"
-                  :id="`${index}purchased_price`"
+                  :id="`${index}purchased_price_wo_tax`"
+                  :disabled="true"
                 />
-                <span class="text-red-700">{{
-                  errors[`${index}purchased_price`]
-                }}</span>
               </div>
               <div>
                 <label
@@ -441,6 +480,55 @@
               </div>
               <div>
                 <label
+                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >{{ $t("purchased_price") }}
+                  <button
+                    :id="`purchased-price-${index}-tooltip-btn`"
+                    class="cursor-default"
+                    type="button"
+                    @mouseover="
+                      $showTooltip({
+                        targetEl: `purchased-price-${index}-tooltip`,
+                        triggerEl: `purchased-price-${index}-tooltip-btn`,
+                        placement: `right`,
+                      })
+                    "
+                  >
+                    <IconC
+                      iconName="InformationCircleIcon"
+                      iconClass="w-4 h-4"
+                    />
+                  </button>
+                  <div
+                    :id="`purchased-price-${index}-tooltip`"
+                    role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
+                  >
+                    {{ $t("purchased_price") }} {{ $t("withTax") }}
+                  </div>
+                </label>
+                <Field
+                  required
+                  rules="required"
+                  type="number"
+                  step="0.01"
+                  v-model="product.purchased_price"
+                  :placeholder="`${$t('purchased_price')} (${$t('withTax')})`"
+                  class="default-input w-full"
+                  :class="
+                    errors[`${index}purchased_price`]
+                      ? 'ring-2 ring-red-500'
+                      : ''
+                  "
+                  :name="`${index}purchased_price`"
+                  :id="`${index}purchased_price`"
+                />
+                <span class="text-red-700">{{
+                  errors[`${index}purchased_price`]
+                }}</span>
+              </div>
+              <div>
+                <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >{{ $t("selling_price") }}</label
                 >
@@ -460,54 +548,6 @@
                 />
                 <span class="text-red-700">{{
                   errors[`${index}selling_price`]
-                }}</span>
-              </div>
-              <div>
-                <label
-                  class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("expiration_date") }}
-                  <button
-                    :id="`product-exp-${index}-tooltip-btn`"
-                    class="cursor-default"
-                    type="button"
-                    @mouseover="
-                      $showTooltip({
-                        targetEl: `product-exp-${index}-tooltip`,
-                        triggerEl: `product-exp-${index}-tooltip-btn`,
-                        placement: `right`,
-                      })
-                    "
-                  >
-                    <IconC
-                      iconName="InformationCircleIcon"
-                      iconClass="w-4 h-4"
-                    />
-                  </button>
-                  <div
-                    :id="`product-exp-${index}-tooltip`"
-                    role="tooltip"
-                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
-                  >
-                    {{ $t("expirationFieldEmptyMsg") }}
-                  </div>
-                </label>
-                <Field
-                  :name="`${index}product_expire`"
-                  :id="`${index}product_expire`"
-                  v-model="product.expiration_date"
-                  :min="minDate"
-                  type="date"
-                  :class="
-                    errors[`${index}product_expire`]
-                      ? 'ring-2 ring-red-500'
-                      : ''
-                  "
-                  class="default-input w-full"
-                  :placeholder="$t('expiration_date')"
-                  required
-                />
-                <span class="text-red-700">{{
-                  errors[`${index}product_expire`]
                 }}</span>
               </div>
             </div>
@@ -726,7 +766,7 @@ export default {
         this.products[idx].barcode = productInfo.barcode;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].selling_price = productInfo.selling_price;
-        this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;
+        this.products[idx].purchased_price = productInfo.purchased_price;
         this.products[idx].expiration_date = productInfo.expiration_date;
         this.products[idx].measure = productInfo.measure;
       }
@@ -744,7 +784,7 @@ export default {
       this.products[idx].product_name = productInfo.name;
       this.products[idx].tax = productInfo.tax;
       this.products[idx].selling_price = productInfo.selling_price;
-      this.products[idx].purchased_price = productInfo.purchased_price_wo_tax;
+      this.products[idx].purchased_price = productInfo.purchased_price;
       this.products[idx].expiration_date = productInfo.expiration_date;
       this.products[idx].measure = productInfo.measure;
     },

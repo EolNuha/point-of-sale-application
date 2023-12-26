@@ -72,7 +72,7 @@
         </div>
       </router-link>
       <div
-        v-if="notifications.length === 0"
+        v-if="notifications.length === 0 && !isLoading"
         class="p-2 text-gray-900 dark:text-gray-200 text-center"
       >
         {{ $t("noNotifications") }}
@@ -112,6 +112,9 @@ export default {
     dateSince() {
       return (date) => moment(date).fromNow();
     },
+  },
+  mounted() {
+    this.getNotifications();
   },
   methods: {
     localizedMessage(message) {

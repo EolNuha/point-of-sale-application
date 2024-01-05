@@ -132,7 +132,7 @@ class CreatePurchase(Resource):
 
     def add_product_to_purchase(self, product, purchase, current_time):
         product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-        product_purchased_price_wo_tax = Decimal(product["purchased_price"])
+        product_purchased_price_wo_tax = Decimal(product["purchased_price_wo_tax"])
         tax_percentage = Decimal(product["tax"]) / 100
         rabat_percentage = Decimal(product["rabat"]) / 100
         price_wo_rabat = product_purchased_price_wo_tax - (
@@ -269,7 +269,7 @@ class CreatePurchase(Resource):
             product_name=product["product_name"],
             product_tax=product["tax"],
             rabat=product["rabat"],
-            product_purchased_price_wo_tax=product["purchased_price"],
+            product_purchased_price_wo_tax=product["purchased_price_wo_tax"],
             product_purchased_price=product_purchased_price,
             product_selling_price=product["selling_price"],
             product_stock=product_stock,
@@ -283,13 +283,13 @@ class CreatePurchase(Resource):
     def create_product(
         self, product, current_time, measure, expiration_date, product_stock
     ):
-        product_purchased_price = Decimal(product["purchased_price"])
+        product_purchased_price = Decimal(product["purchased_price_wo_tax"])
         created_product = Product(
             name=product["product_name"],
             barcode=product["barcode"],
             stock=product_stock,
             tax=product["tax"],
-            purchased_price_wo_tax=product["purchased_price"],
+            purchased_price_wo_tax=product["purchased_price_wo_tax"],
             purchased_price=product_purchased_price,
             selling_price=product["selling_price"],
             measure=measure,

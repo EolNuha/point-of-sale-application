@@ -388,33 +388,11 @@
               <div>
                 <label
                   class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("purchased_price") }}
-                  <button
-                    :id="`purchased-${index}-tooltip-btn`"
-                    class="cursor-default"
-                    type="button"
-                    @mouseover="
-                      $showTooltip({
-                        targetEl: `purchased-${index}-tooltip`,
-                        triggerEl: `purchased-${index}-tooltip-btn`,
-                        placement: `right`,
-                      })
-                    "
-                  >
-                    <IconC
-                      iconName="InformationCircleIcon"
-                      iconClass="w-4 h-4"
-                    />
-                  </button>
-                  <div
-                    :id="`purchased-${index}-tooltip`"
-                    role="tooltip"
-                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
-                  >
-                    {{ $t("purchased_price") }} {{ $t("withoutTax") }}
-                  </div>
+                  >{{ $t("purchased_price") }} ({{ $t("withoutTax") }})
                 </label>
                 <Field
+                  required
+                  rules="required"
                   type="number"
                   step="0.01"
                   v-model="product.purchased_price_wo_tax"
@@ -422,10 +400,18 @@
                     'withoutTax'
                   )})`"
                   class="default-input w-full"
-                  :name="`${index}purchased_price`"
+                  :class="
+                    errors[`${index}purchased_price`]
+                      ? 'ring-2 ring-red-500'
+                      : ''
+                  "
+                  :name="`${index}purchased_price_wo_tax`"
                   :id="`${index}purchased_price_wo_tax`"
-                  :disabled="true"
+                  @change="updatePurchasedPriceWTax(index)"
                 />
+                <span class="text-red-700">{{
+                  errors[`${index}purchased_price`]
+                }}</span>
               </div>
               <div>
                 <label
@@ -443,6 +429,7 @@
                   :class="errors[`${index}rabat`] ? 'ring-2 ring-red-500' : ''"
                   :name="`${index}rabat`"
                   :id="`${index}rabat`"
+                  @change="updatePurchasedPriceWTax(index)"
                 />
                 <span class="text-red-700">{{ errors[`${index}rabat`] }}</span>
               </div>
@@ -468,6 +455,7 @@
                   :label="`settings_value`"
                   type="text"
                   :placeholder="$t('tax')"
+                  @option:selected="updatePurchasedPriceWTax(index)"
                 >
                   <template v-slot:option="option">
                     {{ option.settings_value }}%
@@ -481,7 +469,7 @@
               <div>
                 <label
                   class="flex items-center gap-1 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >{{ $t("purchased_price") }}
+                  >{{ $t("purchased_price") }} ({{ $t("withTax") }})
                   <button
                     :id="`purchased-price-${index}-tooltip-btn`"
                     class="cursor-default"
@@ -504,28 +492,19 @@
                     role="tooltip"
                     class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-neutral-700 dark:bg-neutral-900 rounded shadow-sm opacity-0 tooltip max-w-[250px]"
                   >
-                    {{ $t("purchased_price") }} {{ $t("withTax") }}
+                    {{ $t("purchasedPriceWTaxCalculation") }}
                   </div>
                 </label>
                 <Field
-                  required
-                  rules="required"
                   type="number"
                   step="0.01"
-                  v-model="product.purchased_price"
+                  v-model="product.purchased_price_w_tax"
                   :placeholder="`${$t('purchased_price')} (${$t('withTax')})`"
-                  class="default-input w-full"
-                  :class="
-                    errors[`${index}purchased_price`]
-                      ? 'ring-2 ring-red-500'
-                      : ''
-                  "
-                  :name="`${index}purchased_price`"
-                  :id="`${index}purchased_price`"
+                  class="default-input !bg-neutral-100 cursor-not-allowed w-full"
+                  :name="`${index}purchased_price_w_tax`"
+                  :id="`${index}purchased_price_w_tax`"
+                  :disabled="true"
                 />
-                <span class="text-red-700">{{
-                  errors[`${index}purchased_price`]
-                }}</span>
               </div>
               <div>
                 <label
@@ -628,7 +607,8 @@ export default {
           stock: null,
           tax: "18",
           rabat: "0",
-          purchased_price: null,
+          purchased_price_wo_tax: null,
+          purchased_price_w_tax: null,
           selling_price: null,
           measure: "pcs",
           expiration_date: "",
@@ -702,7 +682,8 @@ export default {
         stock: null,
         tax: "18",
         rabat: "0",
-        purchased_price: null,
+        purchased_price_wo_tax: null,
+        purchased_price_w_tax: null,
         selling_price: null,
         measure: "pcs",
         expiration_date: "",
@@ -766,7 +747,8 @@ export default {
         this.products[idx].barcode = productInfo.barcode;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].selling_price = productInfo.selling_price;
-        this.products[idx].purchased_price = productInfo.purchased_price;
+        this.products[idx].purchased_price_wo_tax =
+          productInfo.purchased_price_wo_tax;
         this.products[idx].expiration_date = productInfo.expiration_date;
         this.products[idx].measure = productInfo.measure;
       }
@@ -784,7 +766,8 @@ export default {
       this.products[idx].product_name = productInfo.name;
       this.products[idx].tax = productInfo.tax;
       this.products[idx].selling_price = productInfo.selling_price;
-      this.products[idx].purchased_price = productInfo.purchased_price;
+      this.products[idx].purchased_price_wo_tax =
+        productInfo.purchased_price_wo_tax;
       this.products[idx].expiration_date = productInfo.expiration_date;
       this.products[idx].measure = productInfo.measure;
     },
@@ -814,6 +797,19 @@ export default {
     },
     saveBarcode(barcode, idx) {
       this.products[idx].barcode = barcode;
+    },
+    updatePurchasedPriceWTax(idx) {
+      const { purchased_price_wo_tax, tax, rabat } = this.products[idx];
+
+      const tax_percentage = Number(tax) / 100;
+      const rabat_percentage = Number(rabat) / 100;
+      const price_wo_rabat =
+        purchased_price_wo_tax - purchased_price_wo_tax * rabat_percentage;
+      const tax_amount = Number(price_wo_rabat * tax_percentage);
+      const purchased_price_w_tax = Number(price_wo_rabat + tax_amount);
+
+      this.products[idx].purchased_price_w_tax =
+        purchased_price_w_tax.toFixed(4);
     },
   },
 };

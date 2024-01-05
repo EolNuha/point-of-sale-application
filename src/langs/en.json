@@ -274,6 +274,7 @@
 	"purchaseWithoutTax": "Purchase without tax",
 	"total_tax_amount": "Total Tax",
 	"withTax": "with tax",
+	"purchasedPriceWTaxCalculation": "Calculated based on price without tax, rabat, and tax value.",
 	"measure": "Measure",
 	"pcs": "Pcs",
 	"kg": "Kg",

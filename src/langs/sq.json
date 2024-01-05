@@ -273,6 +273,7 @@
 	"purchaseWithoutTax": "Blerje pa TVSH",
 	"total_tax_amount": "TVSH Total",
 	"withTax": "me TVSH",
+	"purchasedPriceWTaxCalculation": "Llogaritur në bazë të çmimit pa TVSH, rabatit dhe TVSH-së.",
 	"measure": "Nj. matëse",
 	"pcs": "Copë",
 	"kg": "Kg",

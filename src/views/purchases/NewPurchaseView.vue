@@ -197,7 +197,9 @@
                       )
                   "
                   @close="
-                    product.search ? saveBarcode(product.search, index) : ''
+                    product.search
+                      ? getProductDetailsBarcode(product.search, index)
+                      : ''
                   "
                   :clearable="true"
                   :filterable="false"
@@ -759,6 +761,7 @@ export default {
       this.products[idx].barcode = barcode;
       const productInfo = this.productsList.find((x) => x.barcode === barcode);
       if (productInfo) {
+        this.products[idx].barcode = productInfo.barcode;
         this.updateProductDetails(productInfo, idx);
       }
     },

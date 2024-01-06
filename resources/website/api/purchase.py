@@ -229,7 +229,7 @@ class CreatePurchase(Resource):
                 tax_alias=tax_query.settings_alias,
                 tax_value=tax_value,
                 total_without_tax=total_wo_tax_value,
-                date_created=current_time,
+                date_created=purchase.date_created,
                 date_modified=current_time,
             )
         )
@@ -276,7 +276,7 @@ class CreatePurchase(Resource):
             product_measure=measure,
             tax_amount=tax_amount,
             total_amount=product_total_amount,
-            date_created=current_time,
+            date_created=purchase.date_created,
             date_modified=current_time,
         )
 

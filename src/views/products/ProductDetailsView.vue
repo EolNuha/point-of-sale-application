@@ -10,6 +10,7 @@
       v-slot="{ errors }"
       class="p-5"
       @submit="isAdd ? createProduct() : updateProduct()"
+      @keydown.enter.prevent
     >
       <div class="mb-6 flex gap-4">
         <div class="basis-1/2">

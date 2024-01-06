@@ -5,6 +5,16 @@
         class="bg-white dark:bg-neutral-900 p-5 rounded relative"
         id="dashboard-step-0"
       >
+        <div
+          v-if="
+            !$can('read', 'products') &&
+            !$can('write', 'products') &&
+            !$can('read', 'analytics')
+          "
+          class="min-h-[50px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-neutral-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        >
+          <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
+        </div>
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
           {{ $t("products") }}
         </h3>
@@ -32,6 +42,16 @@
         />
       </div>
       <div class="bg-white dark:bg-neutral-900 p-5 rounded relative">
+        <div
+          v-if="
+            !$can('read', 'sales') &&
+            !$can('write', 'sales') &&
+            !$can('read', 'analytics')
+          "
+          class="min-h-[50px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-neutral-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        >
+          <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
+        </div>
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
           {{ $t("sales") }}
         </h3>
@@ -62,6 +82,16 @@
         class="bg-white dark:bg-neutral-900 p-5 rounded relative"
         id="dashboard-step-1"
       >
+        <div
+          v-if="
+            !$can('read', 'purchases') &&
+            !$can('write', 'purchases') &&
+            !$can('read', 'analytics')
+          "
+          class="min-h-[50px] absolute top-0 left-0 right-0 bottom-0 w-full z-50 overflow-hidden flex flex-col items-center justify-center opacity-90 bg-neutral-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200"
+        >
+          <IconC iconName="LockClosedIcon" iconClass="w-16 h-16" />
+        </div>
         <h3 class="text-gray-900 dark:text-white text-2xl mb-2">
           {{ $t("purchases") }}
         </h3>

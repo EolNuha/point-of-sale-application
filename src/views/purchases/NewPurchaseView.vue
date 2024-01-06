@@ -1,6 +1,6 @@
 <template>
   <div class="main-div">
-    <Form v-slot="{ errors }" @submit="submit()">
+    <Form v-slot="{ errors }" @submit="submit()" @keydown.enter.prevent>
       <h2
         class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
       >
@@ -69,8 +69,6 @@
             >{{ $t("tax_number") }}</label
           >
           <Field
-            required
-            rules="required"
             type="number"
             step="1"
             v-model="seller.tax_number"

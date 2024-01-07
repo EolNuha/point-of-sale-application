@@ -392,7 +392,7 @@
                 </label>
                 <Field
                   required
-                  rules="required"
+                  rules="requiredZeroIncluded"
                   type="number"
                   step="0.01"
                   v-model="product.purchased_price_wo_tax"
@@ -401,7 +401,7 @@
                   )})`"
                   class="default-input w-full"
                   :class="
-                    errors[`${index}purchased_price`]
+                    errors[`${index}purchased_price_wo_tax`]
                       ? 'ring-2 ring-red-500'
                       : ''
                   "
@@ -410,7 +410,7 @@
                   @change="updatePurchasedPriceWTax(index)"
                 />
                 <span class="text-red-700">{{
-                  errors[`${index}purchased_price`]
+                  errors[`${index}purchased_price_wo_tax`]
                 }}</span>
               </div>
               <div>
@@ -420,7 +420,7 @@
                 </label>
                 <Field
                   required
-                  rules="required|minMax:0,100"
+                  rules="requiredZeroIncluded|minMax:0,100"
                   type="number"
                   step="0.01"
                   v-model="product.rabat"
@@ -513,7 +513,7 @@
                 >
                 <Field
                   required
-                  rules="required"
+                  rules="requiredZeroIncluded"
                   type="number"
                   step="0.01"
                   v-model="product.selling_price"

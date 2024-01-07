@@ -51,16 +51,19 @@ export default {
       }
       return true;
     });
-
-    defineRule("minMax", (value, [min, max]) => {
-      if (!value || !value.length) {
+    defineRule("requiredZeroIncluded", (value) => {
+      if (value === 0 || !!value) {
         return true;
       }
+      return this.$t("isRequired");
+    });
+
+    defineRule("minMax", (value, [min, max]) => {
       const numericValue = Number(value);
-      if (numericValue < min) {
+      if (numericValue < Number(min)) {
         return this.$t("minValue", { min });
       }
-      if (numericValue > max) {
+      if (numericValue > Number(max)) {
         return this.$t("maxValue", { max });
       }
       return true;

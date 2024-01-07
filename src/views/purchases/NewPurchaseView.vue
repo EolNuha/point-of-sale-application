@@ -751,6 +751,7 @@ export default {
           productInfo.purchased_price_wo_tax;
         this.products[idx].expiration_date = productInfo.expiration_date;
         this.products[idx].measure = productInfo.measure;
+        this.updatePurchasedPriceWTax(idx);
       }
     },
     getProductDetailsBarcode(e, idx) {
@@ -761,6 +762,7 @@ export default {
       if (productInfo) {
         this.products[idx].barcode = productInfo.barcode;
         this.updateProductDetails(productInfo, idx);
+        this.updatePurchasedPriceWTax(idx);
       }
     },
     updateProductDetails(productInfo, idx) {

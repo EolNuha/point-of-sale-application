@@ -19,7 +19,7 @@ parser = reqparse.RequestParser()
 parser.add_argument("page", type=int, default=1)
 parser.add_argument("per_page", type=int, default=20)
 parser.add_argument("search", type=str, default="")
-parser.add_argument("sort_column", type=str, default="date_created")
+parser.add_argument("sort_column", type=str, default="id")
 parser.add_argument("sort_dir", type=str, default="desc")
 
 

@@ -712,10 +712,12 @@ export default {
     getSellerDetails(e) {
       const seller_name = e.seller_name ? e.seller_name : e;
       this.seller.seller_name = seller_name;
+      this.seller.search = null;
       const sellerInfo = this.sellers.find(
         (x) => x.seller_name.toLowerCase() === seller_name.toLowerCase()
       );
       if (sellerInfo) {
+        this.seller.seller_name = sellerInfo?.seller_name;
         this.seller.fiscal_number = sellerInfo?.seller_fiscal_number;
         this.seller.tax_number = sellerInfo?.seller_tax_number;
       }
@@ -740,10 +742,12 @@ export default {
     getProductDetails(e, idx) {
       const product_name = e.name ? e.name : e;
       this.products[idx].product_name = product_name;
+      this.products[idx].search = null;
       const productInfo = this.productsList.find(
         (x) => x.name?.toLowerCase() === product_name.toLowerCase()
       );
       if (productInfo) {
+        this.products[idx].product_name = productInfo.name;
         this.products[idx].barcode = productInfo.barcode;
         this.products[idx].tax = productInfo.tax;
         this.products[idx].selling_price = productInfo.selling_price;
@@ -758,6 +762,7 @@ export default {
       if (this.isQrCode) return;
       const barcode = e.barcode ? Number(e.barcode) : Number(e);
       this.products[idx].barcode = barcode;
+      this.products[idx].search = null;
       const productInfo = this.productsList.find((x) => x.barcode === barcode);
       if (productInfo) {
         this.products[idx].barcode = productInfo.barcode;

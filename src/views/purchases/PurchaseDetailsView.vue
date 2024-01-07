@@ -81,7 +81,7 @@
                 <tr>
                   <td class="py-2">{{ $t("tax_number") }}</td>
                   <td class="text-right py-2">
-                    {{ purchase.seller_tax_number }}
+                    {{ purchase.seller_tax_number || "-" }}
                   </td>
                 </tr>
               </tbody>

@@ -24,6 +24,9 @@ module.exports = {
         ...colors,
       },
     },
+    letterSpacing: {
+      jsPDF: "0.5px",
+    },
   },
   plugins: [require("flowbite/plugin")],
 };

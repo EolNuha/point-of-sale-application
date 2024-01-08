@@ -64,7 +64,9 @@
               <tbody>
                 <tr>
                   <td class="py-2">{{ $t("seller_name") }}</td>
-                  <td class="text-right py-2">{{ purchase.seller_name }}</td>
+                  <td class="text-right py-2 tracking-jsPDF">
+                    {{ purchase.seller_name }}
+                  </td>
                 </tr>
                 <tr>
                   <td class="py-2">{{ $t("invoice_number") }}</td>
@@ -95,29 +97,39 @@
             <thead
               class="text-xs text-gray-700 uppercase bg-neutral-100 dark:bg-neutral-700 dark:text-gray-400"
             >
-              <tr>
-                <th scope="col" class="py-3 px-3">{{ $t("product_name") }}</th>
-                <th scope="col" class="py-3 px-3">{{ $t("barcode") }}</th>
-                <th scope="col" class="py-3 px-3">{{ $t("measure") }}</th>
-                <th scope="col" class="py-3 px-3">{{ $t("stock") }}</th>
-                <th scope="col" class="py-3 px-3">
+              <tr class="tracking-jsPDF">
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
+                  {{ $t("product_name") }}
+                </th>
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
+                  {{ $t("barcode") }}
+                </th>
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
+                  {{ $t("measure") }}
+                </th>
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
+                  {{ $t("stock") }}
+                </th>
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
                   {{ $t("purchased_price_wo_tax") }}
                 </th>
-                <th scope="col" class="py-3 px-3">
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
                   {{ $t("purchased_price") }}
                 </th>
                 <!-- <th scope="col" class="py-3 px-3">
                     {{ $t("selling_price") }}
                   </th> -->
-                <th scope="col" class="py-3 px-3">{{ $t("tax") }}</th>
-                <th scope="col" class="py-3 px-3 text-right">
+                <th scope="col" class="py-3 px-3 whitespace-nowrap">
+                  {{ $t("tax") }}
+                </th>
+                <th scope="col" class="py-3 px-3 text-right whitespace-nowrap">
                   {{ $t("total") }}
                 </th>
               </tr>
             </thead>
             <tbody>
               <template v-for="item in purchase.purchase_items" :key="item.id">
-                <tr class="bg-white dark:bg-neutral-900">
+                <tr class="bg-white dark:bg-neutral-900 tracking-jsPDF">
                   <td class="py-3 px-3">
                     {{ item.product.name }}
                   </td>
@@ -128,7 +140,7 @@
                     </div>
                   </td>
                   <td class="py-3 px-3">
-                    <div>x {{ item.product.stock }}</div>
+                    <div>{{ item.product.stock }}</div>
                   </td>
                   <td class="py-3 px-3">
                     <div>{{ item.product.purchased_price_wo_tax }} €</div>
@@ -153,9 +165,9 @@
         <div class="flex flex-row justify-end p-5">
           <div class="basis-3/4 md:basis-1/2 lg:basis-1/3">
             <table class="text-gray-700 dark:text-gray-300 w-full">
-              <tbody>
+              <tbody class="tracking-jsPDF">
                 <template v-for="item in taxes" :key="item.id">
-                  <tr>
+                  <tr class="tracking-jsPDF">
                     <td class="py-2 uppercase">
                       {{ $t("tax") }} ({{ item.settings_value }}%)
                     </td>
@@ -169,7 +181,7 @@
                       €
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="tracking-jsPDF">
                     <td class="py-2 uppercase">
                       {{ $t("subTotal") }} ({{ item.settings_value }}%)
                     </td>
@@ -267,13 +279,14 @@ export default {
         this.removeClass(child, className);
       }
     },
-    async getPrintPdf() {
+    async createPdf(elementHTML, options) {
       let doc = new jsPDF();
-      let elementHTML = document.getElementById("content");
       let copiedElement = elementHTML.cloneNode(true);
       this.removeClass(copiedElement, [
         "dark:bg-neutral-700",
+        "dark:bg-neutral-800",
         "dark:bg-neutral-900",
+        "dark:text-gray-200",
         "dark:text-gray-300",
         "dark:text-gray-400",
         "dark:border-gray-600",
@@ -284,31 +297,35 @@ export default {
         x: 0,
         y: 0,
         width: 190,
-        windowWidth: 800,
+        windowWidth: 1000, // Spread operator to use the provided options
+        // eslint-disable-next-line no-unused-vars
+        callback: options.callback || function (doc) {}, // Default callback if not provided
       });
+      return doc;
+    },
+
+    async getPdf() {
+      let elementHTML = document.getElementById("content");
+      return this.createPdf(elementHTML, {});
+    },
+
+    async getPrintPdf() {
+      const doc = await this.getPdf();
       let iframe = document.getElementById("iframe");
       iframe.src = doc.output("datauristring");
       this.$openModal("printModal");
     },
+
     async download() {
       this.isPdfLoading = true;
       const purchaseTxt = this.$t("purchase").toLowerCase();
       const purchaseId = this.$route.params.purchaseId;
-      let doc = new jsPDF();
-
       let elementHTML = document.querySelector("#content");
 
-      await doc.html(elementHTML, {
+      await this.createPdf(elementHTML, {
         callback: function (doc) {
-          // Save the PDF
           doc.save(`${purchaseTxt}-${purchaseId}.pdf`, { extensions: ["pdf"] });
         },
-        margin: [10, 10, 10, 10],
-        autoPaging: "text",
-        x: 0,
-        y: 0,
-        width: 190,
-        windowWidth: 800,
       });
       this.isPdfLoading = false;
     },

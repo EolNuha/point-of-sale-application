@@ -60,7 +60,7 @@
         </th>
         <th
           scope="col"
-          class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
+          class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 whitespace-nowrap"
           @click="sort('seller_invoice_number')"
         >
           <div class="flex justify-between items-center">
@@ -78,20 +78,20 @@
         <template v-for="item in taxes" :key="item.settings_value">
           <th
             scope="col"
-            class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+            class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed whitespace-nowrap"
           >
             {{ item.settings_name }}%
           </th>
           <th
             scope="col"
-            class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed"
+            class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 cursor-not-allowed whitespace-nowrap"
           >
             {{ $t("subTotal") }} {{ item.settings_name }}%
           </th>
         </template>
         <th
           scope="col"
-          class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600"
+          class="py-3 px-6 hover:bg-neutral-200/[.6] hover:dark:bg-neutral-600 whitespace-nowrap"
           @click="sort('total_amount')"
         >
           <div class="flex justify-between items-center">
@@ -119,9 +119,11 @@
           </td>
           <td class="py-2 px-6">{{ purchase.id }}</td>
           <td class="py-2 px-6">{{ purchase.seller_name }}</td>
-          <td class="py-2 px-6">{{ purchase.seller_invoice_number }}</td>
+          <td class="py-2 px-6">
+            {{ purchase.seller_invoice_number }}
+          </td>
           <template v-for="item in taxes" :key="item.settings_value">
-            <td class="py-2 px-6">
+            <td class="py-2 px-6 whitespace-nowrap">
               {{
                 purchase.taxes
                   ? purchase.taxes[item.settings_alias]?.tax_value || "0.00"
@@ -139,7 +141,9 @@
               €
             </td>
           </template>
-          <td class="py-2 px-6">{{ purchase.total_amount }} €</td>
+          <td class="py-2 px-6 whitespace-nowrap">
+            {{ purchase.total_amount }} €
+          </td>
           <td class="py-2 px-6 w-1.5" v-if="$can('read', 'purchases')">
             <button
               class="p-2.5 rounded-full hover:bg-neutral-300/50 dark:hover:bg-neutral-700"

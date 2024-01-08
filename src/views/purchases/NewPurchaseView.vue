@@ -162,6 +162,15 @@
       <div class="divide-y divide-gray-400">
         <div v-for="(product, index) in products" :key="index" class="py-5">
           <div class="flex flex-row gap-2">
+            <button
+              v-show="products?.length != 1"
+              type="button"
+              class="py-1.5 px-1 rounded text-4xl bg-neutral-300/50 dark:bg-neutral-900/50 text-gray-700 dark:text-white"
+              @click="removeProduct(index)"
+              disabled
+            >
+              {{ index + 1 }}
+            </button>
             <div
               class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 w-full"
             >

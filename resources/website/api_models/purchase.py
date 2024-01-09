@@ -81,6 +81,7 @@ detailed_purchases = swagger.model(
         "seller_name": fields.String,
         "purchase_items": fields.List(fields.Nested(purchases_item)),
         "taxes": fields.Raw,
+        "purchase_type": fields.String,
     },
 )
 

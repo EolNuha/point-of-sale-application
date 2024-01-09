@@ -53,6 +53,7 @@ def getDailyPurchaseDict(item):
         "seller_invoice_number": item.seller_invoice_number,
         "seller_fiscal_number": item.seller_fiscal_number,
         "seller_tax_number": item.seller_tax_number,
+        "purchase_type": item.purchase_type,
         "purchase_items": getPurchaseItemsList(item.purchase_items),
         "taxes": getGroupedByAliasTaxes(item.purchase_taxes),
         "date_created": item.date_created.strftime("%d.%m.%Y, %H:%M:%S"),
@@ -96,15 +97,14 @@ def getPurchaseItemDict(item):
             "stock": str(Decimal(item.product_stock).quantize(TWOPLACES)),
             "tax": item.product_tax,
             "purchased_price_wo_tax": str(
-                Decimal(item.product_purchased_price_wo_tax or 0).quantize(TWOPLACES)
+                Decimal(item.product_purchased_price_wo_tax or 0)
             ),
-            "purchased_price": str(
-                Decimal(item.product_purchased_price or 0).quantize(TWOPLACES)
-            ),
+            "purchased_price": str(Decimal(item.product_purchased_price or 0)),
             "measure": item.product_measure,
             "selling_price": str(
                 Decimal(item.product_selling_price or 0).quantize(TWOPLACES)
             ),
+            "rabat": str(item.rabat),
         },
         "tax_amount": str(Decimal(item.tax_amount).quantize(TWOPLACES)),
         "total_amount": str(Decimal(item.total_amount or 0).quantize(TWOPLACES)),

@@ -58,6 +58,17 @@ input[type="date"] {
   @apply dark:text-gray-400 #{!important};
 }
 
+.vs--disabled {
+  .vs__open-indicator,
+  .vs__dropdown-toggle,
+  .vs__clear,
+  .vs__selected,
+  .vs__search {
+	@apply bg-neutral-50 #{!important};
+  @apply dark:bg-neutral-700 #{!important};
+  }
+}
+
 .vs--multiple .vs__selected {
   @apply dark:bg-neutral-600;
   @apply dark:text-gray-300;

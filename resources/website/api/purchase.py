@@ -819,89 +819,336 @@ class PurchaseDetails(Resource):
         db.session.commit()
         return "Success", 200
 
-    @purchase_rest.expect(purchase_edit)
+    @purchase_rest.expect(purchase_create)
     def put(self, purchaseId):
         ctx = decimal.getcontext()
         ctx.rounding = decimal.ROUND_HALF_UP
+        current_user = currentUser(request)
 
-        deleted_items = purchase_rest.payload["deletedItems"]
-        purchase_items = purchase_rest.payload["purchase_items"]
+        purchase_payload = purchase_rest.payload
 
-        purchase_query = Purchase.query.filter_by(id=purchaseId).first_or_404()
-        subtotal, purchase_taxes = [], []
-        taxes = Settings.query.filter_by(settings_type="tax").all()
+        products = purchase_payload["products"]
+        seller = purchase_payload["seller"]
 
-        for item in deleted_items:
-            product = Product.query.filter_by(
-                barcode=item["product"]["barcode"]
-            ).first()
-            if product:
-                product.stock -= Decimal(item["product"]["stock"])
-            PurchaseItem.query.filter_by(id=item["id"]).delete()
-            PurchaseTax.query.filter_by(purchase_id=purchaseId).filter_by(
-                tax_name=item["product"]["tax"]
-            ).delete()
-            db.session.commit()
-
-        for item in purchase_items:
-            item_stock = Decimal(item["product"]["stock"]).quantize(FOURPLACES)
-            item_purchased_price = Decimal(item["product"]["purchased_price"]).quantize(
-                FOURPLACES
-            )
-            item_tax = Decimal(item["product"]["tax"]).quantize(FOURPLACES)
-            tax_amount = Decimal(
-                Decimal(item_tax / 100).quantize(FOURPLACES) * item_purchased_price
-            ).quantize(FOURPLACES)
-            item_purchased_price_wo_tax = item_purchased_price - tax_amount
-
-            subtotal.append(
-                Decimal(item_purchased_price_wo_tax * item_stock).quantize(FOURPLACES)
-            )
-
-            for tax in taxes:
-                if item["product"]["tax"] == int(tax.settings_value):
-                    key_v = tax.settings_name + "+" + tax.settings_alias
-                    purchase_taxes.append({key_v: tax_amount * item_stock})
-
-            purchase_item = PurchaseItem.query.filter_by(id=item["id"]).first()
-
-            purchase_item.product_stock = item_stock
-            purchase_item.product_purchased_price_wo_tax = item_purchased_price_wo_tax
-            purchase_item.product_purchased_price = item_purchased_price
-            purchase_item.tax_amount = tax_amount
-            purchase_item.total_amount = Decimal(
-                Decimal(item_purchased_price).quantize(FOURPLACES) * Decimal(item_stock)
-            ).quantize(FOURPLACES)
-
-            product = Product.query.filter_by(
-                barcode=item["product"]["barcode"]
-            ).first()
-            if product:
-                product.stock += item_stock - purchase_item.product_stock
-                product.purchased_price_wo_tax = item_purchased_price_wo_tax
-                product.purchased_price = item_purchased_price
-
-            db.session.commit()
-
-        purchase_query.subtotal_amount = sum(subtotal)
-        purchase_taxes = sumListOfDicts(purchase_taxes)
-
-        for key, value in purchase_taxes.items():
-            split_key = key.split("+")
-            purchase_tax = PurchaseTax.query.filter(
-                PurchaseTax.purchase_id.like(purchaseId),
-                PurchaseTax.tax_name.ilike(split_key[0]),
-            ).first()
-            purchase_tax.tax_value = value
-            purchase_tax.date_modified = datetime.now()
-            db.session.commit()
-
-        total_sum = (
-            PurchaseItem.query.filter_by(purchase_id=purchaseId)
-            .with_entities(func.sum(PurchaseItem.total_amount).label("total"))
-            .first()
-            .total
+        current_time = datetime.now()
+        purchase_date_split = seller["purchase_date"].split("-")
+        purchase_date = datetime.combine(
+            date(
+                year=int(purchase_date_split[0]),
+                month=int(purchase_date_split[1]),
+                day=int(purchase_date_split[2]),
+            ),
+            datetime.now().time(),
         )
-        purchase_query.total_amount = total_sum
+
+        purchase = Purchase.query.filter_by(id=purchaseId).first_or_404()
+
+        purchase.seller_name = seller["seller_name"]
+        purchase.seller_invoice_number = seller["invoice_number"]
+        purchase.seller_fiscal_number = seller["fiscal_number"]
+        purchase.seller_tax_number = seller["tax_number"]
+        purchase.purchase_type = seller["purchase_type"]
+        purchase.user = current_user
+        purchase.date_created = purchase_date
+        purchase.date_modified = current_time
+
+        db.session.flush()
+
+        products_dict = {product["barcode"]: product for product in products}
+        # product_barcodes = [int(product["barcode"]) for product in products]
+
+        for item in purchase.purchase_items:
+            if item.product_barcode in products_dict:
+                # Call update function
+                self.update_product_to_purchase(
+                    purchase_item=item,
+                    product=products_dict[item.product_barcode],
+                    current_time=current_time,
+                )
+            else:
+                # Call delete function
+                self.delete_product_from_purchase(
+                    barcode=item.product_barcode, purchase_item=item
+                )
+
+        purchase_items_barcodes = [
+            purchase_item.product_barcode for purchase_item in purchase.purchase_items
+        ]
+
+        for product in products:
+            if int(product["barcode"]) not in purchase_items_barcodes:
+                # Call create function
+                try:
+                    self.add_product_to_purchase(product, purchase, current_time)
+                except IntegrityError as e:
+                    db.session.rollback()
+                    raise BadRequest("barcodeExistsDetailed")
+
+        purchase.total_amount = (
+            db.session.query(func.sum(PurchaseItem.total_amount))
+            .filter_by(purchase_id=purchase.id)
+            .scalar()
+            or 0
+        )
+        purchase.subtotal_amount = (
+            db.session.query(
+                func.sum(PurchaseItem.total_amount - PurchaseItem.tax_amount)
+            )
+            .filter_by(purchase_id=purchase.id)
+            .scalar()
+            or 0
+        )
+        purchase.rabat_amount = (
+            db.session.query(func.sum(PurchaseItem.rabat))
+            .filter_by(purchase_id=purchase.id)
+            .scalar()
+            or 0
+        )
+
         db.session.commit()
         return "Success", 200
+
+    def update_product_to_purchase(self, purchase_item, product, current_time):
+        found_product = Product.query.filter_by(
+            barcode=purchase_item.product_barcode
+        ).first()
+
+        found_purchase_item = PurchaseItem.query.filter_by(id=purchase_item.id).first()
+        found_purchase_tax = (
+            PurchaseTax.query.filter_by(purchase_id=purchase_item.purchase_id)
+            .filter_by(tax_value=purchase_item.tax_amount)
+            .first()
+        )
+        purchase_item_stock = purchase_item.product_stock
+        product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
+        stock_difference = product_stock - purchase_item_stock
+        product_purchased_price_wo_tax = Decimal(product["purchased_price_wo_tax"])
+        tax_percentage = Decimal(product["tax"]) / 100
+        rabat_percentage = Decimal(product["rabat"]) / 100
+        price_wo_rabat = product_purchased_price_wo_tax - (
+            product_purchased_price_wo_tax * rabat_percentage
+        )
+        tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
+        product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(
+            FOURPLACES
+        )
+        product_total_amount = Decimal(
+            product_purchased_price * product_stock
+        ).quantize(FOURPLACES)
+
+        total_tax_amount = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
+
+        total_wo_tax_value = product_total_amount - total_tax_amount
+        expiration_date = self.get_expiration_date(product)
+        measure = str(product["measure"])
+
+        found_product.stock += stock_difference
+        found_product.tax = product["tax"]
+        found_product.purchased_price_wo_tax = product_purchased_price_wo_tax
+        found_product.purchased_price = product_purchased_price
+        found_product.selling_price = product["selling_price"]
+        found_product.measure = measure
+        found_product.expiration_date = expiration_date
+        found_product.date_modified = current_time
+
+        found_purchase_item.product_tax = product["tax"]
+        found_purchase_item.product_purchased_price_wo_tax = (
+            product_purchased_price_wo_tax
+        )
+        found_purchase_item.product_purchased_price = product_purchased_price
+        found_purchase_item.product_selling_price = product["selling_price"]
+        found_purchase_item.rabat = product["rabat"]
+        found_purchase_item.product_measure = measure
+        found_purchase_item.product_stock = product_stock
+        found_purchase_item.total_amount = product_total_amount
+        found_purchase_item.tax_amount = total_tax_amount
+        found_purchase_item.date_modified = current_time
+
+        tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()
+        found_purchase_tax.tax_name = tax_query.settings_name
+        found_purchase_tax.tax_alias = tax_query.settings_alias
+        found_purchase_tax.tax_value = total_tax_amount
+        found_purchase_tax.total_without_tax = total_wo_tax_value
+        found_purchase_tax.date_modified = current_time
+
+    def delete_product_from_purchase(self, barcode, purchase_item):
+        found_product = Product.query.filter_by(barcode=barcode).first()
+        if found_product:
+            found_product.stock -= Decimal(purchase_item.product_stock)
+
+        PurchaseItem.query.filter_by(id=purchase_item.id).delete()
+        PurchaseTax.query.filter_by(purchase_id=purchase_item.purchase_id).filter_by(
+            tax_value=purchase_item.tax_amount
+        ).delete()
+        db.session.commit()
+
+    def add_product_to_purchase(self, product, purchase, current_time):
+        product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
+        product_purchased_price_wo_tax = Decimal(product["purchased_price_wo_tax"])
+        tax_percentage = Decimal(product["tax"]) / 100
+        rabat_percentage = Decimal(product["rabat"]) / 100
+        price_wo_rabat = product_purchased_price_wo_tax - (
+            product_purchased_price_wo_tax * rabat_percentage
+        )
+        tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
+        product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(
+            FOURPLACES
+        )
+        product_total_amount = Decimal(
+            product_purchased_price * product_stock
+        ).quantize(FOURPLACES)
+
+        total_tax_amount = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
+
+        expiration_date = self.get_expiration_date(product)
+
+        product_query = Product.query.filter_by(name=product["product_name"]).first()
+        measure = str(product["measure"])
+
+        found_with_barcode = Product.query.filter_by(barcode=product["barcode"]).first()
+        if found_with_barcode and found_with_barcode.name != product["product_name"]:
+            if product_query and product_query.barcode != found_with_barcode.barcode:
+                raise IntegrityError("barcodeExistsDetailed")
+
+        if product_query:
+            purchase_item = self.create_purchase_item(
+                purchase,
+                product_query,
+                product,
+                current_time,
+                product_purchased_price,
+                total_tax_amount,
+                product_total_amount,
+                measure,
+                product_stock,
+            )
+            product_query.name = product["product_name"]
+            product_query.barcode = product["barcode"]
+            product_query.tax = product["tax"]
+            product_query.purchased_price_wo_tax = product_purchased_price_wo_tax
+            product_query.purchased_price = product_purchased_price
+            product_query.selling_price = product["selling_price"]
+            product_query.measure = measure
+            product_query.stock += product_stock
+            product_query.expiration_date = expiration_date
+        elif found_with_barcode:
+            purchase_item = self.create_purchase_item(
+                purchase,
+                found_with_barcode,
+                product,
+                current_time,
+                product_purchased_price,
+                total_tax_amount,
+                product_total_amount,
+                measure,
+                product_stock,
+            )
+            found_with_barcode.name = product["product_name"]
+            found_with_barcode.barcode = product["barcode"]
+            found_with_barcode.tax = product["tax"]
+            found_with_barcode.purchased_price_wo_tax = product_purchased_price_wo_tax
+            found_with_barcode.purchased_price = product_purchased_price
+            found_with_barcode.selling_price = product["selling_price"]
+            found_with_barcode.measure = measure
+            found_with_barcode.stock += product_stock
+            found_with_barcode.expiration_date = expiration_date
+        else:
+            created_product = self.create_product(
+                product, current_time, measure, expiration_date, product_stock
+            )
+
+            purchase_item = self.create_purchase_item(
+                purchase,
+                created_product,
+                product,
+                current_time,
+                product_purchased_price,
+                total_tax_amount,
+                product_total_amount,
+                measure,
+                product_stock,
+            )
+
+        tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()
+
+        tax_value = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
+        total_wo_tax_value = product_total_amount - tax_value
+
+        db.session.add(
+            PurchaseTax(
+                purchase=purchase,
+                tax_name=tax_query.settings_name,
+                tax_alias=tax_query.settings_alias,
+                tax_value=tax_value,
+                total_without_tax=total_wo_tax_value,
+                date_created=purchase.date_created,
+                date_modified=current_time,
+            )
+        )
+        db.session.add(purchase_item)
+
+    def get_expiration_date(self, product):
+        if product["expiration_date"]:
+            expiration_date = product["expiration_date"].split("-")
+            expiration_date = datetime.combine(
+                date(
+                    year=int(expiration_date[0]),
+                    month=int(expiration_date[1]),
+                    day=int(expiration_date[2]),
+                ),
+                time.min,
+            )
+        else:
+            expiration_date = None
+        return expiration_date
+
+    def create_purchase_item(
+        self,
+        purchase,
+        product_query,
+        product,
+        current_time,
+        product_purchased_price,
+        tax_amount,
+        product_total_amount,
+        measure,
+        product_stock,
+    ):
+        return PurchaseItem(
+            purchase=purchase,
+            product_id=product_query.id,
+            product_barcode=product["barcode"],
+            product_name=product["product_name"],
+            product_tax=product["tax"],
+            rabat=product["rabat"],
+            product_purchased_price_wo_tax=product["purchased_price_wo_tax"],
+            product_purchased_price=product_purchased_price,
+            product_selling_price=product["selling_price"],
+            product_stock=product_stock,
+            product_measure=measure,
+            tax_amount=tax_amount,
+            total_amount=product_total_amount,
+            date_created=purchase.date_created,
+            date_modified=current_time,
+        )
+
+    def create_product(
+        self, product, current_time, measure, expiration_date, product_stock
+    ):
+        product_purchased_price = Decimal(product["purchased_price_wo_tax"])
+        created_product = Product(
+            name=product["product_name"],
+            barcode=product["barcode"],
+            stock=product_stock,
+            tax=product["tax"],
+            purchased_price_wo_tax=product["purchased_price_wo_tax"],
+            purchased_price=product_purchased_price,
+            selling_price=product["selling_price"],
+            measure=measure,
+            expiration_date=expiration_date,
+            date_created=current_time,
+            date_modified=current_time,
+        )
+
+        db.session.add(created_product)
+        return created_product

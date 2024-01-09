@@ -283,5 +283,7 @@
 	"investment": "Investment",
 	"expense": "Expense",
 	"purchase_type": "Purchase type",
-	"noNotifications": "No notifications have been added yet..."
+	"noNotifications": "No notifications have been added yet...",
+	"duplicateBarcode": "This barcode can not be used more than once!",
+	"duplicateName": "This name can not be used more than once!"
 }

@@ -63,6 +63,26 @@ export default [
     },
   },
   {
+    path: "/purchases/:id",
+    name: "purchase-edit",
+    component: NewPurchaseView,
+    meta: {
+      title: "newPurchase",
+      breadcrumb: [
+        {
+          text: (route) => "purchases",
+          to: "purchases",
+          active: false,
+        },
+        {
+          text: (route) => "editPurchase",
+          to: "purchase-edit",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: "/purchases/daily/:purchaseId",
     name: "purchase-view",
     component: PurchaseDetailsView,
@@ -89,31 +109,31 @@ export default [
       ],
     },
   },
-  {
-    path: "/purchases/daily/edit/:purchaseId",
-    name: "purchase-edit",
-    component: PurchaseDetailsView,
-    props: { edit: true },
-    meta: {
-      title: "editPurchase",
-      breadcrumb: [
-        {
-          text: (route) => "purchases",
-          to: "purchases",
-          active: false,
-        },
-        {
-          text: (route) => "dailyPurchases",
-          to: "daily-purchases",
-          active: false,
-          query: true,
-        },
-        {
-          text: (route) => "editPurchase",
-          to: "purchase-edit",
-          active: true,
-        },
-      ],
-    },
-  },
+  // {
+  //   path: "/purchases/daily/edit/:purchaseId",
+  //   name: "purchase-edit",
+  //   component: PurchaseDetailsView,
+  //   props: { edit: true },
+  //   meta: {
+  //     title: "editPurchase",
+  //     breadcrumb: [
+  //       {
+  //         text: (route) => "purchases",
+  //         to: "purchases",
+  //         active: false,
+  //       },
+  //       {
+  //         text: (route) => "dailyPurchases",
+  //         to: "daily-purchases",
+  //         active: false,
+  //         query: true,
+  //       },
+  //       {
+  //         text: (route) => "editPurchase",
+  //         to: "purchase-edit",
+  //         active: true,
+  //       },
+  //     ],
+  //   },
+  // },
 ];

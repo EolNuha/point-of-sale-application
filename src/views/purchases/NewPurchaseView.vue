@@ -181,7 +181,7 @@
                 >
                 <Field
                   required
-                  rules="required"
+                  :rules="`required|uniqueBarcode:${index}`"
                   type="number"
                   step="1"
                   v-model="product.barcode"
@@ -216,6 +216,7 @@
                   type="text"
                   :placeholder="$t('barcode')"
                   :taggable="true"
+                  :disabled="isUpdate && product.is_old_product"
                   @option:selected="getProductDetailsBarcode($event, index)"
                 />
                 <span class="text-red-700">{{
@@ -229,7 +230,7 @@
                 >
                 <Field
                   required
-                  rules="required"
+                  :rules="`required|uniqueName:${index}`"
                   type="text"
                   v-model="product.product_name"
                   :placeholder="$t('product_name')"
@@ -260,6 +261,7 @@
                   type="text"
                   :placeholder="$t('product_name')"
                   :taggable="true"
+                  :disabled="isUpdate && product.is_old_product"
                   @option:selected="getProductDetails($event, index)"
                 />
                 <span class="text-red-700">{{ errors[`${index}name`] }}</span>
@@ -576,7 +578,7 @@
             />
             <span class="sr-only">Loading...</span>
           </div>
-          <div v-else>Submit</div>
+          <div v-else>{{ isUpdate ? $t("update") : "Submit" }}</div>
         </button>
       </div>
     </Form>
@@ -585,7 +587,7 @@
 
 <script>
 import ScannerDetector from "js-scanner-detection";
-import { Field, Form } from "vee-validate";
+import { Field, Form, defineRule } from "vee-validate";
 
 export default {
   components: {
@@ -595,6 +597,7 @@ export default {
   setup() {},
   data() {
     return {
+      isUpdate: true,
       isLoading: false,
       measures: [],
       purchase_types: [],
@@ -630,6 +633,9 @@ export default {
     productsList() {
       return this.$store.getters["productModule/getProductsList"];
     },
+    purchase() {
+      return this.$store.state.purchaseModule.purchase;
+    },
     sellers() {
       return this.$store.getters["purchaseModule/getSellersList"];
     },
@@ -648,6 +654,14 @@ export default {
     };
     this.scannerDetector = new ScannerDetector(options);
     this.seller.purchase_date = this.minDate;
+    this.isUpdate = !!this.$route.params.id;
+    if (this.isUpdate) {
+      await this.$store
+        .dispatch("purchaseModule/getPurchaseDetails", this.$route.params.id)
+        .then(() => {
+          this.setPurchase();
+        });
+    }
     await this.$store
       .dispatch("settingsModule/getSettingsType", {
         settings_type: "measure",
@@ -665,7 +679,58 @@ export default {
     await this.getSellers("");
     await this.getProducts("");
   },
+  beforeCreate() {
+    defineRule("uniqueBarcode", (value, [index]) => {
+      const products = JSON.parse(JSON.stringify(this.products));
+      products.splice(index, 1);
+
+      if (products.some((product) => product.barcode === value))
+        return this.$t("duplicateBarcode");
+      return true;
+    });
+    defineRule("uniqueName", (value, [index]) => {
+      const products = JSON.parse(JSON.stringify(this.products));
+      products.splice(index, 1);
+
+      if (products.some((product) => product.product_name === value))
+        return this.$t("duplicateName");
+      return true;
+    });
+  },
   methods: {
+    convertDateFormat(dateStr) {
+      const [datePart] = dateStr.split(", ");
+      const [day, month, year] = datePart.split(".");
+      const utcDateStr = `${year}-${month}-${day}T00:00:00Z`;
+
+      // Create a new Date object in UTC
+      const date = new Date(utcDateStr);
+
+      // Format the date into "yyyy-MM-dd"
+      const formattedDate = date.toISOString().split("T")[0];
+
+      return formattedDate;
+    },
+    setPurchase() {
+      this.seller.seller_name = this.purchase.seller_name;
+      this.seller.invoice_number = this.purchase.seller_invoice_number;
+      this.seller.fiscal_number = this.purchase.seller_fiscal_number;
+      this.seller.tax_number = this.purchase.seller_tax_number;
+      this.seller.purchase_date = this.convertDateFormat(
+        this.purchase.date_created
+      );
+      this.seller.purchase_type = this.purchase.purchase_type;
+      this.products = [];
+      this.purchase.purchase_items.forEach((item) => {
+        const { product } = item;
+        product.product_name = item.product.name;
+        product.purchased_price_w_tax = item.product.purchased_price;
+        product.expiration_date = item.product.expiration_date || null;
+        product.is_old_product = true;
+        // console.log(item.product, idx);
+        this.products.push(product);
+      });
+    },
     async onComplete(barcode) {
       this.isQrCode = true;
       await this.$store
@@ -793,11 +858,17 @@ export default {
       const data = {
         products: this.products,
         seller: this.seller,
+        id: this.$route.params.id,
       };
       this.$store
-        .dispatch("purchaseModule/createPurchase", data)
+        .dispatch(
+          `purchaseModule/${
+            this.isUpdate ? "updatePurchase" : "createPurchase"
+          }`,
+          data
+        )
         .then(() => {
-          this.$router.push({ name: "purchases" });
+          if (!this.isUpdate) this.$router.push({ name: "purchases" });
           this.isLoading = false;
           this.$toast.success(this.$t("purchaseSaved"));
         })

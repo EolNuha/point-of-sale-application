@@ -104,6 +104,9 @@ def getPurchaseItemDict(item):
             "selling_price": str(
                 Decimal(item.product_selling_price or 0).quantize(TWOPLACES)
             ),
+            "expiration_date": item.product_expiration_date.strftime("%Y-%m-%d")
+            if item.product_expiration_date
+            else None,
             "rabat": str(item.rabat),
         },
         "tax_amount": str(Decimal(item.tax_amount).quantize(TWOPLACES)),

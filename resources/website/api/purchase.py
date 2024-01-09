@@ -169,6 +169,7 @@ class CreatePurchase(Resource):
                 product_total_amount,
                 measure,
                 product_stock,
+                expiration_date,
             )
             product_query.name = product["product_name"]
             product_query.barcode = product["barcode"]
@@ -190,6 +191,7 @@ class CreatePurchase(Resource):
                 product_total_amount,
                 measure,
                 product_stock,
+                expiration_date,
             )
             found_with_barcode.name = product["product_name"]
             found_with_barcode.barcode = product["barcode"]
@@ -215,6 +217,7 @@ class CreatePurchase(Resource):
                 product_total_amount,
                 measure,
                 product_stock,
+                expiration_date,
             )
 
         tax_query = self.get_or_create_tax_query(product["tax"])
@@ -261,6 +264,7 @@ class CreatePurchase(Resource):
         product_total_amount,
         measure,
         product_stock,
+        expiration_date,
     ):
         return PurchaseItem(
             purchase=purchase,
@@ -274,6 +278,7 @@ class CreatePurchase(Resource):
             product_selling_price=product["selling_price"],
             product_stock=product_stock,
             product_measure=measure,
+            product_expiration_date=expiration_date,
             tax_amount=tax_amount,
             total_amount=product_total_amount,
             date_created=purchase.date_created,
@@ -962,6 +967,7 @@ class PurchaseDetails(Resource):
         found_purchase_item.product_stock = product_stock
         found_purchase_item.total_amount = product_total_amount
         found_purchase_item.tax_amount = total_tax_amount
+        found_purchase_item.product_expiration_date = expiration_date
         found_purchase_item.date_modified = current_time
 
         tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()

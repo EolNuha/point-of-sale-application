@@ -184,3 +184,29 @@ def create_product(product, current_time, measure, expiration_date, product_stoc
 
     db.session.add(created_product)
     return created_product
+
+
+def calculate_totals(tax_amount, product_purchased_price, product):
+    product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
+    product_total_amount = Decimal(product_purchased_price * product_stock).quantize(
+        FOURPLACES
+    )
+
+    total_tax_amount = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
+    total_wo_tax_value = product_total_amount - total_tax_amount
+
+    return product_total_amount, total_tax_amount, total_wo_tax_value
+
+
+def calculate_tax_and_price(product):
+    product_purchased_price_wo_tax = Decimal(product["purchased_price_wo_tax"])
+    rabat_percentage = Decimal(product["rabat"]) / 100
+    price_wo_rabat = product_purchased_price_wo_tax - (
+        product_purchased_price_wo_tax * rabat_percentage
+    )
+
+    tax_percentage = Decimal(product["tax"]) / 100
+    tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
+    product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(FOURPLACES)
+
+    return tax_amount, product_purchased_price

@@ -32,6 +32,8 @@ from website.api_models.purchase import (
 from website.helpers_functions.helpers_purchase import (
     add_product_to_purchase,
     get_expiration_date,
+    calculate_totals,
+    calculate_tax_and_price,
 )
 
 purchase_rest = Namespace("Purchase")
@@ -741,65 +743,124 @@ class PurchaseDetails(Resource):
         found_product = Product.query.filter_by(
             barcode=purchase_item.product_barcode
         ).first()
-
         found_purchase_item = PurchaseItem.query.filter_by(id=purchase_item.id).first()
         found_purchase_tax = (
             PurchaseTax.query.filter_by(purchase_id=purchase_item.purchase_id)
             .filter_by(tax_value=purchase_item.tax_amount)
             .first()
         )
-        purchase_item_stock = purchase_item.product_stock
-        product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-        stock_difference = product_stock - purchase_item_stock
-        product_purchased_price_wo_tax = Decimal(product["purchased_price_wo_tax"])
-        tax_percentage = Decimal(product["tax"]) / 100
-        rabat_percentage = Decimal(product["rabat"]) / 100
-        price_wo_rabat = product_purchased_price_wo_tax - (
-            product_purchased_price_wo_tax * rabat_percentage
-        )
-        tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
-        product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(
-            FOURPLACES
-        )
-        product_total_amount = Decimal(
-            product_purchased_price * product_stock
-        ).quantize(FOURPLACES)
 
-        total_tax_amount = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
+        (stock_difference) = self.calculate_stock(product, purchase_item)
 
-        total_wo_tax_value = product_total_amount - total_tax_amount
+        (tax_amount, product_purchased_price) = calculate_tax_and_price(product)
+
+        (
+            product_total_amount,
+            total_tax_amount,
+            total_wo_tax_value,
+        ) = calculate_totals(tax_amount, product_purchased_price, product)
+
         expiration_date = get_expiration_date(product)
         measure = str(product["measure"])
 
+        self.update_product(
+            found_product,
+            product,
+            stock_difference,
+            product_purchased_price,
+            measure,
+            expiration_date,
+            current_time,
+        )
+
+        self.update_purchase_item(
+            found_purchase_item,
+            product,
+            product_purchased_price,
+            measure,
+            expiration_date,
+            product_total_amount,
+            total_tax_amount,
+            current_time,
+        )
+
+        tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()
+        self.update_purchase_tax(
+            found_purchase_tax,
+            tax_query,
+            total_tax_amount,
+            total_wo_tax_value,
+            current_time,
+        )
+
+    def update_product(
+        self,
+        found_product,
+        product,
+        stock_difference,
+        product_purchased_price,
+        measure,
+        expiration_date,
+        current_time,
+    ):
         found_product.stock += stock_difference
         found_product.tax = product["tax"]
-        found_product.purchased_price_wo_tax = product_purchased_price_wo_tax
+        found_product.purchased_price_wo_tax = Decimal(
+            product["purchased_price_wo_tax"]
+        )
         found_product.purchased_price = product_purchased_price
         found_product.selling_price = product["selling_price"]
         found_product.measure = measure
         found_product.expiration_date = expiration_date
         found_product.date_modified = current_time
 
+    def update_purchase_item(
+        self,
+        found_purchase_item,
+        product,
+        product_purchased_price,
+        measure,
+        expiration_date,
+        product_total_amount,
+        total_tax_amount,
+        current_time,
+    ):
         found_purchase_item.product_tax = product["tax"]
-        found_purchase_item.product_purchased_price_wo_tax = (
-            product_purchased_price_wo_tax
+        found_purchase_item.product_purchased_price_wo_tax = Decimal(
+            product["purchased_price_wo_tax"]
         )
         found_purchase_item.product_purchased_price = product_purchased_price
         found_purchase_item.product_selling_price = product["selling_price"]
         found_purchase_item.rabat = product["rabat"]
         found_purchase_item.product_measure = measure
-        found_purchase_item.product_stock = product_stock
+        found_purchase_item.product_stock = Decimal(product["stock"]).quantize(
+            FOURPLACES
+        )
         found_purchase_item.total_amount = product_total_amount
         found_purchase_item.tax_amount = total_tax_amount
         found_purchase_item.product_expiration_date = expiration_date
         found_purchase_item.date_modified = current_time
 
-        tax_query = Settings.query.filter_by(settings_value=int(product["tax"])).one()
+    def update_purchase_tax(
+        self,
+        found_purchase_tax,
+        tax_query,
+        total_tax_amount,
+        total_wo_tax_value,
+        current_time,
+    ):
         found_purchase_tax.tax_name = tax_query.settings_name
         found_purchase_tax.tax_alias = tax_query.settings_alias
         found_purchase_tax.tax_value = total_tax_amount
         found_purchase_tax.total_without_tax = total_wo_tax_value
         found_purchase_tax.date_modified = current_time
+
+    def calculate_stock(self, product, purchase_item):
+        purchase_item_stock = purchase_item.product_stock
+        product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
+        stock_difference = product_stock - purchase_item_stock
+
+        return stock_difference
 
     def delete_product_from_purchase(self, barcode, purchase_item):
         found_product = Product.query.filter_by(barcode=barcode).first()

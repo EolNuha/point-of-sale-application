@@ -780,6 +780,7 @@ class PurchaseDetails(Resource):
         self.update_purchase_item(
             found_purchase_item,
             product,
+            product_purchased_price_wo_tax,
             product_purchased_price,
             measure,
             expiration_date,
@@ -802,6 +803,7 @@ class PurchaseDetails(Resource):
         found_product,
         product,
         stock_difference,
+        product_purchased_price_wo_tax,
         product_purchased_price,
         measure,
         expiration_date,
@@ -809,9 +811,7 @@ class PurchaseDetails(Resource):
     ):
         found_product.stock += stock_difference
         found_product.tax = product["tax"]
-        found_product.purchased_price_wo_tax = Decimal(
-            product["purchased_price_wo_tax"]
-        )
+        found_product.purchased_price_wo_tax = product_purchased_price_wo_tax
         found_product.purchased_price = product_purchased_price
         found_product.selling_price = product["selling_price"]
         found_product.measure = measure
@@ -822,6 +822,7 @@ class PurchaseDetails(Resource):
         self,
         found_purchase_item,
         product,
+        product_purchased_price_wo_tax,
         product_purchased_price,
         measure,
         expiration_date,
@@ -830,8 +831,8 @@ class PurchaseDetails(Resource):
         current_time,
     ):
         found_purchase_item.product_tax = product["tax"]
-        found_purchase_item.product_purchased_price_wo_tax = Decimal(
-            product["purchased_price_wo_tax"]
+        found_purchase_item.product_purchased_price_wo_tax = (
+            product_purchased_price_wo_tax
         )
         found_purchase_item.product_purchased_price = product_purchased_price
         found_purchase_item.product_selling_price = product["selling_price"]

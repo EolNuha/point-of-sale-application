@@ -1,5 +1,9 @@
 <template>
-  <div class="main-div">
+  <div class="main-div relative">
+    <OverlayC
+      v-if="isDataLoading"
+      :outerDiv="`opacity-[95] bg-neutral-100 dark:bg-neutral-900 `"
+    />
     <Form v-slot="{ errors }" @submit="submit()" @keydown.enter.prevent>
       <h2
         class="mb-4 text-2xl font-extrabold tracking-tight leading-none text-gray-700 dark:text-white"
@@ -597,6 +601,7 @@ export default {
   setup() {},
   data() {
     return {
+      isDataLoading: true,
       isUpdate: true,
       isLoading: false,
       measures: [],
@@ -647,6 +652,7 @@ export default {
     },
   },
   async created() {
+    this.isDataLoading = true;
     let options = {
       minLength: 4,
       endChar: [9, 13],
@@ -678,6 +684,7 @@ export default {
       });
     await this.getSellers("");
     await this.getProducts("");
+    this.isDataLoading = false;
   },
   beforeCreate() {
     defineRule("uniqueBarcode", (value, [index]) => {

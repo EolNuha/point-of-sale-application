@@ -752,7 +752,11 @@ class PurchaseDetails(Resource):
 
         (stock_difference) = self.calculate_stock(product, purchase_item)
 
-        (tax_amount, product_purchased_price) = calculate_tax_and_price(product)
+        (
+            tax_amount,
+            product_purchased_price,
+            product_purchased_price_wo_tax,
+        ) = calculate_tax_and_price(product)
 
         (
             product_total_amount,

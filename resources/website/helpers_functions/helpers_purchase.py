@@ -13,19 +13,14 @@ FOURPLACES = Decimal(10) ** -4
 
 def add_product_to_purchase(product, purchase, current_time):
     product_stock = Decimal(product["stock"]).quantize(FOURPLACES)
-    product_purchased_price_wo_tax = Decimal(product["purchased_price_wo_tax"])
-    tax_percentage = Decimal(product["tax"]) / 100
-    rabat_percentage = Decimal(product["rabat"]) / 100
-    price_wo_rabat = product_purchased_price_wo_tax - (
-        product_purchased_price_wo_tax * rabat_percentage
+    (
+        tax_amount,
+        product_purchased_price,
+        product_purchased_price_wo_tax,
+    ) = calculate_tax_and_price(product)
+    (product_total_amount, total_tax_amount, total_wo_tax_value) = calculate_totals(
+        tax_amount, product_purchased_price, product
     )
-    tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
-    product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(FOURPLACES)
-    product_total_amount = Decimal(product_purchased_price * product_stock).quantize(
-        FOURPLACES
-    )
-
-    total_tax_amount = Decimal(tax_amount * product_stock).quantize(FOURPLACES)
 
     expiration_date = get_expiration_date(product)
 
@@ -209,4 +204,4 @@ def calculate_tax_and_price(product):
     tax_amount = Decimal(price_wo_rabat * tax_percentage).quantize(FOURPLACES)
     product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(FOURPLACES)
 
-    return tax_amount, product_purchased_price
+    return tax_amount, product_purchased_price, product_purchased_price_wo_tax

@@ -771,6 +771,7 @@ class PurchaseDetails(Resource):
             found_product,
             product,
             stock_difference,
+            product_purchased_price_wo_tax,
             product_purchased_price,
             measure,
             expiration_date,

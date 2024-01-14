@@ -1,14 +1,20 @@
+from flask import current_app, send_file
+from openpyxl import load_workbook
+import os
 from website import db
 import decimal
+from sqlalchemy import func
 from website.models.settings import Settings
 from website.models.purchase import PurchaseItem, PurchaseTax
 from website.models.product import Product
+from website.jsonify.purchase import getGroupedByAliasTaxes
 from datetime import datetime, date, time
 from sqlalchemy.exc import IntegrityError
 
 
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
+TWOPLACES = Decimal(10) ** -2
 
 
 def add_product_to_purchase(product, purchase, current_time):
@@ -205,3 +211,61 @@ def calculate_tax_and_price(product):
     product_purchased_price = Decimal(price_wo_rabat + tax_amount).quantize(FOURPLACES)
 
     return tax_amount, product_purchased_price, product_purchased_price_wo_tax
+
+
+def purchase_excel_template(items, file_name):
+    try:
+        template_path = os.path.join(
+            current_app.static_folder, "purchase-template.xlsx"
+        )
+
+        wb = load_workbook(template_path)
+        ws = wb.active
+
+        rows = 0
+
+        for index, item in enumerate(items):
+            rows += 1
+            ws[f"A{index+5}"] = index + 1
+            ws[f"B{index+5}"] = item.date_created.strftime("%d.%m.%Y")
+            ws[f"C{index+5}"] = item.seller_invoice_number
+            ws[f"D{index+5}"] = item.seller_name
+            ws[f"E{index+5}"] = item.seller_fiscal_number
+            ws[f"F{index+5}"] = item.seller_tax_number
+            taxes = getGroupedByAliasTaxes(item.purchase_taxes)
+
+            ws[f"G{index+5}"] = (
+                taxes["zero"]["total_without_tax"] if "zero" in taxes else 0
+            )
+
+            ws[f"M{index+5}"] = (
+                taxes["eighteen"]["total_without_tax"] if "eighteen" in taxes else 0
+            )
+            ws[f"S{index+5}"] = (
+                taxes["eighteen"]["tax_value"] if "eighteen" in taxes else 0
+            )
+
+            ws[f"V{index+5}"] = (
+                taxes["eight"]["total_without_tax"] if "eight" in taxes else 0
+            )
+            ws[f"AB{index+5}"] = taxes["eight"]["tax_value"] if "eight" in taxes else 0
+
+            ws[f"AC{index+5}"] = f"=SUM(S{index+5},AB{index+5})"
+
+        ws["G4"] = f"=SUM(G5:G{rows + 5})"
+        ws["M4"] = f"=SUM(M5:M{rows + 5})"
+        ws["S4"] = f"=SUM(S5:S{rows + 5})"
+        ws["V4"] = f"=SUM(V5:V{rows + 5})"
+        ws["AB4"] = f"=SUM(AB5:AB{rows + 5})"
+        ws["AC4"] = f"=SUM(AC5:AC{rows + 5})"
+
+        edited_file_path = os.path.join(current_app.static_folder, "edited_file.xlsx")
+        wb.save(edited_file_path)
+
+        return send_file(
+            edited_file_path,
+            as_attachment=True,
+            attachment_filename=f"{file_name}.xlsx",
+        )
+    except Exception as e:
+        return str(e), 500

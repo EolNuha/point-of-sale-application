@@ -140,7 +140,6 @@
 </template>
 
 <script>
-import JsonToExcel from "@/services/mixins/JsonToExcel";
 import DetailedView from "./DetailedView.vue";
 export default {
   data() {
@@ -161,7 +160,6 @@ export default {
   components: {
     DetailedView,
   },
-  mixins: [JsonToExcel],
   computed: {
     purchases() {
       return this.$store.getters["purchaseModule/getPurchasesList"];
@@ -175,6 +173,11 @@ export default {
     taxes() {
       return this.$store.state.settingsModule.settings_type.tax?.filter(
         (item) => item.settings_alias !== "zero"
+      );
+    },
+    fileName() {
+      return (
+        this.purchase_date.replaceAll(".", "-") + `-${this.$t("purchases")}`
       );
     },
   },
@@ -230,19 +233,27 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          file_name: this.fileName,
         })
         .then((response) => {
           this.allPurchases = response.data;
+          const fileURL = URL.createObjectURL(new Blob([response.data]));
+          const fileLink = document.createElement("a");
+          fileLink.href = fileURL;
+          fileLink.setAttribute("download", `${this.fileName}.xlsx`);
+          document.body.appendChild(fileLink);
+
+          fileLink.click();
+
+          document.body.removeChild(fileLink);
+          window.URL.revokeObjectURL(fileURL);
+          this.isExcelLoading = false;
         });
     },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllPurchases();
 
-      let fileName =
-        this.purchase_date.replaceAll(".", "-") + `-${this.$t("purchases")}`;
-
-      await this.jsonToExcel(this.allPurchases, fileName);
       this.isExcelLoading = false;
     },
     sort(col) {

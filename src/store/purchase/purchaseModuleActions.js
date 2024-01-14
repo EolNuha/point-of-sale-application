@@ -90,7 +90,10 @@ export default {
   getDailyPurchasesExcel({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/purchases/daily/excel`, { params: data })
+        .get(`/api/purchases/daily/excel`, {
+          params: data,
+          responseType: "blob",
+        })
         .then(async (response) => {
           resolve(response);
         })

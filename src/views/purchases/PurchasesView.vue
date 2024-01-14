@@ -250,6 +250,18 @@ export default {
         ? "purchaseModule/getPurchasesDetailedExcel"
         : "purchaseModule/getPurchasesGroupedExcel";
     },
+    fileName() {
+      let fileName;
+      const idx = this.$checkIfMonth(this.startDate, this.endDate);
+      if (idx !== -1) {
+        fileName = `${this.$t(
+          this.$getMonths[idx + 1].value
+        )}-${this.startDate?.substring(0, 4)}-${this.$t("purchases")}`;
+      } else {
+        fileName = `${this.startDate}-${this.$t("to")}-${this.endDate}`;
+      }
+      return fileName;
+    },
   },
   methods: {
     switchView() {
@@ -295,25 +307,30 @@ export default {
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
+          file_name: this.fileName,
         })
         .then((response) => {
           this.allPurchases = response.data;
+          if (this.detailedView) {
+            const fileURL = URL.createObjectURL(new Blob([response.data]));
+            const fileLink = document.createElement("a");
+            fileLink.href = fileURL;
+            fileLink.setAttribute("download", `${this.fileName}.xlsx`);
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+
+            document.body.removeChild(fileLink);
+            window.URL.revokeObjectURL(fileURL);
+            this.isExcelLoading = false;
+          }
         });
     },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllPurchases();
-
-      let fileName;
-      const idx = this.$checkIfMonth(this.startDate, this.endDate);
-      if (idx !== -1) {
-        fileName = `${this.$t(
-          this.$getMonths[idx + 1].value
-        )}-${this.startDate?.substring(0, 4)}-${this.$t("purchases")}`;
-      } else {
-        fileName = `${this.startDate}-TO-${this.endDate}`;
-      }
-      await this.jsonToExcel(this.allPurchases, fileName);
+      if (this.detailedView) return;
+      await this.jsonToExcel(this.allPurchases, this.fileName);
       this.isExcelLoading = false;
     },
     sort(col) {

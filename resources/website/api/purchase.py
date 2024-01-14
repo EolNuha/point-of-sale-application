@@ -1,4 +1,6 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_file, current_app
+from openpyxl import load_workbook
+import os
 from sqlalchemy.exc import IntegrityError
 from website.models.settings import Settings
 from website.models.purchase import Purchase, PurchaseItem, PurchaseTax
@@ -13,6 +15,7 @@ from website.jsonify.purchase import (
     getSellerDict,
     getDailyPurchasesListExcel,
     getPurchasesListExcel,
+    getGroupedByAliasTaxes,
 )
 from website import db
 from sqlalchemy import or_, asc, desc, func, and_
@@ -47,6 +50,7 @@ parser.add_argument("date", type=str, default="")
 parser.add_argument("search", type=str, default="")
 parser.add_argument("sort_column", type=str, default="date_created")
 parser.add_argument("sort_dir", type=str, default="desc")
+parser.add_argument("file_name", type=str, default="purchases")
 parser.add_argument(
     "type_filter[]",
     type=str,
@@ -60,6 +64,7 @@ parser.add_argument(
 
 Decimal = decimal.Decimal
 FOURPLACES = Decimal(10) ** -4
+TWOPLACES = Decimal(10) ** -2
 
 
 @purchase_rest.route("purchases")
@@ -401,15 +406,17 @@ class GetDetailedPurchasesExcel(Resource):
             "sort_column": "",
             "sort_dir": "",
             "search": "",
+            "file_name": "",
             "type_filter[]": "",
         }
     )
     def get(self):
         args = parser.parse_args()
-        search, sort_column, sort_dir = (
+        search, sort_column, sort_dir, file_name = (
             args["search"],
             args["sort_column"],
             args["sort_dir"],
+            args["file_name"],
         )
         type_filter = args["type_filter[]"] or ["purchase", "investment", "expense"]
 
@@ -442,7 +449,71 @@ class GetDetailedPurchasesExcel(Resource):
             .all()
         )
 
-        return jsonify(getDailyPurchasesListExcel(query_items))
+        try:
+            template_path = os.path.join(
+                current_app.static_folder, "purchase-template.xlsx"
+            )
+
+            wb = load_workbook(template_path)
+            ws = wb.active
+
+            rows = 0
+
+            for index, item in enumerate(query_items):
+                rows += 1
+                total_tax_amount = (
+                    db.session.query(func.sum(PurchaseTax.tax_value))
+                    .filter_by(purchase_id=item.id)
+                    .scalar()
+                    or 0
+                )
+                ws[f"A{index+5}"] = index + 1
+                ws[f"B{index+5}"] = item.date_created.strftime("%d.%m.%Y")
+                ws[f"C{index+5}"] = item.seller_invoice_number
+                ws[f"D{index+5}"] = item.seller_name
+                ws[f"E{index+5}"] = item.seller_fiscal_number
+                ws[f"F{index+5}"] = item.seller_tax_number
+                taxes = getGroupedByAliasTaxes(item.purchase_taxes)
+
+                ws[f"G{index+5}"] = (
+                    taxes["zero"]["total_without_tax"] if "zero" in taxes else 0
+                )
+
+                ws[f"M{index+5}"] = (
+                    taxes["eighteen"]["total_without_tax"] if "eighteen" in taxes else 0
+                )
+                ws[f"S{index+5}"] = (
+                    taxes["eighteen"]["tax_value"] if "eighteen" in taxes else 0
+                )
+
+                ws[f"V{index+5}"] = (
+                    taxes["eight"]["total_without_tax"] if "eight" in taxes else 0
+                )
+                ws[f"AB{index+5}"] = (
+                    taxes["eight"]["tax_value"] if "eight" in taxes else 0
+                )
+
+                ws[f"AC{index+5}"] = Decimal(total_tax_amount).quantize(TWOPLACES)
+
+            ws["G4"] = f"=SUM(G5:G{rows + 5})"
+            ws["M4"] = f"=SUM(M5:M{rows + 5})"
+            ws["S4"] = f"=SUM(S5:S{rows + 5})"
+            ws["V4"] = f"=SUM(V5:V{rows + 5})"
+            ws["AB4"] = f"=SUM(AB5:AB{rows + 5})"
+            ws["AC4"] = f"=SUM(AC5:AC{rows + 5})"
+
+            edited_file_path = os.path.join(
+                current_app.static_folder, "edited_file.xlsx"
+            )
+            wb.save(edited_file_path)
+
+            return send_file(
+                edited_file_path,
+                as_attachment=True,
+                attachment_filename=f"{file_name}.xlsx",
+            )
+        except Exception as e:
+            return str(e), 500
 
 
 @purchase_rest.route("purchases/daily/excel")

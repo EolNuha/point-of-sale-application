@@ -16,11 +16,7 @@
               />
             </div>
             <input
-              @input="
-                $debounce(() => {
-                  searchQuery = $event.target.value;
-                })
-              "
+              @input="searchQuery = $event.target.value"
               type="text"
               class="default-input w-full pl-10"
               :placeholder="$t('search')"
@@ -430,6 +426,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import DeleteModal from "@/components/modals/DeleteModal.vue";
 import JsonToExcel from "@/services/mixins/JsonToExcel";
 export default {
@@ -447,6 +444,7 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       allProducts: [],
+      debouncedGetProducts: null,
     };
   },
   mixins: [JsonToExcel],
@@ -454,7 +452,7 @@ export default {
     searchQuery: {
       async handler() {
         this.currentPage = 1;
-        this.getProducts(1);
+        this.debouncedGetProducts(1);
       },
     },
   },
@@ -480,6 +478,7 @@ export default {
     },
   },
   async created() {
+    this.debouncedGetProducts = debounce(this.getProducts, 500);
     window.addEventListener("keydown", (e) => {
       if (e.key == "Delete") {
         const isEmpty = this.selectedProducts?.length === 0;

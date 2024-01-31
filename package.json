@@ -25,6 +25,7 @@
     "js-scanner-detection": "^1.1.0",
     "jspdf": "^2.5.1",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "sweetalert2": "^11.4.35",
     "vee-validate": "^4.5.8",

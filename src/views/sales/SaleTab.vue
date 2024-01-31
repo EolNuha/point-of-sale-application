@@ -16,11 +16,7 @@
           <input
             :ref="`sale-tab-${id}-input`"
             @keydown="keyEvent"
-            @input="
-              $debounce(() => {
-                searchQuery = $event.target.value;
-              })
-            "
+            @input="debouncedSearch"
             :value="searchQuery"
             type="text"
             class="default-input w-full pl-10"
@@ -196,6 +192,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import ScannerDetector from "js-scanner-detection";
 import RemoveModal from "@/components/modals/RemoveModal.vue";
 import FinishSaleModal from "@/components/modals/FinishSaleModal.vue";
@@ -226,34 +223,8 @@ export default {
       is_regular: false,
       isQrCode: false,
       scannerDetector: null,
+      debouncedSearch: null,
     };
-  },
-  watch: {
-    searchQuery: {
-      async handler(value) {
-        if (this.isQrCode) return;
-        if (value === "") {
-          this.searchedProductsIndex = 0;
-          this.searchedProducts = [];
-          return;
-        }
-        try {
-          await this.$store
-            .dispatch("productModule/getProducts", {
-              page: 1,
-              per_page: 10,
-              search: value,
-              sort_column: "name",
-              sort_dir: "asc",
-            })
-            .then((res) => {
-              this.searchedProducts = res.data.data;
-            });
-        } catch {
-          console.log();
-        }
-      },
-    },
   },
   computed: {
     isSelected() {
@@ -281,6 +252,7 @@ export default {
     },
   },
   created() {
+    this.debouncedSearch = debounce(this.handleSearch, 250);
     let options = {
       minLength: 4,
       onComplete: this.onComplete,
@@ -311,6 +283,31 @@ export default {
     this.scannerDetector.stopScanning();
   },
   methods: {
+    async handleSearch(event) {
+      const value = event.target.value;
+      this.searchQuery = value;
+      if (this.isQrCode) return;
+      if (value === "") {
+        this.searchedProductsIndex = 0;
+        this.searchedProducts = [];
+        return;
+      }
+      try {
+        await this.$store
+          .dispatch("productModule/getProducts", {
+            page: 1,
+            per_page: 10,
+            search: value,
+            sort_column: "name",
+            sort_dir: "asc",
+          })
+          .then((res) => {
+            this.searchedProducts = res.data.data;
+          });
+      } catch {
+        console.log();
+      }
+    },
     async onComplete(barcode) {
       this.isQrCode = true;
       const searchInput = this.$refs[`sale-tab-${this.id}-input`];

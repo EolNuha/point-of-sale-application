@@ -19,11 +19,7 @@
                 />
               </div>
               <input
-                @input="
-                  $debounce(() => {
-                    searchQuery = $event.target.value;
-                  })
-                "
+                @input="searchQuery = $event.target.value"
                 type="text"
                 class="default-input w-full px-10"
                 :placeholder="$t('search')"
@@ -437,6 +433,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import DeleteModal from "@/components/modals/DeleteModal.vue";
 import JsonToExcel from "@/services/mixins/JsonToExcel";
 
@@ -452,6 +449,7 @@ export default {
       allSales: [],
       selectedSale: [],
       showFilters: false,
+      debouncedGetSales: null,
     };
   },
   components: {
@@ -486,7 +484,7 @@ export default {
     searchQuery: {
       async handler() {
         this.currentPage = 1;
-        this.getSales(1);
+        this.debouncedGetSales(1);
       },
     },
     typeFilters: {
@@ -497,6 +495,7 @@ export default {
     },
   },
   async created() {
+    this.debouncedGetSales = debounce(this.getSales, 500);
     await this.getSales(this.currentPage);
   },
   methods: {

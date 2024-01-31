@@ -8,11 +8,7 @@
       >
         <span class="font-bold">{{ $t("date") }}:</span>
         <input
-          @input="
-            $debounce(() => {
-              startDate = $event.target.value;
-            })
-          "
+          @input="startDate = $event.target.value"
           :value="startDate"
           ref="startDate"
           name="start"
@@ -56,6 +52,7 @@
   </div>
 </template>
 <script>
+import debounce from "lodash/debounce";
 import AreaChart from "@/components/charts/AreaChart.vue";
 export default {
   props: {
@@ -87,12 +84,13 @@ export default {
       isFetching: true,
       total_amountSold: "",
       startDate: "",
+      debouncedGetData: null,
     };
   },
   watch: {
     startDate: {
       async handler() {
-        this.getData();
+        this.debouncedGetData();
       },
     },
     "$i18n.locale": {
@@ -104,6 +102,7 @@ export default {
     },
   },
   created() {
+    this.debouncedGetData = debounce(this.getData, 500);
     this.startDate = this.formatDate(new Date());
   },
   methods: {

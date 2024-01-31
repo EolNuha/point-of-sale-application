@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import RangeDateFilter from "@/components/RangeDateFilterComponent.vue";
 export default {
   props: {
@@ -77,6 +78,7 @@ export default {
       currentDate: "",
       startDate: "",
       endDate: "",
+      debouncedGetData: null,
     };
   },
   computed: {
@@ -165,12 +167,12 @@ export default {
   watch: {
     startDate: {
       async handler() {
-        if (this.endDate) this.getData();
+        if (this.endDate) this.debouncedGetData();
       },
     },
     endDate: {
       async handler() {
-        if (this.startDate) this.getData();
+        if (this.startDate) this.debouncedGetData();
       },
     },
     id: {
@@ -178,6 +180,9 @@ export default {
         if (this.startDate) this.getData();
       },
     },
+  },
+  created() {
+    this.debouncedGetData = debounce(this.getData, 500);
   },
   methods: {
     setCurrentDateText(e) {

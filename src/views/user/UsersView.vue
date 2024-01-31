@@ -16,11 +16,7 @@
               />
             </div>
             <input
-              @input="
-                $debounce(() => {
-                  searchQuery = $event.target.value;
-                })
-              "
+              @input="searchQuery = $event.target.value"
               type="text"
               class="default-input w-full px-10"
               :placeholder="$t('search')"
@@ -354,6 +350,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import RedActionModal from "@/components/modals/RedActionModal.vue";
 export default {
   components: {
@@ -369,13 +366,14 @@ export default {
       sortColumn: null,
       sortDir: "desc",
       showFilters: false,
+      debouncedGetUsers: null,
     };
   },
   watch: {
     searchQuery: {
       async handler() {
         this.currentPage = 1;
-        this.getUsers(1);
+        this.debouncedGetUsers(1);
       },
     },
     isActiveFilters: {
@@ -405,6 +403,7 @@ export default {
     },
   },
   created() {
+    this.debouncedGetUsers = debounce(this.getUsers, 1);
     this.getUsers(this.currentPage);
   },
   methods: {

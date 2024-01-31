@@ -30,8 +30,7 @@
             :class="errors.seller_name ? 'ring-2 ring-red-500' : ''"
             v-model="seller.seller_name"
             @search="
-              ($event, loading) =>
-                $debounce(() => searchSellers($event, loading))
+              ($event, loading) => debouncedSearchSellers($event, loading)
             "
             @close="seller.search ? getSellerDetails(seller.search) : ''"
             :clearable="true"
@@ -203,9 +202,7 @@
                   v-model="product.barcode"
                   @search="
                     ($event, loading) =>
-                      $debounce(() =>
-                        searchProducts($event, loading, index, 'barcode')
-                      )
+                      debouncedSearchProducts($event, loading, index, 'barcode')
                   "
                   @close="
                     product.search
@@ -248,9 +245,7 @@
                   v-model="product.product_name"
                   @search="
                     ($event, loading) =>
-                      $debounce(() =>
-                        searchProducts($event, loading, index, 'name')
-                      )
+                      debouncedSearchProducts($event, loading, index, 'name')
                   "
                   @close="
                     product.search
@@ -590,6 +585,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import ScannerDetector from "js-scanner-detection";
 import { Field, Form, defineRule } from "vee-validate";
 
@@ -632,6 +628,8 @@ export default {
           search: "",
         },
       ],
+      debouncedSearchSellers: null,
+      debouncedSearchProducts: null,
     };
   },
   computed: {
@@ -652,6 +650,8 @@ export default {
     },
   },
   async created() {
+    this.debouncedSearchSellers = debounce(this.searchSellers, 500);
+    this.debouncedSearchProducts = debounce(this.searchProducts, 500);
     this.isDataLoading = true;
     let options = {
       minLength: 4,
@@ -792,6 +792,7 @@ export default {
     },
     getSellerDetails(e) {
       const seller_name = e.seller_name ? e.seller_name : e;
+      console.log(seller_name, e);
       this.seller.seller_name = seller_name;
       this.seller.search = null;
       const sellerInfo = this.sellers.find(

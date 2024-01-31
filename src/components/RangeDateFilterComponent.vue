@@ -16,11 +16,7 @@
         v-if="currentDate === null"
       >
         <input
-          @input="
-            $debounce(() => {
-              startDate = $event.target.value;
-            })
-          "
+          @input="startDate = $event.target.value"
           :value="startDate"
           ref="startDate"
           name="start"
@@ -31,11 +27,7 @@
         />
         <span class="text-gray-500">{{ $t("to") }}</span>
         <input
-          @input="
-            $debounce(() => {
-              endDate = $event.target.value;
-            })
-          "
+          @input="endDate = $event.target.value"
           :value="endDate"
           ref="endDate"
           name="start"

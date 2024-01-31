@@ -16,11 +16,7 @@
               />
             </div>
             <input
-              @input="
-                $debounce(() => {
-                  searchQuery = $event.target.value;
-                })
-              "
+              @input="searchQuery = $event.target.value"
               type="text"
               class="default-input w-full px-10"
               :placeholder="$t('search')"
@@ -170,6 +166,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 import DateFilter from "@/components/DateFilterComponent.vue";
 import JsonToExcel from "@/services/mixins/JsonToExcel";
 import DetailedView from "./DetailedView.vue";
@@ -189,6 +186,7 @@ export default {
       allSales: [],
       showFilters: false,
       detailedView: true,
+      debouncedGetSales: null,
     };
   },
   components: {
@@ -201,7 +199,7 @@ export default {
     searchQuery: {
       async handler() {
         this.currentPage = 1;
-        this.getSales(1);
+        this.debouncedGetSales(1);
       },
     },
     typeFilters: {
@@ -243,6 +241,7 @@ export default {
     },
   },
   async created() {
+    this.debouncedGetSales = debounce(this.getSales, 500);
     const currentMonth = this.getMonth(new Date().getMonth() + 1);
     this.currentMonth = new Date().getMonth() + 1;
     this.startDate = currentMonth.startDate;

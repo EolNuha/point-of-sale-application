@@ -75,6 +75,7 @@
   </div>
 </template>
 <script>
+import debounce from "lodash/debounce";
 import AreaChart from "@/components/charts/AreaChart.vue";
 import PieChart from "@/components/charts/PieChart.vue";
 import RangeDateFilter from "@/components/RangeDateFilterComponent.vue";
@@ -119,17 +120,18 @@ export default {
       currentDate: "",
       startDate: "",
       endDate: "",
+      debouncedGetData: null,
     };
   },
   watch: {
     startDate: {
       async handler() {
-        if (this.endDate) this.getData();
+        if (this.endDate) this.debouncedGetData();
       },
     },
     endDate: {
       async handler() {
-        if (this.startDate) this.getData();
+        if (this.startDate) this.debouncedGetData();
       },
     },
     id: {
@@ -144,6 +146,9 @@ export default {
         this.isFetching = false;
       },
     },
+  },
+  created() {
+    this.debouncedGetData = debounce(this.getData, 500);
   },
   methods: {
     setCurrentDateText(e) {

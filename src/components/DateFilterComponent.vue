@@ -15,7 +15,7 @@
     <div class="flex items-center gap-2 w-full" v-if="currentMonth === 0">
       <input
         @input="
-          $debounce(() => {
+          debounce(() => {
             dateStart = $event.target.value;
           })
         "
@@ -30,7 +30,7 @@
       <span class="text-gray-500">{{ $t("to") }}</span>
       <input
         @input="
-          $debounce(() => {
+          debounce(() => {
             dateEnd = $event.target.value;
           })
         "
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 export default {
   props: {
     startDate: String,
@@ -56,6 +57,7 @@ export default {
   },
   data() {
     return {
+      debounce,
       afterCreated: false,
       months: [
         { id: 0, value: "Custom" },

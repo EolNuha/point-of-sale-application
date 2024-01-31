@@ -15,6 +15,7 @@
           </div>
           <input
             :ref="`sale-tab-${id}-input`"
+            :id="`sale-tab-${id}-input`"
             @keydown="keyEvent"
             @input="debouncedSearch"
             :value="searchQuery"
@@ -128,6 +129,7 @@
                         : (product.quantity = 1)
                   "
                   @focus="$event.target.select()"
+                  @keydown.enter="this.$putOnFocus(`sale-tab-${id}-input`)"
                 />
               </td>
               <td class="py-2 px-6 max-w-xs">{{ product.selling_price }} €</td>

@@ -267,9 +267,8 @@ export default {
         this.removeClass(child, className);
       }
     },
-    async getPrintPdf() {
+    async createPdf(elementHTML, options) {
       let doc = new jsPDF();
-      let elementHTML = document.getElementById("content");
       let copiedElement = elementHTML.cloneNode(true);
       this.removeClass(copiedElement, [
         "dark:bg-neutral-700",
@@ -287,7 +286,14 @@ export default {
         y: 0,
         width: 190,
         windowWidth: 1000,
+        // eslint-disable-next-line no-unused-vars
+        callback: options.callback || function (doc) {},
       });
+      return doc;
+    },
+    async getPrintPdf() {
+      let elementHTML = document.getElementById("content");
+      let doc = await this.createPdf(elementHTML, {});
       let iframe = document.getElementById("iframe");
       iframe.src = doc.output("datauristring");
       this.$openModal("printModal");
@@ -296,21 +302,12 @@ export default {
       this.isPdfLoading = true;
       const saleTxt = this.$t("sale").toLowerCase();
       const saleId = this.$route.params.saleId;
-      let doc = new jsPDF();
 
       let elementHTML = document.querySelector("#content");
-
-      await doc.html(elementHTML, {
+      await this.createPdf(elementHTML, {
         callback: function (doc) {
-          // Save the PDF
-          doc.save(`${saleTxt}-${saleId}-pdf.pdf`);
+          doc.save(`${saleTxt}-${saleId}.pdf`, { extensions: ["pdf"] });
         },
-        margin: [10, 10, 10, 10],
-        autoPaging: "text",
-        x: 0,
-        y: 0,
-        width: 190,
-        windowWidth: 1000,
       });
       this.isPdfLoading = false;
     },

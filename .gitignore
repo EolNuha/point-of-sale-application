@@ -29,6 +29,7 @@ pnpm-debug.log*
 /resources/build
 /resources/dist
 /resources/app.spec
+/resources/website/static/companyLogo.*
 
 **/__pycache__/
 

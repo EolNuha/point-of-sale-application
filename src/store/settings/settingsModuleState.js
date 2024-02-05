@@ -3,4 +3,5 @@ export default {
     tax: [],
     notification: [],
   },
+  company: {},
 };

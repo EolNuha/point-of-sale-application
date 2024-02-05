@@ -34,12 +34,13 @@ export default {
         });
     });
   },
-  getCompany() {
+  getCompany({ commit }) {
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/settings/company`)
         .then(async (response) => {
           resolve(response);
+          commit("SET_COMPANY", response.data);
         })
         .catch((error) => {
           reject(error);

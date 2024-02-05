@@ -137,6 +137,7 @@
               v-if="company.logo"
               class="x-btn bg-gray-300"
               @click.stop="clearImage"
+              type="button"
             >
               <IconC
                 iconName="XMarkIcon"
@@ -176,15 +177,6 @@ export default {
     return {
       isLoading: false,
       isDataLoading: true,
-      company: {
-        name: "",
-        address: "",
-        phone: "",
-        tax_number: "",
-        fiscal_number: "",
-        logo: null,
-        file: null,
-      },
     };
   },
   beforeCreate() {
@@ -200,11 +192,18 @@ export default {
   },
   async mounted() {
     this.isDataLoading = true;
-    await this.$store.dispatch("settingsModule/getCompany").then((response) => {
-      this.company = response.data;
-      this.company.file = null;
-    });
+    await this.$store.dispatch("settingsModule/getCompany");
     this.isDataLoading = false;
+  },
+  computed: {
+    company: {
+      get() {
+        return this.$store.state.settingsModule.company;
+      },
+      set(v) {
+        this.$store.commit("SET_COMPANY", v);
+      },
+    },
   },
   methods: {
     async update() {

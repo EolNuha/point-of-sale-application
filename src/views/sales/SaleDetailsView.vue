@@ -56,6 +56,38 @@
             {{ $t("date") }}: {{ sale.date_created?.substring(0, 10) }}
           </p>
         </div>
+        <div class="flex flex-row pt-5">
+          <div class="basis-3/4 md:basis-1/2 lg:basis-1/3">
+            <table class="text-gray-700 dark:text-gray-400 text-sm w-full">
+              <tbody>
+                <tr>
+                  <td class="py-2">{{ $t("seller_name") }}</td>
+                  <td class="text-right py-2 tracking-jsPDF">
+                    {{ company.name }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">{{ $t("address") }}</td>
+                  <td class="text-right py-2">
+                    {{ company.address }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">{{ $t("fiscal_number") }}</td>
+                  <td class="text-right py-2">
+                    {{ company.fiscal_number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">{{ $t("tax_number") }}</td>
+                  <td class="text-right py-2">
+                    {{ company.tax_number || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div class="overflow-x-auto sm:rounded my-5 scrollbar-style">
           <table
             class="w-full text-sm text-left text-gray-700 dark:text-gray-400 my-5"
@@ -181,6 +213,9 @@ export default {
     };
   },
   computed: {
+    company() {
+      return this.$store.state.settingsModule.company;
+    },
     sale() {
       return this.$store.state.saleModule.sale;
     },
@@ -216,6 +251,7 @@ export default {
     },
   },
   async created() {
+    await this.$store.dispatch("settingsModule/getCompany");
     await this.$store
       .dispatch("saleModule/getSaleDetails", this.$route.params.saleId)
       .then(() => {
@@ -237,7 +273,9 @@ export default {
       let copiedElement = elementHTML.cloneNode(true);
       this.removeClass(copiedElement, [
         "dark:bg-neutral-700",
+        "dark:bg-neutral-800",
         "dark:bg-neutral-900",
+        "dark:text-gray-200",
         "dark:text-gray-300",
         "dark:text-gray-400",
         "dark:border-gray-600",
@@ -248,7 +286,7 @@ export default {
         x: 0,
         y: 0,
         width: 190,
-        windowWidth: 800,
+        windowWidth: 1000,
       });
       let iframe = document.getElementById("iframe");
       iframe.src = doc.output("datauristring");
@@ -272,7 +310,7 @@ export default {
         x: 0,
         y: 0,
         width: 190,
-        windowWidth: 800,
+        windowWidth: 1000,
       });
       this.isPdfLoading = false;
     },

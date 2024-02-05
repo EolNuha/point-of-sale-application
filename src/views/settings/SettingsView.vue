@@ -89,30 +89,32 @@
               </div>
             </li>
           </router-link>
-          <li
-            class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white"
-          >
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0">
-                <IconC iconName="InformationCircleIcon" iconClass="w-6 h-6" />
-              </div>
-              <div class="flex-1 min-w-0">
-                <p
-                  class="text-lg font-medium text-gray-900 truncate dark:text-white"
+          <router-link :to="{ name: 'company' }">
+            <li
+              class="rounded px-4 sm:px-8 py-3 sm:py-4 bg-white dark:bg-neutral-900 hover:bg-neutral-100 hover:dark:bg-neutral-900/75 dark:text-white"
+            >
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <IconC iconName="InformationCircleIcon" iconClass="w-6 h-6" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="text-lg font-medium text-gray-900 truncate dark:text-white"
+                  >
+                    {{ $t("company") }}
+                  </p>
+                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                    {{ $t("companyInfo") }}
+                  </p>
+                </div>
+                <div
+                  class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
                 >
-                  About
-                </p>
-                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  Information about the desktop software
-                </p>
+                  <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4" />
+                </div>
               </div>
-              <div
-                class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
-              >
-                <IconC iconName="ChevronRightIcon" iconClass="w-4 h-4" />
-              </div>
-            </div>
-          </li>
+            </li>
+          </router-link>
         </ul>
       </div>
     </div>

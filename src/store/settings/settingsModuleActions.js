@@ -19,4 +19,31 @@ export default {
         });
     });
   },
+  updateCompany({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/settings/company`,
+        method: "PUT",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  getCompany() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/settings/company`)
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

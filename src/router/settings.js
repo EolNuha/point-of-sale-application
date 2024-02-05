@@ -3,6 +3,7 @@ const SettingsView = () => import("../views/settings/SettingsView.vue");
 const LanguagesView = () => import("../views/settings/LanguagesView.vue");
 const ThemeView = () => import("../views/settings/ThemeView.vue");
 const PermissionsView = () => import("../views/settings/PermissionsView.vue");
+const CompanyView = () => import("../views/settings/CompanyView.vue");
 export default [
   {
     path: "/settings",
@@ -74,6 +75,26 @@ export default [
         {
           text: (route) => "permissions",
           to: "permissions",
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: "/settings/company",
+    name: "company",
+    component: CompanyView,
+    meta: {
+      title: "company",
+      breadcrumb: [
+        {
+          text: (route) => "settings",
+          to: "settings",
+          active: false,
+        },
+        {
+          text: (route) => "company",
+          to: "company",
           active: true,
         },
       ],

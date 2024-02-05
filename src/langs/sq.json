@@ -284,5 +284,13 @@
 	"purchase_type": "Lloji i blerjes",
 	"noNotifications": "Nuk është shtuar ende asnjë njoftim...",
 	"duplicateBarcode": "Ky barkod nuk mund të perdoret më shumë se një herë!",
-	"duplicateName": "Ky emër nuk mund të perdoret më shumë se një herë!"
+	"duplicateName": "Ky emër nuk mund të perdoret më shumë se një herë!",
+	"company": "Kompania",
+	"address": "Adresa",
+	"phone": "Numri i telefonit",
+	"logo": "Logo",
+	"companySuccess": "Informacioni i kompanisë u përditësua me sukses!",
+	"companyInfo": "Informatat e kompanisë",
+	"clickToUpload": "Klikoni këtu për të ngarkuar një imazh",
+	"phoneMsg": "Numri i telefonit duhet të jetë në këtë format: +383xxxxxxxx"
 }

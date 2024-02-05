@@ -285,5 +285,13 @@
 	"purchase_type": "Purchase type",
 	"noNotifications": "No notifications have been added yet...",
 	"duplicateBarcode": "This barcode can not be used more than once!",
-	"duplicateName": "This name can not be used more than once!"
+	"duplicateName": "This name can not be used more than once!",
+	"company": "Company",
+	"address": "Address",
+	"phone": "Phone Number",
+	"logo": "Logo",
+	"companySuccess": "Successfully updated company information!",
+	"companyInfo": "Company Information",
+	"clickToUpload": "Click here to upload an image",
+	"phoneMsg": "Phone number must be in this format: +383xxxxxxxx"
 }

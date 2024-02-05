@@ -14,11 +14,7 @@
 
     <div class="flex items-center gap-2 w-full" v-if="currentMonth === 0">
       <input
-        @input="
-          debounce(() => {
-            dateStart = $event.target.value;
-          })
-        "
+        @input="dateStart = $event.target.value"
         :value="dateStart"
         ref="startDate"
         name="start"
@@ -29,11 +25,7 @@
       />
       <span class="text-gray-500">{{ $t("to") }}</span>
       <input
-        @input="
-          debounce(() => {
-            dateEnd = $event.target.value;
-          })
-        "
+        @input="dateEnd = $event.target.value"
         :value="dateEnd"
         ref="endDate"
         name="start"
@@ -57,7 +49,6 @@ export default {
   },
   data() {
     return {
-      debounce,
       afterCreated: false,
       months: [
         { id: 0, value: "Custom" },
@@ -77,6 +68,7 @@ export default {
       currentMonth: "",
       dateStart: this.startDate,
       dateEnd: this.endDate,
+      debouncedDispatchCall: null,
     };
   },
   watch: {
@@ -94,7 +86,7 @@ export default {
           this.$emit("startDateChange", this.dateStart);
           this.$emit("endDateChange", this.dateEnd);
           if (this.afterCreated)
-            this.makeDispatchCall(this.dateStart, this.dateEnd);
+            this.debouncedDispatchCall(this.dateStart, this.dateEnd);
         }
       },
     },
@@ -108,7 +100,7 @@ export default {
         } else {
           this.currentMonth = 0;
         }
-        this.makeDispatchCall(value, this.dateEnd);
+        this.debouncedDispatchCall(value, this.dateEnd);
       },
     },
     dateEnd: {
@@ -121,11 +113,12 @@ export default {
         } else {
           this.currentMonth = 0;
         }
-        this.makeDispatchCall(this.dateStart, value);
+        this.debouncedDispatchCall(this.dateStart, value);
       },
     },
   },
   created() {
+    this.debouncedDispatchCall = debounce(this.makeDispatchCall, 500);
     this.currentMonth = new Date().getMonth() + 1;
   },
   mounted() {

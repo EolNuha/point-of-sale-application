@@ -293,5 +293,6 @@
 	"companySuccess": "Successfully updated company information!",
 	"companyInfo": "Company Information",
 	"clickToUpload": "Click here to upload an image",
-	"phoneMsg": "Phone number must be in this format: +383xxxxxxxx"
+	"phoneMsg": "Phone number must be in this format: +383xxxxxxxx",
+	"imageTypesError": "Only PNG, JPG, JPEG, WEBP, GIF, and SVG files are accepted."
 }

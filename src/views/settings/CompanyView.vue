@@ -118,6 +118,7 @@
             :class="errors.logo ? 'ring-2 ring-red-500' : ''"
             class="default-input w-full"
             placeholder="Company Name"
+            accept="image/*"
           />
           <span class="text-red-700">{{ errors.logo }}</span>
         </div>
@@ -215,7 +216,14 @@ export default {
       this.isLoading = false;
     },
     onImageInput(e) {
+      const allowedTypes = ["png", "jpg", "jpeg", "webp", "gif", "svg"];
       const f = e.target.files[0];
+      const { type } = f;
+      if (!allowedTypes.includes(type.split("/")[1])) {
+        this.$refs.companyImage.value = null;
+        this.$toast.warning(this.$t("imageTypesError"));
+        return;
+      }
       if (f) {
         this.company.logo = URL.createObjectURL(f);
         this.company.file = f;

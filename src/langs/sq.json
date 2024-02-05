@@ -292,5 +292,6 @@
 	"companySuccess": "Informacioni i kompanisë u përditësua me sukses!",
 	"companyInfo": "Informatat e kompanisë",
 	"clickToUpload": "Klikoni këtu për të ngarkuar një imazh",
-	"phoneMsg": "Numri i telefonit duhet të jetë në këtë format: +383xxxxxxxx"
+	"phoneMsg": "Numri i telefonit duhet të jetë në këtë format: +383xxxxxxxx",
+	"imageTypesError": "Pranohen vetëm skedarët PNG, JPG, JPEG, WEBP, GIF dhe SVG."
 }

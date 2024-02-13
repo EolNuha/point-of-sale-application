@@ -8,7 +8,7 @@
     >
       <OverlayC
         v-if="isDataLoading"
-        outer-div="opacity-100 bg-neutral-100 dark:bg-neutral-900"
+        outer-div="opacity-100 bg-neutral-100 dark:bg-neutral-900 "
       />
       <Form
         v-slot="{ errors }"
@@ -129,13 +129,15 @@
           >
           <div
             @click="$refs.companyImage.click()"
-            class="w-[150px] h-[150px] bg-gray-200 rounded flex items-center justify-center text-center cursor-pointer relative m-0"
+            class="w-[150px] h-[150px] bg-neutral-200 dark:bg-neutral-800 rounded flex items-center justify-center text-center cursor-pointer relative m-0"
           >
-            <p v-if="!company.logo">{{ $t("clickToUpload") }}</p>
+            <p v-if="!company.logo" class="text-gray-700 dark:text-gray-200">
+              {{ $t("clickToUpload") }}
+            </p>
             <img v-else :src="company.logo" class="max-w-[100%] max-h-[100%]" />
             <button
               v-if="company.logo"
-              class="x-btn bg-gray-300"
+              class="x-btn bg-neutral-300 dark:bg-neutral-800"
               @click.stop="clearImage"
               type="button"
             >

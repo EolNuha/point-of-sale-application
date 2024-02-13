@@ -58,7 +58,7 @@
             {{ $t("date") }}: {{ purchase.date_created?.substring(0, 10) }}
           </p>
         </div>
-        <div class="flex flex-row pt-5">
+        <div class="flex flex-row pt-5 w-full">
           <div class="basis-3/4 md:basis-1/2 lg:basis-1/3">
             <table class="text-gray-700 dark:text-gray-400 text-sm w-full">
               <tbody>
@@ -84,6 +84,36 @@
                   <td class="py-2">{{ $t("tax_number") }}</td>
                   <td class="text-right py-2">
                     {{ purchase.seller_tax_number || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="basis-3/4 md:basis-1/2 lg:basis-1/3 ml-auto">
+            <table class="text-gray-700 dark:text-gray-400 text-sm w-full">
+              <tbody>
+                <tr>
+                  <td class="py-2">{{ $t("buyer_name") }}</td>
+                  <td class="text-right py-2 tracking-jsPDF">
+                    {{ company.name }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">{{ $t("address") }}</td>
+                  <td class="text-right py-2">
+                    {{ company.address }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">{{ $t("fiscal_number") }}</td>
+                  <td class="text-right py-2">
+                    {{ company.fiscal_number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">{{ $t("tax_number") }}</td>
+                  <td class="text-right py-2">
+                    {{ company.tax_number || "-" }}
                   </td>
                 </tr>
               </tbody>
@@ -251,6 +281,9 @@ export default {
     };
   },
   computed: {
+    company() {
+      return this.$store.state.settingsModule.company;
+    },
     purchase() {
       return this.$store.state.purchaseModule.purchase;
     },
@@ -261,6 +294,7 @@ export default {
     },
   },
   async created() {
+    await this.$store.dispatch("settingsModule/getCompany");
     await this.$store
       .dispatch(
         "purchaseModule/getPurchaseDetails",

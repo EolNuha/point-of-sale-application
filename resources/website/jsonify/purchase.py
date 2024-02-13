@@ -97,16 +97,20 @@ def getPurchaseItemDict(item):
             "stock": str(Decimal(item.product_stock).quantize(TWOPLACES)),
             "tax": item.product_tax,
             "purchased_price_wo_tax": str(
-                Decimal(item.product_purchased_price_wo_tax or 0)
+                Decimal(item.product_purchased_price_wo_tax or 0).quantize(TWOPLACES)
             ),
-            "purchased_price": str(Decimal(item.product_purchased_price or 0)),
+            "purchased_price": str(
+                Decimal(item.product_purchased_price or 0).quantize(TWOPLACES)
+            ),
             "measure": item.product_measure,
             "selling_price": str(
                 Decimal(item.product_selling_price or 0).quantize(TWOPLACES)
             ),
-            "expiration_date": item.product_expiration_date.strftime("%Y-%m-%d")
-            if item.product_expiration_date
-            else None,
+            "expiration_date": (
+                item.product_expiration_date.strftime("%Y-%m-%d")
+                if item.product_expiration_date
+                else None
+            ),
             "rabat": str(item.rabat),
         },
         "tax_amount": str(Decimal(item.tax_amount).quantize(TWOPLACES)),

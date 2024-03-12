@@ -116,7 +116,7 @@
                   <td class="py-3 px-6">{{ item.product.barcode }}</td>
                   <td class="py-3 px-6">{{ item.product.measure }}</td>
                   <td class="py-3 px-6">
-                    <div>x {{ item.quantity }}</div>
+                    <div>{{ item.quantity }}</div>
                   </td>
                   <td class="py-3 px-6">{{ item.product.selling_price }} €</td>
                   <td class="py-3 px-6">

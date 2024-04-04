@@ -233,6 +233,7 @@
 	"permissionCreatedSuccessfully": "Permission created successfully!",
 	"printDoc": "Print {value} document",
 	"print": "Print",
+	"upload": "Upload",
 	"download": "Download",
 	"downloading": "Downloading",
 	"employee": "Employee",
@@ -295,5 +296,10 @@
 	"clickToUpload": "Click here to upload an image",
 	"phoneMsg": "Phone number must be in this format: +383xxxxxxxx",
 	"imageTypesError": "Only PNG, JPG, JPEG, WEBP, GIF, and SVG files are accepted.",
-	"buyer_name": "Buyer Name"
+	"buyer_name": "Buyer Name",
+	"here": "here",
+	"excelTemplateDownloadDescription": "To get the format template of how the excel file should be, click",
+	"taxRules": "Tax must be a number and must be 0, 8 or 18",
+	"purchasePriceRules": "The purchase price must be without Tax",
+	"measureRules": "The unit of measurement must be one of the following: pcs, kg, or liter"
 }

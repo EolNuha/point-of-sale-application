@@ -233,6 +233,7 @@
 	"permissionCreatedSuccessfully": "Autorizimi është krijuar me sukses!",
 	"printDoc": "Printo dokumentin për {value}",
 	"print": "Printo",
+	"upload": "Ngarko",
 	"download": "Shkarko",
 	"downloading": "Duke e shkarkuar",
 	"employee": "Punëtori",
@@ -294,5 +295,10 @@
 	"clickToUpload": "Klikoni këtu për të ngarkuar një imazh",
 	"phoneMsg": "Numri i telefonit duhet të jetë në këtë format: +383xxxxxxxx",
 	"imageTypesError": "Pranohen vetëm skedarët PNG, JPG, JPEG, WEBP, GIF dhe SVG.",
-	"buyer_name": "Emri i blerësit"
+	"buyer_name": "Emri i blerësit",
+	"here": "këtu",
+	"excelTemplateDownloadDescription": "Per te marrë template-in e formatit se si duhet te jete excel file klikoni",
+	"taxRules": "TVSH duhet te jete numer dhe duhet te jete 0, 8 apo 18",
+	"purchasePriceRules": "Çmimi i blerjes duhet të jetë pa TVSH",
+	"measureRules": "Njësia Matëse duhet te jete njëra nga këto: pcs, kg, apo liter"
 }

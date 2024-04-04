@@ -111,4 +111,19 @@ export default {
         });
     });
   },
+  uploadProductsExcel({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `/api/products/excel`,
+        method: "PUT",
+        data,
+      })
+        .then(async (response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

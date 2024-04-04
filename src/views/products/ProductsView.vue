@@ -42,34 +42,75 @@
             class="theme-gradient-btn flex items-center text-center"
           >
             <IconC iconName="PlusIcon" iconClass="w-5 h-5 mr-2" />
-            {{ $t("createProduct") }}</button
-          ><button
-            @click="downloadExcel()"
+            {{ $t("createProduct") }}
+          </button>
+          <button
+            id="dropdownProductsExcelMenuBtn"
+            @click="
+              $toggleDropdown({
+                targetEl: `dropdownProductsExcelMenu`,
+                triggerEl: `dropdownProductsExcelMenuBtn`,
+                placement: `top`,
+              })
+            "
             class="green-gradient-btn inline-flex items-center text-center"
-            :disabled="!(products?.length > 0)"
           >
-            <div
-              class="inline-flex flex-row"
-              role="status"
-              v-if="isExcelLoading"
-            >
-              <IconC
-                iconType="custom"
-                iconName="SpinnerIcon"
-                iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-white"
-              />
-              {{ $t("downloading") }}...
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div class="inline-flex flex-row" v-else>
+            <div class="inline-flex flex-row">
               <IconC
                 iconType="custom"
                 iconName="ExcelFileIcon"
                 iconClass="w-5 h-5 fill-white mr-2"
               />
-              {{ $t("download") }} Excel
+              Excel
             </div>
           </button>
+          <div
+            id="dropdownProductsExcelMenu"
+            class="hidden z-10 flex flex-col gap-[2px] w-44 bg-white rounded shadow-md shadow-gray-400/75 dark:shadow-neutral-700/75 dark:bg-neutral-800 dark:divide-gray-600"
+            style="inset: 0px auto auto -10px !important"
+          >
+            <button
+              @click="downloadExcel()"
+              class="gray-outline-btn inline-flex items-center text-center w-full text-green-500"
+              :disabled="!(products?.length > 0)"
+            >
+              <div
+                class="inline-flex flex-row"
+                role="status"
+                v-if="isExcelLoading"
+              >
+                <IconC
+                  iconType="custom"
+                  iconName="SpinnerIcon"
+                  iconClass="mr-2 w-5 h-5 text-gray-200 animate-spin fill-green-500"
+                />
+                {{ $t("downloading") }}...
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="inline-flex flex-row" v-else>
+                <IconC
+                  iconType="custom"
+                  iconName="ExcelFileIcon"
+                  iconClass="w-5 h-5 fill-green-500 mr-2"
+                />
+                {{ $t("download") }} Excel
+              </div>
+            </button>
+            <button
+              @click="$openModal(uploadExcelRef)"
+              class="gray-outline-btn inline-flex items-center text-center w-full text-green-500"
+              :disabled="!(products?.length > 0)"
+            >
+              <div class="inline-flex flex-row">
+                <IconC
+                  iconType="custom"
+                  iconName="ExcelFileIcon"
+                  iconClass="w-5 h-5 fill-green-500 mr-2"
+                />
+                {{ $t("upload") }} Excel
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -422,6 +463,11 @@
         selectedProducts = [];
       "
     />
+    <upload-excel-modal
+      :key="uploadExcelRef"
+      :modalRef="uploadExcelRef"
+      @reload="getProducts(currentPage)"
+    />
   </div>
 </template>
 
@@ -429,12 +475,15 @@
 import debounce from "lodash/debounce";
 import DeleteModal from "@/components/modals/DeleteModal.vue";
 import JsonToExcel from "@/services/mixins/JsonToExcel";
+import UploadExcelModal from "@/components/modals/UploadExcelModal.vue";
 export default {
   components: {
     DeleteModal,
+    UploadExcelModal,
   },
   data() {
     return {
+      uploadExcelRef: "upload-excel-ref",
       isTableLoading: true,
       isExcelLoading: false,
       selectedProducts: [],
@@ -563,3 +612,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+#dropdownProductsExcelMenu {
+  inset: 0px auto auto -20px !important;
+}
+</style>

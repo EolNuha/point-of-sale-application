@@ -99,7 +99,6 @@
             <button
               @click="$openModal(uploadExcelRef)"
               class="gray-outline-btn inline-flex items-center text-center w-full text-green-500"
-              :disabled="!(products?.length > 0)"
             >
               <div class="inline-flex flex-row">
                 <IconC

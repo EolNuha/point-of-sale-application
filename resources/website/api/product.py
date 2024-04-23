@@ -283,7 +283,9 @@ class GetProductsExcel(Resource):
                     else:
                         float(row[i])
                 except Exception as e:
-                    raise BadRequest(f"Vlera {row[i]} nuk eshte {arr[i]} valid!")
+                    raise BadRequest(
+                        f'Vlera "{row[i]}" nuk eshte {str(arr[i]).lower()} valid!'
+                    )
 
             if i == 6 and row[i].lower() not in ["kg", "pcs", "liter"]:
                 raise BadRequest(f"Njesia matese duhet te jete pcs, kg, ose liter")

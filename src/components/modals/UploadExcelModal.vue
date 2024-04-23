@@ -68,12 +68,13 @@
               :ref="modalRef + '_remove_btn'"
               type="button"
               class="theme-gradient-btn h-10 w-20 inline-flex justify-center items-center"
+              :disabled="isLoading"
             >
               <IconC
                 v-if="isLoading"
                 iconType="custom"
                 iconName="SpinnerIcon"
-                iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-red-600"
+                iconClass="mr-2 w-4 h-4 text-gray-200 animate-spin fill-green-600"
               />
               <span v-else>{{ $t("upload") }}</span>
             </button>
@@ -110,7 +111,6 @@ export default {
       ];
       const f = e.target.files[0];
       const { type } = f;
-      console.log(type);
       if (!allowedTypes.includes(type.split("/")[1])) {
         this.$refs.excelFile.value = null;
         this.$toast.warning(this.$t("imageTypesError"));
@@ -130,6 +130,10 @@ export default {
         .then(() => {
           this.$hideModal(this.modalRef);
           this.$emit("reload");
+        })
+        .catch((error) => {
+          const errMsg = error?.response?.data?.message;
+          this.$toast.error(errMsg || this.$t("somethingWrong"));
         });
       this.isLoading = false;
     },

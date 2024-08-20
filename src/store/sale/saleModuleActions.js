@@ -61,7 +61,10 @@ export default {
   getSalesDetailedExcel({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/sales/detailed/excel`, { params: data })
+        .get(`/api/sales/detailed/excel`, {
+          params: data,
+          responseType: "blob",
+        })
         .then(async (response) => {
           resolve(response);
         })

@@ -239,6 +239,18 @@ export default {
         ? "saleModule/getSalesDetailedExcel"
         : "saleModule/getSalesGroupedExcel";
     },
+    fileName() {
+      let fileName;
+      const idx = this.$checkIfMonth(this.startDate, this.endDate);
+      if (idx !== -1) {
+        fileName = `${this.$t(
+          this.$getMonths[idx + 1].value
+        )}-${this.startDate?.substring(0, 4)}-${this.$t("sales")}`;
+      } else {
+        fileName = `${this.startDate}-${this.$t("to")}-${this.endDate}`;
+      }
+      return fileName;
+    },
   },
   async created() {
     this.debouncedGetSales = debounce(this.getSales, 500);
@@ -287,33 +299,36 @@ export default {
     async getAllSales() {
       await this.$store
         .dispatch(this.allSalesDispatch, {
-          page: 1,
-          per_page: this.pagination.total,
           start_date: this.startDate,
           end_date: this.endDate,
           search: this.searchQuery,
           sort_column: this.sortColumn,
           sort_dir: this.sortDir,
-          type_filter: this.typeFilters,
+          file_name: this.fileName,
         })
         .then((response) => {
           this.allSales = response.data;
+          if (this.detailedView) {
+            console.log(response.data);
+            const fileURL = URL.createObjectURL(new Blob([response.data]));
+            const fileLink = document.createElement("a");
+            fileLink.href = fileURL;
+            fileLink.setAttribute("download", `${this.fileName}.xlsx`);
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+
+            document.body.removeChild(fileLink);
+            window.URL.revokeObjectURL(fileURL);
+            this.isExcelLoading = false;
+          }
         });
     },
     async downloadExcel() {
       this.isExcelLoading = true;
       await this.getAllSales();
-
-      let fileName;
-      const idx = this.$checkIfMonth(this.startDate, this.endDate);
-      if (idx !== -1) {
-        fileName = `${this.$t(
-          this.$getMonths[idx + 1].value
-        )}-${this.startDate?.substring(0, 4)}-${this.$t("sales")}`;
-      } else {
-        fileName = `${this.startDate}-TO-${this.endDate}`;
-      }
-      await this.jsonToExcel(this.allSales, fileName);
+      if (this.detailedView) return;
+      await this.jsonToExcel(this.allSales, this.fileName);
       this.isExcelLoading = false;
     },
     sort(col) {

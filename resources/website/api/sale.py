@@ -5,6 +5,7 @@ from website.models.product import Product
 from website.models.sale import Sale, SaleItem, SaleTax
 from website.models.user import User
 from website.helpers import getPaginatedDict, sumListOfDicts
+from website.helpers_functions.helpers_sale import sale_excel_template
 from website.jsonify.settings import getTaxesList
 from website.jsonify.sale import (
     getDailySalesList,
@@ -36,6 +37,7 @@ parser.add_argument("start_date", type=str, default="")
 parser.add_argument("end_date", type=str, default="")
 parser.add_argument("date", type=str, default="")
 parser.add_argument("search", type=str, default="")
+parser.add_argument("file_name", type=str, default="")
 parser.add_argument("sort_column", type=str, default="date_created")
 parser.add_argument("sort_dir", type=str, default="desc")
 parser.add_argument("type_filter[]", type=str, action="append", default=[True, False])
@@ -69,6 +71,7 @@ class Sales(Resource):
             total_price = product_selling_price * quantity
             gross_profit = total_price - gross_total
             net_profit = gross_profit - total_tax_amount
+            total_wo_tax_amount = total_price - total_tax_amount
             return {
                 "total_amount": total_price.quantize(FOURPLACES),
                 "subtotal_amount": subtotal_price.quantize(FOURPLACES),
@@ -77,6 +80,7 @@ class Sales(Resource):
                 "tax_amount": tax_amount.quantize(FOURPLACES),
                 "total_tax_amount": total_tax_amount.quantize(FOURPLACES),
                 "selling_price_wo_tax": selling_price_wo_tax.quantize(FOURPLACES),
+                "total_wo_tax_amount": total_wo_tax_amount.quantize(FOURPLACES)
             }
 
         total_amount = sum(
@@ -151,6 +155,7 @@ class Sales(Resource):
                     tax_name=tax_query.settings_name,
                     tax_alias=tax_query.settings_alias,
                     tax_value=product_totals["total_tax_amount"],
+                    total_without_tax=product_totals["total_wo_tax_amount"],
                     date_created=current_time,
                     date_modified=current_time,
                 )
@@ -597,53 +602,26 @@ class GetSalesDetailedExcel(Resource):
             "sort_column": "",
             "sort_dir": "",
             "search": "",
+            "file_name": "",
             "type_filter[]": "",
         }
     )
     def get(self):
         args = parser.parse_args()
-        search = args["search"]
-        sort_column = args["sort_column"]
-        sort_dir = args["sort_dir"]
-        custom_start_date = args["start_date"]
-        custom_end_date = args["end_date"]
-        type_filter = args["type_filter[]"]
-
-        ctx = decimal.getcontext()
-        ctx.rounding = decimal.ROUND_HALF_UP
-
-        if not type_filter:
-            type_filter = [True, False]
+        search, sort_column, sort_dir, file_name = (
+            args["search"],
+            args["sort_column"],
+            args["sort_dir"],
+            args["file_name"],
+        )
+        type_filter = args["type_filter[]"] or [True, False]
         type_filter = [x == "true" or x == True for x in type_filter]
+        
+        custom_start_date = args["start_date"].split("-")
+        custom_end_date = args["end_date"].split("-")
 
-        if sort_column == "user":
-            sort_column = func.lower(User.first_name)
-        elif sort_column == "tax":
-            sort_column = func.lower(SaleTax.tax_value)
-        elif sort_column == "date_created":
-            sort_column = Sale.date_created
-
-        sort = asc(sort_column) if sort_dir == "asc" else desc(sort_column)
-
-        custom_start_date = custom_start_date.split("-")
-        custom_end_date = custom_end_date.split("-")
-
-        date_start = datetime.combine(
-            date(
-                year=int(custom_start_date[0]),
-                month=int(custom_start_date[1]),
-                day=int(custom_start_date[2]),
-            ),
-            time.min,
-        )
-        date_end = datetime.combine(
-            date(
-                year=int(custom_end_date[0]),
-                month=int(custom_end_date[1]),
-                day=int(custom_end_date[2]),
-            ),
-            time.max,
-        )
+        date_start = datetime.combine(date(*map(int, custom_start_date)), time.min)
+        date_end = datetime.combine(date(*map(int, custom_end_date)), time.max)
 
         looking_for = (
             search.strip().replace("_", "__").replace("*", "%").replace("?", "_")
@@ -651,9 +629,8 @@ class GetSalesDetailedExcel(Resource):
             else f"%{search.strip()}%"
         )
 
-        items = (
-            Sale.query.join(User)
-            .filter(
+        query_items = (
+            Sale.query.join(User).filter(
                 or_(
                     Sale.id.ilike(looking_for),
                     Sale.total_amount.ilike(looking_for),
@@ -662,16 +639,14 @@ class GetSalesDetailedExcel(Resource):
                     User.last_name.ilike(looking_for),
                 )
             )
+            .order_by(asc(sort_column) if sort_dir == "asc" else desc(sort_column))
             .filter(Sale.date_created <= date_end)
             .filter(Sale.date_created >= date_start)
             .filter(and_(Sale.is_regular.in_(type_filter)))
-            .order_by(sort)
             .all()
         )
 
-        sale_items = getDetailedExcelList(items)
-
-        return jsonify(sale_items)
+        return sale_excel_template(query_items, file_name)
 
 
 @sale_rest.route("sales/daily")

@@ -12,7 +12,7 @@ class Product(db.Model):
     purchased_price_wo_tax = db.Column(db.Numeric(precision=10, scale=4), default=0)
     purchased_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
     selling_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
-    measure = db.Column(db.Enum("pcs", "kg", "liter"), default="pcs")
+    measure = db.Column(db.String(50), default="pcs")
     expiration_date = db.Column(db.DateTime, default=None)
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())

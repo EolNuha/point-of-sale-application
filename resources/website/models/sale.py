@@ -23,6 +23,7 @@ class SaleTax(db.Model):
     tax_name = db.Column(db.String(200))
     tax_alias = db.Column(db.String(200))
     tax_value = db.Column(db.Numeric(precision=10, scale=4))
+    total_without_tax = db.Column(db.Numeric(precision=10, scale=4))
     date_created = db.Column(db.DateTime, default=datetime.now())
     date_modified = db.Column(db.DateTime, default=datetime.now())
 
@@ -37,7 +38,7 @@ class SaleItem(db.Model):
     product_selling_price = db.Column(db.Numeric(precision=10, scale=4), default=0)
     product_quantity = db.Column(db.Numeric(precision=10, scale=4))
     price_without_tax = db.Column(db.Numeric(precision=10, scale=4))
-    product_measure = db.Column(db.Enum("pcs", "kg", "liter"), default="pcs")
+    product_measure = db.Column(db.String(50), default="pcs")
     tax_amount = db.Column(db.Numeric(precision=10, scale=4))
     total_amount = db.Column(db.Numeric(precision=10, scale=4))
     gross_profit_amount = db.Column(db.Numeric(precision=10, scale=4))

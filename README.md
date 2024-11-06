@@ -54,6 +54,12 @@ npm install
 npm run electron:serve
 ```
 
+### Login credentials as super-admin to view the application
+```
+username: eolnuha
+password: admin
+```
+
 ### Compiles and minifies for production
 ```
 npm run electron:build
